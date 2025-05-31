@@ -1,0 +1,12 @@
+# Ignore node_modules and build output
+node_modules/
+dist/
+
+# Ignore lock files
+yarn.lock
+
+# Ignore environment files
+.env
+
+# Ignore log files
+*.log 
