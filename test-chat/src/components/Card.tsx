@@ -55,7 +55,7 @@ const Card: React.FC<CardProps> = ({ title, children, onClose }) => {
               isMinimized ? (
                 <path
                   fillRule="evenodd"
-                  d="M10 3a1 1 0 011 1v10a1 1 0 11-2 0V4a1 1 0 011-1z"
+                  d="M3 7a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 13a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
                   clipRule="evenodd"
                 />
               ) : (
