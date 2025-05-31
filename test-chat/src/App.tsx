@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Chat from './components/Chat';
 import Card from './components/Card';
+import { Canvas } from './components/Canvas';
 import './App.css';
 
 const App: React.FC = () => {
@@ -11,9 +12,11 @@ const App: React.FC = () => {
   }
 
   return (
-    <Card title="Chat" onClose={() => setShowChat(false)}>
-      <Chat />
-    </Card>
+    <Canvas>
+      <Card title="Chat" onClose={() => setShowChat(false)}>
+        <Chat />
+      </Card>
+    </Canvas>
   );
 };
 
