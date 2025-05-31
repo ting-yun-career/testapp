@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { ReactNode } from 'react';
+import { useDraggable } from '../hooks/useDraggable';
 
 interface CardActionButtonProps {
   onClick: () => void;
@@ -38,15 +39,28 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ title, children, onClose }) => {
   const [isMinimized, setIsMinimized] = useState(false);
+  const { handleMouseDown, handleMouseMove, handleMouseUp, style } =
+    useDraggable({
+      dragHandleClassName: 'card-header',
+    });
 
   const handleMinimize = () => {
     setIsMinimized(!isMinimized);
   };
 
   return (
-    <div className="min-w-xl max-w-2xl mx-auto my-8 border-[1px] border-[#1a1a2a] rounded-md overflow-hidden bg-[#2a2b2e]">
-      <div className="flex justify-between items-center px-4 py-2 bg-[#323337]">
-        <h2 className="font-semibold text-lg text-white">{title}</h2>
+    <div
+      className="fixed min-w-xl max-w-2xl border-[1px] border-[#1a1a2a] rounded-md overflow-hidden bg-[#2a2b2e]"
+      style={style}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+    >
+      <div className="card-header flex justify-between items-center px-4 py-2 bg-[#323337] cursor-grab active:cursor-grabbing">
+        <h2 className="font-semibold text-lg text-white select-none">
+          {title}
+        </h2>
         <div className="flex gap-2">
           <CardActionButton
             onClick={handleMinimize}

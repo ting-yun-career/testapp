@@ -11,7 +11,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <Card title="Chat AI" onClose={() => setShowChat(false)}>
+    <Card title="Chat" onClose={() => setShowChat(false)}>
       <Chat />
     </Card>
   );
