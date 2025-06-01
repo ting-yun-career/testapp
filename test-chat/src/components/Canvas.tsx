@@ -21,6 +21,39 @@ const GRID_SIZE = 16; // 1rem = 16px
 const Grid: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const drawGrid = (
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number
+  ) => {
+    // Clear the canvas
+    ctx.clearRect(0, 0, width, height);
+
+    // Set point style
+    ctx.fillStyle = 'rgba(212, 212, 212, 0.5)'; // neutral-300 with 50% opacity
+
+    // Calculate the center of the viewport
+    const centerX = Math.floor(width / 2);
+    const centerY = Math.floor(height / 2);
+
+    // Calculate how many grid cells we need in each direction
+    const cellsX = Math.ceil(width / GRID_SIZE) + 1;
+    const cellsY = Math.ceil(height / GRID_SIZE) + 1;
+
+    // Calculate the offset to ensure points align with the grid
+    const offsetX = centerX % GRID_SIZE;
+    const offsetY = centerY % GRID_SIZE;
+
+    // Draw points in all directions from the center
+    for (let x = -Math.ceil(cellsX / 2); x < Math.ceil(cellsX / 2); x++) {
+      for (let y = -Math.ceil(cellsY / 2); y < Math.ceil(cellsY / 2); y++) {
+        const pointX = centerX + x * GRID_SIZE - offsetX;
+        const pointY = centerY + y * GRID_SIZE - offsetY;
+        ctx.fillRect(pointX, pointY, 1, 1);
+      }
+    }
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -32,18 +65,7 @@ const Grid: React.FC = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Set point style
-    ctx.fillStyle = 'rgba(212, 212, 212, 0.5)'; // neutral-300 with 50% opacity
-
-    // Draw points
-    for (let x = 0; x < canvas.width; x += GRID_SIZE) {
-      for (let y = 0; y < canvas.height; y += GRID_SIZE) {
-        ctx.fillRect(x, y, 1, 1);
-      }
-    }
+    drawGrid(ctx, canvas.width, canvas.height);
   }, []);
 
   // Update canvas size when window resizes
@@ -52,20 +74,13 @@ const Grid: React.FC = () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
 
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = 'rgba(212, 212, 212, 0.5)';
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
 
-      for (let x = 0; x < canvas.width; x += GRID_SIZE) {
-        for (let y = 0; y < canvas.height; y += GRID_SIZE) {
-          ctx.fillRect(x, y, 1, 1);
-        }
-      }
+      drawGrid(ctx, canvas.width, canvas.height);
     };
 
     window.addEventListener('resize', handleResize);
