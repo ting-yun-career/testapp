@@ -128,9 +128,9 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
   });
   const viewportRef = useRef<HTMLDivElement>(null);
 
-  // Calculate the maximum canvas size (the grid extent)
-  const canvasWidth = GRID_POINTS * GRID_SIZE;
-  const canvasHeight = GRID_POINTS * GRID_SIZE;
+  // Calculate the canvas size as 1.5x the viewport or the grid extent, whichever is larger
+  const canvasWidth = Math.max(GRID_POINTS * GRID_SIZE, viewportSize.x * 1.5);
+  const canvasHeight = Math.max(GRID_POINTS * GRID_SIZE, viewportSize.y * 1.5);
 
   // Update viewport size when resized
   useEffect(() => {
@@ -157,18 +157,13 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
 
     if (e.shiftKey) {
       setOffset((prev) => {
-        // Calculate new x offset - positive deltaY means scroll left
         const newX = prev.x - e.deltaY;
 
-        // Calculate the minimum allowed X (always negative or zero)
-        // This represents how far left we can scroll
-        // If canvas is smaller than viewport, don't allow scrolling
         let minX = 0;
         if (canvasWidth > viewportSize.x) {
           minX = -(canvasWidth - viewportSize.x);
         }
 
-        // Ensure we're within bounds - can't scroll past left or right edge
         return {
           x: Math.min(0, Math.max(minX, newX)),
           y: prev.y,
@@ -176,18 +171,13 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
       });
     } else {
       setOffset((prev) => {
-        // Calculate new y offset - positive deltaY means scroll up
         const newY = prev.y - e.deltaY;
 
-        // Calculate the minimum allowed Y (always negative or zero)
-        // This represents how far down we can scroll
-        // If canvas is smaller than viewport, don't allow scrolling
         let minY = 0;
         if (canvasHeight > viewportSize.y) {
           minY = -(canvasHeight - viewportSize.y);
         }
 
-        // Ensure we're within bounds - can't scroll past top or bottom edge
         return {
           x: prev.x,
           y: Math.min(0, Math.max(minY, newY)),
