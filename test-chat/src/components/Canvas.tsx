@@ -109,6 +109,35 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
   const totalGridWidth = GRID_POINTS * GRID_SIZE;
   const totalGridHeight = GRID_POINTS * GRID_SIZE;
 
+  // Calculate the maximum scroll limits
+  const [maxScrollLimits, setMaxScrollLimits] = useState<Position>({
+    x: 0,
+    y: 0,
+  });
+
+  // Update max scroll limits when window is resized
+  useEffect(() => {
+    const updateScrollLimits = () => {
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      // Calculate how far we can scroll in x and y directions
+      // This ensures the grid edge meets the viewport edge
+      const maxScrollX = -(totalGridWidth - viewportWidth);
+      const maxScrollY = -(totalGridHeight - viewportHeight);
+
+      // Round to nearest GRID_SIZE for consistency
+      const roundedMaxScrollX = Math.ceil(maxScrollX / GRID_SIZE) * GRID_SIZE;
+      const roundedMaxScrollY = Math.ceil(maxScrollY / GRID_SIZE) * GRID_SIZE;
+
+      setMaxScrollLimits({ x: roundedMaxScrollX, y: roundedMaxScrollY });
+    };
+
+    updateScrollLimits();
+    window.addEventListener('resize', updateScrollLimits);
+    return () => window.removeEventListener('resize', updateScrollLimits);
+  }, [totalGridWidth, totalGridHeight]);
+
   const handleWheel = (e: WheelEvent<HTMLDivElement>) => {
     e.preventDefault();
 
@@ -118,8 +147,8 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
       let newY = prev.y;
 
       // Get the scroll direction (positive or negative)
-      const directionX = e.deltaY < 0 ? -1 : 1;
-      const directionY = e.deltaY < 0 ? -1 : 1;
+      const directionX = e.deltaY > 0 ? -1 : 1;
+      const directionY = e.deltaY > 0 ? -1 : 1;
 
       if (e.shiftKey) {
         newX -= directionX * GRID_SIZE * SCROLLING_SPEED;
@@ -127,8 +156,9 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
         newY -= directionY * GRID_SIZE * SCROLLING_SPEED;
       }
 
-      newX = Math.min(0, newX);
-      newY = Math.min(0, newY);
+      // Constrain scrolling to the calculated limits
+      newX = Math.max(maxScrollLimits.x, Math.min(0, newX));
+      newY = Math.max(maxScrollLimits.y, Math.min(0, newY));
 
       console.log('Offset:', { x: newX, y: newY });
       return { x: newX, y: newY };
