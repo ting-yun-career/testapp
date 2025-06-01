@@ -106,7 +106,6 @@ const Grid: React.FC = () => {
 export const Canvas: React.FC<CanvasProps> = ({ children }) => {
   const [offset, setOffset] = useState<Position>({ x: 0, y: 0 });
 
-  // The actual size of our grid in pixels
   const totalGridWidth = GRID_POINTS * GRID_SIZE;
   const totalGridHeight = GRID_POINTS * GRID_SIZE;
 
@@ -119,8 +118,8 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
       let newY = prev.y;
 
       // Get the scroll direction (positive or negative)
-      const directionX = e.deltaY > 0 ? -1 : 1;
-      const directionY = e.deltaY > 0 ? -1 : 1;
+      const directionX = e.deltaY < 0 ? -1 : 1;
+      const directionY = e.deltaY < 0 ? -1 : 1;
 
       if (e.shiftKey) {
         newX -= directionX * GRID_SIZE * SCROLLING_SPEED;
