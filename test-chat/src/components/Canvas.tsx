@@ -127,6 +127,10 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
     y: window.innerHeight,
   });
 
+  // Calculate the maximum canvas size (the grid extent)
+  const canvasWidth = GRID_POINTS * GRID_SIZE;
+  const canvasHeight = GRID_POINTS * GRID_SIZE;
+
   // Update viewport size when window resizes
   useEffect(() => {
     const handleResize = () => {
@@ -143,11 +147,14 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
         // Calculate new x offset - positive deltaY means scroll left
         const newX = prev.x - e.deltaY;
 
-        // Calculate the minimum allowed x offset to prevent scrolling past right edge
-        // Grid is GRID_POINTS * GRID_SIZE wide
-        const minX = Math.min(0, viewportSize.x - GRID_POINTS * GRID_SIZE);
+        // Logic to prevent empty space on the right side
+        // If canvas is smaller than viewport, don't allow any scrolling
+        if (canvasWidth <= viewportSize.x) {
+          return { ...prev, x: 0 };
+        }
 
-        // Limit x to prevent scrolling to negative space
+        // Otherwise, clamp scroll between 0 and -(canvasWidth - viewportSize.x)
+        const minX = -(canvasWidth - viewportSize.x);
         return {
           x: Math.max(minX, Math.min(0, newX)),
           y: prev.y,
@@ -158,11 +165,14 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
         // Calculate new y offset - positive deltaY means scroll up
         const newY = prev.y - e.deltaY;
 
-        // Calculate the minimum allowed y offset to prevent scrolling past bottom edge
-        // Grid is GRID_POINTS * GRID_SIZE tall
-        const minY = Math.min(0, viewportSize.y - GRID_POINTS * GRID_SIZE);
+        // Logic to prevent empty space on the bottom
+        // If canvas is smaller than viewport, don't allow any scrolling
+        if (canvasHeight <= viewportSize.y) {
+          return { ...prev, y: 0 };
+        }
 
-        // Limit y to prevent scrolling to negative space
+        // Otherwise, clamp scroll between 0 and -(canvasHeight - viewportSize.y)
+        const minY = -(canvasHeight - viewportSize.y);
         return {
           x: prev.x,
           y: Math.max(minY, Math.min(0, newY)),
@@ -182,9 +192,11 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
       onWheel={handleWheel}
     >
       <div
-        className="absolute min-w-full min-h-full"
+        className="absolute"
         style={{
           transform: `translate(${offset.x}px, ${offset.y}px)`,
+          width: `${canvasWidth}px`,
+          height: `${canvasHeight}px`,
         }}
       >
         <Grid />
