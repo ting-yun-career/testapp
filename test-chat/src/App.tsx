@@ -1,19 +1,28 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import Chat from './components/Chat';
 import Card from './components/Card';
 import { Canvas } from './components/Canvas';
 import './App.css';
 
-const App: React.FC = () => {
-  const [showChat, setShowChat] = useState(true);
+interface SiteData {
+  canvasOffset: { x: number; y: number };
+}
 
-  if (!showChat) {
-    return null;
-  }
+const App: React.FC = () => {
+  const [siteData, setSiteData] = useState<SiteData>({
+    canvasOffset: { x: 0, y: 0 },
+  });
+
+  useLayoutEffect(() => {
+    const siteData = localStorage.getItem('siteData');
+    if (siteData) {
+      setSiteData(JSON.parse(siteData));
+    }
+  }, []);
 
   return (
-    <Canvas>
-      <Card title="Chat" onClose={() => setShowChat(false)}>
+    <Canvas initialOffset={siteData.canvasOffset}>
+      <Card title="Chat">
         <Chat />
       </Card>
     </Canvas>
