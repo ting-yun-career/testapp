@@ -24,7 +24,7 @@ interface UseDraggableReturn {
   };
 }
 
-const GRID_SIZE = 16; // 1rem = 16px
+const GRID_SIZE = 16;
 
 function snapToGrid(value: number): number {
   return Math.round(value / GRID_SIZE) * GRID_SIZE;
