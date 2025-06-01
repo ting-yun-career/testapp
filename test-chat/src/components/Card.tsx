@@ -42,6 +42,7 @@ const Card: React.FC<CardProps> = ({ title, children, onClose }) => {
   const { handleMouseDown, handleMouseMove, handleMouseUp, style } =
     useDraggable({
       dragHandleClassName: 'card-header',
+      snapToGrid: true,
     });
 
   const handleMinimize = () => {

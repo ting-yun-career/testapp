@@ -9,6 +9,7 @@ interface Position {
 interface UseDraggableOptions {
   dragHandleClassName?: string;
   initialPosition?: Position;
+  snapToGrid?: boolean;
 }
 
 interface UseDraggableReturn {
@@ -21,6 +22,12 @@ interface UseDraggableReturn {
     transform: string;
     cursor: string;
   };
+}
+
+const GRID_SIZE = 16; // 1rem = 16px
+
+function snapToGrid(value: number): number {
+  return Math.round(value / GRID_SIZE) * GRID_SIZE;
 }
 
 export function useDraggable(
@@ -53,9 +60,12 @@ export function useDraggable(
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging) {
       const canvasOffset = window.__CANVAS_OFFSET__ || { x: 0, y: 0 };
+      const newX = e.clientX - dragOffset.current.x + canvasOffset.x;
+      const newY = e.clientY - dragOffset.current.y + canvasOffset.y;
+
       setPosition({
-        x: e.clientX - dragOffset.current.x + canvasOffset.x,
-        y: e.clientY - dragOffset.current.y + canvasOffset.y,
+        x: options.snapToGrid ? snapToGrid(newX) : newX,
+        y: options.snapToGrid ? snapToGrid(newY) : newY,
       });
     }
   };
@@ -72,7 +82,7 @@ export function useDraggable(
     handleMouseUp,
     style: {
       transform: `translate(${position.x}px, ${position.y}px)`,
-      cursor: isDragging ? 'grabbing' : 'default',
+      cursor: isDragging ? 'grabbing' : 'grab',
     },
   };
 }
