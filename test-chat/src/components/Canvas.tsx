@@ -159,10 +159,9 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
       setOffset((prev) => {
         const newX = prev.x - e.deltaY;
 
-        let minX = 0;
-        if (canvasWidth > viewportSize.x) {
-          minX = -(canvasWidth - viewportSize.x);
-        }
+        // We can't scroll right past the origin (0)
+        // We can't scroll left past the right edge of the canvas
+        const minX = -(canvasWidth - viewportSize.x);
 
         return {
           x: Math.min(0, Math.max(minX, newX)),
@@ -173,10 +172,14 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
       setOffset((prev) => {
         const newY = prev.y - e.deltaY;
 
-        let minY = 0;
-        if (canvasHeight > viewportSize.y) {
-          minY = -(canvasHeight - viewportSize.y);
-        }
+        // We can't scroll up past the origin (0)
+        // We can't scroll down past the bottom edge of the canvas
+        const minY = -(canvasHeight - viewportSize.y);
+
+        console.log('minY', minY);
+        console.log('newY', newY);
+        console.log('Math.max(minY, newY)', Math.max(minY, newY));
+        console.log('y', Math.min(0, Math.max(minY, newY)));
 
         return {
           x: prev.x,
@@ -198,11 +201,9 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
       viewportSize,
       canvasWidth,
       canvasHeight,
-      minAllowedX:
-        canvasWidth > viewportSize.x ? -(canvasWidth - viewportSize.x) : 0,
-      minAllowedY:
-        canvasHeight > viewportSize.y ? -(canvasHeight - viewportSize.y) : 0,
-      actualBoundaries: `X: [${canvasWidth > viewportSize.x ? -(canvasWidth - viewportSize.x) : 0}, 0], Y: [${canvasHeight > viewportSize.y ? -(canvasHeight - viewportSize.y) : 0}, 0]`,
+      minAllowedX: -(canvasWidth - viewportSize.x),
+      minAllowedY: -(canvasHeight - viewportSize.y),
+      actualBoundaries: `X: [${-(canvasWidth - viewportSize.x)}, 0], Y: [${-(canvasHeight - viewportSize.y)}, 0]`,
     });
   }, [offset, viewportSize, canvasWidth, canvasHeight]);
 
