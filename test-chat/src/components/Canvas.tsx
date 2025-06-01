@@ -17,7 +17,7 @@ declare global {
 }
 
 const GRID_SIZE = 16;
-const GRID_POINTS = 200; // Number of points in each direction
+const GRID_POINTS = 400; // Number of points in each direction
 
 const Grid: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -126,15 +126,26 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
     x: window.innerWidth,
     y: window.innerHeight,
   });
+  const viewportRef = useRef<HTMLDivElement>(null);
 
   // Calculate the maximum canvas size (the grid extent)
   const canvasWidth = GRID_POINTS * GRID_SIZE;
   const canvasHeight = GRID_POINTS * GRID_SIZE;
 
-  // Update viewport size when window resizes
+  // Update viewport size when resized
   useEffect(() => {
+    const updateViewportSize = () => {
+      if (viewportRef.current) {
+        setViewportSize({
+          x: viewportRef.current.clientWidth,
+          y: viewportRef.current.clientHeight,
+        });
+      }
+    };
+
+    updateViewportSize();
     const handleResize = () => {
-      setViewportSize({ x: window.innerWidth, y: window.innerHeight });
+      updateViewportSize();
     };
 
     window.addEventListener('resize', handleResize);
@@ -142,21 +153,22 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
   }, []);
 
   const handleWheel = (e: WheelEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
     if (e.shiftKey) {
       setOffset((prev) => {
         // Calculate new x offset - positive deltaY means scroll left
         const newX = prev.x - e.deltaY;
 
-        // Logic to prevent empty space on the right side
-        // If canvas is smaller than viewport, don't allow any scrolling
-        if (canvasWidth <= viewportSize.x) {
-          return { ...prev, x: 0 };
-        }
+        // Calculate the minimum X value (most negative) that prevents scrolling past right edge
+        // This is negative because we're translating the canvas
+        const minAllowedX = Math.min(0, viewportSize.x - canvasWidth);
 
-        // Otherwise, clamp scroll between 0 and -(canvasWidth - viewportSize.x)
-        const minX = -(canvasWidth - viewportSize.x);
+        // Clamp between min (negative) and 0
+        const clampedX = Math.max(minAllowedX, Math.min(0, newX));
+
         return {
-          x: Math.max(minX, Math.min(0, newX)),
+          x: clampedX,
           y: prev.y,
         };
       });
@@ -165,17 +177,16 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
         // Calculate new y offset - positive deltaY means scroll up
         const newY = prev.y - e.deltaY;
 
-        // Logic to prevent empty space on the bottom
-        // If canvas is smaller than viewport, don't allow any scrolling
-        if (canvasHeight <= viewportSize.y) {
-          return { ...prev, y: 0 };
-        }
+        // Calculate the minimum Y value (most negative) that prevents scrolling past bottom edge
+        // This is negative because we're translating the canvas
+        const minAllowedY = Math.min(0, viewportSize.y - canvasHeight);
 
-        // Otherwise, clamp scroll between 0 and -(canvasHeight - viewportSize.y)
-        const minY = -(canvasHeight - viewportSize.y);
+        // Clamp between min (negative) and 0
+        const clampedY = Math.max(minAllowedY, Math.min(0, newY));
+
         return {
           x: prev.x,
-          y: Math.max(minY, Math.min(0, newY)),
+          y: clampedY,
         };
       });
     }
@@ -186,8 +197,19 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
     window.__CANVAS_OFFSET__ = offset;
   }, [offset]);
 
+  // Add debug info for development
+  console.log({
+    offset,
+    viewportSize,
+    canvasWidth,
+    canvasHeight,
+    minAllowedX: viewportSize.x - canvasWidth,
+    minAllowedY: viewportSize.y - canvasHeight,
+  });
+
   return (
     <div
+      ref={viewportRef}
       className="fixed inset-0 overflow-hidden bg-[#121212]"
       onWheel={handleWheel}
     >
