@@ -17,7 +17,8 @@ declare global {
 }
 
 const GRID_SIZE = 16;
-const GRID_POINTS = 400; // Number of points in each direction
+const GRID_POINTS = 400;
+const SCROLLING_SPEED = 2;
 
 const Grid: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -28,11 +29,7 @@ const Grid: React.FC = () => {
     height: number,
     offset: Position
   ) => {
-    console.log('drawGrid');
-    // Clear the canvas
     ctx.clearRect(0, 0, width, height);
-
-    // Set point style
     ctx.fillStyle = 'rgba(212, 212, 212, 0.5)'; // neutral-300 with 50% opacity
 
     for (let x = 0; x <= GRID_POINTS; x++) {
@@ -51,14 +48,12 @@ const Grid: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set canvas size to match window size
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth * 2;
+    canvas.height = window.innerHeight * 2;
 
     drawGrid(ctx, canvas.width, canvas.height, { x: 0, y: 0 });
   }, []);
 
-  // Update canvas size when window resizes
   useEffect(() => {
     const handleResize = () => {
       const canvas = canvasRef.current;
@@ -67,8 +62,8 @@ const Grid: React.FC = () => {
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
 
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth * 2;
+      canvas.height = window.innerHeight * 2;
 
       drawGrid(
         ctx,
@@ -82,7 +77,6 @@ const Grid: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Redraw grid when canvas offset changes
   useEffect(() => {
     const checkOffset = () => {
       const canvas = canvasRef.current;
@@ -124,37 +118,31 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
       let newX = prev.x;
       let newY = prev.y;
 
+      // Get the scroll direction (positive or negative)
+      const directionX = e.deltaY > 0 ? -1 : 1;
+      const directionY = e.deltaY > 0 ? -1 : 1;
+
       if (e.shiftKey) {
-        // Horizontal scrolling
-        newX -= e.deltaY;
+        newX -= directionX * GRID_SIZE * SCROLLING_SPEED;
       } else {
-        // Vertical scrolling
-        newY -= e.deltaY;
+        newY -= directionY * GRID_SIZE * SCROLLING_SPEED;
       }
 
-      // Constrain offsets to valid range:
-      // - Never allow positive offsets (can't scroll past origin)
-      // - Never allow scrolling past the grid boundaries
-
-      // X constraints
-      newX = Math.min(0, newX); // Can't go past left edge
-
-      // Y constraints
-      newY = Math.min(0, newY); // Can't go past top edge
+      newX = Math.min(0, newX);
+      newY = Math.min(0, newY);
 
       console.log('Offset:', { x: newX, y: newY });
       return { x: newX, y: newY };
     });
   };
 
-  // Export offset to window for draggable components to access
   useEffect(() => {
     window.__CANVAS_OFFSET__ = offset;
   }, [offset]);
 
   return (
     <div
-      className="fixed inset-0 overflow-hidden bg-[#121212]"
+      className="fixed inset-0 overflow-hidden bg-[#121212] border border-white"
       onWheel={handleWheel}
     >
       <div
@@ -165,6 +153,7 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
       >
         <div
           style={{
+            border: '1px solid red',
             width: `${totalGridWidth}px`,
             height: `${totalGridHeight}px`,
             position: 'relative',
