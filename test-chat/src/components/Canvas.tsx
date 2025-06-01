@@ -21,6 +21,7 @@ const GRID_POINTS = 200; // Number of points in each direction
 
 const Grid: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const lastOffsetRef = useRef<Position>({ x: 0, y: 0 });
 
   const drawGrid = (
     ctx: CanvasRenderingContext2D,
@@ -28,28 +29,18 @@ const Grid: React.FC = () => {
     height: number,
     offset: Position
   ) => {
+    console.log('drawGrid');
     // Clear the canvas
     ctx.clearRect(0, 0, width, height);
 
     // Set point style
     ctx.fillStyle = 'rgba(212, 212, 212, 0.5)'; // neutral-300 with 50% opacity
 
-    // Calculate the viewport center (this will be our (0,0) point)
-    const originX = Math.floor(width / 2);
-    const originY = Math.floor(height / 2);
-
-    // Draw points in all quadrants
-    // Each quadrant will have 200x200 points
-    for (let x = -GRID_POINTS; x <= GRID_POINTS; x++) {
-      for (let y = -GRID_POINTS; y <= GRID_POINTS; y++) {
-        // Calculate the actual pixel position
-        const pointX = originX + x * GRID_SIZE + offset.x;
-        const pointY = originY + y * GRID_SIZE + offset.y;
-
-        // Only draw if the point is within the viewport
-        if (pointX >= 0 && pointX <= width && pointY >= 0 && pointY <= height) {
-          ctx.fillRect(pointX, pointY, 1, 1);
-        }
+    for (let x = 0; x <= GRID_POINTS; x++) {
+      for (let y = 0; y <= GRID_POINTS; y++) {
+        const pointX = x * GRID_SIZE - offset.x;
+        const pointY = y * GRID_SIZE - offset.y;
+        ctx.fillRect(pointX, pointY, 1, 1);
       }
     }
   };
@@ -94,30 +85,38 @@ const Grid: React.FC = () => {
 
   // Redraw grid when canvas offset changes
   useEffect(() => {
-    let animationFrameId: number;
+    const checkOffset = () => {
+      console.log('checkOffset');
+      const currentOffset = window.__CANVAS_OFFSET__ || { x: 0, y: 0 };
 
-    const updateGrid = () => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
+      // Only redraw if offset has changed
+      if (
+        currentOffset.x !== lastOffsetRef.current.x ||
+        currentOffset.y !== lastOffsetRef.current.y
+      ) {
+        console.log('redraw');
+        const canvas = canvasRef.current;
+        if (!canvas) return;
 
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
-      drawGrid(
-        ctx,
-        canvas.width,
-        canvas.height,
-        window.__CANVAS_OFFSET__ || { x: 0, y: 0 }
-      );
-      animationFrameId = requestAnimationFrame(updateGrid);
+        drawGrid(ctx, canvas.width, canvas.height, currentOffset);
+        lastOffsetRef.current = { ...currentOffset };
+      }
+
+      requestAnimationFrame(checkOffset);
     };
 
-    animationFrameId = requestAnimationFrame(updateGrid);
+    const animationFrameId = requestAnimationFrame(checkOffset);
     return () => cancelAnimationFrame(animationFrameId);
   }, []);
 
   return (
-    <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 pointer-events-none border border-white"
+    />
   );
 };
 
@@ -126,13 +125,11 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
 
   const handleWheel = (e: WheelEvent<HTMLDivElement>) => {
     if (e.shiftKey) {
-      // Horizontal scrolling when shift is pressed
       setOffset((prev) => ({
         x: prev.x - e.deltaY,
         y: prev.y,
       }));
     } else {
-      // Normal vertical scrolling
       setOffset((prev) => ({
         x: prev.x,
         y: prev.y - e.deltaY,
