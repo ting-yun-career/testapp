@@ -125,15 +125,27 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
 
   const handleWheel = (e: WheelEvent<HTMLDivElement>) => {
     if (e.shiftKey) {
-      setOffset((prev) => ({
-        x: prev.x - e.deltaY,
-        y: prev.y,
-      }));
+      setOffset((prev) => {
+        // Calculate new x offset
+        const newX = prev.x - e.deltaY;
+
+        // Limit x scrolling to the range [0, GRID_POINTS * GRID_SIZE]
+        return {
+          x: Math.min(Math.max(0, newX), GRID_POINTS * GRID_SIZE),
+          y: prev.y,
+        };
+      });
     } else {
-      setOffset((prev) => ({
-        x: prev.x,
-        y: prev.y - e.deltaY,
-      }));
+      setOffset((prev) => {
+        // Calculate new y offset
+        const newY = prev.y - e.deltaY;
+
+        // Limit y scrolling to the range [0, GRID_POINTS * GRID_SIZE]
+        return {
+          x: prev.x,
+          y: Math.min(Math.max(0, newY), GRID_POINTS * GRID_SIZE),
+        };
+      });
     }
   };
 
