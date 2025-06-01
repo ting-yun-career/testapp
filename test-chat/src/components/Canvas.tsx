@@ -160,15 +160,17 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
         // Calculate new x offset - positive deltaY means scroll left
         const newX = prev.x - e.deltaY;
 
-        // Calculate the minimum X value (most negative) that prevents scrolling past right edge
-        // This is negative because we're translating the canvas
-        const minAllowedX = Math.min(0, viewportSize.x - canvasWidth);
+        // Calculate the minimum allowed X (always negative or zero)
+        // This represents how far left we can scroll
+        // If canvas is smaller than viewport, don't allow scrolling
+        let minX = 0;
+        if (canvasWidth > viewportSize.x) {
+          minX = -(canvasWidth - viewportSize.x);
+        }
 
-        // Clamp between min (negative) and 0
-        const clampedX = Math.max(minAllowedX, Math.min(0, newX));
-
+        // Ensure we're within bounds - can't scroll past left or right edge
         return {
-          x: clampedX,
+          x: Math.min(0, Math.max(minX, newX)),
           y: prev.y,
         };
       });
@@ -177,16 +179,18 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
         // Calculate new y offset - positive deltaY means scroll up
         const newY = prev.y - e.deltaY;
 
-        // Calculate the minimum Y value (most negative) that prevents scrolling past bottom edge
-        // This is negative because we're translating the canvas
-        const minAllowedY = Math.min(0, viewportSize.y - canvasHeight);
+        // Calculate the minimum allowed Y (always negative or zero)
+        // This represents how far down we can scroll
+        // If canvas is smaller than viewport, don't allow scrolling
+        let minY = 0;
+        if (canvasHeight > viewportSize.y) {
+          minY = -(canvasHeight - viewportSize.y);
+        }
 
-        // Clamp between min (negative) and 0
-        const clampedY = Math.max(minAllowedY, Math.min(0, newY));
-
+        // Ensure we're within bounds - can't scroll past top or bottom edge
         return {
           x: prev.x,
-          y: clampedY,
+          y: Math.min(0, Math.max(minY, newY)),
         };
       });
     }
@@ -198,14 +202,19 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
   }, [offset]);
 
   // Add debug info for development
-  console.log({
-    offset,
-    viewportSize,
-    canvasWidth,
-    canvasHeight,
-    minAllowedX: viewportSize.x - canvasWidth,
-    minAllowedY: viewportSize.y - canvasHeight,
-  });
+  useEffect(() => {
+    console.log({
+      offset,
+      viewportSize,
+      canvasWidth,
+      canvasHeight,
+      minAllowedX:
+        canvasWidth > viewportSize.x ? -(canvasWidth - viewportSize.x) : 0,
+      minAllowedY:
+        canvasHeight > viewportSize.y ? -(canvasHeight - viewportSize.y) : 0,
+      actualBoundaries: `X: [${canvasWidth > viewportSize.x ? -(canvasWidth - viewportSize.x) : 0}, 0], Y: [${canvasHeight > viewportSize.y ? -(canvasHeight - viewportSize.y) : 0}, 0]`,
+    });
+  }, [offset, viewportSize, canvasWidth, canvasHeight]);
 
   return (
     <div
