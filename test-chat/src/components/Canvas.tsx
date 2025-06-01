@@ -122,6 +122,20 @@ const Grid: React.FC = () => {
 
 export const Canvas: React.FC<CanvasProps> = ({ children }) => {
   const [offset, setOffset] = useState<Position>({ x: 0, y: 0 });
+  const [viewportSize, setViewportSize] = useState<Position>({
+    x: window.innerWidth,
+    y: window.innerHeight,
+  });
+
+  // Update viewport size when window resizes
+  useEffect(() => {
+    const handleResize = () => {
+      setViewportSize({ x: window.innerWidth, y: window.innerHeight });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleWheel = (e: WheelEvent<HTMLDivElement>) => {
     if (e.shiftKey) {
@@ -129,10 +143,13 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
         // Calculate new x offset - positive deltaY means scroll left
         const newX = prev.x - e.deltaY;
 
-        // Limit x to prevent scrolling to negative space (left of canvas)
-        // newX must be <= 0 to keep the points visible (x>0)
+        // Calculate the minimum allowed x offset to prevent scrolling past right edge
+        // Grid is GRID_POINTS * GRID_SIZE wide
+        const minX = Math.min(0, viewportSize.x - GRID_POINTS * GRID_SIZE);
+
+        // Limit x to prevent scrolling to negative space
         return {
-          x: Math.min(0, newX),
+          x: Math.max(minX, Math.min(0, newX)),
           y: prev.y,
         };
       });
@@ -141,11 +158,14 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
         // Calculate new y offset - positive deltaY means scroll up
         const newY = prev.y - e.deltaY;
 
-        // Limit y to prevent scrolling to negative space (above canvas)
-        // newY must be <= 0 to keep the points visible (y>0)
+        // Calculate the minimum allowed y offset to prevent scrolling past bottom edge
+        // Grid is GRID_POINTS * GRID_SIZE tall
+        const minY = Math.min(0, viewportSize.y - GRID_POINTS * GRID_SIZE);
+
+        // Limit y to prevent scrolling to negative space
         return {
           x: prev.x,
-          y: Math.min(0, newY),
+          y: Math.max(minY, Math.min(0, newY)),
         };
       });
     }
