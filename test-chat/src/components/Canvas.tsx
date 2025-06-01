@@ -21,7 +21,6 @@ const GRID_POINTS = 400; // Number of points in each direction
 
 const Grid: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const lastOffsetRef = useRef<Position>({ x: 0, y: 0 });
 
   const drawGrid = (
     ctx: CanvasRenderingContext2D,
@@ -86,25 +85,18 @@ const Grid: React.FC = () => {
   // Redraw grid when canvas offset changes
   useEffect(() => {
     const checkOffset = () => {
-      console.log('checkOffset');
-      const currentOffset = window.__CANVAS_OFFSET__ || { x: 0, y: 0 };
+      const canvas = canvasRef.current;
+      if (!canvas) return;
 
-      // Only redraw if offset has changed
-      if (
-        currentOffset.x !== lastOffsetRef.current.x ||
-        currentOffset.y !== lastOffsetRef.current.y
-      ) {
-        console.log('redraw');
-        const canvas = canvasRef.current;
-        if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
 
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-
-        drawGrid(ctx, canvas.width, canvas.height, currentOffset);
-        lastOffsetRef.current = { ...currentOffset };
-      }
-
+      drawGrid(
+        ctx,
+        canvas.width,
+        canvas.height,
+        window.__CANVAS_OFFSET__ || { x: 0, y: 0 }
+      );
       requestAnimationFrame(checkOffset);
     };
 
@@ -113,80 +105,46 @@ const Grid: React.FC = () => {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 pointer-events-none border border-white"
-    />
+    <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
   );
 };
 
 export const Canvas: React.FC<CanvasProps> = ({ children }) => {
   const [offset, setOffset] = useState<Position>({ x: 0, y: 0 });
-  const [viewportSize, setViewportSize] = useState<Position>({
-    x: window.innerWidth,
-    y: window.innerHeight,
-  });
-  const viewportRef = useRef<HTMLDivElement>(null);
 
-  // Calculate the canvas size as 1.5x the viewport or the grid extent, whichever is larger
-  const canvasWidth = Math.max(GRID_POINTS * GRID_SIZE, viewportSize.x * 1.5);
-  const canvasHeight = Math.max(GRID_POINTS * GRID_SIZE, viewportSize.y * 1.5);
-
-  // Update viewport size when resized
-  useEffect(() => {
-    const updateViewportSize = () => {
-      if (viewportRef.current) {
-        setViewportSize({
-          x: viewportRef.current.clientWidth,
-          y: viewportRef.current.clientHeight,
-        });
-      }
-    };
-
-    updateViewportSize();
-    const handleResize = () => {
-      updateViewportSize();
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  // The actual size of our grid in pixels
+  const totalGridWidth = GRID_POINTS * GRID_SIZE;
+  const totalGridHeight = GRID_POINTS * GRID_SIZE;
 
   const handleWheel = (e: WheelEvent<HTMLDivElement>) => {
     e.preventDefault();
 
-    if (e.shiftKey) {
-      setOffset((prev) => {
-        const newX = prev.x - e.deltaY;
+    setOffset((prev) => {
+      // Calculate new offsets based on wheel delta
+      let newX = prev.x;
+      let newY = prev.y;
 
-        // We can't scroll right past the origin (0)
-        // We can't scroll left past the right edge of the canvas
-        const minX = -(canvasWidth - viewportSize.x);
+      if (e.shiftKey) {
+        // Horizontal scrolling
+        newX -= e.deltaY;
+      } else {
+        // Vertical scrolling
+        newY -= e.deltaY;
+      }
 
-        return {
-          x: Math.min(0, Math.max(minX, newX)),
-          y: prev.y,
-        };
-      });
-    } else {
-      setOffset((prev) => {
-        const newY = prev.y - e.deltaY;
+      // Constrain offsets to valid range:
+      // - Never allow positive offsets (can't scroll past origin)
+      // - Never allow scrolling past the grid boundaries
 
-        // We can't scroll up past the origin (0)
-        // We can't scroll down past the bottom edge of the canvas
-        const minY = -(canvasHeight - viewportSize.y);
+      // X constraints
+      newX = Math.min(0, newX); // Can't go past left edge
 
-        console.log('minY', minY);
-        console.log('newY', newY);
-        console.log('Math.max(minY, newY)', Math.max(minY, newY));
-        console.log('y', Math.min(0, Math.max(minY, newY)));
+      // Y constraints
+      newY = Math.min(0, newY); // Can't go past top edge
 
-        return {
-          x: prev.x,
-          y: Math.min(0, Math.max(minY, newY)),
-        };
-      });
-    }
+      console.log('Offset:', { x: newX, y: newY });
+      return { x: newX, y: newY };
+    });
   };
 
   // Export offset to window for draggable components to access
@@ -194,22 +152,8 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
     window.__CANVAS_OFFSET__ = offset;
   }, [offset]);
 
-  // Add debug info for development
-  useEffect(() => {
-    console.log({
-      offset,
-      viewportSize,
-      canvasWidth,
-      canvasHeight,
-      minAllowedX: -(canvasWidth - viewportSize.x),
-      minAllowedY: -(canvasHeight - viewportSize.y),
-      actualBoundaries: `X: [${-(canvasWidth - viewportSize.x)}, 0], Y: [${-(canvasHeight - viewportSize.y)}, 0]`,
-    });
-  }, [offset, viewportSize, canvasWidth, canvasHeight]);
-
   return (
     <div
-      ref={viewportRef}
       className="fixed inset-0 overflow-hidden bg-[#121212]"
       onWheel={handleWheel}
     >
@@ -217,12 +161,18 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
         className="absolute"
         style={{
           transform: `translate(${offset.x}px, ${offset.y}px)`,
-          width: `${canvasWidth}px`,
-          height: `${canvasHeight}px`,
         }}
       >
-        <Grid />
-        {children}
+        <div
+          style={{
+            width: `${totalGridWidth}px`,
+            height: `${totalGridHeight}px`,
+            position: 'relative',
+          }}
+        >
+          <Grid />
+          {children}
+        </div>
       </div>
     </div>
   );
