@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import type { ReactNode, WheelEvent } from 'react';
 
 interface Position {
@@ -19,30 +19,62 @@ declare global {
 const GRID_SIZE = 16; // 1rem = 16px
 
 const Grid: React.FC = () => {
-  const points = useMemo(() => {
-    const gridPoints = [];
-    // Create enough points to cover viewport plus some overflow
-    const cols = Math.ceil(window.innerWidth / GRID_SIZE) + 10;
-    const rows = Math.ceil(window.innerHeight / GRID_SIZE) + 10;
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    for (let x = 0; x < cols; x++) {
-      for (let y = 0; y < rows; y++) {
-        gridPoints.push(
-          <div
-            key={`${x}-${y}`}
-            className="absolute w-[1px] h-[1px] bg-gray-600/30"
-            style={{
-              left: `${x * GRID_SIZE}px`,
-              top: `${y * GRID_SIZE}px`,
-            }}
-          />
-        );
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Set canvas size to match window size
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Clear the canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Set point style
+    ctx.fillStyle = 'rgba(212, 212, 212, 0.5)'; // neutral-300 with 50% opacity
+
+    // Draw points
+    for (let x = 0; x < canvas.width; x += GRID_SIZE) {
+      for (let y = 0; y < canvas.height; y += GRID_SIZE) {
+        ctx.fillRect(x, y, 1, 1);
       }
     }
-    return gridPoints;
   }, []);
 
-  return <div className="absolute inset-0">{points}</div>;
+  // Update canvas size when window resizes
+  useEffect(() => {
+    const handleResize = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'rgba(212, 212, 212, 0.5)';
+
+      for (let x = 0; x < canvas.width; x += GRID_SIZE) {
+        for (let y = 0; y < canvas.height; y += GRID_SIZE) {
+          ctx.fillRect(x, y, 1, 1);
+        }
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return (
+    <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
+  );
 };
 
 export const Canvas: React.FC<CanvasProps> = ({ children }) => {
