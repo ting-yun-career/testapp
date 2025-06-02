@@ -62,9 +62,7 @@ export const Canvas: React.FC<CanvasProps> = ({ children, initialOffset, status 
         {children}
       </div>
       {status && (
-        <div className="fixed bottom-4 left-4 bg-[#1e1e1e] bg-opacity-50 text-gray-400 px-3 py-1 rounded-md text-sm">
-          {status}
-        </div>
+        <div className="fixed bottom-1 left-1 bg-[#1e1e1e] bg-opacity-50 text-gray-400 px-2 py-0 text-sm">{status}</div>
       )}
     </div>
   )

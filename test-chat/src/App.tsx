@@ -27,11 +27,10 @@ const App: React.FC = () => {
 
       localStorage.setItem('siteData', JSON.stringify(dataToSave))
 
-      // Hide status after a short delay
       setTimeout(() => {
         setStatus(undefined)
       }, 1500)
-    }, 5000)
+    }, 15000)
 
     return () => clearInterval(saveInterval)
   }, [])
