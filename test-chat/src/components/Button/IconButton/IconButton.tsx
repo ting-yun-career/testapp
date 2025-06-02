@@ -26,6 +26,15 @@ export const icons: Record<string, IconDefinition> = {
   share: {
     path: 'M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13',
   },
+  minimize: {
+    path: 'M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z',
+  },
+  minimizeAlt: {
+    path: 'M3 7a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 13a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z',
+  },
+  close: {
+    path: 'M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z',
+  },
 } as const;
 
 export type IconName = keyof typeof icons;
@@ -33,6 +42,7 @@ export type IconName = keyof typeof icons;
 interface IconButtonProps {
   icon: IconName;
   text?: string;
+  title?: string;
   onClick?: () => void;
   variant?: 'default' | 'primary';
 }
@@ -40,6 +50,7 @@ interface IconButtonProps {
 const IconButton: React.FC<IconButtonProps> = ({
   icon,
   text,
+  title,
   onClick,
   variant = 'default',
 }) => {
@@ -54,7 +65,7 @@ const IconButton: React.FC<IconButtonProps> = ({
   const iconData = icons[icon];
 
   return (
-    <button className={buttonClasses} onClick={onClick}>
+    <button className={buttonClasses} onClick={onClick} title={title}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className={text ? 'w-4 h-4' : 'w-5 h-5'}
