@@ -1,5 +1,5 @@
 import React from 'react';
-import IconButton from './IconButton';
+import IconButton from './Button/IconButton/IconButton';
 
 const HeaderFloatingBar: React.FC = () => {
   return (
