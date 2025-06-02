@@ -1,49 +1,49 @@
-import React, { useState, useEffect } from 'react';
-import type { ReactNode, WheelEvent } from 'react';
-import HeaderFloatingBar from './HeaderFloatingBar';
+import React, { useState, useEffect } from 'react'
+import type { ReactNode, WheelEvent } from 'react'
+import HeaderFloatingBar from './HeaderFloatingBar'
 
 interface Position {
-  x: number;
-  y: number;
+  x: number
+  y: number
 }
 
 declare global {
   interface Window {
-    __CANVAS_OFFSET__: Position;
+    __CANVAS_OFFSET__: Position
   }
 }
 
-const SCROLLING_STEP = 16;
-const SCROLLING_SPEED = 3;
+const SCROLLING_STEP = 16
+const SCROLLING_SPEED = 3
 
 interface CanvasProps {
-  children: ReactNode;
-  initialOffset: Position;
+  children: ReactNode
+  initialOffset: Position
 }
 export const Canvas: React.FC<CanvasProps> = ({ children, initialOffset }) => {
-  const [offset, setOffset] = useState<Position>(initialOffset);
+  const [offset, setOffset] = useState<Position>(initialOffset)
 
   const handleWheel = (e: WheelEvent<HTMLDivElement>) => {
     setOffset((prev) => {
-      let newX = prev.x;
-      let newY = prev.y;
+      let newX = prev.x
+      let newY = prev.y
 
-      const directionX = e.deltaY < 0 ? -1 : 1;
-      const directionY = e.deltaY < 0 ? -1 : 1;
+      const directionX = e.deltaY < 0 ? -1 : 1
+      const directionY = e.deltaY < 0 ? -1 : 1
 
       if (e.shiftKey) {
-        newX -= directionX * SCROLLING_STEP * SCROLLING_SPEED;
+        newX -= directionX * SCROLLING_STEP * SCROLLING_SPEED
       } else {
-        newY -= directionY * SCROLLING_STEP * SCROLLING_SPEED;
+        newY -= directionY * SCROLLING_STEP * SCROLLING_SPEED
       }
 
-      return { x: newX, y: newY };
-    });
-  };
+      return { x: newX, y: newY }
+    })
+  }
 
   useEffect(() => {
-    window.__CANVAS_OFFSET__ = offset;
-  }, [offset]);
+    window.__CANVAS_OFFSET__ = offset
+  }, [offset])
 
   return (
     <div
@@ -61,5 +61,5 @@ export const Canvas: React.FC<CanvasProps> = ({ children, initialOffset }) => {
         {children}
       </div>
     </div>
-  );
-};
+  )
+}

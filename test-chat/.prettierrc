@@ -2,6 +2,15 @@
   "singleQuote": true,
   "trailingComma": "es5",
   "tabWidth": 2,
-  "semi": true,
-  "printWidth": 80
-} 
+  "semi": false,
+  "printWidth": 120,
+  "arrowParens": "always",
+  "importOrderSortSpecifiers": true,
+  "importOrderCaseInsensitive": true,
+  "importOrderParserPlugins": [
+    "typescript",
+    "classProperties",
+    "decorators-legacy"
+  ],
+  "importOrder": ["<THIRD_PARTY_MODULES>", "^@/(.*)$", "^../(.*)$", "^./(.*)$"]
+}

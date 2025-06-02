@@ -1,24 +1,23 @@
-import React, { useState } from 'react';
-import type { ReactNode } from 'react';
-import { useDraggable } from '../hooks/useDraggable';
-import IconButton from './Button/IconButton/IconButton';
+import React, { useState } from 'react'
+import type { ReactNode } from 'react'
+import { useDraggable } from '../hooks/useDraggable'
+import IconButton from './Button/IconButton/IconButton'
 
 interface CardProps {
-  title: string;
-  children: ReactNode;
-  onClose?: () => void;
+  title: string
+  children: ReactNode
+  onClose?: () => void
 }
 
 const Card: React.FC<CardProps> = ({ title, children, onClose }) => {
-  const [isMinimized, setIsMinimized] = useState(false);
-  const { handleMouseDown, handleMouseMove, handleMouseUp, style } =
-    useDraggable({
-      dragHandleClassName: 'card-header',
-    });
+  const [isMinimized, setIsMinimized] = useState(false)
+  const { handleMouseDown, handleMouseMove, handleMouseUp, style } = useDraggable({
+    dragHandleClassName: 'card-header',
+  })
 
   const handleMinimize = () => {
-    setIsMinimized(!isMinimized);
-  };
+    setIsMinimized(!isMinimized)
+  }
 
   return (
     <div
@@ -37,16 +36,12 @@ const Card: React.FC<CardProps> = ({ title, children, onClose }) => {
             onClick={handleMinimize}
             title={isMinimized ? 'Maximize' : 'Minimize'}
           />
-          {onClose && (
-            <IconButton icon="close" onClick={onClose} title="Close" />
-          )}
+          {onClose && <IconButton icon="close" onClick={onClose} title="Close" />}
         </div>
       </div>
-      <div className={`transition-all duration-300`}>
-        {!isMinimized && children}
-      </div>
+      <div className={`transition-all duration-300`}>{!isMinimized && children}</div>
     </div>
-  );
-};
+  )
+}
 
-export default Card;
+export default Card
