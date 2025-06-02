@@ -89,10 +89,12 @@ const Card: React.FC<CardProps> = ({ title, children, onClose }) => {
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 3 3"
-          fill="currentColor"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="0.3"
           className="w-full h-full text-gray-400"
         >
-          <polygon points="3,3 3,0 0,3" fill="currentColor" />
+          <polygon points="3,3 3,0 0,3" />
         </svg>
       </div>
     </div>
