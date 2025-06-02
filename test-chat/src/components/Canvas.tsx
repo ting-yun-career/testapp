@@ -19,8 +19,9 @@ const SCROLLING_SPEED = 3
 interface CanvasProps {
   children: ReactNode
   initialOffset: Position
+  status?: string
 }
-export const Canvas: React.FC<CanvasProps> = ({ children, initialOffset }) => {
+export const Canvas: React.FC<CanvasProps> = ({ children, initialOffset, status }) => {
   const [offset, setOffset] = useState<Position>(initialOffset)
 
   const handleWheel = (e: WheelEvent<HTMLDivElement>) => {
@@ -60,6 +61,11 @@ export const Canvas: React.FC<CanvasProps> = ({ children, initialOffset }) => {
       >
         {children}
       </div>
+      {status && (
+        <div className="fixed bottom-4 left-4 bg-[#1e1e1e] bg-opacity-50 text-gray-400 px-3 py-1 rounded-md text-sm">
+          {status}
+        </div>
+      )}
     </div>
   )
 }
