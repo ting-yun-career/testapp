@@ -1,17 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import type { ReactNode, WheelEvent } from 'react'
+import type { Position } from '../App'
 import HeaderFloatingBar from './HeaderFloatingBar'
-
-interface Position {
-  x: number
-  y: number
-}
-
-declare global {
-  interface Window {
-    __CANVAS_OFFSET__: Position
-  }
-}
 
 const SCROLLING_STEP = 16
 const SCROLLING_SPEED = 3

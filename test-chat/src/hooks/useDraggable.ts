@@ -1,70 +1,60 @@
-import { useState, useRef } from 'react';
-import type { MouseEvent } from 'react';
-
-interface Position {
-  x: number;
-  y: number;
-}
+import { useState, useRef } from 'react'
+import type { MouseEvent } from 'react'
+import type { Position } from '../App'
 
 interface UseDraggableOptions {
-  dragHandleClassName?: string;
-  initialPosition?: Position;
+  dragHandleClassName?: string
+  initialPosition?: Position
 }
 
 interface UseDraggableReturn {
-  position: Position;
-  isDragging: boolean;
-  handleMouseDown: (e: MouseEvent) => void;
-  handleMouseMove: (e: MouseEvent) => void;
-  handleMouseUp: () => void;
+  position: Position
+  isDragging: boolean
+  handleMouseDown: (e: MouseEvent) => void
+  handleMouseMove: (e: MouseEvent) => void
+  handleMouseUp: () => void
   style: {
-    transform: string;
-    cursor: string;
-  };
+    transform: string
+    cursor: string
+  }
 }
 
-export function useDraggable(
-  options: UseDraggableOptions = {}
-): UseDraggableReturn {
-  const [position, setPosition] = useState<Position>(
-    options.initialPosition || { x: 0, y: 0 }
-  );
-  const [isDragging, setIsDragging] = useState(false);
-  const dragOffset = useRef<Position>({ x: 0, y: 0 });
+export function useDraggable(options: UseDraggableOptions = {}): UseDraggableReturn {
+  const [position, setPosition] = useState<Position>(options.initialPosition || { x: 0, y: 0 })
+  const [isDragging, setIsDragging] = useState(false)
+  const dragOffset = useRef<Position>({ x: 0, y: 0 })
 
   const handleMouseDown = (e: MouseEvent) => {
     if (options.dragHandleClassName) {
-      if (
-        !(e.target as HTMLElement).closest(`.${options.dragHandleClassName}`)
-      ) {
-        return;
+      if (!(e.target as HTMLElement).closest(`.${options.dragHandleClassName}`)) {
+        return
       }
     }
 
-    setIsDragging(true);
-    const canvasOffset = window.__CANVAS_OFFSET__ || { x: 0, y: 0 };
+    setIsDragging(true)
+    const canvasOffset = window.__CANVAS_OFFSET__ || { x: 0, y: 0 }
     dragOffset.current = {
       x: e.clientX - position.x + canvasOffset.x,
       y: e.clientY - position.y + canvasOffset.y,
-    };
-  };
+    }
+  }
 
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging) {
-      const canvasOffset = window.__CANVAS_OFFSET__ || { x: 0, y: 0 };
-      const newX = e.clientX - dragOffset.current.x + canvasOffset.x;
-      const newY = e.clientY - dragOffset.current.y + canvasOffset.y;
+      const canvasOffset = window.__CANVAS_OFFSET__ || { x: 0, y: 0 }
+      const newX = e.clientX - dragOffset.current.x + canvasOffset.x
+      const newY = e.clientY - dragOffset.current.y + canvasOffset.y
 
       setPosition({
         x: newX,
         y: newY,
-      });
+      })
     }
-  };
+  }
 
   const handleMouseUp = () => {
-    setIsDragging(false);
-  };
+    setIsDragging(false)
+  }
 
   return {
     position,
@@ -76,5 +66,5 @@ export function useDraggable(
       transform: `translate(${position.x}px, ${position.y}px)`,
       cursor: isDragging ? 'grabbing' : 'grab',
     },
-  };
+  }
 }

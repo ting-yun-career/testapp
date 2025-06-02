@@ -4,12 +4,45 @@ import Card from './components/Card'
 import { Canvas } from './components/Canvas'
 import './App.css'
 
+declare global {
+  interface Window {
+    __CANVAS_OFFSET__: Position
+  }
+}
+
+export type Position = {
+  x: number
+  y: number
+}
+
+type CardType = 'chat'
+
 const DEFAULT_SITE_DATA: SiteData = {
   canvasOffset: { x: 0, y: 0 },
+  cards: [
+    {
+      title: 'Card 1',
+      type: 'chat',
+      size: { width: 500, height: 300 },
+      position: { x: 0, y: 0 },
+    },
+    {
+      title: 'Card 2',
+      type: 'chat',
+      size: { width: 500, height: 300 },
+      position: { x: 500, y: 0 },
+    },
+  ],
 }
 
 interface SiteData {
-  canvasOffset: { x: number; y: number }
+  canvasOffset: Position
+  cards: {
+    title: string
+    type: CardType
+    size: { width: number; height: number }
+    position: Position
+  }[]
 }
 
 const App: React.FC = () => {
