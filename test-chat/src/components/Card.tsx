@@ -30,9 +30,7 @@ const Card: React.FC<CardProps> = ({ title, children, onClose }) => {
       onMouseLeave={handleMouseUp}
     >
       <div className="card-header flex justify-between items-center px-4 py-2 bg-[#323337] cursor-grab active:cursor-grabbing">
-        <h2 className="font-semibold text-lg text-white select-none">
-          {title}
-        </h2>
+        <h2 className="text-lg text-white select-none">{title}</h2>
         <div className="card-actions">
           <IconButton
             icon={isMinimized ? 'minimizeAlt' : 'minimize'}

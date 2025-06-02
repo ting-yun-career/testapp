@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import type { ReactNode, WheelEvent } from 'react';
+import HeaderFloatingBar from './HeaderFloatingBar';
 
 interface Position {
   x: number;
   y: number;
-}
-
-interface CanvasProps {
-  children: ReactNode;
 }
 
 declare global {
@@ -16,29 +13,30 @@ declare global {
   }
 }
 
-const GRID_SIZE = 16;
-const SCROLLING_SPEED = 2;
+const SCROLLING_STEP = 16;
+const SCROLLING_SPEED = 3;
 
-export const Canvas: React.FC<CanvasProps> = ({ children }) => {
-  const [offset, setOffset] = useState<Position>({ x: 0, y: 0 });
+interface CanvasProps {
+  children: ReactNode;
+  initialOffset: Position;
+}
+export const Canvas: React.FC<CanvasProps> = ({ children, initialOffset }) => {
+  const [offset, setOffset] = useState<Position>(initialOffset);
 
   const handleWheel = (e: WheelEvent<HTMLDivElement>) => {
     setOffset((prev) => {
-      // Calculate new offsets based on wheel delta
       let newX = prev.x;
       let newY = prev.y;
 
-      // Get the scroll direction (positive or negative)
       const directionX = e.deltaY < 0 ? -1 : 1;
       const directionY = e.deltaY < 0 ? -1 : 1;
 
       if (e.shiftKey) {
-        newX -= directionX * GRID_SIZE * SCROLLING_SPEED;
+        newX -= directionX * SCROLLING_STEP * SCROLLING_SPEED;
       } else {
-        newY -= directionY * GRID_SIZE * SCROLLING_SPEED;
+        newY -= directionY * SCROLLING_STEP * SCROLLING_SPEED;
       }
 
-      console.log('Offset:', { x: newX, y: newY });
       return { x: newX, y: newY };
     });
   };
@@ -49,10 +47,11 @@ export const Canvas: React.FC<CanvasProps> = ({ children }) => {
 
   return (
     <div
-      className="fixed inset-0 overflow-hidden bg-[#121212]"
+      className="fixed inset-0 overflow-hidden bg-[#121212] border border-white"
       onWheel={handleWheel}
       style={{ touchAction: 'none' }}
     >
+      <HeaderFloatingBar />
       <div
         className="absolute"
         style={{

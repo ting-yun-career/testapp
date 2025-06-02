@@ -22,7 +22,10 @@ const App: React.FC = () => {
 
   return (
     <Canvas initialOffset={siteData.canvasOffset}>
-      <Card title="Chat">
+      <Card title="Title 1">
+        <Chat />
+      </Card>
+      <Card title="Title 2">
         <Chat />
       </Card>
     </Canvas>

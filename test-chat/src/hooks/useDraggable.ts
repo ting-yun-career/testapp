@@ -9,7 +9,6 @@ interface Position {
 interface UseDraggableOptions {
   dragHandleClassName?: string;
   initialPosition?: Position;
-  snapToGrid?: boolean;
 }
 
 interface UseDraggableReturn {
@@ -24,12 +23,6 @@ interface UseDraggableReturn {
   };
 }
 
-const GRID_SIZE = 16;
-
-function snapToGrid(value: number): number {
-  return Math.round(value / GRID_SIZE) * GRID_SIZE;
-}
-
 export function useDraggable(
   options: UseDraggableOptions = {}
 ): UseDraggableReturn {
@@ -40,7 +33,6 @@ export function useDraggable(
   const dragOffset = useRef<Position>({ x: 0, y: 0 });
 
   const handleMouseDown = (e: MouseEvent) => {
-    // If a drag handle is specified, only start dragging if clicking it
     if (options.dragHandleClassName) {
       if (
         !(e.target as HTMLElement).closest(`.${options.dragHandleClassName}`)
@@ -64,8 +56,8 @@ export function useDraggable(
       const newY = e.clientY - dragOffset.current.y + canvasOffset.y;
 
       setPosition({
-        x: options.snapToGrid ? snapToGrid(newX) : newX,
-        y: options.snapToGrid ? snapToGrid(newY) : newY,
+        x: newX,
+        y: newY,
       });
     }
   };
