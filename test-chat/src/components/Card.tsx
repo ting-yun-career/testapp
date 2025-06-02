@@ -79,7 +79,7 @@ const Card: React.FC<CardProps> = ({ title, children, onClose }) => {
         </div>
       </div>
       <div className={`flex-grow overflow-auto ${isMinimized ? 'hidden' : 'block'}`}>
-        <div className="h-full overflow-y-scroll scrollbar-hide">{children}</div>
+        <div className="h-full">{children}</div>
       </div>
       {/* Resize handle */}
       <div
