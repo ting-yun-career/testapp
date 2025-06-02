@@ -16,6 +16,7 @@ const App: React.FC = () => {
   useLayoutEffect(() => {
     const siteData = localStorage.getItem('siteData');
     if (siteData) {
+      debugger;
       setSiteData(JSON.parse(siteData));
     }
   }, []);
