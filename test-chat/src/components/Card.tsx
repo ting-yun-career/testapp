@@ -78,9 +78,23 @@ const Card: React.FC<CardProps> = ({ title, children, onClose }) => {
           {onClose && <IconButton icon="close" onClick={onClose} title="Close" />}
         </div>
       </div>
-      <div className={`flex-grow overflow-auto p-4 ${isMinimized ? 'hidden' : 'block'}`}>{children}</div>
-      {/* Resize handles */}
-      <div className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize" onMouseDown={(e) => startResize(e, 'se')} />
+      <div className={`flex-grow overflow-auto ${isMinimized ? 'hidden' : 'block'}`}>
+        <div className="h-full overflow-y-scroll scrollbar-hide">{children}</div>
+      </div>
+      {/* Resize handle */}
+      <div
+        className="absolute bottom-3 right-3 w-3 h-3 cursor-se-resize opacity-50 hover:opacity-100 transition-opacity"
+        onMouseDown={(e) => startResize(e, 'se')}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 3 3"
+          fill="currentColor"
+          className="w-full h-full text-gray-400"
+        >
+          <polygon points="3,3 3,0 0,3" fill="currentColor" />
+        </svg>
+      </div>
     </div>
   )
 }
