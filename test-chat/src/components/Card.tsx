@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import type { ReactNode } from 'react'
-import type { Position } from '../utils/siteDataTypes'
+import type { Card, Position } from '../utils/siteDataTypes'
 import { useDraggable } from '../hooks/useDraggable'
 import IconButton from './Button/IconButton/IconButton'
 
@@ -11,6 +11,7 @@ interface CardProps {
   onClose?: () => void
   initialPosition?: Position
   initialSize?: { width: number; height: number }
+  onChange: (newCard: Card) => void
 }
 
 const Card: React.FC<CardProps> = ({
@@ -20,12 +21,13 @@ const Card: React.FC<CardProps> = ({
   onClose,
   initialPosition = { x: 0, y: 0 },
   initialSize = { width: 500, height: 300 },
+  onChange,
 }) => {
   const [isMinimized, setIsMinimized] = useState(false)
   const [size, setSize] = useState(initialSize)
   const [isResizing, setIsResizing] = useState(false)
 
-  const { handleMouseDown, handleMouseMove, handleMouseUp, style } = useDraggable({
+  const { position, handleMouseDown, handleMouseMove, handleMouseUp, style } = useDraggable({
     dragHandleClassName: 'card-header',
     initialPosition,
   })
@@ -57,6 +59,13 @@ const Card: React.FC<CardProps> = ({
       setIsResizing(false)
       document.removeEventListener('mousemove', onMouseMove)
       document.removeEventListener('mouseup', onMouseUp)
+      onChange({
+        id,
+        title,
+        type: 'chat',
+        position,
+        size,
+      })
     }
 
     document.addEventListener('mousemove', onMouseMove)

@@ -11,6 +11,7 @@ export type Size = {
 export type CardType = 'chat'
 
 export type Card = {
+  id: string
   title: string
   type: CardType
   size: Size
@@ -26,12 +27,14 @@ export const DEFAULT_SITE_DATA: SiteData = {
   canvasOffset: { x: 0, y: 0 },
   cards: {
     card1: {
+      id: 'card1',
       title: 'Card 1',
       type: 'chat',
       size: { width: 500, height: 300 },
       position: { x: 0, y: 0 },
     },
     card2: {
+      id: 'card2',
       title: 'Card 2',
       type: 'chat',
       size: { width: 500, height: 300 },

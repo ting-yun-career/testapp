@@ -1,11 +1,10 @@
 import { createContext } from 'react'
-import type { Position, Size, SiteData } from '../utils/siteDataTypes'
+import type { Position, SiteData, Card } from '../utils/siteDataTypes'
 
 export interface SiteDataContextType {
   siteData: SiteData
   updateCanvasOffset: (offset: Position) => void
-  updateCardPosition: (cardId: string, position: Position) => void
-  updateCardSize: (cardId: string, size: Size) => void
+  updateCard: (cardId: string, newCard: Card) => void
 }
 
 export const SiteDataContext = createContext<SiteDataContextType | undefined>(undefined)

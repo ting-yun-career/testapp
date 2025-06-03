@@ -8,5 +8,3 @@ export const useSiteData = () => {
   }
   return context
 }
-
-export { SiteDataProvider }
