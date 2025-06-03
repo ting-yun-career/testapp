@@ -1,10 +1,11 @@
 import { useState, useRef } from 'react'
 import type { MouseEvent } from 'react'
-import type { Position } from '../App'
+import type { Position } from '../utils/siteDataTypes'
 
 interface UseDraggableOptions {
-  dragHandleClassName?: string
+  dragHandleClassName: string
   initialPosition?: Position
+  id?: string
 }
 
 interface UseDraggableReturn {
@@ -19,7 +20,7 @@ interface UseDraggableReturn {
   }
 }
 
-export function useDraggable(options: UseDraggableOptions = {}): UseDraggableReturn {
+export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
   const [position, setPosition] = useState<Position>(options.initialPosition || { x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
   const dragOffset = useRef<Position>({ x: 0, y: 0 })

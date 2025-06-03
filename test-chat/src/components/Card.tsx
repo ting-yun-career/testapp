@@ -1,21 +1,33 @@
 import React, { useState } from 'react'
 import type { ReactNode } from 'react'
+import type { Position } from '../utils/siteDataTypes'
 import { useDraggable } from '../hooks/useDraggable'
 import IconButton from './Button/IconButton/IconButton'
 
 interface CardProps {
+  id: string
   title: string
   children: ReactNode
   onClose?: () => void
+  initialPosition?: Position
+  initialSize?: { width: number; height: number }
 }
 
-const Card: React.FC<CardProps> = ({ title, children, onClose }) => {
+const Card: React.FC<CardProps> = ({
+  id,
+  title,
+  children,
+  onClose,
+  initialPosition = { x: 0, y: 0 },
+  initialSize = { width: 500, height: 300 },
+}) => {
   const [isMinimized, setIsMinimized] = useState(false)
-  const [size, setSize] = useState({ width: 500, height: 300 })
+  const [size, setSize] = useState(initialSize)
   const [isResizing, setIsResizing] = useState(false)
 
   const { handleMouseDown, handleMouseMove, handleMouseUp, style } = useDraggable({
     dragHandleClassName: 'card-header',
+    initialPosition,
   })
 
   const handleMinimize = () => {
