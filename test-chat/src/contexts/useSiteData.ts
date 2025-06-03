@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { SiteDataContext, SiteDataProvider } from './SiteDataContext'
+import { SiteDataContext } from './SiteDataContext'
 
 export const useSiteData = () => {
   const context = useContext(SiteDataContext)
