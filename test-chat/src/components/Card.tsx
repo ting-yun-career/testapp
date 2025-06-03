@@ -16,24 +16,17 @@ const Card: React.FC<CardProps> = ({ data, children, onClose, onChange }) => {
   const [size, setSize] = useState(data.size)
   const [isResizing, setIsResizing] = useState(false)
   const sizeRef = useRef(data.size)
-  const positionRef = useRef(data.position)
 
   const { position, handleMouseDown, handleMouseMove, handleMouseUp, style } = useDraggable({
     dragHandleClassName: 'card-header',
-    initialPosition: positionRef.current,
+    initialPosition: data.position,
+    onDragEnd: (position) => {
+      onChange({
+        ...data,
+        position,
+      })
+    },
   })
-
-  useEffect(() => {
-    positionRef.current = position
-  }, [position])
-
-  const updateCardData = useCallback(() => {
-    onChange({
-      ...data,
-      size: sizeRef.current,
-      position: positionRef.current,
-    })
-  }, [data, onChange])
 
   const handleMinimize = () => {
     setIsMinimized(!isMinimized)
@@ -65,7 +58,11 @@ const Card: React.FC<CardProps> = ({ data, children, onClose, onChange }) => {
       setIsResizing(false)
       document.removeEventListener('mousemove', onMouseMove)
       document.removeEventListener('mouseup', onMouseUp)
-      updateCardData()
+      onChange({
+        ...data,
+        size: sizeRef.current,
+        position,
+      })
     }
 
     document.addEventListener('mousemove', onMouseMove)

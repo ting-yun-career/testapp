@@ -4,6 +4,7 @@ import type { Position } from '../utils/siteDataTypes'
 
 interface UseDraggableOptions {
   dragHandleClassName: string
+  onDragEnd: (position: Position) => void
   initialPosition?: Position
   id?: string
 }
@@ -55,6 +56,7 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
 
   const handleMouseUp = () => {
     setIsDragging(false)
+    options.onDragEnd(position)
   }
 
   return {
