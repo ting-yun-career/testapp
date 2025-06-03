@@ -2,7 +2,7 @@ import React from 'react'
 import Chat from './components/Chat'
 import Card from './components/Card'
 import { Canvas } from './components/Canvas'
-import { SiteDataProvider } from './contexts/SiteDataContext'
+import { SiteDataProvider } from './contexts/useSiteData'
 import { useSiteData } from './contexts/useSiteData'
 import './App.css'
 

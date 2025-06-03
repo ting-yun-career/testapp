@@ -1,8 +1,16 @@
-import React, { useState, useCallback } from 'react'
+import React, { createContext, useState, useCallback } from 'react'
 import type { ReactNode } from 'react'
 import type { Position, Size, SiteData } from '../utils/siteDataTypes'
 import { DEFAULT_SITE_DATA } from '../utils/siteDataTypes'
-import { SiteDataContext } from './SiteDataContext'
+
+export interface SiteDataContextType {
+  siteData: SiteData
+  updateCanvasOffset: (offset: Position) => void
+  updateCardPosition: (cardId: string, position: Position) => void
+  updateCardSize: (cardId: string, size: Size) => void
+}
+
+export const SiteDataContext = createContext<SiteDataContextType | undefined>(undefined)
 
 export const SiteDataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [siteData, setSiteData] = useState<SiteData>(() => {
