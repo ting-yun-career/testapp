@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import type { ReactNode } from 'react'
 import type { Card } from '../utils/siteDataTypes'
 import { useDraggable } from '../hooks/useDraggable'
