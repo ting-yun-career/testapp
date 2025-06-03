@@ -31,7 +31,6 @@ export const SiteDataProvider: React.FC<{ children: ReactNode }> = ({ children }
 
   const updateCard = useCallback(
     (newCard: Card) => {
-      debugger
       if (!siteData.cards[newCard.id]) return
 
       updateSiteData({
