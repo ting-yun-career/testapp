@@ -1,6 +1,6 @@
-import React, { createContext, useState, useContext, useCallback } from 'react'
+import React, { createContext, useState, useCallback } from 'react'
 import type { ReactNode } from 'react'
-import type { Position, Size, Card, SiteData } from '../utils/siteDataTypes'
+import type { Position, Size, SiteData } from '../utils/siteDataTypes'
 import { DEFAULT_SITE_DATA } from '../utils/siteDataTypes'
 
 interface SiteDataContextType {
@@ -10,7 +10,7 @@ interface SiteDataContextType {
   updateCardSize: (cardId: string, size: Size) => void
 }
 
-const SiteDataContext = createContext<SiteDataContextType | undefined>(undefined)
+export const SiteDataContext = createContext<SiteDataContextType | undefined>(undefined)
 
 export const SiteDataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [siteData, setSiteData] = useState<SiteData>(() => {
@@ -85,12 +85,4 @@ export const SiteDataProvider: React.FC<{ children: ReactNode }> = ({ children }
       {children}
     </SiteDataContext.Provider>
   )
-}
-
-export const useSiteData = () => {
-  const context = useContext(SiteDataContext)
-  if (context === undefined) {
-    throw new Error('useSiteData must be used within a SiteDataProvider')
-  }
-  return context
 }
