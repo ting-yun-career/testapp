@@ -7,12 +7,12 @@ import IconButton from './Button/IconButton/IconButton'
 interface CardProps {
   data: Card
   children: ReactNode
-  onClose?: () => void
   onChange: (newCard: Card) => void
+  onClose: (cardId: string) => void
 }
 
-const Card: React.FC<CardProps> = ({ data, children, onClose, onChange }) => {
-  const [isMinimized, setIsMinimized] = useState(false)
+const Card: React.FC<CardProps> = ({ data, children, onChange, onClose }) => {
+  const [isMinimized, setIsMinimized] = useState(data.isMinimized)
   const [size, setSize] = useState(data.size)
   const [isResizing, setIsResizing] = useState(false)
   const sizeRef = useRef(data.size)
@@ -30,6 +30,10 @@ const Card: React.FC<CardProps> = ({ data, children, onClose, onChange }) => {
 
   const handleMinimize = () => {
     setIsMinimized(!isMinimized)
+    onChange({
+      ...data,
+      isMinimized,
+    })
   }
 
   const startResize = (e: React.MouseEvent) => {
@@ -86,16 +90,14 @@ const Card: React.FC<CardProps> = ({ data, children, onClose, onChange }) => {
       onMouseLeave={handleMouseUp}
     >
       <div className="card-header flex justify-between items-center px-4 py-2 bg-[#323337] cursor-grab active:cursor-grabbing">
-        <h2 className="text-lg text-white select-none">
-          {data.title} {JSON.stringify(size)}
-        </h2>
-        <div className="card-actions">
+        <h2 className="text-lg text-white select-none">{data.title}</h2>
+        <div className="flex gap-1">
           <IconButton
             icon={isMinimized ? 'minimizeAlt' : 'minimize'}
             onClick={handleMinimize}
             title={isMinimized ? 'Maximize' : 'Minimize'}
           />
-          {onClose && <IconButton icon="close" onClick={onClose} title="Close" />}
+          <IconButton icon="close" onClick={() => onClose(data.id)} title="Close" />
         </div>
       </div>
       <div className={`flex-grow overflow-auto ${isMinimized ? 'hidden' : 'block'}`}>
