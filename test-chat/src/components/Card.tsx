@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useRef } from 'react'
 import type { ReactNode } from 'react'
 import type { Card } from '../utils/siteDataTypes'
 import { useDraggable } from '../hooks/useDraggable'
@@ -15,6 +15,7 @@ const Card: React.FC<CardProps> = ({ data, children, onClose, onChange }) => {
   const [isMinimized, setIsMinimized] = useState(false)
   const [size, setSize] = useState(data.size)
   const [isResizing, setIsResizing] = useState(false)
+  const latestSizeRef = useRef(data.size)
 
   const { position, handleMouseDown, handleMouseMove, handleMouseUp, style } = useDraggable({
     dragHandleClassName: 'card-header',
@@ -24,15 +25,6 @@ const Card: React.FC<CardProps> = ({ data, children, onClose, onChange }) => {
   const handleMinimize = () => {
     setIsMinimized(!isMinimized)
   }
-
-  const updateCardData = useCallback(() => {
-    debugger
-    onChange({
-      ...data,
-      size,
-      position,
-    })
-  }, [data, size, position, onChange])
 
   const startResize = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -47,18 +39,24 @@ const Card: React.FC<CardProps> = ({ data, children, onClose, onChange }) => {
       const deltaX = moveEvent.clientX - startX
       const deltaY = moveEvent.clientY - startY
 
-      setSize({
+      const newSize = {
         width: Math.max(200, startWidth + deltaX),
         height: Math.max(100, startHeight + deltaY),
-      })
+      }
+
+      setSize(newSize)
+      latestSizeRef.current = newSize
     }
 
     const onMouseUp = () => {
       setIsResizing(false)
       document.removeEventListener('mousemove', onMouseMove)
       document.removeEventListener('mouseup', onMouseUp)
-      setTimeout(updateCardData, 100)
-      // updateCardData()
+      onChange({
+        ...data,
+        size: latestSizeRef.current,
+        position,
+      })
     }
 
     document.addEventListener('mousemove', onMouseMove)
