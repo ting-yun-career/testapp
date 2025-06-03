@@ -34,7 +34,7 @@ const Card: React.FC<CardProps> = ({
     setIsMinimized(!isMinimized)
   }
 
-  const startResize = (e: React.MouseEvent, direction: string) => {
+  const startResize = (e: React.MouseEvent) => {
     e.preventDefault()
     setIsResizing(true)
 
@@ -48,8 +48,8 @@ const Card: React.FC<CardProps> = ({
       const deltaY = moveEvent.clientY - startY
 
       setSize({
-        width: Math.max(200, startWidth + (direction.includes('e') ? deltaX : 0)),
-        height: Math.max(100, startHeight + (direction.includes('s') ? deltaY : 0)),
+        width: Math.max(200, startWidth + deltaX),
+        height: Math.max(100, startHeight + deltaY),
       })
     }
 
@@ -93,10 +93,9 @@ const Card: React.FC<CardProps> = ({
       <div className={`flex-grow overflow-auto ${isMinimized ? 'hidden' : 'block'}`}>
         <div className="h-full">{children}</div>
       </div>
-      {/* Resize handle */}
       <div
-        className="absolute bottom-3 right-3 w-3 h-3 cursor-se-resize opacity-50 hover:opacity-100 transition-opacity"
-        onMouseDown={(e) => startResize(e, 'se')}
+        className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize opacity-50 hover:opacity-100 transition-opacity"
+        onMouseDown={startResize}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +105,7 @@ const Card: React.FC<CardProps> = ({
           strokeWidth="0.3"
           className="w-full h-full text-gray-400"
         >
-          <polygon points="3,3 3,0 0,3" />
+          <polygon points="2,2 2,0 0,2" />
         </svg>
       </div>
     </div>
