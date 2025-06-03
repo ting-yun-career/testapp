@@ -30,14 +30,15 @@ export const SiteDataProvider: React.FC<{ children: ReactNode }> = ({ children }
   )
 
   const updateCard = useCallback(
-    (cardId: string, newCard: Card) => {
-      if (!siteData.cards[cardId]) return
+    (newCard: Card) => {
+      debugger
+      if (!siteData.cards[newCard.id]) return
 
       updateSiteData({
         ...siteData,
         cards: {
           ...siteData.cards,
-          [cardId]: newCard,
+          [newCard.id]: newCard,
         },
       })
     },

@@ -1,40 +1,38 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import type { ReactNode } from 'react'
-import type { Card, Position } from '../utils/siteDataTypes'
+import type { Card } from '../utils/siteDataTypes'
 import { useDraggable } from '../hooks/useDraggable'
 import IconButton from './Button/IconButton/IconButton'
 
 interface CardProps {
-  id: string
-  title: string
+  data: Card
   children: ReactNode
   onClose?: () => void
-  initialPosition?: Position
-  initialSize?: { width: number; height: number }
   onChange: (newCard: Card) => void
 }
 
-const Card: React.FC<CardProps> = ({
-  id,
-  title,
-  children,
-  onClose,
-  initialPosition = { x: 0, y: 0 },
-  initialSize = { width: 500, height: 300 },
-  onChange,
-}) => {
+const Card: React.FC<CardProps> = ({ data, children, onClose, onChange }) => {
   const [isMinimized, setIsMinimized] = useState(false)
-  const [size, setSize] = useState(initialSize)
+  const [size, setSize] = useState(data.size)
   const [isResizing, setIsResizing] = useState(false)
 
   const { position, handleMouseDown, handleMouseMove, handleMouseUp, style } = useDraggable({
     dragHandleClassName: 'card-header',
-    initialPosition,
+    initialPosition: data.position,
   })
 
   const handleMinimize = () => {
     setIsMinimized(!isMinimized)
   }
+
+  const updateCardData = useCallback(() => {
+    debugger
+    onChange({
+      ...data,
+      size,
+      position,
+    })
+  }, [data, size, position, onChange])
 
   const startResize = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -59,13 +57,8 @@ const Card: React.FC<CardProps> = ({
       setIsResizing(false)
       document.removeEventListener('mousemove', onMouseMove)
       document.removeEventListener('mouseup', onMouseUp)
-      onChange({
-        id,
-        title,
-        type: 'chat',
-        position,
-        size,
-      })
+      setTimeout(updateCardData, 100)
+      // updateCardData()
     }
 
     document.addEventListener('mousemove', onMouseMove)
@@ -89,7 +82,9 @@ const Card: React.FC<CardProps> = ({
       onMouseLeave={handleMouseUp}
     >
       <div className="card-header flex justify-between items-center px-4 py-2 bg-[#323337] cursor-grab active:cursor-grabbing">
-        <h2 className="text-lg text-white select-none">{title}</h2>
+        <h2 className="text-lg text-white select-none">
+          {data.title} {JSON.stringify(size)}
+        </h2>
         <div className="card-actions">
           <IconButton
             icon={isMinimized ? 'minimizeAlt' : 'minimize'}
