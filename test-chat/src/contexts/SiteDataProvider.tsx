@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import type { ReactNode } from 'react'
 import type { Position, SiteData, Card } from '../utils/siteDataTypes'
-import { DEFAULT_SITE_DATA } from '../utils/siteDataTypes'
+import { DEFAULT_SITE_DATA, DEFAULT_CARD } from '../utils/siteDataTypes'
 import { SiteDataContext } from './SiteDataContext'
 
 export const SiteDataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -29,6 +29,12 @@ export const SiteDataProvider: React.FC<{ children: ReactNode }> = ({ children }
     [siteData, updateSiteData]
   )
 
+  const addCard = useCallback(() => {
+    updateSiteData({
+      ...siteData,
+      cards: { ...siteData.cards, [DEFAULT_CARD.id]: DEFAULT_CARD },
+    })
+  }, [siteData, updateSiteData])
   const updateCard = useCallback(
     (newCard: Card) => {
       if (!siteData.cards[newCard.id]) return
@@ -62,6 +68,7 @@ export const SiteDataProvider: React.FC<{ children: ReactNode }> = ({ children }
       value={{
         siteData,
         updateCanvasOffset,
+        addCard,
         updateCard,
         removeCard,
       }}
