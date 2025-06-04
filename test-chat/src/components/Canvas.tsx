@@ -1,13 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import type { ReactNode, WheelEvent } from 'react'
 import type { Position } from '../utils/siteDataTypes'
 import HeaderFloatingBar from './HeaderFloatingBar'
-
-declare global {
-  interface Window {
-    __CANVAS_OFFSET__: Position
-  }
-}
 
 const SCROLLING_STEP = 16
 const SCROLLING_SPEED = 3
@@ -44,10 +38,6 @@ export const Canvas: React.FC<CanvasProps> = ({ children, initialOffset, status,
       return updatedOffset
     })
   }
-
-  useEffect(() => {
-    window.__CANVAS_OFFSET__ = offset
-  }, [offset])
 
   return (
     <div

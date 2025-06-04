@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import type { MouseEvent } from 'react'
 import type { Position } from '../utils/siteDataTypes'
+import { useSiteData } from '../contexts/useSiteData'
 
 interface UseDraggableOptions {
   dragHandleClassName: string
@@ -22,6 +23,7 @@ interface UseDraggableReturn {
 }
 
 export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
+  const { siteData } = useSiteData()
   const [position, setPosition] = useState<Position>(options.initialPosition || { x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
   const dragOffset = useRef<Position>({ x: 0, y: 0 })
@@ -34,7 +36,8 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
     }
 
     setIsDragging(true)
-    const canvasOffset = window.__CANVAS_OFFSET__ || { x: 0, y: 0 }
+
+    const canvasOffset = siteData.canvasOffset || { x: 0, y: 0 }
     dragOffset.current = {
       x: e.clientX - position.x + canvasOffset.x,
       y: e.clientY - position.y + canvasOffset.y,
@@ -43,7 +46,7 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
 
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging) {
-      const canvasOffset = window.__CANVAS_OFFSET__ || { x: 0, y: 0 }
+      const canvasOffset = siteData.canvasOffset || { x: 0, y: 0 }
       const newX = e.clientX - dragOffset.current.x + canvasOffset.x
       const newY = e.clientY - dragOffset.current.y + canvasOffset.y
 
