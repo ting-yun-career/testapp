@@ -15,7 +15,7 @@ const IconButton: React.FC<IconButtonProps> = ({ icon, text, title, onClick }) =
       title={title}
     >
       <span className="material-symbols-outlined">{icon}</span>
-      {text && <span className="text-sm inline-block">{text}</span>}
+      {text && <span className="text-base inline-block">{text}</span>}
     </button>
   )
 }
