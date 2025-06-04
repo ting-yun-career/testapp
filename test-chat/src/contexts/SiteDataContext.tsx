@@ -5,6 +5,7 @@ export interface SiteDataContextType {
   siteData: SiteData
   updateCanvasOffset: (offset: Position) => void
   updateCard: (newCard: Card) => void
+  removeCard: (id: string) => void
 }
 
 export const SiteDataContext = createContext<SiteDataContextType | undefined>(undefined)

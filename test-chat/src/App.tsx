@@ -7,12 +7,12 @@ import './App.css'
 import Card from './components/Card'
 
 const AppContent: React.FC = () => {
-  const { siteData, updateCanvasOffset, updateCard } = useSiteData()
+  const { siteData, updateCanvasOffset, updateCard, removeCard } = useSiteData()
   return (
     <Canvas initialOffset={siteData.canvasOffset} onOffsetChange={updateCanvasOffset}>
       {siteData.cards &&
         Object.entries(siteData.cards).map(([id, data]) => (
-          <Card key={id} data={data} onChange={updateCard}>
+          <Card key={id} data={data} onChange={updateCard} onClose={removeCard}>
             <Chat />
           </Card>
         ))}

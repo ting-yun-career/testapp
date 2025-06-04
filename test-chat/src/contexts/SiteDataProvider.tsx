@@ -44,12 +44,26 @@ export const SiteDataProvider: React.FC<{ children: ReactNode }> = ({ children }
     [siteData, updateSiteData]
   )
 
+  const removeCard = useCallback(
+    (id: string) => {
+      const newCards = { ...siteData.cards }
+      delete newCards[id]
+
+      updateSiteData({
+        ...siteData,
+        cards: newCards,
+      })
+    },
+    [siteData, updateSiteData]
+  )
+
   return (
     <SiteDataContext.Provider
       value={{
         siteData,
         updateCanvasOffset,
         updateCard,
+        removeCard,
       }}
     >
       {children}
