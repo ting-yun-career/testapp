@@ -16,6 +16,7 @@ export type Card = {
   type: CardType
   size: Size
   position: Position
+  isMinimized: boolean
 }
 
 export interface SiteData {
@@ -32,13 +33,7 @@ export const DEFAULT_SITE_DATA: SiteData = {
       type: 'chat',
       size: { width: 500, height: 300 },
       position: { x: 0, y: 0 },
-    },
-    card2: {
-      id: 'card2',
-      title: 'Card 2',
-      type: 'chat',
-      size: { width: 500, height: 300 },
-      position: { x: 500, y: 0 },
+      isMinimized: false,
     },
   },
 }

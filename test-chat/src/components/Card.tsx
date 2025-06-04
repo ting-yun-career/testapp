@@ -93,7 +93,7 @@ const Card: React.FC<CardProps> = ({ data, children, onChange, onClose }) => {
         <h2 className="text-lg text-white select-none">{data.title}</h2>
         <div className="flex gap-1">
           <IconButton
-            icon={isMinimized ? 'minimizeAlt' : 'minimize'}
+            icon={isMinimized ? 'stat_minus_2' : 'stat_2'}
             onClick={handleMinimize}
             title={isMinimized ? 'Maximize' : 'Minimize'}
           />
@@ -103,21 +103,21 @@ const Card: React.FC<CardProps> = ({ data, children, onChange, onClose }) => {
       <div className={`flex-grow overflow-auto ${isMinimized ? 'hidden' : 'block'}`}>
         <div className="h-full">{children}</div>
       </div>
-      <div
-        className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize opacity-50 hover:opacity-100 transition-opacity"
-        onMouseDown={startResize}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 3 3"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="0.3"
-          className="w-full h-full text-gray-400"
+      {!isMinimized ? (
+        <div
+          className="absolute bottom-1 right-1 w-4 h-4 cursor-se-resize hover:opacity-100 transition-opacity"
+          onMouseDown={startResize}
         >
-          <polygon points="2,2 2,0 0,2" />
-        </svg>
-      </div>
+          <span className="material-symbols-outlined">pip</span>
+        </div>
+      ) : (
+        <div
+          className="absolute bottom-1 right-1 w-4 h-4 cursor-se-resize hover:opacity-100 transition-opacity"
+          onMouseDown={startResize}
+        >
+          <span className="material-symbols-outlined">arrows_outward</span>
+        </div>
+      )}
     </div>
   )
 }
