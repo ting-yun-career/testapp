@@ -32,7 +32,7 @@ const Card: React.FC<CardProps> = ({ data, children, onChange, onClose }) => {
     setIsMinimized(!isMinimized)
     onChange({
       ...data,
-      isMinimized,
+      isMinimized: !isMinimized,
     })
   }
 
