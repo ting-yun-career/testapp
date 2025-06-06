@@ -105,10 +105,10 @@ const Card: React.FC<CardProps> = ({ data, children, onChange, onClose }) => {
       </div>
       {!isMinimized ? (
         <div
-          className="absolute bottom-1 right-1 w-4 h-4 cursor-se-resize hover:opacity-100 transition-opacity"
+          className="absolute bottom-2 right-1 w-4 h-4 cursor-se-resize hover:opacity-100 transition-opacity"
           onMouseDown={startResize}
         >
-          <span className="material-symbols-outlined">pip</span>
+          <span className="material-symbols-outlined !text-xl">pip</span>
         </div>
       ) : (
         <div
