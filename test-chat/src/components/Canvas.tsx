@@ -4,7 +4,7 @@ import type { Position } from '../utils/siteDataTypes'
 import { useSiteData } from '../contexts/useSiteData'
 import HeaderFloatingBar from './HeaderFloatingBar'
 import FooterFloatingBar from './FooterFloatingBar'
-import { Flyout } from './Flyout'
+import { Flyout } from './flyout'
 
 const SCROLLING_STEP = 16
 const SCROLLING_SPEED = 3
