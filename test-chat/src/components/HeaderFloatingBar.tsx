@@ -1,12 +1,12 @@
 import React from 'react'
 import IconButton from './Button/IconButton/IconButton'
-import FloatingBarWrapper from './FloatingBarWrapper'
+import FloatingBar from './FloatingBarWrapper'
 
 const HeaderFloatingBar: React.FC = () => {
   return (
-    <FloatingBarWrapper position="top">
+    <FloatingBar position="top">
       <IconButton icon="menu" text="Menu" />
-    </FloatingBarWrapper>
+    </FloatingBar>
   )
 }
 

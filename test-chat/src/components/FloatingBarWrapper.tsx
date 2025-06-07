@@ -1,11 +1,11 @@
 import React from 'react'
 
-interface FloatingBarWrapperProps {
+interface FloatingBarProps {
   children: React.ReactNode
   position: 'top' | 'bottom'
 }
 
-const FloatingBarWrapper: React.FC<FloatingBarWrapperProps> = ({ children, position }) => {
+const FloatingBar: React.FC<FloatingBarProps> = ({ children, position }) => {
   const positionClass = position === 'top' ? 'top-8' : 'bottom-8'
   return (
     <div
@@ -16,4 +16,4 @@ const FloatingBarWrapper: React.FC<FloatingBarWrapperProps> = ({ children, posit
   )
 }
 
-export default FloatingBarWrapper
+export default FloatingBar
