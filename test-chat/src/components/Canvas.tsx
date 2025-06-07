@@ -51,11 +51,11 @@ export const Canvas: React.FC<CanvasProps> = ({ children, initialOffset, status,
       <HeaderFloatingBar />
 
       <div
-        className="fixed left-0 top-0 bottom-0 bg-[#080811] border-l border-[#080811] transition-all duration-300 ease-in-out"
+        className="fixed left-0 top-0 bottom-0 bg-[#080811] border-r border-whitetransition-all duration-300 ease-in-out"
         style={{ width: siteData.widgetPanel.isOpen ? '250px' : '0' }}
       >
         <div
-          className="absolute top-0 left-[calc(100%)] bg-[#080811] border-l border-[#080811]"
+          className="absolute top-0 left-[calc(100%)] p-2 bg-[#080811] border-[#e1e1e1] border-b border-r border-[#080811]"
           onClick={toggleWidgetPanel}
         >
           <span className="material-symbols-outlined !text-4xl" title="Toggle Widget Panel">
