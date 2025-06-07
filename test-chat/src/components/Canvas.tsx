@@ -4,7 +4,6 @@ import type { Position } from '../utils/siteDataTypes'
 import { useSiteData } from '../contexts/useSiteData'
 import HeaderFloatingBar from './HeaderFloatingBar'
 import FooterFloatingBar from './FooterFloatingBar'
-import IconButton from './Button/IconButton/IconButton'
 
 const SCROLLING_STEP = 16
 const SCROLLING_SPEED = 3
@@ -52,15 +51,16 @@ export const Canvas: React.FC<CanvasProps> = ({ children, initialOffset, status,
       <HeaderFloatingBar />
 
       <div
-        className="fixed left-0 top-0 bottom-0 bg-[#1e1e1e] border-r border-white transition-all duration-300 ease-in-out"
+        className="fixed left-0 top-0 bottom-0 bg-[#080811] border-l border-[#080811] transition-all duration-300 ease-in-out"
         style={{ width: siteData.widgetPanel.isOpen ? '250px' : '0' }}
       >
-        <div className="absolute top-1 left-full">
-          <IconButton
-            icon={siteData.widgetPanel.isOpen ? 'left_panel_open' : 'left_panel_close'}
-            onClick={toggleWidgetPanel}
-            title="Toggle Widget Panel"
-          />
+        <div
+          className="absolute top-0 left-[calc(100%)] bg-[#080811] border-l border-[#080811]"
+          onClick={toggleWidgetPanel}
+        >
+          <span className="material-symbols-outlined !text-4xl" title="Toggle Widget Panel">
+            shelf_auto_hide
+          </span>
         </div>
         {/* Content of your flyout panel */}
       </div>
