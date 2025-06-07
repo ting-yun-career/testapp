@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import type { ReactNode, WheelEvent } from 'react'
 import type { Position } from '../utils/siteDataTypes'
 import HeaderFloatingBar from './HeaderFloatingBar'
+import FooterFloatingBar from './FooterFloatingBar'
 
 const SCROLLING_STEP = 16
 const SCROLLING_SPEED = 3
@@ -46,6 +47,7 @@ export const Canvas: React.FC<CanvasProps> = ({ children, initialOffset, status,
       style={{ touchAction: 'none' }}
     >
       <HeaderFloatingBar />
+
       <div
         className="absolute"
         style={{
@@ -54,6 +56,9 @@ export const Canvas: React.FC<CanvasProps> = ({ children, initialOffset, status,
       >
         {children}
       </div>
+
+      <FooterFloatingBar />
+
       {status && (
         <div className="fixed bottom-1 left-1 bg-[#1e1e1e] bg-opacity-50 text-gray-400 px-2 py-0 text-sm">{status}</div>
       )}
