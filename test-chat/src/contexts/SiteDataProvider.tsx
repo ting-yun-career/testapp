@@ -11,6 +11,7 @@ export const SiteDataProvider: React.FC<{ children: ReactNode }> = ({ children }
     return {
       canvasOffset: parsedData.canvasOffset || DEFAULT_SITE_DATA.canvasOffset,
       cards: parsedData.cards || DEFAULT_SITE_DATA.cards,
+      widgetPanel: parsedData.widgetPanel || DEFAULT_SITE_DATA.widgetPanel,
     }
   })
 
@@ -64,6 +65,13 @@ export const SiteDataProvider: React.FC<{ children: ReactNode }> = ({ children }
     [siteData, updateSiteData]
   )
 
+  const toggleWidgetPanel = useCallback(() => {
+    updateSiteData({
+      ...siteData,
+      widgetPanel: { isOpen: !siteData.widgetPanel.isOpen },
+    })
+  }, [siteData, updateSiteData])
+
   return (
     <SiteDataContext.Provider
       value={{
@@ -72,6 +80,7 @@ export const SiteDataProvider: React.FC<{ children: ReactNode }> = ({ children }
         addCard,
         updateCard,
         removeCard,
+        toggleWidgetPanel,
       }}
     >
       {children}

@@ -24,6 +24,7 @@ export type Card = {
 export interface SiteData {
   canvasOffset: Position
   cards: { [key: string]: Card }
+  widgetPanel: { isOpen: boolean }
 }
 
 export const DEFAULT_CARD: Card = {
@@ -40,4 +41,5 @@ export const DEFAULT_SITE_DATA: SiteData = {
   cards: {
     [DEFAULT_CARD.id]: DEFAULT_CARD,
   },
+  widgetPanel: { isOpen: true },
 }

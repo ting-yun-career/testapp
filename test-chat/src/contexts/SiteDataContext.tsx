@@ -7,6 +7,7 @@ export interface SiteDataContextType {
   addCard: (newCard: Card) => void
   updateCard: (newCard: Card) => void
   removeCard: (id: string) => void
+  toggleWidgetPanel: () => void
 }
 
 export const SiteDataContext = createContext<SiteDataContextType | undefined>(undefined)

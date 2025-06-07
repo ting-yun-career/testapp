@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import type { ReactNode, WheelEvent } from 'react'
 import type { Position } from '../utils/siteDataTypes'
+import { useSiteData } from '../contexts/useSiteData'
 import HeaderFloatingBar from './HeaderFloatingBar'
 import FooterFloatingBar from './FooterFloatingBar'
+import IconButton from './Button/IconButton/IconButton'
 
 const SCROLLING_STEP = 16
 const SCROLLING_SPEED = 3
@@ -15,6 +17,7 @@ interface CanvasProps {
 }
 export const Canvas: React.FC<CanvasProps> = ({ children, initialOffset, status, onOffsetChange }) => {
   const [offset, setOffset] = useState<Position>(initialOffset)
+  const { siteData, toggleWidgetPanel } = useSiteData()
 
   const handleWheel = (e: WheelEvent<HTMLDivElement>) => {
     const newOffset = (prev: Position) => {
@@ -47,6 +50,20 @@ export const Canvas: React.FC<CanvasProps> = ({ children, initialOffset, status,
       style={{ touchAction: 'none' }}
     >
       <HeaderFloatingBar />
+
+      <div
+        className="fixed left-0 top-0 bottom-0 bg-[#1e1e1e] border-r border-white transition-all duration-300 ease-in-out"
+        style={{ width: siteData.widgetPanel.isOpen ? '250px' : '0' }}
+      >
+        <div className="absolute top-1 left-full">
+          <IconButton
+            icon={siteData.widgetPanel.isOpen ? 'left_panel_open' : 'left_panel_close'}
+            onClick={toggleWidgetPanel}
+            title="Toggle Widget Panel"
+          />
+        </div>
+        {/* Content of your flyout panel */}
+      </div>
 
       <div
         className="absolute"
