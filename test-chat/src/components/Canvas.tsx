@@ -51,7 +51,7 @@ export const Canvas: React.FC<CanvasProps> = ({ children, initialOffset, status,
       <HeaderFloatingBar />
 
       <div
-        className="fixed left-0 top-0 bottom-0 bg-[#080811] border-r border-white transition-all duration-300 ease-in-out"
+        className="fixed left-0 top-0 bottom-0 bg-[#080811] border-r border-white transition-all duration-300 ease-in-out z-20"
         style={{ width: siteData.widgetPanel.isOpen ? '250px' : '0' }}
       >
         <div
