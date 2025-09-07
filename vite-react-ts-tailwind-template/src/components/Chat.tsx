@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 const Chat: React.FC = () => {
   return (
     <div className="w-full min-h-screen bg-[#202123] text-white flex flex-col items-center justify-center p-6">
@@ -12,6 +11,11 @@ const Chat: React.FC = () => {
             placeholder="Ask anything"
             className="w-full bg-transparent resize-none text-white placeholder-gray-500 font-sans text-base focus:outline-none"
           ></textarea>
+          <div className="flex justify-end">
+            <button className="mt-2 px-4 py-2 bg-gray-700 text-white rounded-lg">
+              <span className="material-symbols-outlined">send</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
