@@ -12,8 +12,8 @@ const Content: React.FC = () => {
               </span>
             </div>
             <div className="flex-1 text-left">
-              item {i + 1} random some long text heading 123 be aoodl sdfa df
-              dfsaew
+              <b>title title</b> random some long text heading 123 be aoodl sdfa
+              df dfsaew
             </div>
           </div>
         ))}
