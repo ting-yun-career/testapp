@@ -1,0 +1,1258 @@
+[
+  {
+    "title": "Quantum AI breakthrough",
+    "summary": "Scientists announce a major leap in quantum computing, enabling new AI capabilities.",
+    "daysAgo": "3",
+    "country": "none",
+    "tags": ["science", "technology"],
+    "sourceUrl": "www.nature.com/news"
+  },
+  {
+    "title": "New electric car unveiled",
+    "summary": "A leading automaker reveals a new electric vehicle with a 500-mile range.",
+    "daysAgo": "2",
+    "country": "JP",
+    "tags": ["technology", "business"],
+    "sourceUrl": "www.autonews.com"
+  },
+  {
+    "title": "Global stock markets rally",
+    "summary": "Major stock indexes worldwide see significant gains driven by positive economic data.",
+    "daysAgo": "1",
+    "country": "none",
+    "tags": ["business", "finance"],
+    "sourceUrl": "www.bloomberg.com/markets"
+  },
+  {
+    "title": "New space telescope launched",
+    "summary": "A new telescope is successfully launched to study exoplanets, promising new discoveries.",
+    "daysAgo": "5",
+    "country": "US",
+    "tags": ["science", "space"],
+    "sourceUrl": "www.nasa.gov"
+  },
+  {
+    "title": "Government approves new policy",
+    "summary": "The national government passes new legislation aimed at reducing carbon emissions.",
+    "daysAgo": "4",
+    "country": "GB",
+    "tags": ["politics", "environment"],
+    "sourceUrl": "www.bbc.co.uk/politics"
+  },
+  {
+    "title": "New cryptocurrency emerges",
+    "summary": "A new digital currency gains rapid traction, sparking interest among investors.",
+    "daysAgo": "2",
+    "country": "none",
+    "tags": ["crypto", "finance"],
+    "sourceUrl": "www.coindesk.com"
+  },
+  {
+    "title": "Film wins top award",
+    "summary": "A documentary about climate change wins the top prize at an international film festival.",
+    "daysAgo": "6",
+    "country": "FR",
+    "tags": ["entertainment", "film"],
+    "sourceUrl": "www.hollywoodreporter.com"
+  },
+  {
+    "title": "Health experts issue warning",
+    "summary": "Public health officials warn about a new virus variant and advise caution.",
+    "daysAgo": "3",
+    "country": "DE",
+    "tags": ["health", "world"],
+    "sourceUrl": "www.who.int"
+  },
+  {
+    "title": "World leaders meet",
+    "summary": "Heads of state gather for an emergency summit to discuss global security threats.",
+    "daysAgo": "7",
+    "country": "none",
+    "tags": ["world", "politics"],
+    "sourceUrl": "www.reuters.com/world"
+  },
+  {
+    "title": "Cybersecurity firm acquires startup",
+    "summary": "A major cybersecurity firm expands its portfolio by acquiring a promising new startup.",
+    "daysAgo": "1",
+    "country": "CA",
+    "tags": ["technology", "business"],
+    "sourceUrl": "www.techcrunch.com"
+  },
+  {
+    "title": "Historic art recovered",
+    "summary": "Stolen paintings from a famous gallery are recovered after a decade-long search.",
+    "daysAgo": "4",
+    "country": "IT",
+    "tags": ["art", "crime"],
+    "sourceUrl": "www.theguardian.com/artanddesign"
+  },
+  {
+    "title": "New vaccine trial successful",
+    "summary": "A new experimental vaccine shows a high rate of effectiveness in its final trial phase.",
+    "daysAgo": "5",
+    "country": "CH",
+    "tags": ["health", "science"],
+    "sourceUrl": "www.lancet.com"
+  },
+  {
+    "title": "Sports league expands",
+    "summary": "A popular sports league announces it will add two new expansion teams next season.",
+    "daysAgo": "2",
+    "country": "US",
+    "tags": ["sports", "business"],
+    "sourceUrl": "www.espn.com"
+  },
+  {
+    "title": "Archeologists find ancient city",
+    "summary": "An ancient city, previously lost to history, is discovered in the desert.",
+    "daysAgo": "6",
+    "country": "EG",
+    "tags": ["history", "discovery"],
+    "sourceUrl": "www.nationalgeographic.com"
+  },
+  {
+    "title": "Social media giant fined",
+    "summary": "A social media company faces a massive fine over privacy violations in Europe.",
+    "daysAgo": "7",
+    "country": "IE",
+    "tags": ["technology", "law"],
+    "sourceUrl": "www.ft.com"
+  },
+  {
+    "title": "AI robot completes marathon",
+    "summary": "A humanoid robot designed with advanced AI successfully runs and finishes a marathon.",
+    "daysAgo": "4",
+    "country": "JP",
+    "tags": ["technology", "robotics"],
+    "sourceUrl": "www.wired.com"
+  },
+  {
+    "title": "Bitcoin mining becomes greener",
+    "summary": "New report shows that bitcoin mining is shifting towards more sustainable energy sources.",
+    "daysAgo": "3",
+    "country": "none",
+    "tags": ["crypto", "environment"],
+    "sourceUrl": "www.decrypt.co"
+  },
+  {
+    "title": "Pop star releases new album",
+    "summary": "A world-renowned pop singer releases their highly anticipated new album, breaking streaming records.",
+    "daysAgo": "1",
+    "country": "US",
+    "tags": ["entertainment", "music"],
+    "sourceUrl": "www.billboard.com"
+  },
+  {
+    "title": "New law on gun control",
+    "summary": "A new federal law on gun control is passed, sparking widespread debate.",
+    "daysAgo": "5",
+    "country": "AU",
+    "tags": ["politics", "society"],
+    "sourceUrl": "www.abc.net.au/news"
+  },
+  {
+    "title": "Astronauts return from ISS",
+    "summary": "A crew of astronauts safely returns to Earth after a six-month mission on the International Space Station.",
+    "daysAgo": "6",
+    "country": "RU",
+    "tags": ["space", "science"],
+    "sourceUrl": "www.esa.int"
+  },
+  {
+    "title": "New drug for Alzheimer's",
+    "summary": "A clinical trial shows a new drug can slow the progression of Alzheimer's disease.",
+    "daysAgo": "2",
+    "country": "GB",
+    "tags": ["health", "science"],
+    "sourceUrl": "www.nejm.org"
+  },
+  {
+    "title": "Global chip shortage ends",
+    "summary": "Experts announce that the global shortage of semiconductors has finally come to an end.",
+    "daysAgo": "7",
+    "country": "none",
+    "tags": ["technology", "business"],
+    "sourceUrl": "www.reuters.com/technology"
+  },
+  {
+    "title": "Stock market hits new high",
+    "summary": "The national stock exchange's main index reaches an all-time high amidst strong corporate earnings.",
+    "daysAgo": "4",
+    "country": "CA",
+    "tags": ["business", "finance"],
+    "sourceUrl": "www.cbc.ca/news/business"
+  },
+  {
+    "title": "Study finds new planet",
+    "summary": "Astronomers discover a new habitable planet in a nearby solar system.",
+    "daysAgo": "5",
+    "country": "none",
+    "tags": ["space", "science"],
+    "sourceUrl": "www.scientificamerican.com"
+  },
+  {
+    "title": "Major oil pipeline opens",
+    "summary": "A new trans-continental oil pipeline is completed, promising to ease energy prices.",
+    "daysAgo": "3",
+    "country": "US",
+    "tags": ["business", "energy"],
+    "sourceUrl": "www.wsj.com"
+  },
+  {
+    "title": "Election results debated",
+    "summary": "Political analysts debate the unexpected outcome of a recent national election.",
+    "daysAgo": "1",
+    "country": "JP",
+    "tags": ["politics", "world"],
+    "sourceUrl": "www.japantimes.co.jp"
+  },
+  {
+    "title": "AI creates a painting",
+    "summary": "An artificial intelligence system generates a painting that sells for millions at auction.",
+    "daysAgo": "6",
+    "country": "none",
+    "tags": ["technology", "art"],
+    "sourceUrl": "www.arstechnica.com"
+  },
+  {
+    "title": "New archaeological discovery",
+    "summary": "A team of archeologists uncovers an ancient tomb filled with previously unknown artifacts.",
+    "daysAgo": "7",
+    "country": "CN",
+    "tags": ["history", "discovery"],
+    "sourceUrl": "www.chinadaily.com.cn"
+  },
+  {
+    "title": "New food safety regulations",
+    "summary": "The government announces strict new regulations to improve food safety standards.",
+    "daysAgo": "2",
+    "country": "US",
+    "tags": ["health", "law"],
+    "sourceUrl": "www.fda.gov"
+  },
+  {
+    "title": "Tech company lays off staff",
+    "summary": "A major tech corporation announces large-scale layoffs as part of a restructuring plan.",
+    "daysAgo": "5",
+    "country": "DE",
+    "tags": ["technology", "business"],
+    "sourceUrl": "www.spiegel.de"
+  },
+  {
+    "title": "Celebrity couple divorces",
+    "summary": "A high-profile celebrity couple announces their separation after a five-year marriage.",
+    "daysAgo": "4",
+    "country": "US",
+    "tags": ["entertainment", "celebrity"],
+    "sourceUrl": "www.people.com"
+  },
+  {
+    "title": "New book on climate change",
+    "summary": "A bestselling author releases a new book detailing the personal impact of climate change.",
+    "daysAgo": "3",
+    "country": "none",
+    "tags": ["environment", "books"],
+    "sourceUrl": "www.penguin.com/news"
+  },
+  {
+    "title": "New quantum computer record",
+    "summary": "Researchers set a new world record for quantum computing speed and accuracy.",
+    "daysAgo": "6",
+    "country": "CH",
+    "tags": ["science", "technology"],
+    "sourceUrl": "www.sciencemag.org"
+  },
+  {
+    "title": "New solar energy project",
+    "summary": "A massive new solar energy farm is approved, promising to power thousands of homes.",
+    "daysAgo": "7",
+    "country": "AU",
+    "tags": ["energy", "environment"],
+    "sourceUrl": "www.renewableenergyworld.com"
+  },
+  {
+    "title": "Retail chain files for bankruptcy",
+    "summary": "A well-known national retail chain announces it will close all its stores after filing for bankruptcy.",
+    "daysAgo": "5",
+    "country": "US",
+    "tags": ["business", "retail"],
+    "sourceUrl": "www.retaildive.com"
+  },
+  {
+    "title": "New therapy for depression",
+    "summary": "A clinical trial proves a new therapy to be highly effective in treating severe depression.",
+    "daysAgo": "2",
+    "country": "none",
+    "tags": ["health", "mental health"],
+    "sourceUrl": "www.thelancet.com/psychiatry"
+  },
+  {
+    "title": "Global summit on migration",
+    "summary": "World leaders meet to discuss a coordinated response to the growing global migration crisis.",
+    "daysAgo": "4",
+    "country": "BE",
+    "tags": ["world", "politics"],
+    "sourceUrl": "www.un.org"
+  },
+  {
+    "title": "First human brain-chip",
+    "summary": "A biotech company successfully implants the first neural interface chip in a human brain.",
+    "daysAgo": "1",
+    "country": "US",
+    "tags": ["technology", "science"],
+    "sourceUrl": "www.technologyreview.com"
+  },
+  {
+    "title": "New video game console",
+    "summary": "A major gaming company unveils its new next-generation video game console.",
+    "daysAgo": "3",
+    "country": "JP",
+    "tags": ["entertainment", "gaming"],
+    "sourceUrl": "www.ign.com"
+  },
+  {
+    "title": "Stock market index plunges",
+    "summary": "The national stock market index drops sharply following a surprise interest rate hike.",
+    "daysAgo": "6",
+    "country": "GB",
+    "tags": ["business", "finance"],
+    "sourceUrl": "www.bbc.co.uk/business"
+  },
+  {
+    "title": "Scientists find new species",
+    "summary": "A new species of deep-sea fish is discovered in the Mariana Trench.",
+    "daysAgo": "5",
+    "country": "none",
+    "tags": ["science", "discovery"],
+    "sourceUrl": "www.oceanic.org/news"
+  },
+  {
+    "title": "New trade agreement signed",
+    "summary": "Several countries sign a new multilateral trade agreement to boost economic cooperation.",
+    "daysAgo": "7",
+    "country": "none",
+    "tags": ["world", "business"],
+    "sourceUrl": "www.wto.org"
+  },
+  {
+    "title": "Tech startup raises funding",
+    "summary": "A robotics startup successfully closes a Series B funding round, raising $50 million.",
+    "daysAgo": "4",
+    "country": "US",
+    "tags": ["technology", "business"],
+    "sourceUrl": "www.forbes.com"
+  },
+  {
+    "title": "New findings on Mars",
+    "summary": "The Mars rover sends back new data suggesting the presence of ancient liquid water.",
+    "daysAgo": "1",
+    "country": "none",
+    "tags": ["space", "science"],
+    "sourceUrl": "www.nasa.gov/mars"
+  },
+  {
+    "title": "Government restructures debt",
+    "summary": "The government announces a plan to restructure a portion of its national debt to avoid a crisis.",
+    "daysAgo": "3",
+    "country": "GR",
+    "tags": ["politics", "finance"],
+    "sourceUrl": "www.ekathimerini.com"
+  },
+  {
+    "title": "Cryptocurrency exchange hacked",
+    "summary": "A major cryptocurrency exchange is the victim of a cyberattack, losing millions in user funds.",
+    "daysAgo": "5",
+    "country": "KR",
+    "tags": ["crypto", "cybersecurity"],
+    "sourceUrl": "www.reuters.com/blockchain"
+  },
+  {
+    "title": "New fitness trend emerges",
+    "summary": "A new high-intensity fitness routine is gaining popularity across social media platforms.",
+    "daysAgo": "2",
+    "country": "none",
+    "tags": ["health", "lifestyle"],
+    "sourceUrl": "www.menshealth.com"
+  },
+  {
+    "title": "Film director announces retirement",
+    "summary": "An acclaimed film director announces that their next film will be their last.",
+    "daysAgo": "6",
+    "country": "FR",
+    "tags": ["entertainment", "film"],
+    "sourceUrl": "www.variety.com"
+  },
+  {
+    "title": "SpaceX launches new satellite",
+    "summary": "A private space company successfully launches a satellite to provide global internet access.",
+    "daysAgo": "7",
+    "country": "US",
+    "tags": ["space", "technology"],
+    "sourceUrl": "www.spacex.com"
+  },
+  {
+    "title": "New AI-powered assistant",
+    "summary": "A new virtual assistant with advanced conversational AI is released to the public.",
+    "daysAgo": "4",
+    "country": "none",
+    "tags": ["technology", "ai"],
+    "sourceUrl": "www.theverge.com"
+  },
+  {
+    "title": "UN issues new report",
+    "summary": "A United Nations report warns that a new wave of famine is imminent in several regions.",
+    "daysAgo": "3",
+    "country": "none",
+    "tags": ["world", "humanitarian"],
+    "sourceUrl": "www.un.org/news"
+  },
+  {
+    "title": "Automaker recalls vehicles",
+    "summary": "A major car company issues a recall for millions of vehicles due to a software glitch.",
+    "daysAgo": "1",
+    "country": "JP",
+    "tags": ["business", "automotive"],
+    "sourceUrl": "www.autoblog.com"
+  },
+  {
+    "title": "Research on renewable energy",
+    "summary": "Scientists make a breakthrough in battery technology, improving energy storage for renewables.",
+    "daysAgo": "5",
+    "country": "DE",
+    "tags": ["science", "energy"],
+    "sourceUrl": "www.nature.com/energy"
+  },
+  {
+    "title": "New law on data privacy",
+    "summary": "A new law is enacted that gives citizens more control over their personal data online.",
+    "daysAgo": "6",
+    "country": "BR",
+    "tags": ["politics", "law"],
+    "sourceUrl": "www.gov.br/news"
+  },
+  {
+    "title": "Cryptocurrency hits new peak",
+    "summary": "The price of Ethereum reaches an all-time high, driven by a surge in investor confidence.",
+    "daysAgo": "7",
+    "country": "none",
+    "tags": ["crypto", "finance"],
+    "sourceUrl": "www.bloomberg.com/crypto"
+  },
+  {
+    "title": "Hollywood strike ends",
+    "summary": "Actors and studios reach an agreement, officially ending a long-standing strike.",
+    "daysAgo": "4",
+    "country": "US",
+    "tags": ["entertainment", "labor"],
+    "sourceUrl": "www.variety.com"
+  },
+  {
+    "title": "New space tourism company",
+    "summary": "A new company announces it will offer commercial space flights to the public.",
+    "daysAgo": "2",
+    "country": "GB",
+    "tags": ["space", "business"],
+    "sourceUrl": "www.theguardian.com/business"
+  },
+  {
+    "title": "Breakthrough in cancer research",
+    "summary": "Researchers discover a new molecular pathway that could lead to new cancer treatments.",
+    "daysAgo": "3",
+    "country": "none",
+    "tags": ["health", "science"],
+    "sourceUrl": "www.cell.com"
+  },
+  {
+    "title": "E-commerce giant expands",
+    "summary": "A leading e-commerce company announces plans to build a new network of fulfillment centers.",
+    "daysAgo": "5",
+    "country": "CN",
+    "tags": ["business", "technology"],
+    "sourceUrl": "www.alizila.com"
+  },
+  {
+    "title": "New music streaming service",
+    "summary": "A new music streaming platform with unique social features launches in beta.",
+    "daysAgo": "6",
+    "country": "US",
+    "tags": ["entertainment", "tech"],
+    "sourceUrl": "www.musicbusinessworldwide.com"
+  },
+  {
+    "title": "Robotic surgery becomes common",
+    "summary": "The use of robotic surgical systems is now becoming a standard procedure in hospitals.",
+    "daysAgo": "1",
+    "country": "DE",
+    "tags": ["health", "technology"],
+    "sourceUrl": "www.bmj.com"
+  },
+  {
+    "title": "Global food prices rise",
+    "summary": "A new report from the UN indicates that global food prices are rising sharply.",
+    "daysAgo": "4",
+    "country": "none",
+    "tags": ["world", "economy"],
+    "sourceUrl": "www.fao.org/news"
+  },
+  {
+    "title": "Fashion house launches NFT",
+    "summary": "A renowned fashion house debuts a new collection of digital-only clothing as NFTs.",
+    "daysAgo": "7",
+    "country": "FR",
+    "tags": ["crypto", "entertainment"],
+    "sourceUrl": "www.vogue.com/business"
+  },
+  {
+    "title": "Political leader resigns",
+    "summary": "A long-serving political leader steps down from their position amid a scandal.",
+    "daysAgo": "2",
+    "country": "GB",
+    "tags": ["politics", "scandal"],
+    "sourceUrl": "www.thetimes.co.uk"
+  },
+  {
+    "title": "New gene therapy approved",
+    "summary": "A new gene therapy to treat a rare genetic disorder receives regulatory approval.",
+    "daysAgo": "3",
+    "country": "US",
+    "tags": ["health", "science"],
+    "sourceUrl": "www.nih.gov"
+  },
+  {
+    "title": "Cybersecurity firm raises funds",
+    "summary": "A startup focused on AI-driven cybersecurity raises a new round of funding.",
+    "daysAgo": "5",
+    "country": "IL",
+    "tags": ["technology", "business"],
+    "sourceUrl": "www.calcalistech.com"
+  },
+  {
+    "title": "New research on black holes",
+    "summary": "Astronomers publish a new study that sheds light on the behavior of black holes.",
+    "daysAgo": "6",
+    "country": "none",
+    "tags": ["science", "space"],
+    "sourceUrl": "www.hubblesite.org"
+  },
+  {
+    "title": "Bank raises interest rates",
+    "summary": "The central bank unexpectedly raises interest rates to combat rising inflation.",
+    "daysAgo": "1",
+    "country": "CA",
+    "tags": ["business", "finance"],
+    "sourceUrl": "www.bnnbloomberg.ca"
+  },
+  {
+    "title": "New travel destination popular",
+    "summary": "A small island nation sees a surge in tourism after being featured in a travel show.",
+    "daysAgo": "7",
+    "country": "IS",
+    "tags": ["travel", "lifestyle"],
+    "sourceUrl": "www.lonelyplanet.com"
+  },
+  {
+    "title": "Study on renewable energy",
+    "summary": "A new study reveals that wind power is now the cheapest source of new electricity generation.",
+    "daysAgo": "4",
+    "country": "ES",
+    "tags": ["energy", "environment"],
+    "sourceUrl": "www.irena.org"
+  },
+  {
+    "title": "Stock market index plunges",
+    "summary": "A major stock market index suffers a sharp decline, causing investor panic.",
+    "daysAgo": "3",
+    "country": "JP",
+    "tags": ["business", "finance"],
+    "sourceUrl": "www.nikkei.com"
+  },
+  {
+    "title": "New AI models released",
+    "summary": "A tech company releases a new set of open-source AI models for public use.",
+    "daysAgo": "2",
+    "country": "none",
+    "tags": ["technology", "ai"],
+    "sourceUrl": "www.openai.com/blog"
+  },
+  {
+    "title": "New book on global politics",
+    "summary": "A new non-fiction book analyzes the changing landscape of global political power.",
+    "daysAgo": "5",
+    "country": "none",
+    "tags": ["politics", "books"],
+    "sourceUrl": "www.foreignaffairs.com"
+  },
+  {
+    "title": "Archaeologists discover tomb",
+    "summary": "A previously unknown tomb from the Roman Empire era is discovered in Italy.",
+    "daysAgo": "6",
+    "country": "IT",
+    "tags": ["history", "discovery"],
+    "sourceUrl": "www.archaeology.org"
+  },
+  {
+    "title": "New therapy for chronic pain",
+    "summary": "A new non-invasive therapy shows promising results in treating chronic pain.",
+    "daysAgo": "7",
+    "country": "AU",
+    "tags": ["health", "science"],
+    "sourceUrl": "www.medicalxpress.com"
+  },
+  {
+    "title": "Sports team wins championship",
+    "summary": "A local sports team wins its first national championship in over 50 years.",
+    "daysAgo": "1",
+    "country": "US",
+    "tags": ["sports", "championship"],
+    "sourceUrl": "www.espn.com/nba"
+  },
+  {
+    "title": "New space probe launched",
+    "summary": "A new space probe is launched to study a previously unexamined region of the asteroid belt.",
+    "daysAgo": "4",
+    "country": "CN",
+    "tags": ["space", "technology"],
+    "sourceUrl": "www.chinadaily.com.cn/space"
+  },
+  {
+    "title": "Major bank announces profits",
+    "summary": "A large international bank reports record profits for the last fiscal quarter.",
+    "daysAgo": "3",
+    "country": "GB",
+    "tags": ["business", "finance"],
+    "sourceUrl": "www.ft.com"
+  },
+  {
+    "title": "New art exhibit opens",
+    "summary": "A new exhibit featuring a renowned painter's late-career work opens at a major gallery.",
+    "daysAgo": "2",
+    "country": "FR",
+    "tags": ["art", "culture"],
+    "sourceUrl": "www.louvre.fr/news"
+  },
+  {
+    "title": "Cryptocurrency market stabilizes",
+    "summary": "After a period of high volatility, the cryptocurrency market shows signs of stability.",
+    "daysAgo": "5",
+    "country": "none",
+    "tags": ["crypto", "finance"],
+    "sourceUrl": "www.coindesk.com"
+  },
+  {
+    "title": "New environmental regulations",
+    "summary": "The government introduces new laws to protect endangered species in national parks.",
+    "daysAgo": "6",
+    "country": "BR",
+    "tags": ["politics", "environment"],
+    "sourceUrl": "www.gov.br/news"
+  },
+  {
+    "title": "Robotics company valued high",
+    "summary": "A robotics startup is valued at $10 billion after its latest round of funding.",
+    "daysAgo": "7",
+    "country": "US",
+    "tags": ["technology", "business"],
+    "sourceUrl": "www.forbes.com"
+  },
+  {
+    "title": "Breakthrough in fusion energy",
+    "summary": "Scientists achieve a new milestone in fusion energy research, bringing it closer to reality.",
+    "daysAgo": "4",
+    "country": "DE",
+    "tags": ["science", "energy"],
+    "sourceUrl": "www.sciencemag.org"
+  },
+  {
+    "title": "E-sports league gains funding",
+    "summary": "A major e-sports league secures a new multi-million dollar investment from a private equity firm.",
+    "daysAgo": "1",
+    "country": "KR",
+    "tags": ["entertainment", "gaming"],
+    "sourceUrl": "www.esportsobserver.com"
+  },
+  {
+    "title": "Major flood relief effort",
+    "summary": "International organizations launch a major relief effort to aid victims of a devastating flood.",
+    "daysAgo": "3",
+    "country": "PK",
+    "tags": ["world", "disaster"],
+    "sourceUrl": "www.unicef.org"
+  },
+  {
+    "title": "New medical tech for hospitals",
+    "summary": "A new medical device that provides instant health diagnostics is approved for hospital use.",
+    "daysAgo": "5",
+    "country": "US",
+    "tags": ["health", "technology"],
+    "sourceUrl": "www.medtech.com"
+  },
+  {
+    "title": "New album from rock band",
+    "summary": "A famous rock band releases their first new album in over a decade.",
+    "daysAgo": "2",
+    "country": "GB",
+    "tags": ["entertainment", "music"],
+    "sourceUrl": "www.rollingstone.com"
+  },
+  {
+    "title": "Political protest turns violent",
+    "summary": "A peaceful political protest in the capital city escalates into violence and clashes with police.",
+    "daysAgo": "6",
+    "country": "MX",
+    "tags": ["politics", "social unrest"],
+    "sourceUrl": "www.eluniversal.com.mx"
+  },
+  {
+    "title": "E-commerce sales beat forecast",
+    "summary": "Holiday e-commerce sales exceed all previous forecasts, signaling a strong consumer economy.",
+    "daysAgo": "7",
+    "country": "none",
+    "tags": ["business", "economy"],
+    "sourceUrl": "www.emarketer.com"
+  },
+  {
+    "title": "Asteroid discovery announced",
+    "summary": "A new large asteroid is discovered on a trajectory that will safely pass Earth.",
+    "daysAgo": "4",
+    "country": "none",
+    "tags": ["space", "science"],
+    "sourceUrl": "www.space.com"
+  },
+  {
+    "title": "New law on artificial intelligence",
+    "summary": "The government passes a new law to regulate the development of artificial intelligence.",
+    "daysAgo": "1",
+    "country": "EU",
+    "tags": ["technology", "politics"],
+    "sourceUrl": "www.euronews.com"
+  },
+  {
+    "title": "Global summit on climate change",
+    "summary": "Leaders meet at a global summit to negotiate a new international climate agreement.",
+    "daysAgo": "3",
+    "country": "none",
+    "tags": ["world", "environment"],
+    "sourceUrl": "www.theguardian.com/environment"
+  },
+  {
+    "title": "New cryptocurrency game",
+    "summary": "A new game built on the blockchain allows players to earn and trade cryptocurrency.",
+    "daysAgo": "5",
+    "country": "none",
+    "tags": ["crypto", "gaming"],
+    "sourceUrl": "www.tokenist.com"
+  },
+  {
+    "title": "Film receives Oscar nominations",
+    "summary": "A surprise hit film receives multiple nominations for the upcoming Academy Awards.",
+    "daysAgo": "6",
+    "country": "US",
+    "tags": ["entertainment", "film"],
+    "sourceUrl": "www.oscars.org"
+  },
+  {
+    "title": "Researchers cure a disease",
+    "summary": "Scientists announce they have developed a complete cure for a previously incurable disease.",
+    "daysAgo": "2",
+    "country": "CH",
+    "tags": ["health", "science"],
+    "sourceUrl": "www.who.int"
+  },
+  {
+    "title": "Major airline files for bankruptcy",
+    "summary": "A major international airline announces it is filing for bankruptcy protection.",
+    "daysAgo": "7",
+    "country": "DE",
+    "tags": ["business", "airline"],
+    "sourceUrl": "www.ft.com"
+  },
+  {
+    "title": "New discovery on the moon",
+    "summary": "Lunar rovers find evidence of vast underground water ice deposits on the moon.",
+    "daysAgo": "4",
+    "country": "CN",
+    "tags": ["space", "discovery"],
+    "sourceUrl": "www.cnsa.gov.cn"
+  },
+  {
+    "title": "New law on food waste",
+    "summary": "The government passes new legislation aimed at reducing food waste in restaurants and grocery stores.",
+    "daysAgo": "1",
+    "country": "FR",
+    "tags": ["politics", "environment"],
+    "sourceUrl": "www.lemonde.fr"
+  },
+  {
+    "title": "New vaccine for flu season",
+    "summary": "A new universal flu vaccine is approved for use, promising to prevent all strains.",
+    "daysAgo": "3",
+    "country": "none",
+    "tags": ["health", "science"],
+    "sourceUrl": "www.cdc.gov"
+  },
+  {
+    "title": "Tech company unveils new phone",
+    "summary": "A leading tech company reveals its new smartphone with a foldable screen.",
+    "daysAgo": "5",
+    "country": "US",
+    "tags": ["technology", "consumer electronics"],
+    "sourceUrl": "www.theverge.com"
+  },
+  {
+    "title": "Global security conference",
+    "summary": "World leaders gather for a conference to address rising global tensions and security threats.",
+    "daysAgo": "6",
+    "country": "SG",
+    "tags": ["world", "politics"],
+    "sourceUrl": "www.channelnewsasia.com"
+  },
+  {
+    "title": "Stock market index plunges",
+    "summary": "A major stock market index suffers a sharp decline, causing investor panic.",
+    "daysAgo": "7",
+    "country": "JP",
+    "tags": ["business", "finance"],
+    "sourceUrl": "www.nikkei.com"
+  },
+  {
+    "title": "New AI models released",
+    "summary": "A tech company releases a new set of open-source AI models for public use.",
+    "daysAgo": "2",
+    "country": "none",
+    "tags": ["technology", "ai"],
+    "sourceUrl": "www.openai.com/blog"
+  },
+  {
+    "title": "New book on global politics",
+    "summary": "A new non-fiction book analyzes the changing landscape of global political power.",
+    "daysAgo": "5",
+    "country": "none",
+    "tags": ["politics", "books"],
+    "sourceUrl": "www.foreignaffairs.com"
+  },
+  {
+    "title": "Archaeologists discover tomb",
+    "summary": "A previously unknown tomb from the Roman Empire era is discovered in Italy.",
+    "daysAgo": "6",
+    "country": "IT",
+    "tags": ["history", "discovery"],
+    "sourceUrl": "www.archaeology.org"
+  },
+  {
+    "title": "New therapy for chronic pain",
+    "summary": "A new non-invasive therapy shows promising results in treating chronic pain.",
+    "daysAgo": "7",
+    "country": "AU",
+    "tags": ["health", "science"],
+    "sourceUrl": "www.medicalxpress.com"
+  },
+  {
+    "title": "Sports team wins championship",
+    "summary": "A local sports team wins its first national championship in over 50 years.",
+    "daysAgo": "1",
+    "country": "US",
+    "tags": ["sports", "championship"],
+    "sourceUrl": "www.espn.com/nba"
+  },
+  {
+    "title": "New space probe launched",
+    "summary": "A new space probe is launched to study a previously unexamined region of the asteroid belt.",
+    "daysAgo": "4",
+    "country": "CN",
+    "tags": ["space", "technology"],
+    "sourceUrl": "www.chinadaily.com.cn/space"
+  },
+  {
+    "title": "Major bank announces profits",
+    "summary": "A large international bank reports record profits for the last fiscal quarter.",
+    "daysAgo": "3",
+    "country": "GB",
+    "tags": ["business", "finance"],
+    "sourceUrl": "www.ft.com"
+  },
+  {
+    "title": "New art exhibit opens",
+    "summary": "A new exhibit featuring a renowned painter's late-career work opens at a major gallery.",
+    "daysAgo": "2",
+    "country": "FR",
+    "tags": ["art", "culture"],
+    "sourceUrl": "www.louvre.fr/news"
+  },
+  {
+    "title": "Cryptocurrency market stabilizes",
+    "summary": "After a period of high volatility, the cryptocurrency market shows signs of stability.",
+    "daysAgo": "5",
+    "country": "none",
+    "tags": ["crypto", "finance"],
+    "sourceUrl": "www.coindesk.com"
+  },
+  {
+    "title": "New environmental regulations",
+    "summary": "The government introduces new laws to protect endangered species in national parks.",
+    "daysAgo": "6",
+    "country": "BR",
+    "tags": ["politics", "environment"],
+    "sourceUrl": "www.gov.br/news"
+  },
+  {
+    "title": "Robotics company valued high",
+    "summary": "A robotics startup is valued at $10 billion after its latest round of funding.",
+    "daysAgo": "7",
+    "country": "US",
+    "tags": ["technology", "business"],
+    "sourceUrl": "www.forbes.com"
+  },
+  {
+    "title": "Breakthrough in fusion energy",
+    "summary": "Scientists achieve a new milestone in fusion energy research, bringing it closer to reality.",
+    "daysAgo": "4",
+    "country": "DE",
+    "tags": ["science", "energy"],
+    "sourceUrl": "www.sciencemag.org"
+  },
+  {
+    "title": "E-sports league gains funding",
+    "summary": "A major e-sports league secures a new multi-million dollar investment from a private equity firm.",
+    "daysAgo": "1",
+    "country": "KR",
+    "tags": ["entertainment", "gaming"],
+    "sourceUrl": "www.esportsobserver.com"
+  },
+  {
+    "title": "Major flood relief effort",
+    "summary": "International organizations launch a major relief effort to aid victims of a devastating flood.",
+    "daysAgo": "3",
+    "country": "PK",
+    "tags": ["world", "disaster"],
+    "sourceUrl": "www.unicef.org"
+  },
+  {
+    "title": "New medical tech for hospitals",
+    "summary": "A new medical device that provides instant health diagnostics is approved for hospital use.",
+    "daysAgo": "5",
+    "country": "US",
+    "tags": ["health", "technology"],
+    "sourceUrl": "www.medtech.com"
+  },
+  {
+    "title": "New album from rock band",
+    "summary": "A famous rock band releases their first new album in over a decade.",
+    "daysAgo": "2",
+    "country": "GB",
+    "tags": ["entertainment", "music"],
+    "sourceUrl": "www.rollingstone.com"
+  },
+  {
+    "title": "Political protest turns violent",
+    "summary": "A peaceful political protest in the capital city escalates into violence and clashes with police.",
+    "daysAgo": "6",
+    "country": "MX",
+    "tags": ["politics", "social unrest"],
+    "sourceUrl": "www.eluniversal.com.mx"
+  },
+  {
+    "title": "E-commerce sales beat forecast",
+    "summary": "Holiday e-commerce sales exceed all previous forecasts, signaling a strong consumer economy.",
+    "daysAgo": "7",
+    "country": "none",
+    "tags": ["business", "economy"],
+    "sourceUrl": "www.emarketer.com"
+  },
+  {
+    "title": "Asteroid discovery announced",
+    "summary": "A new large asteroid is discovered on a trajectory that will safely pass Earth.",
+    "daysAgo": "4",
+    "country": "none",
+    "tags": ["space", "science"],
+    "sourceUrl": "www.space.com"
+  },
+  {
+    "title": "New law on artificial intelligence",
+    "summary": "The government passes a new law to regulate the development of artificial intelligence.",
+    "daysAgo": "1",
+    "country": "EU",
+    "tags": ["technology", "politics"],
+    "sourceUrl": "www.euronews.com"
+  },
+  {
+    "title": "Global summit on climate change",
+    "summary": "Leaders meet at a global summit to negotiate a new international climate agreement.",
+    "daysAgo": "3",
+    "country": "none",
+    "tags": ["world", "environment"],
+    "sourceUrl": "www.theguardian.com/environment"
+  },
+  {
+    "title": "New cryptocurrency game",
+    "summary": "A new game built on the blockchain allows players to earn and trade cryptocurrency.",
+    "daysAgo": "5",
+    "country": "none",
+    "tags": ["crypto", "gaming"],
+    "sourceUrl": "www.tokenist.com"
+  },
+  {
+    "title": "Film receives Oscar nominations",
+    "summary": "A surprise hit film receives multiple nominations for the upcoming Academy Awards.",
+    "daysAgo": "6",
+    "country": "US",
+    "tags": ["entertainment", "film"],
+    "sourceUrl": "www.oscars.org"
+  },
+  {
+    "title": "Researchers cure a disease",
+    "summary": "Scientists announce they have developed a complete cure for a previously incurable disease.",
+    "daysAgo": "2",
+    "country": "CH",
+    "tags": ["health", "science"],
+    "sourceUrl": "www.who.int"
+  },
+  {
+    "title": "Major airline files for bankruptcy",
+    "summary": "A major international airline announces it is filing for bankruptcy protection.",
+    "daysAgo": "7",
+    "country": "DE",
+    "tags": ["business", "airline"],
+    "sourceUrl": "www.ft.com"
+  },
+  {
+    "title": "New discovery on the moon",
+    "summary": "Lunar rovers find evidence of vast underground water ice deposits on the moon.",
+    "daysAgo": "4",
+    "country": "CN",
+    "tags": ["space", "discovery"],
+    "sourceUrl": "www.cnsa.gov.cn"
+  },
+  {
+    "title": "New law on food waste",
+    "summary": "The government passes new legislation aimed at reducing food waste in restaurants and grocery stores.",
+    "daysAgo": "1",
+    "country": "FR",
+    "tags": ["politics", "environment"],
+    "sourceUrl": "www.lemonde.fr"
+  },
+  {
+    "title": "New vaccine for flu season",
+    "summary": "A new universal flu vaccine is approved for use, promising to prevent all strains.",
+    "daysAgo": "3",
+    "country": "none",
+    "tags": ["health", "science"],
+    "sourceUrl": "www.cdc.gov"
+  },
+  {
+    "title": "Tech company unveils new phone",
+    "summary": "A leading tech company reveals its new smartphone with a foldable screen.",
+    "daysAgo": "5",
+    "country": "US",
+    "tags": ["technology", "consumer electronics"],
+    "sourceUrl": "www.theverge.com"
+  },
+  {
+    "title": "Global security conference",
+    "summary": "World leaders gather for a conference to address rising global tensions and security threats.",
+    "daysAgo": "6",
+    "country": "SG",
+    "tags": ["world", "politics"],
+    "sourceUrl": "www.channelnewsasia.com"
+  },
+  {
+    "title": "Cryptocurrency exchange sued",
+    "summary": "A major cryptocurrency exchange is facing a lawsuit from regulators over securities violations.",
+    "daysAgo": "7",
+    "country": "US",
+    "tags": ["crypto", "law"],
+    "sourceUrl": "www.sec.gov"
+  },
+  {
+    "title": "New research on longevity",
+    "summary": "A study finds a new compound that could significantly extend the human lifespan.",
+    "daysAgo": "1",
+    "country": "none",
+    "tags": ["health", "science"],
+    "sourceUrl": "www.cell.com/news"
+  },
+  {
+    "title": "Political candidate gains support",
+    "summary": "An underdog political candidate unexpectedly surges in the polls, gaining momentum.",
+    "daysAgo": "2",
+    "country": "CA",
+    "tags": ["politics", "election"],
+    "sourceUrl": "www.cbc.ca/news/politics"
+  },
+  {
+    "title": "New solar plane unveiled",
+    "summary": "A new solar-powered aircraft completes its first successful flight, staying aloft for days.",
+    "daysAgo": "3",
+    "country": "FR",
+    "tags": ["technology", "environment"],
+    "sourceUrl": "www.airbus.com/news"
+  },
+  {
+    "title": "Gaming company acquired",
+    "summary": "A large tech company acquires a video game developer for a multi-billion dollar sum.",
+    "daysAgo": "5",
+    "country": "US",
+    "tags": ["business", "gaming"],
+    "sourceUrl": "www.wsj.com"
+  },
+  {
+    "title": "New space station module",
+    "summary": "A new module is successfully attached to the International Space Station, expanding its research capabilities.",
+    "daysAgo": "6",
+    "country": "RU",
+    "tags": ["space", "technology"],
+    "sourceUrl": "www.roscosmos.ru"
+  },
+  {
+    "title": "Health report on air quality",
+    "summary": "A new report shows a dramatic improvement in air quality in major urban centers.",
+    "daysAgo": "4",
+    "country": "CN",
+    "tags": ["health", "environment"],
+    "sourceUrl": "www.who.int/news"
+  },
+  {
+    "title": "Hollywood studio sold",
+    "summary": "A historic Hollywood film studio is sold to a private equity firm in a major deal.",
+    "daysAgo": "7",
+    "country": "US",
+    "tags": ["entertainment", "business"],
+    "sourceUrl": "www.variety.com"
+  },
+  {
+    "title": "New cryptocurrency platform",
+    "summary": "A new platform for trading and storing NFTs is launched, promising lower fees.",
+    "daysAgo": "1",
+    "country": "none",
+    "tags": ["crypto", "technology"],
+    "sourceUrl": "www.theblockcrypto.com"
+  },
+  {
+    "title": "New law on gun control",
+    "summary": "A new federal law on gun control is passed, sparking widespread debate.",
+    "daysAgo": "5",
+    "country": "AU",
+    "tags": ["politics", "society"],
+    "sourceUrl": "www.abc.net.au/news"
+  },
+  {
+    "title": "Astronauts return from ISS",
+    "summary": "A crew of astronauts safely returns to Earth after a six-month mission on the International Space Station.",
+    "daysAgo": "6",
+    "country": "RU",
+    "tags": ["space", "science"],
+    "sourceUrl": "www.esa.int"
+  },
+  {
+    "title": "New drug for Alzheimer's",
+    "summary": "A clinical trial shows a new drug can slow the progression of Alzheimer's disease.",
+    "daysAgo": "2",
+    "country": "GB",
+    "tags": ["health", "science"],
+    "sourceUrl": "www.nejm.org"
+  },
+  {
+    "title": "Global chip shortage ends",
+    "summary": "Experts announce that the global shortage of semiconductors has finally come to an end.",
+    "daysAgo": "7",
+    "country": "none",
+    "tags": ["technology", "business"],
+    "sourceUrl": "www.reuters.com/technology"
+  },
+  {
+    "title": "Stock market hits new high",
+    "summary": "The national stock exchange's main index reaches an all-time high amidst strong corporate earnings.",
+    "daysAgo": "4",
+    "country": "CA",
+    "tags": ["business", "finance"],
+    "sourceUrl": "www.cbc.ca/news/business"
+  },
+  {
+    "title": "Study finds new planet",
+    "summary": "Astronomers discover a new habitable planet in a nearby solar system.",
+    "daysAgo": "5",
+    "country": "none",
+    "tags": ["space", "science"],
+    "sourceUrl": "www.scientificamerican.com"
+  },
+  {
+    "title": "Major oil pipeline opens",
+    "summary": "A new trans-continental oil pipeline is completed, promising to ease energy prices.",
+    "daysAgo": "3",
+    "country": "US",
+    "tags": ["business", "energy"],
+    "sourceUrl": "www.wsj.com"
+  },
+  {
+    "title": "Election results debated",
+    "summary": "Political analysts debate the unexpected outcome of a recent national election.",
+    "daysAgo": "1",
+    "country": "JP",
+    "tags": ["politics", "world"],
+    "sourceUrl": "www.japantimes.co.jp"
+  },
+  {
+    "title": "AI creates a painting",
+    "summary": "An artificial intelligence system generates a painting that sells for millions at auction.",
+    "daysAgo": "6",
+    "country": "none",
+    "tags": ["technology", "art"],
+    "sourceUrl": "www.arstechnica.com"
+  },
+  {
+    "title": "New archaeological discovery",
+    "summary": "A team of archeologists uncovers an ancient tomb filled with previously unknown artifacts.",
+    "daysAgo": "7",
+    "country": "CN",
+    "tags": ["history", "discovery"],
+    "sourceUrl": "www.chinadaily.com.cn"
+  },
+  {
+    "title": "New food safety regulations",
+    "summary": "The government announces strict new regulations to improve food safety standards.",
+    "daysAgo": "2",
+    "country": "US",
+    "tags": ["health", "law"],
+    "sourceUrl": "www.fda.gov"
+  },
+  {
+    "title": "Tech company lays off staff",
+    "summary": "A major tech corporation announces large-scale layoffs as part of a restructuring plan.",
+    "daysAgo": "5",
+    "country": "DE",
+    "tags": ["technology", "business"],
+    "sourceUrl": "www.spiegel.de"
+  },
+  {
+    "title": "Celebrity couple divorces",
+    "summary": "A high-profile celebrity couple announces their separation after a five-year marriage.",
+    "daysAgo": "4",
+    "country": "US",
+    "tags": ["entertainment", "celebrity"],
+    "sourceUrl": "www.people.com"
+  },
+  {
+    "title": "New book on climate change",
+    "summary": "A bestselling author releases a new book detailing the personal impact of climate change.",
+    "daysAgo": "3",
+    "country": "none",
+    "tags": ["environment", "books"],
+    "sourceUrl": "www.penguin.com/news"
+  },
+  {
+    "title": "New quantum computer record",
+    "summary": "Researchers set a new world record for quantum computing speed and accuracy.",
+    "daysAgo": "6",
+    "country": "CH",
+    "tags": ["science", "technology"],
+    "sourceUrl": "www.sciencemag.org"
+  },
+  {
+    "title": "New solar energy project",
+    "summary": "A massive new solar energy farm is approved, promising to power thousands of homes.",
+    "daysAgo": "7",
+    "country": "AU",
+    "tags": ["energy", "environment"],
+    "sourceUrl": "www.renewableenergyworld.com"
+  }
+]
