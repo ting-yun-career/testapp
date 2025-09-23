@@ -25,7 +25,7 @@ const Content: React.FC = () => {
           .map((item, i) => (
             <div
               key={i}
-              className="flex items-center gap-2 px-1 py-1 min-h-12 break-inside-avoid"
+              className="flex items-center gap-2 px-1 py-2 min-h-12 break-inside-avoid"
             >
               <div className="flex-none flex items-center justify-center">
                 <div
