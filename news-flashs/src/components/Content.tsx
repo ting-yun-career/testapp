@@ -16,6 +16,8 @@ const Content: React.FC = () => {
     return 'border-black';
   };
 
+  const selectedTags = ["business", "technology", "science", "health", "sports"];
+
   return (
     <>
       <div className="my-1 flex items-center gap-4 px-2">
@@ -23,21 +25,11 @@ const Content: React.FC = () => {
           <span className="material-symbols-outlined">wb_sunny</span>
         </div>
         <div className="flex flex-wrap gap-2">
-          <a href="#" className="text-blue-500 underline text-xs">
-            #business
-          </a>
-          <a href="#" className="text-blue-500 underline text-xs">
-            #technology
-          </a>
-          <a href="#" className="text-blue-500 underline text-xs">
-            #science
-          </a>
-          <a href="#" className="text-blue-500 underline text-xs">
-            #health
-          </a>
-          <a href="#" className="text-blue-500 underline text-xs">
-            #sports
-          </a>
+          {selectedTags.map((tag, index) => (
+            <a href="#" key={index} className="text-blue-500 underline text-xs">
+              #{tag}
+            </a>
+          ))}
         </div>
       </div>
       <div className="columns-1 md:columns-2 lg:columns-3 gap-0 px-1">
