@@ -18,7 +18,28 @@ const Content: React.FC = () => {
 
   return (
     <>
-      <div className="my-1">topper</div>
+      <div className="my-1 flex items-center gap-4 px-2">
+        <div className="flex items-center">
+          <span className="material-symbols-outlined">wb_sunny</span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <a href="#" className="text-blue-500 underline text-xs">
+            #business
+          </a>
+          <a href="#" className="text-blue-500 underline text-xs">
+            #technology
+          </a>
+          <a href="#" className="text-blue-500 underline text-xs">
+            #science
+          </a>
+          <a href="#" className="text-blue-500 underline text-xs">
+            #health
+          </a>
+          <a href="#" className="text-blue-500 underline text-xs">
+            #sports
+          </a>
+        </div>
+      </div>
       <div className="columns-1 md:columns-2 lg:columns-3 gap-0 px-1">
         {[...data]
           .sort((a, b) => a.daysAgo - b.daysAgo)
