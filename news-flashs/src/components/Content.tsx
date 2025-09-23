@@ -18,15 +18,18 @@ const Content: React.FC = () => {
 
   return (
     <>
-      <div className="hidden md:block my-1">topper</div>
-      <div className="columns-1 md:columns-2 lg:columns-3 gap-0">
+      <div className="my-1">topper</div>
+      <div className="columns-1 md:columns-2 lg:columns-3 gap-0 px-1">
         {[...data]
           .sort((a, b) => a.daysAgo - b.daysAgo)
           .map((item, i) => (
-            <div key={i} className="flex items-center gap-2 px-1 py-1 min-h-12 break-inside-avoid">
+            <div
+              key={i}
+              className="flex items-center gap-2 px-1 py-1 min-h-12 break-inside-avoid"
+            >
               <div className="flex-none flex items-center justify-center">
                 <div
-                  className={`w-6 h-6 rounded-full border flex items-center justify-center text-xs font-bold ${getBorderColorClass(item.daysAgo)}`}
+                  className={`w-6 h-6 rounded-full border flex items-center justify-center text-xs font-bold mr-1 ${getBorderColorClass(item.daysAgo)}`}
                 >
                   <span className={getTextColorClass(item.daysAgo)}>
                     {item.daysAgo}
