@@ -2,23 +2,34 @@ import React from 'react';
 import data from './data.json';
 
 const Content: React.FC = () => {
+  const getTextColorClass = (days: number) => {
+    if (days === 1) return 'text-red-500';
+    if (days === 2) return 'text-orange-500';
+    if (days === 3) return 'text-amber-800';
+    return 'text-black';
+  };
+
+  const getBorderColorClass = (days: number) => {
+    if (days === 1) return 'border-red-500';
+    if (days === 2) return 'border-orange-500';
+    if (days === 3) return 'border-amber-800';
+    return 'border-black';
+  };
+
   return (
     <>
       <div className="hidden md:block my-1">topper</div>
       <div className="columns-1 md:columns-2 lg:columns-3 gap-0">
         <div className="">
-          {data.map((item, i) => (
+          {[...data].sort((a, b) => a.daysAgo - b.daysAgo).map((item, i) => (
             <div key={i} className="flex items-center gap-2 px-1 py-1 min-h-12">
               <div className="flex-none flex items-center justify-center">
-                <span className="material-symbols-outlined">
-                  radio_button_unchecked
-                </span>
+                <div className={`w-6 h-6 rounded-full border flex items-center justify-center text-xs font-bold ${getBorderColorClass(item.daysAgo)}`}>
+                  <span className={getTextColorClass(item.daysAgo)}>{item.daysAgo}</span>
+                </div>
               </div>
               <div className="flex-1 text-left">
-                <b>
-                  ({item.daysAgo} days) {item.title}
-                </b>{' '}
-                {item.summary}
+                <b>{item.title}</b> {item.summary}
               </div>
             </div>
           ))}

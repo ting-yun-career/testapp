@@ -1,1258 +1,1012 @@
 [
   {
+    "id": "e49f6976-1b5e-49b8-b11a-1d374e2d83f3",
     "title": "Quantum AI breakthrough",
     "summary": "Scientists announce a major leap in quantum computing, enabling new AI capabilities.",
-    "daysAgo": "3",
+    "daysAgo": 3,
     "country": "none",
     "tags": ["science", "technology"],
-    "sourceUrl": "www.nature.com/news"
+    "sourceUrl": "https://www.nature.com/news/qcf41f7rj",
+    "fullContent": "In a historic announcement, researchers from a global consortium of universities and private labs have revealed a significant advancement in quantum computing. The breakthrough involves a new type of qubit that maintains its state for unprecedented durations, drastically reducing the error rate that has long plagued quantum systems. This technological leap is expected to unlock new capabilities for artificial intelligence, particularly in complex problem-solving and machine learning algorithms that are too computationally intensive for classical computers. Experts believe that this could accelerate drug discovery, materials science, and financial modeling. The team has published its findings in a peer-reviewed journal, and the new technology is already being licensed for development."
   },
   {
+    "id": "f5d0867d-d125-4148-8426-68165706599f",
     "title": "New electric car unveiled",
     "summary": "A leading automaker reveals a new electric vehicle with a 500-mile range.",
-    "daysAgo": "2",
+    "daysAgo": 2,
     "country": "JP",
     "tags": ["technology", "business"],
-    "sourceUrl": "www.autonews.com"
+    "sourceUrl": "https://www.autonews.com/events/ofyrf4r9",
+    "fullContent": "Japanese automaker, Toyota, has unveiled its latest electric vehicle model, the 'E-Vision.' The car boasts a revolutionary solid-state battery that allows it to achieve a remarkable 500-mile range on a single charge. The company claims the vehicle can recharge to 80% capacity in under 15 minutes at a fast-charging station. The E-Vision also features a minimalist interior with an integrated AI assistant that adapts to the driver's habits. Analysts are calling this a game-changer for the EV market, potentially addressing key consumer anxieties about range and charging time. The vehicle is set to go into production in late 2026."
   },
   {
+    "id": "1894d075-8461-460d-9b5f-f3f50e82c813",
     "title": "Global stock markets rally",
     "summary": "Major stock indexes worldwide see significant gains driven by positive economic data.",
-    "daysAgo": "1",
+    "daysAgo": 1,
     "country": "none",
     "tags": ["business", "finance"],
-    "sourceUrl": "www.bloomberg.com/markets"
+    "sourceUrl": "https://www.bloomberg.com/markets/indexes/2025/rally/1232",
+    "fullContent": "The global financial community is celebrating a widespread rally in stock markets, with the S&P 500, FTSE 100, and Nikkei 225 all posting robust gains. The surge is attributed to a series of positive economic reports, including better-than-expected GDP growth figures from key economies and a decrease in global inflation rates. Investor confidence has been buoyed by signs of economic stability and a strong earnings season for major corporations. Market analysts predict that if this trend continues, it could signal the beginning of a new bull market cycle. Companies in the technology and renewable energy sectors have been the biggest winners in the recent rally."
   },
   {
+    "id": "a9d35811-1c25-4a1d-8f2c-567a213009a5",
     "title": "New space telescope launched",
     "summary": "A new telescope is successfully launched to study exoplanets, promising new discoveries.",
-    "daysAgo": "5",
+    "daysAgo": 5,
     "country": "US",
     "tags": ["science", "space"],
-    "sourceUrl": "www.nasa.gov"
+    "sourceUrl": "https://www.nasa.gov/space/missions/telescopes/hubble/2025/launch/nikson-ba124345",
+    "fullContent": "NASA successfully launched the 'Exo-Gazer' telescope, a next-generation orbital observatory designed to search for and characterize exoplanets. The telescope, equipped with a new high-resolution spectrograph, will be able to analyze the atmospheres of distant planets for biosignatures. This mission is a joint effort with the European Space Agency and other international partners. The data collected by the Exo-Gazer is expected to provide unprecedented insights into the prevalence of potentially habitable worlds in our galaxy. Scientists are hopeful that the mission could lead to the first definitive discovery of a planet similar to Earth."
   },
   {
+    "id": "c1f6b86e-b352-45e0-94d3-0d31d3434d0b",
     "title": "Government approves new policy",
     "summary": "The national government passes new legislation aimed at reducing carbon emissions.",
-    "daysAgo": "4",
+    "daysAgo": 4,
     "country": "GB",
     "tags": ["politics", "environment"],
-    "sourceUrl": "www.bbc.co.uk/politics"
+    "sourceUrl": "https://www.bbc.com/news/uk-politics/headlines/74857126",
+    "fullContent": "The UK Parliament has passed a landmark piece of legislation known as the 'Green Economy Act.' The new law introduces a comprehensive framework for reducing the country's carbon emissions by 50% over the next decade. Key provisions include a carbon tax on industrial polluters, subsidies for companies investing in renewable energy, and a ban on single-use plastics. Environmental groups have praised the move as a crucial step towards climate action, while some industry leaders have raised concerns about the potential economic impact. The government states the policy is designed to stimulate innovation and create green jobs."
   },
   {
+    "id": "224c65e2-2a62-4f11-85b8-d014d59300fe",
+    "title": "New electric car unveiled",
+    "summary": "A leading automaker reveals a new electric vehicle with a 500-mile range.",
+    "daysAgo": 2,
+    "country": "JP",
+    "tags": ["technology", "business"],
+    "sourceUrl": "https://www.autonews.com/ev/new-electric-car-unveiled-122-f94-h243",
+    "fullContent": "Japanese automaker, Toyota, has unveiled its latest electric vehicle model, the 'E-Vision.' The car boasts a revolutionary solid-state battery that allows it to achieve a remarkable 500-mile range on a single charge. The company claims the vehicle can recharge to 80% capacity in under 15 minutes at a fast-charging station. The E-Vision also features a minimalist interior with an integrated AI assistant that adapts to the driver's habits. Analysts are calling this a game-changer for the EV market, potentially addressing key consumer anxieties about range and charging time. The vehicle is set to go into production in late 2026."
+  },
+  {
+    "id": "e2d83395-57f2-4467-932d-94d0c9c7f938",
     "title": "New cryptocurrency emerges",
     "summary": "A new digital currency gains rapid traction, sparking interest among investors.",
-    "daysAgo": "2",
+    "daysAgo": 2,
     "country": "none",
     "tags": ["crypto", "finance"],
-    "sourceUrl": "www.coindesk.com"
+    "sourceUrl": "https://www.coindesk.com/market-analysis/new-digital-currency-gains-traction-y2x",
+    "fullContent": "A new cryptocurrency named 'Aetherium' has been launched and is quickly gaining a foothold in the volatile crypto market. The coin is built on a new blockchain protocol that promises faster transaction speeds and lower energy consumption compared to existing cryptocurrencies. Early investors are flocking to Aetherium, drawn by its innovative 'proof-of-stake-plus' consensus mechanism. Market analysts are closely watching its performance, noting its potential to disrupt established players like Bitcoin and Ethereum. The creators of Aetherium have emphasized its focus on decentralized finance and smart contract applications."
   },
   {
+    "id": "52093a8d-a417-48f5-b74c-42b789945037",
     "title": "Film wins top award",
     "summary": "A documentary about climate change wins the top prize at an international film festival.",
-    "daysAgo": "6",
+    "daysAgo": 6,
     "country": "FR",
     "tags": ["entertainment", "film"],
-    "sourceUrl": "www.hollywoodreporter.com"
+    "sourceUrl": "https://www.hollywoodreporter.com/awards-season/cannes-film-festival-documentary-wins-top-prize-145623",
+    "fullContent": "The documentary film 'The Last Glacier' has won the prestigious Golden Palm award at the Cannes Film Festival. The film, directed by renowned French filmmaker Sophie Dubois, provides a poignant and visually stunning look at the rapid melting of glaciers in the Alps and its effect on local communities. The jury praised the documentary for its powerful message and artistic merit. The film's win has generated significant buzz, with many critics calling it a must-see for audiences worldwide. This victory is seen as a sign of growing recognition for environmental storytelling in the film industry."
   },
   {
+    "id": "0d15e4f4-51e6-42f0-a7d1-e6c1e508687a",
     "title": "Health experts issue warning",
     "summary": "Public health officials warn about a new virus variant and advise caution.",
-    "daysAgo": "3",
+    "daysAgo": 3,
     "country": "DE",
     "tags": ["health", "world"],
-    "sourceUrl": "www.who.int"
+    "sourceUrl": "https://www.who.int/emergencies/disease-outbreak-news/2025/germany/variant-x-alert-1282",
+    "fullContent": "The World Health Organization (WHO) has issued a global alert regarding a new variant of a previously known virus. Preliminary data from German health authorities suggests the new strain, dubbed 'Variant X', is highly transmissible. While its severity is still under investigation, health officials are urging the public to exercise caution and adhere to existing health guidelines, such as vaccination and proper hygiene. Governments around the world are meeting to discuss a coordinated response and potential travel restrictions. Research is already underway to determine the effectiveness of existing vaccines against this new variant."
   },
   {
+    "id": "c4d12c8a-a53c-446a-9f5b-118e778772a0",
     "title": "World leaders meet",
     "summary": "Heads of state gather for an emergency summit to discuss global security threats.",
-    "daysAgo": "7",
+    "daysAgo": 7,
     "country": "none",
     "tags": ["world", "politics"],
-    "sourceUrl": "www.reuters.com/world"
+    "sourceUrl": "https://www.reuters.com/world/summit/emergency-meeting-security-threats-gnv12",
+    "fullContent": "Leaders from the G7 nations and other key global powers have convened for an emergency summit in Geneva to address escalating security concerns. The closed-door meetings are focused on de-escalating a rising geopolitical conflict, countering cyber terrorism, and ensuring the stability of international supply chains. The summit comes at a critical time, with tensions mounting in several regions. A joint statement is expected at the conclusion of the talks, outlining a new framework for international cooperation. The outcome of these discussions is seen as vital for preventing further global instability."
   },
   {
+    "id": "a60b0933-5c8c-4a11-809c-4861b5855e97",
     "title": "Cybersecurity firm acquires startup",
     "summary": "A major cybersecurity firm expands its portfolio by acquiring a promising new startup.",
-    "daysAgo": "1",
+    "daysAgo": 1,
     "country": "CA",
     "tags": ["technology", "business"],
-    "sourceUrl": "www.techcrunch.com"
+    "sourceUrl": "https://www.techcrunch.com/2025/11/09/securenet-acquires-aegis-ai-for-500m-ai-cybersecurity",
+    "fullContent": "Canadian cybersecurity giant, SecureNet, has announced its acquisition of 'Aegis AI,' a promising startup specializing in using artificial intelligence to detect and prevent cyberattacks. The deal, valued at over $500 million, will integrate Aegis AI's technology into SecureNet's existing suite of security products. The acquisition is a strategic move to bolster SecureNet's offerings in an increasingly competitive market. According to a company spokesperson, the goal is to create a more proactive and predictive defense system against sophisticated cyber threats. The move is expected to strengthen Canada's position in the global cybersecurity landscape."
   },
   {
+    "id": "22e86d08-d28f-4632-b7e1-8728a50c82f2",
     "title": "Historic art recovered",
     "summary": "Stolen paintings from a famous gallery are recovered after a decade-long search.",
-    "daysAgo": "4",
+    "daysAgo": 4,
     "country": "IT",
     "tags": ["art", "crime"],
-    "sourceUrl": "www.theguardian.com/artanddesign"
+    "sourceUrl": "https://www.theguardian.com/artanddesign/2025/sep/06/stolen-uffizi-paintings-recovered",
+    "fullContent": "A collection of masterpieces stolen from the Uffizi Gallery in Florence has been recovered by Italian police. The paintings, which include works by renowned Renaissance artists, went missing over a decade ago in a high-profile heist. The recovery was the result of a complex international investigation that spanned multiple countries. Authorities have arrested several individuals in connection with the theft. The gallery's director expressed immense relief, stating the return of the art is a victory for cultural heritage. The paintings are now being carefully assessed for any damage before being returned to public display."
   },
   {
+    "id": "b188c039-4d6d-472e-848e-2826a761e3d0",
     "title": "New vaccine trial successful",
     "summary": "A new experimental vaccine shows a high rate of effectiveness in its final trial phase.",
-    "daysAgo": "5",
+    "daysAgo": 5,
     "country": "CH",
     "tags": ["health", "science"],
-    "sourceUrl": "www.lancet.com"
+    "sourceUrl": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(25)02324-4/fulltext",
+    "fullContent": "A new experimental vaccine for a common respiratory virus has shown an astonishing 95% efficacy rate in its final Phase 3 clinical trial. The trial, conducted by a Swiss biopharmaceutical company, involved thousands of participants across several countries. The vaccine uses a novel messenger RNA technology that triggers a strong and lasting immune response. This breakthrough is poised to revolutionize public health, potentially preventing millions of illnesses and deaths annually. The company is now fast-tracking its application for regulatory approval, with hopes of making the vaccine widely available within the next year."
   },
   {
+    "id": "4b7b6531-9a7e-4054-942f-76a086050b40",
     "title": "Sports league expands",
     "summary": "A popular sports league announces it will add two new expansion teams next season.",
-    "daysAgo": "2",
+    "daysAgo": 2,
     "country": "US",
     "tags": ["sports", "business"],
-    "sourceUrl": "www.espn.com"
+    "sourceUrl": "https://www.espn.com/soccer/story/_/id/35451234/mls-expands-san-diego-las-vegas-2026-season",
+    "fullContent": "Major League Soccer (MLS) has announced a significant expansion, adding two new teams to the league for the upcoming season. The new franchises will be based in San Diego and Las Vegas, bringing the total number of teams to 30. The league's commissioner cited fan interest and market growth as key factors in the decision. The expansion is expected to generate billions of dollars in revenue and further elevate the sport's profile in the United States. Fans are already eagerly anticipating the inaugural seasons for both new clubs, with team names and logos to be revealed soon."
   },
   {
+    "id": "7649d217-1f4a-4a25-a7f4-d02f4a475355",
     "title": "Archeologists find ancient city",
     "summary": "An ancient city, previously lost to history, is discovered in the desert.",
-    "daysAgo": "6",
+    "daysAgo": 6,
     "country": "EG",
     "tags": ["history", "discovery"],
-    "sourceUrl": "www.nationalgeographic.com"
+    "sourceUrl": "https://www.nationalgeographic.com/history/article/lost-ancient-egyptian-city-discovered-in-desert",
+    "fullContent": "Archaeologists working in the Egyptian desert have unearthed the remains of a previously unknown ancient city. The city, dating back over 3,000 years, was discovered through a combination of satellite imagery and ground-penetrating radar. Initial excavations have revealed temples, dwellings, and an elaborate system of streets, suggesting a highly organized society. The discovery is being hailed as one of the most significant archaeological finds of the century, offering new insights into the history of the region. The team is now working to preserve the site and carefully excavate its treasures."
   },
   {
+    "id": "8c59f64c-f126-4d06-93a8-444d32a0d182",
     "title": "Social media giant fined",
     "summary": "A social media company faces a massive fine over privacy violations in Europe.",
-    "daysAgo": "7",
+    "daysAgo": 7,
     "country": "IE",
     "tags": ["technology", "law"],
-    "sourceUrl": "www.ft.com"
+    "sourceUrl": "https://www.ft.com/content/13459c0d-a78b-4b2a-a95e-1c6e17a3a824",
+    "fullContent": "Meta, the parent company of Facebook and Instagram, has been hit with a staggering fine of $1.2 billion by the Irish Data Protection Commission (DPC). The penalty, one of the largest under Europe's GDPR regulations, was issued for the company's handling of user data. The DPC found that Meta had failed to protect the personal information of European citizens, leading to a major data breach. The fine underscores the growing scrutiny and regulatory pressure faced by big tech companies in Europe. Meta has stated it plans to appeal the decision, but the ruling could set a precedent for future privacy cases."
   },
   {
+    "id": "df261d76-8804-4b55-a681-37d4023a1058",
     "title": "AI robot completes marathon",
     "summary": "A humanoid robot designed with advanced AI successfully runs and finishes a marathon.",
-    "daysAgo": "4",
+    "daysAgo": 4,
     "country": "JP",
     "tags": ["technology", "robotics"],
-    "sourceUrl": "www.wired.com"
+    "sourceUrl": "https://www.wired.com/story/ai-robot-completes-tokyo-marathon",
+    "fullContent": "A Japanese robotics company has showcased a remarkable achievement in artificial intelligence and engineering. Their latest creation, a humanoid robot named 'Atlas,' has successfully completed the Tokyo Marathon. The robot, which stands 5 feet tall and weighs 150 pounds, used sophisticated AI to navigate the course, conserve energy, and adapt to changing terrain. This is the first time a bipedal robot has completed a marathon without human assistance. The company says the technology has applications in disaster relief, search and rescue, and logistics. The event has been hailed as a major milestone in the field of robotics."
   },
   {
+    "id": "4080b06b-7145-42f5-af80-87a41926c805",
     "title": "Bitcoin mining becomes greener",
     "summary": "New report shows that bitcoin mining is shifting towards more sustainable energy sources.",
-    "daysAgo": "3",
+    "daysAgo": 3,
     "country": "none",
     "tags": ["crypto", "environment"],
-    "sourceUrl": "www.decrypt.co"
+    "sourceUrl": "https://www.decrypt.co/98765/bitcoin-mining-report-shows-renewable-energy-shift",
+    "fullContent": "A new report from the Cambridge Centre for Alternative Finance reveals a significant shift in the energy consumption of the Bitcoin network. The study shows that the percentage of bitcoin mining operations powered by renewable energy sources, such as solar, wind, and hydro, has risen sharply in the past year. This trend is a direct response to growing environmental concerns and investor pressure. The move towards sustainability is a key factor in the long-term viability of cryptocurrency. This is a positive development for an industry that has faced heavy criticism for its carbon footprint."
   },
   {
+    "id": "8f8a65d5-9118-47c1-ae0e-7c9b0a80e608",
     "title": "Pop star releases new album",
     "summary": "A world-renowned pop singer releases their highly anticipated new album, breaking streaming records.",
-    "daysAgo": "1",
+    "daysAgo": 1,
     "country": "US",
     "tags": ["entertainment", "music"],
-    "sourceUrl": "www.billboard.com"
+    "sourceUrl": "https://www.billboard.com/music/pop/taylor-swift-midnight-sun-breaks-streaming-records-123456789",
+    "fullContent": "Taylor Swift's latest album, 'Midnight Sun,' has shattered all previous streaming records within 24 hours of its release. The album, her tenth studio record, was met with critical acclaim and immediate fan fervor. Spotify and Apple Music both reported platform-wide surges in traffic, with the album generating over 500 million streams globally on its first day. The album's lead single, 'Starfall,' has topped the charts in dozens of countries. Swift's new sound, a mix of synth-pop and folk, has been praised for its lyrical depth and production quality. The release is a cultural phenomenon, dominating social media conversations."
   },
   {
+    "id": "e4414b2d-114c-4735-a764-f5d6f1f45607",
     "title": "New law on gun control",
     "summary": "A new federal law on gun control is passed, sparking widespread debate.",
-    "daysAgo": "5",
+    "daysAgo": 5,
     "country": "AU",
     "tags": ["politics", "society"],
-    "sourceUrl": "www.abc.net.au/news"
+    "sourceUrl": "https://www.abc.net.au/news/2025-11-05/australia-passes-new-gun-control-law/10293456",
+    "fullContent": "The Australian government has passed a controversial new law tightening gun control measures across the country. The legislation bans the sale of semi-automatic rifles and introduces a mandatory buy-back program for existing owners. The move comes in response to a series of recent mass shootings that have shaken the nation. The law has been met with mixed reactions, with gun-control advocates praising the swift action and gun-rights groups condemning it as an infringement on personal liberties. The debate over the new law is expected to continue for weeks, but the government remains firm on its stance."
   },
   {
+    "id": "4d1a58c2-3e37-4184-a15d-59844f23b20e",
     "title": "Astronauts return from ISS",
     "summary": "A crew of astronauts safely returns to Earth after a six-month mission on the International Space Station.",
-    "daysAgo": "6",
+    "daysAgo": 6,
     "country": "RU",
     "tags": ["space", "science"],
-    "sourceUrl": "www.esa.int"
+    "sourceUrl": "https://www.esa.int/Space_Exploration/Human_Spaceflight/Astronauts_return_to_Earth_from_ISS",
+    "fullContent": "A three-person crew from the International Space Station has returned to Earth safely, landing in the steppes of Kazakhstan. The astronauts, one American, one Russian, and one German, completed a six-month research mission aboard the station. Their work included a variety of scientific experiments, from studying the effects of microgravity on human physiology to testing new materials for future spacecraft. All crew members are reported to be in good health and will now undergo a period of post-flight medical checks. The successful mission marks another chapter in international cooperation in space exploration."
   },
   {
+    "id": "55f5f745-0d0f-48d6-ae56-0683a48e7e17",
     "title": "New drug for Alzheimer's",
     "summary": "A clinical trial shows a new drug can slow the progression of Alzheimer's disease.",
-    "daysAgo": "2",
+    "daysAgo": 2,
     "country": "GB",
     "tags": ["health", "science"],
-    "sourceUrl": "www.nejm.org"
+    "sourceUrl": "https://www.nejm.org/doi/full/10.1056/NEJMoa25123456",
+    "fullContent": "British pharmaceutical company, BioGenix, has announced promising results from a clinical trial for a new drug aimed at combating Alzheimer's disease. The drug, called 'Neuro-Restore,' was shown to significantly slow the cognitive decline in patients in the early stages of the disease. The findings were published in the New England Journal of Medicine and are being hailed as a major breakthrough in the fight against a debilitating condition. While the drug is not a cure, it offers new hope for millions of people and their families. Further research is needed, but experts are optimistic about its potential impact."
   },
   {
+    "id": "0d6211fe-6872-4d2c-8067-17596a7d577e",
     "title": "Global chip shortage ends",
     "summary": "Experts announce that the global shortage of semiconductors has finally come to an end.",
-    "daysAgo": "7",
+    "daysAgo": 7,
     "country": "none",
     "tags": ["technology", "business"],
-    "sourceUrl": "www.reuters.com/technology"
+    "sourceUrl": "https://www.reuters.com/technology/global-chip-shortage-finally-comes-end-2025-09-03",
+    "fullContent": "The tech industry can finally breathe a sigh of relief as a new report from analysts confirms that the global semiconductor chip shortage has ended. The shortage, which began in 2020, has severely impacted the production of everything from cars and smartphones to gaming consoles. The end of the shortage is attributed to new fabrication plants coming online and a normalization of supply chains. This is a positive development for manufacturers and consumers, as it will lead to increased production and lower prices. The end of the shortage signals a return to stability in the technology sector."
   },
   {
+    "id": "f516a8d6-4e50-4d4b-9e32-21175787627a",
     "title": "Stock market hits new high",
     "summary": "The national stock exchange's main index reaches an all-time high amidst strong corporate earnings.",
-    "daysAgo": "4",
+    "daysAgo": 4,
     "country": "CA",
     "tags": ["business", "finance"],
-    "sourceUrl": "www.cbc.ca/news/business"
+    "sourceUrl": "https://www.cbc.ca/news/business/toronto-stock-exchange-tsx-composite-hits-new-high-1.6789012",
+    "fullContent": "The Toronto Stock Exchange's S&P/TSX Composite Index has reached an unprecedented all-time high, driven by a wave of strong corporate earnings reports. Major companies in the banking, energy, and mining sectors reported profits that exceeded analyst expectations, fueling investor enthusiasm. The market's performance is seen as a strong indicator of the health and resilience of the Canadian economy. Analysts at major financial institutions are forecasting continued growth, citing sustained consumer demand and a stable political environment. The record-breaking performance has been a source of optimism for investors across the country."
   },
   {
+    "id": "c71a3642-1e9a-4f51-863a-23945a68d067",
     "title": "Study finds new planet",
     "summary": "Astronomers discover a new habitable planet in a nearby solar system.",
-    "daysAgo": "5",
+    "daysAgo": 5,
     "country": "none",
     "tags": ["space", "science"],
-    "sourceUrl": "www.scientificamerican.com"
+    "sourceUrl": "https://www.scientificamerican.com/article/astronomers-discover-new-habitable-planet-proxima-centauri-d",
+    "fullContent": "Astronomers at the European Southern Observatory have announced the discovery of a new exoplanet, 'Proxima Centauri D,' which orbits in the habitable zone of a star just four light-years away. The planet, slightly larger than Earth, has been detected using a new high-precision spectrograph. While more research is needed to confirm its habitability, the discovery is incredibly exciting for the search for life beyond Earth. The planet's close proximity makes it a prime target for future missions and detailed study. The discovery highlights the ongoing advances in astronomical technology."
   },
   {
+    "id": "2d1f05a9-4b13-4416-83a3-d9d1c1a92440",
     "title": "Major oil pipeline opens",
     "summary": "A new trans-continental oil pipeline is completed, promising to ease energy prices.",
-    "daysAgo": "3",
+    "daysAgo": 3,
     "country": "US",
     "tags": ["business", "energy"],
-    "sourceUrl": "www.wsj.com"
+    "sourceUrl": "https://www.wsj.com/articles/new-oil-pipeline-eases-energy-prices-in-midwest-5b8c9d4a",
+    "fullContent": "A new trans-continental oil pipeline, stretching from the Gulf of Mexico to the Midwest, has been completed and is now operational. The pipeline, a project that took five years to build, is designed to transport over a million barrels of crude oil per day. Proponents of the pipeline argue that it will increase energy security and help lower fuel costs for consumers. However, environmental groups have criticized the project for its potential impact on local ecosystems and its role in prolonging dependence on fossil fuels. The pipeline's opening marks a significant moment for the US energy sector."
   },
   {
+    "id": "f5125301-8b21-4f1e-9d21-4d0f68d374d6",
     "title": "Election results debated",
     "summary": "Political analysts debate the unexpected outcome of a recent national election.",
-    "daysAgo": "1",
+    "daysAgo": 1,
     "country": "JP",
     "tags": ["politics", "world"],
-    "sourceUrl": "www.japantimes.co.jp"
+    "sourceUrl": "https://www.japantimes.co.jp/news/2025/11/09/politics/election-results-hung-parliament-debate",
+    "fullContent": "Following the recent general election in Japan, political analysts are dissecting the surprising results. The ruling party, despite leading in the polls, failed to secure a majority, leading to a hung parliament. The outcome is seen as a major blow to the incumbent Prime Minister and has created political uncertainty. The unexpected results have been attributed to a combination of voter discontent over the economy and a strong showing from new opposition parties. Coalition talks are now underway to form a new government, but the process is expected to be difficult. The election has been a fascinating case study for political science."
   },
   {
+    "id": "a98a6c8e-a2b8-4e1b-9a4f-0b3d1b6e4e5e",
     "title": "AI creates a painting",
     "summary": "An artificial intelligence system generates a painting that sells for millions at auction.",
-    "daysAgo": "6",
+    "daysAgo": 6,
     "country": "none",
     "tags": ["technology", "art"],
-    "sourceUrl": "www.arstechnica.com"
+    "sourceUrl": "https://arstechnica.com/art/2025/11/04/ai-created-painting-sells-for-4-5-million-at-auction",
+    "fullContent": "A piece of artwork created entirely by an artificial intelligence program has sold for a staggering $4.5 million at a prestigious auction house in London. The painting, titled 'The Algorithm's Gaze,' was created by an AI trained on a dataset of millions of masterpieces from art history. The sale has sparked a heated debate in the art world about the nature of creativity and the role of technology in art. While some critics argue that the work lacks a human soul, others see it as a new frontier for artistic expression. The sale signals a new era where AI-generated works will be a legitimate part of the art market."
   },
   {
+    "id": "1e66c98a-d9b1-4c12-9c3f-9a4a7a8d5f30",
     "title": "New archaeological discovery",
     "summary": "A team of archeologists uncovers an ancient tomb filled with previously unknown artifacts.",
-    "daysAgo": "7",
+    "daysAgo": 7,
     "country": "CN",
     "tags": ["history", "discovery"],
-    "sourceUrl": "www.chinadaily.com.cn"
+    "sourceUrl": "https://www.chinadaily.com.cn/culture/2025-11/03/content_12345678.htm",
+    "fullContent": "Archaeologists in China have made an extraordinary discovery: a 2,000-year-old tomb from the Han Dynasty. The tomb, which was found intact and untouched by looters, is filled with a treasure trove of artifacts, including intricate bronze vessels, jade carvings, and well-preserved silk textiles. The discovery is a major find for Chinese history, as it provides a rare glimpse into the burial rituals and daily life of the Han elite. The artifacts are now being carefully studied to unlock their secrets. The find highlights the richness of China's cultural heritage."
   },
   {
+    "id": "d748f5a2-3f10-4c4e-9b2f-2d7f8d68f2f2",
     "title": "New food safety regulations",
     "summary": "The government announces strict new regulations to improve food safety standards.",
-    "daysAgo": "2",
+    "daysAgo": 2,
     "country": "US",
     "tags": ["health", "law"],
-    "sourceUrl": "www.fda.gov"
+    "sourceUrl": "https://www.fda.gov/news/press-releases/fda-announces-new-food-safety-regulations-to-improve-public-health-2025-11-08",
+    "fullContent": "The U.S. Food and Drug Administration (FDA) has announced a new set of strict regulations to enhance food safety across the country. The new rules, which will take effect next year, require food manufacturers to implement advanced tracking systems and undergo more frequent inspections. The move is a response to a series of recent food-borne illness outbreaks. While consumer advocates have welcomed the regulations, some industry groups have expressed concerns about the increased costs and compliance burdens. The FDA says the new rules are a necessary step to protect public health."
   },
   {
+    "id": "14f2913e-a1b4-4e2b-b9f1-9c6a1e5d7d3c",
     "title": "Tech company lays off staff",
     "summary": "A major tech corporation announces large-scale layoffs as part of a restructuring plan.",
-    "daysAgo": "5",
+    "daysAgo": 5,
     "country": "DE",
     "tags": ["technology", "business"],
-    "sourceUrl": "www.spiegel.de"
+    "sourceUrl": "https://www.spiegel.de/wirtschaft/siemens-plant-grossen-stellenabbau-a-12345678.html",
+    "fullContent": "Siemens, the German technology and engineering giant, has announced it will lay off over 5,000 employees as part of a major restructuring effort. The company stated the layoffs are necessary to streamline operations and focus on key growth areas, such as industrial automation and digital services. The move comes as the company faces increased competition and economic headwinds. The restructuring plan is aimed at improving profitability and positioning the company for long-term success. The layoffs have been met with criticism from labor unions, which are calling for negotiations to mitigate the impact on workers."
   },
   {
+    "id": "e4a7a8f1-c8a7-4b1f-9c8e-5b2c4a9d2f6c",
     "title": "Celebrity couple divorces",
     "summary": "A high-profile celebrity couple announces their separation after a five-year marriage.",
-    "daysAgo": "4",
+    "daysAgo": 4,
     "country": "US",
     "tags": ["entertainment", "celebrity"],
-    "sourceUrl": "www.people.com"
+    "sourceUrl": "https://people.com/celebrity/ryan-reynolds-blake-lively-divorce-statement",
+    "fullContent": "In a joint statement released on social media, Hollywood power couple Ryan Reynolds and Blake Lively announced they are separating after five years of marriage. The news has shocked fans and media alike, as the couple was known for their seemingly perfect relationship. The statement requested privacy during this difficult time. The announcement has sparked a frenzy of speculation about the reasons for the split, with tabloids and gossip sites working overtime to get the scoop. The couple's lawyers have stated that the divorce is amicable and they will co-parent their three children."
   },
   {
+    "id": "a5d09f7a-2d4e-4f1a-b6d8-21f45c9a1d4a",
     "title": "New book on climate change",
     "summary": "A bestselling author releases a new book detailing the personal impact of climate change.",
-    "daysAgo": "3",
+    "daysAgo": 3,
     "country": "none",
     "tags": ["environment", "books"],
-    "sourceUrl": "www.penguin.com/news"
+    "sourceUrl": "https://www.penguin.com/news/naomi-klein-new-book-on-climate-change-the-uninhabitable-earth-98745",
+    "fullContent": "Journalist and author Naomi Klein has released her latest book, 'The Uninhabitable Earth,' which explores the personal and emotional toll of the climate crisis. The book, already a bestseller, combines scientific data with personal stories of individuals affected by extreme weather events and environmental degradation. Critics have praised the book for its powerful and accessible prose, calling it a wake-up call for a generation grappling with the climate emergency. The book is sparking conversations and debates about how to address the crisis on both a personal and political level. It is expected to become a staple of environmental literature."
   },
   {
+    "id": "b6a71d8c-5f32-4e4b-9e9d-1a8c9f0b1a45",
     "title": "New quantum computer record",
     "summary": "Researchers set a new world record for quantum computing speed and accuracy.",
-    "daysAgo": "6",
+    "daysAgo": 6,
     "country": "CH",
     "tags": ["science", "technology"],
-    "sourceUrl": "www.sciencemag.org"
+    "sourceUrl": "https://www.sciencemag.org/news/article/new-quantum-computer-record-zurich-lab-12345",
+    "fullContent": "A team of physicists at the Swiss Federal Institute of Technology in Zurich has set a new world record in quantum computing. Using a new superconducting qubit design, the team was able to perform a complex calculation with an unprecedented level of speed and accuracy. The achievement marks a significant step forward in the race for 'quantum supremacy,' a milestone where a quantum computer can solve a problem that is impossible for a classical supercomputer. The researchers' findings have been published in the prestigious journal Science. This is a monumental achievement for the field of quantum computing."
   },
   {
+    "id": "d0e12f6a-04b3-4f9e-9b2f-3d1f4a5c6d7b",
     "title": "New solar energy project",
     "summary": "A massive new solar energy farm is approved, promising to power thousands of homes.",
-    "daysAgo": "7",
+    "daysAgo": 7,
     "country": "AU",
     "tags": ["energy", "environment"],
-    "sourceUrl": "www.renewableenergyworld.com"
+    "sourceUrl": "https://www.renewableenergyworld.com/articles/australia-approves-massive-solar-farm-project-in-outback-q123",
+    "fullContent": "The Australian government has given final approval for the construction of a new solar energy farm in the Outback. The project, which will be one of the largest in the country, is expected to generate enough clean electricity to power over 50,000 homes. The move is part of the government's broader strategy to transition to a renewable energy grid. The project has been lauded by environmental groups but has faced some criticism from local residents concerned about land use and environmental impact. The construction is set to begin next year, creating hundreds of jobs in the process."
   },
   {
+    "id": "f5a9c0d1-7f8e-4a6c-9a4d-9d7e3a9c6b12",
     "title": "Retail chain files for bankruptcy",
     "summary": "A well-known national retail chain announces it will close all its stores after filing for bankruptcy.",
-    "daysAgo": "5",
+    "daysAgo": 5,
     "country": "US",
     "tags": ["business", "retail"],
-    "sourceUrl": "www.retaildive.com"
+    "sourceUrl": "https://www.retaildive.com/news/sears-files-for-bankruptcy-will-close-all-remaining-stores/543210",
+    "fullContent": "Sears, a once-iconic American retail chain, has filed for Chapter 11 bankruptcy and announced it will be closing all remaining stores. The company, which has been in decline for years, cited fierce competition from online retailers and a heavy debt load as the primary reasons for the decision. The bankruptcy marks the end of an era for a company that was once a pillar of the American retail landscape. The closure will result in the loss of thousands of jobs and leave empty storefronts in shopping malls across the country. The company's remaining assets will be liquidated to pay off creditors."
   },
   {
+    "id": "0c2d3a9d-5d2f-4c8d-b7f5-1b3a8c5d6e2e",
     "title": "New therapy for depression",
     "summary": "A clinical trial proves a new therapy to be highly effective in treating severe depression.",
-    "daysAgo": "2",
+    "daysAgo": 2,
     "country": "none",
     "tags": ["health", "mental health"],
-    "sourceUrl": "www.thelancet.com/psychiatry"
+    "sourceUrl": "https://www.thelancet.com/journals/lancet/article/PIIS2215-0366(25)00456-X/fulltext",
+    "fullContent": "A new study published in the journal The Lancet Psychiatry reveals a groundbreaking new therapy for treatment-resistant depression. The therapy, which involves a combination of cognitive behavioral therapy and a new form of neurostimulation, showed remarkable success in a large-scale clinical trial. Patients who underwent the treatment experienced a significant reduction in symptoms and an improvement in their quality of life. The therapy offers new hope for millions who have not responded to traditional treatments. The research is a major step forward in the field of mental health."
   },
   {
+    "id": "1f8b4a5c-9d6a-4b2e-a3d8-21f4c7e6d9b0",
     "title": "Global summit on migration",
     "summary": "World leaders meet to discuss a coordinated response to the growing global migration crisis.",
-    "daysAgo": "4",
+    "daysAgo": 4,
     "country": "BE",
     "tags": ["world", "politics"],
-    "sourceUrl": "www.un.org"
+    "sourceUrl": "https://www.un.org/press/en/2025/global-migration-summit-in-brussels.html",
+    "fullContent": "Leaders from over 50 countries have gathered in Brussels for a high-level summit on the global migration crisis. The meeting, organized by the European Union, aims to develop a coordinated international strategy to manage the flow of refugees and migrants. Key topics on the agenda include humanitarian aid, border security, and long-term integration plans. The summit comes as several nations face record numbers of asylum seekers, straining resources and creating political tension. A joint declaration is expected to be signed, outlining new commitments for international cooperation and burden-sharing."
   },
   {
+    "id": "42f5d9a8-e1c2-4a5f-b8d9-21b3d7a8c4f0",
     "title": "First human brain-chip",
     "summary": "A biotech company successfully implants the first neural interface chip in a human brain.",
-    "daysAgo": "1",
+    "daysAgo": 1,
     "country": "US",
     "tags": ["technology", "science"],
-    "sourceUrl": "www.technologyreview.com"
+    "sourceUrl": "https://www.technologyreview.com/2025/11/09/100456/neuralink-first-human-brain-chip-implant",
+    "fullContent": "Neuralink, a company founded by Elon Musk, has successfully implanted its first brain-computer interface (BCI) chip into a human patient. The surgical procedure, performed on a quadriplegic man, was a complete success. The patient is now able to control a computer cursor and keyboard using only his thoughts. This groundbreaking achievement marks a new era in neurotechnology, with potential applications for treating a wide range of neurological disorders. The company's goal is to restore communication and mobility to millions of people with disabilities. The successful trial opens the door for further human studies and a new frontier in medicine."
   },
   {
+    "id": "b3f7c1d8-8e6f-4a0f-9c7d-3a4f6e1b8c2a",
     "title": "New video game console",
     "summary": "A major gaming company unveils its new next-generation video game console.",
-    "daysAgo": "3",
+    "daysAgo": 3,
     "country": "JP",
     "tags": ["entertainment", "gaming"],
-    "sourceUrl": "www.ign.com"
+    "sourceUrl": "https://www.ign.com/articles/sony-unveils-playstation-6-console-release-date",
+    "fullContent": "Sony has officially unveiled the highly anticipated PlayStation 6, the next-generation video game console. The new console features a sleek, futuristic design and is powered by a custom-built processor that promises to deliver unprecedented graphical fidelity and performance. The company showcased a number of exclusive titles during the reveal event, including a new entry in the 'God of War' series. The PlayStation 6 will be available in both a standard and a digital-only edition. The new console is expected to go head-to-head with Microsoft's next Xbox console, reigniting the console wars."
   },
   {
+    "id": "c1f6d9a0-2f5a-4b1c-8e4d-7a6b8d9c1b3a",
     "title": "Stock market index plunges",
     "summary": "The national stock market index drops sharply following a surprise interest rate hike.",
-    "daysAgo": "6",
+    "daysAgo": 6,
     "country": "GB",
     "tags": ["business", "finance"],
-    "sourceUrl": "www.bbc.co.uk/business"
+    "sourceUrl": "https://www.bbc.com/news/business-54321098/ftse-100-plunges-as-bank-of-england-raises-interest-rates",
+    "fullContent": "The FTSE 100, London's leading stock market index, has plummeted by over 5% in a single day of trading. The sharp decline was triggered by a surprise interest rate hike from the Bank of England, a move aimed at curbing persistent inflation. The decision caught investors off guard and sparked a wave of sell-offs across all sectors. The sudden drop erased billions of pounds from market capitalization and has led to concerns about a potential economic recession. Analysts are now closely watching for further market volatility in the coming days."
   },
   {
+    "id": "a9e8b7d6-3f1a-4c9d-8e7c-4f5d6a7b8e9c",
     "title": "Scientists find new species",
     "summary": "A new species of deep-sea fish is discovered in the Mariana Trench.",
-    "daysAgo": "5",
+    "daysAgo": 5,
     "country": "none",
     "tags": ["science", "discovery"],
-    "sourceUrl": "www.oceanic.org/news"
+    "sourceUrl": "https://www.oceanic.org/news/new-species-of-fish-discovered-in-mariana-trench-12345",
+    "fullContent": "A team of marine biologists exploring the deep waters of the Mariana Trench has discovered a new species of fish. The fish, a translucent creature with bioluminescent fins, was found at a depth of over 8,000 meters. The discovery was made using a remotely operated underwater vehicle equipped with advanced cameras. The new species, which has been named 'Abyssalis Luminosus,' is a testament to the vast and unexplored biodiversity of the deep ocean. The find highlights the importance of continued oceanographic research and conservation efforts."
   },
   {
+    "id": "4b6c8d7e-1a2f-4c5a-8b9f-5c4d6e7f8a9b",
     "title": "New trade agreement signed",
     "summary": "Several countries sign a new multilateral trade agreement to boost economic cooperation.",
-    "daysAgo": "7",
+    "daysAgo": 7,
     "country": "none",
     "tags": ["world", "business"],
-    "sourceUrl": "www.wto.org"
+    "sourceUrl": "https://www.wto.org/news/new-multilateral-trade-agreement-signed-by-25-nations-2025-09-03",
+    "fullContent": "In a major victory for international trade, a new multilateral agreement has been signed by 25 nations from across the globe. The agreement, brokered by the World Trade Organization (WTO), aims to reduce tariffs and non-tariff barriers, making it easier for goods and services to flow between countries. Proponents argue that the deal will boost global economic growth and create millions of new jobs. The agreement is a sign of a renewed commitment to free trade and cooperation after a period of increasing protectionism. The new framework is expected to take effect in the coming year."
   },
   {
+    "id": "7d9b2e3c-1a8f-4b7d-8e9a-5f6d7c8a9f0e",
     "title": "Tech startup raises funding",
     "summary": "A robotics startup successfully closes a Series B funding round, raising $50 million.",
-    "daysAgo": "4",
+    "daysAgo": 4,
     "country": "US",
     "tags": ["technology", "business"],
-    "sourceUrl": "www.forbes.com"
+    "sourceUrl": "https://www.forbes.com/sites/tech/2025/11/06/robotics-startup-robo-works-raises-50m-in-series-b-funding-round",
+    "fullContent": "A San Francisco-based robotics startup, 'Robo-Works,' has announced the successful completion of a Series B funding round, raising $50 million. The company, which specializes in developing autonomous delivery robots, plans to use the capital to expand its operations and accelerate the development of its next-generation robots. The funding round was led by a major venture capital firm and includes several other prominent investors. The investment signals strong confidence in the future of the autonomous delivery market. The company plans to launch its new fleet of robots in major cities across the country within the next 18 months."
   },
   {
+    "id": "e4f8d7c6-2f1a-4b9d-8e7c-6d1a9b8f2d7c",
     "title": "New findings on Mars",
     "summary": "The Mars rover sends back new data suggesting the presence of ancient liquid water.",
-    "daysAgo": "1",
+    "daysAgo": 1,
     "country": "none",
     "tags": ["space", "science"],
-    "sourceUrl": "www.nasa.gov/mars"
+    "sourceUrl": "https://www.nasa.gov/mars/perseverance-rover/new-findings-on-ancient-liquid-water-12345",
+    "fullContent": "The Perseverance rover, currently exploring the Jezero Crater on Mars, has sent back compelling new data that points to the existence of ancient liquid water on the red planet. The rover's instruments have detected complex mineral formations that are typically formed in the presence of water. This discovery further strengthens the theory that Mars was once a much warmer and wetter planet, capable of supporting microbial life. The new findings are a major milestone in the search for extraterrestrial life and will guide the future of Mars exploration. Scientists are thrilled by the new data."
   },
   {
+    "id": "8b7c6f2a-1e9d-4c3b-8d6f-2a5c4d3b1e7c",
     "title": "Government restructures debt",
     "summary": "The government announces a plan to restructure a portion of its national debt to avoid a crisis.",
-    "daysAgo": "3",
+    "daysAgo": 3,
     "country": "GR",
     "tags": ["politics", "finance"],
-    "sourceUrl": "www.ekathimerini.com"
+    "sourceUrl": "https://www.ekathimerini.com/economy/115432/greece-announces-national-debt-restructuring-plan",
+    "fullContent": "The Greek government has announced a comprehensive plan to restructure a significant portion of its national debt. The plan, which was negotiated with the European Central Bank and the International Monetary Fund, aims to extend the maturity of loans and reduce interest payments. The move is a crucial step towards ensuring long-term financial stability and preventing a potential debt crisis. The government stated that the restructuring will not involve any new austerity measures, a promise that has been welcomed by citizens. The deal is seen as a sign of the country's economic recovery and a commitment to fiscal responsibility."
   },
   {
+    "id": "e4f1c9d8-4b7e-4c8d-8e9d-1b3c9f2d1e8c",
     "title": "Cryptocurrency exchange hacked",
     "summary": "A major cryptocurrency exchange is the victim of a cyberattack, losing millions in user funds.",
-    "daysAgo": "5",
+    "daysAgo": 5,
     "country": "KR",
     "tags": ["crypto", "cybersecurity"],
-    "sourceUrl": "www.reuters.com/blockchain"
+    "sourceUrl": "https://www.reuters.com/blockchain/cryptocurrency/bithumb-exchange-hacked-loses-millions-in-user-funds-2025-11-05",
+    "fullContent": "Bithumb, a prominent cryptocurrency exchange based in South Korea, has confirmed that it was the target of a major cyberattack. The hack resulted in the loss of over $100 million in user funds, including a variety of cryptocurrencies. The company has temporarily suspended all deposits and withdrawals while it conducts an investigation with law enforcement. The incident has sent shockwaves through the crypto community, raising renewed concerns about the security of digital asset exchanges. Bithumb has promised to reimburse affected users and is working to identify the culprits behind the attack."
   },
   {
+    "id": "c7f2e1d9-5a8b-4b2e-9d6f-8a3c5d7b1e9f",
     "title": "New fitness trend emerges",
     "summary": "A new high-intensity fitness routine is gaining popularity across social media platforms.",
-    "daysAgo": "2",
+    "daysAgo": 2,
     "country": "none",
     "tags": ["health", "lifestyle"],
-    "sourceUrl": "www.menshealth.com"
+    "sourceUrl": "https://www.menshealth.com/fitness/a3456789/new-kinetic-flow-fitness-trend-social-media",
+    "fullContent": "A new fitness routine called 'Kinetic Flow' is taking social media by storm, with millions of users sharing their workouts and results. The routine is a high-intensity, low-impact exercise program that combines elements of yoga, martial arts, and bodyweight training. Celebrities and fitness influencers have been seen endorsing the workout, contributing to its viral popularity. Proponents claim that Kinetic Flow not only improves physical strength and endurance but also promotes mental clarity and focus. Fitness experts are cautiously optimistic, advising people to ease into the routine to avoid injury."
   },
   {
+    "id": "2b9c7e1f-4d6a-4c2b-8a9d-1c3f5e7b8d0c",
     "title": "Film director announces retirement",
     "summary": "An acclaimed film director announces that their next film will be their last.",
-    "daysAgo": "6",
+    "daysAgo": 6,
     "country": "FR",
     "tags": ["entertainment", "film"],
-    "sourceUrl": "www.variety.com"
+    "sourceUrl": "https://www.variety.com/2025/11/04/film/news/jean-pierre-jeunet-announces-retirement-12345",
+    "fullContent": "Jean-Pierre Jeunet, the celebrated French director behind films like 'Amélie,' has announced his retirement from filmmaking. In a recent interview, the director stated that his next project, a science-fiction epic, will be his final film. Jeunet cited creative burnout and a desire to pursue other passions as the reasons for his decision. The news has saddened fans and colleagues alike, who have praised his unique visual style and whimsical storytelling. The director's retirement marks the end of an influential career in European cinema. His final film is highly anticipated."
   },
   {
+    "id": "e5c2d1b8-3a9d-4c7b-8e5f-1c9d2f3a6c8e",
     "title": "SpaceX launches new satellite",
     "summary": "A private space company successfully launches a satellite to provide global internet access.",
-    "daysAgo": "7",
+    "daysAgo": 7,
     "country": "US",
     "tags": ["space", "technology"],
-    "sourceUrl": "www.spacex.com"
+    "sourceUrl": "https://www.spacex.com/news/2025/11/03/starlink-launch-from-cape-canaveral",
+    "fullContent": "SpaceX has successfully launched another batch of Starlink satellites into low Earth orbit. The launch, which took place from Cape Canaveral, Florida, brings the total number of satellites in the constellation to over 5,000. The Starlink network aims to provide high-speed internet access to remote and underserved areas around the globe. The company's reusable rocket technology continues to drive down the cost of space launches. The successful launch is a significant step forward in SpaceX's mission to create a global internet network."
   },
   {
+    "id": "c1d9b4a8-6f7e-4b9a-8f1d-2e4b8c9d1f5a",
     "title": "New AI-powered assistant",
     "summary": "A new virtual assistant with advanced conversational AI is released to the public.",
-    "daysAgo": "4",
+    "daysAgo": 4,
     "country": "none",
     "tags": ["technology", "ai"],
-    "sourceUrl": "www.theverge.com"
+    "sourceUrl": "https://www.theverge.com/2025/11/06/23456789/aura-new-ai-powered-virtual-assistant-launches",
+    "fullContent": "A new virtual assistant, named 'Aura,' has been released by a stealth-mode startup, promising a new level of conversational fluency. The assistant is powered by a large language model that enables it to understand and respond to complex queries, perform a variety of tasks, and even generate creative content. Unlike existing assistants, Aura is designed to learn from user interactions, becoming more personalized over time. The company is positioning Aura as a direct competitor to Alexa and Google Assistant. Early reviews have praised the assistant's natural-sounding voice and impressive capabilities."
   },
   {
+    "id": "1e3a9b4c-8f1d-4c8d-9a6f-1b2c3d4e5f6a",
     "title": "UN issues new report",
     "summary": "A United Nations report warns that a new wave of famine is imminent in several regions.",
-    "daysAgo": "3",
+    "daysAgo": 3,
     "country": "none",
     "tags": ["world", "humanitarian"],
-    "sourceUrl": "www.un.org/news"
+    "sourceUrl": "https://www.un.org/news/press-release/un-report-warns-of-imminent-famine-in-several-regions",
+    "fullContent": "The United Nations World Food Programme (WFP) has published a grim report, warning that a new wave of famine is on the verge of affecting millions of people in several regions of Africa and the Middle East. The report cited a combination of factors, including prolonged drought, political instability, and rising food prices. The WFP is calling for an immediate and coordinated international response to prevent a catastrophic humanitarian crisis. The UN has requested an additional $5 billion in emergency funding to provide food aid and support to the most vulnerable populations. The report is a stark reminder of the challenges facing the global community."
   },
   {
+    "id": "f5d1e2b8-9a6c-4f8e-8b1d-2c4a9d8f3e5c",
     "title": "Automaker recalls vehicles",
     "summary": "A major car company issues a recall for millions of vehicles due to a software glitch.",
-    "daysAgo": "1",
+    "daysAgo": 1,
     "country": "JP",
     "tags": ["business", "automotive"],
-    "sourceUrl": "www.autoblog.com"
+    "sourceUrl": "https://www.autoblog.com/2025/11/09/honda-recalls-2-million-vehicles-due-to-software-glitch",
+    "fullContent": "Honda has issued a massive recall for over 2 million vehicles worldwide due to a serious software glitch. The flaw affects the car's infotainment system, which can cause the backup camera to freeze and the navigation system to fail. The company stated that the issue does not affect the vehicle's driving performance, but it could pose a safety risk. Honda is advising all affected owners to bring their vehicles to a dealership for a free software update. The recall is expected to cost the company millions in repairs and will be a major logistical challenge."
   },
   {
+    "id": "7b8e1d4c-2a6f-4b9d-9c8a-1d5f7e6b9c8d",
     "title": "Research on renewable energy",
     "summary": "Scientists make a breakthrough in battery technology, improving energy storage for renewables.",
-    "daysAgo": "5",
+    "daysAgo": 5,
     "country": "DE",
     "tags": ["science", "energy"],
-    "sourceUrl": "www.nature.com/energy"
+    "sourceUrl": "https://www.nature.com/articles/d215c0e-12345678",
+    "fullContent": "Researchers at the Max Planck Institute in Germany have developed a new type of battery that can store renewable energy with significantly greater efficiency and at a lower cost than current models. The 'Bio-Battery,' which is made from a combination of organic materials, is capable of a 95% energy retention rate over thousands of charging cycles. The breakthrough is a game-changer for the renewable energy sector, as it solves one of the biggest challenges in transitioning to a green grid: energy storage. The new technology is expected to accelerate the adoption of solar and wind power worldwide."
   },
   {
+    "id": "e4a1f3c5-9b8d-4a1e-8c7d-9f2d1e3a4b6c",
     "title": "New law on data privacy",
     "summary": "A new law is enacted that gives citizens more control over their personal data online.",
-    "daysAgo": "6",
+    "daysAgo": 6,
     "country": "BR",
     "tags": ["politics", "law"],
-    "sourceUrl": "www.gov.br/news"
+    "sourceUrl": "https://www.gov.br/news/new-data-privacy-law-enacted-in-brazil-for-citizen-protection",
+    "fullContent": "Brazil has enacted a new data privacy law, 'Lei de Proteção de Dados,' that gives its citizens unprecedented control over their personal information online. The law requires companies to obtain explicit consent before collecting, processing, or sharing user data. It also gives citizens the right to request that their data be deleted or corrected. The legislation is a response to growing public concerns about data breaches and surveillance. Tech companies operating in Brazil will have to comply with the new regulations or face hefty fines. The law is a landmark for data protection in the region."
   },
   {
+    "id": "a9d7f5c2-1e9b-4c8d-8e7f-1d3a6c9d8e5b",
     "title": "Cryptocurrency hits new peak",
     "summary": "The price of Ethereum reaches an all-time high, driven by a surge in investor confidence.",
-    "daysAgo": "7",
+    "daysAgo": 7,
     "country": "none",
     "tags": ["crypto", "finance"],
-    "sourceUrl": "www.bloomberg.com/crypto"
+    "sourceUrl": "https://www.bloomberg.com/crypto/news/ethereum-hits-new-all-time-high-amid-investor-confidence-surge",
+    "fullContent": "The cryptocurrency Ethereum has reached a new all-time high, with its price soaring past the $5,000 mark. The surge is being attributed to a number of factors, including a successful network upgrade, growing adoption of its blockchain for decentralized applications, and a general increase in investor confidence in the crypto market. The milestone solidifies Ethereum's position as the second-largest cryptocurrency by market capitalization. Analysts predict that its value will continue to rise as more developers and businesses build on its platform. The achievement is a testament to the growing maturity of the crypto industry."
   },
   {
+    "id": "b4f2c8a1-8d3f-4e6c-9a1d-7c8b2a5c1e9f",
     "title": "Hollywood strike ends",
     "summary": "Actors and studios reach an agreement, officially ending a long-standing strike.",
-    "daysAgo": "4",
+    "daysAgo": 4,
     "country": "US",
     "tags": ["entertainment", "labor"],
-    "sourceUrl": "www.variety.com"
+    "sourceUrl": "https://www.variety.com/2025/11/06/tv/news/sag-aftra-amp-tp-reach-deal-strike-ends-1234567",
+    "fullContent": "The Screen Actors Guild – American Federation of Television and Radio Artists (SAG-AFTRA) has reached a new contract agreement with the Alliance of Motion Picture and Television Producers (AMPTP), officially ending a six-month-long strike. The new deal includes significant gains for actors, including higher wages, better residuals for streaming content, and protections against the use of artificial intelligence. The agreement means that film and television production, which has been largely shut down, can finally resume. The strike was one of the longest in Hollywood's history and had a major impact on the entertainment industry."
   },
   {
+    "id": "2e3c8a1d-9b7e-4c6f-8d9e-1f2a3d4c6e9d",
     "title": "New space tourism company",
     "summary": "A new company announces it will offer commercial space flights to the public.",
-    "daysAgo": "2",
+    "daysAgo": 2,
     "country": "GB",
     "tags": ["space", "business"],
-    "sourceUrl": "www.theguardian.com/business"
+    "sourceUrl": "https://www.theguardian.com/business/2025/nov/08/orion-ventures-space-tourism-company-announcement",
+    "fullContent": "A British aerospace startup, 'Orion Ventures,' has announced its entry into the commercial space tourism market. The company plans to offer suborbital flights to the public for a price of $250,000 per seat. Orion Ventures is developing a new, fully reusable spacecraft that can carry up to six passengers to the edge of space. The company is positioning itself as a competitor to existing players like Virgin Galactic and Blue Origin. The announcement is a sign of the growing commercialization of space and the increasing accessibility of space travel. The first flights are scheduled for 2028."
   },
   {
+    "id": "5f6e1d2c-9a8b-4c7f-8d9e-3a1b4c6d8e9f",
     "title": "Breakthrough in cancer research",
     "summary": "Researchers discover a new molecular pathway that could lead to new cancer treatments.",
-    "daysAgo": "3",
+    "daysAgo": 3,
     "country": "none",
     "tags": ["health", "science"],
-    "sourceUrl": "www.cell.com"
+    "sourceUrl": "https://www.cell.com/molecular-cell/fulltext/S1097-2765(25)00987-X",
+    "fullContent": "A team of researchers from the Francis Crick Institute in London has made a significant discovery in the field of oncology. The scientists identified a previously unknown molecular pathway that allows cancer cells to evade the body's immune system. By targeting this pathway with new drugs, they were able to halt tumor growth in lab experiments. The discovery offers a new and promising avenue for developing more effective cancer treatments. The research is a major step forward in personalized medicine. The findings have been published in the journal 'Cell,' and clinical trials are expected to begin soon."
   },
   {
+    "id": "7a9b2d8c-1e6f-4c5d-8e9f-1a3b5c7d8e9f",
     "title": "E-commerce giant expands",
     "summary": "A leading e-commerce company announces plans to build a new network of fulfillment centers.",
-    "daysAgo": "5",
+    "daysAgo": 5,
     "country": "CN",
     "tags": ["business", "technology"],
-    "sourceUrl": "www.alizila.com"
+    "sourceUrl": "https://www.alizila.com/news/alibaba-announces-new-fulfillment-centers-to-speed-up-deliveries",
+    "fullContent": "Alibaba, the Chinese e-commerce behemoth, has announced an ambitious plan to build a new network of fulfillment centers across the country. The company's goal is to reduce delivery times to under 24 hours for most of its customers. The new centers will be highly automated and will utilize advanced robotics and AI to sort and package orders. The expansion is a direct response to rising competition from rivals like JD.com and Pinduoduo. The investment will strengthen Alibaba's logistics capabilities and improve the customer experience. The project is expected to be completed within the next three years."
   },
   {
+    "id": "e4c1d7a8-4b2e-4f1c-9a3d-1b7c8e9f5d6a",
     "title": "New music streaming service",
     "summary": "A new music streaming platform with unique social features launches in beta.",
-    "daysAgo": "6",
+    "daysAgo": 6,
     "country": "US",
     "tags": ["entertainment", "tech"],
-    "sourceUrl": "www.musicbusinessworldwide.com"
+    "sourceUrl": "https://www.musicbusinessworldwide.com/sonic-wave-new-music-streaming-service-with-social-features-launches",
+    "fullContent": "A new music streaming service called 'Sonic Wave' has entered the market, promising a unique social experience for music lovers. The platform, which is currently in beta, allows users to create shared listening sessions, host live DJ sets, and interact with artists in real-time. Sonic Wave also offers a more generous royalty model for artists, which has garnered support from independent musicians. The company is positioning itself as a more community-focused alternative to Spotify and Apple Music. The launch is a sign of continued innovation in the highly competitive music streaming industry."
   },
   {
+    "id": "f5d7c8a1-9b2e-4c5d-8a6f-1d3c9b4e5d7a",
     "title": "Robotic surgery becomes common",
     "summary": "The use of robotic surgical systems is now becoming a standard procedure in hospitals.",
-    "daysAgo": "1",
+    "daysAgo": 1,
     "country": "DE",
     "tags": ["health", "technology"],
-    "sourceUrl": "www.bmj.com"
+    "sourceUrl": "https://www.bmj.com/content/380/bmj.p234/robotic-surgery-is-becoming-standard-in-hospitals",
+    "fullContent": "A new report from the British Medical Journal (BMJ) reveals that robotic surgical systems are now being used in over 60% of major surgical procedures in Germany. The report highlights how the use of robots has led to improved patient outcomes, including shorter recovery times and reduced pain. The technology, which is still in its early stages, is expected to become a standard tool in hospitals worldwide. Doctors say the robots allow for greater precision and less invasive procedures, benefiting both patients and surgeons. The adoption of this technology is a major milestone for modern medicine."
   },
   {
+    "id": "9b7c1d4e-5a8f-4c9d-8e6b-1c3d5a8b7e9c",
     "title": "Global food prices rise",
     "summary": "A new report from the UN indicates that global food prices are rising sharply.",
-    "daysAgo": "4",
+    "daysAgo": 4,
     "country": "none",
     "tags": ["world", "economy"],
-    "sourceUrl": "www.fao.org/news"
+    "sourceUrl": "https://www.fao.org/news/story/en/global-food-prices-rise-sharply-due-to-conflict-and-climate",
+    "fullContent": "The UN's Food and Agriculture Organization (FAO) has released a new report showing a sharp increase in global food prices. The FAO Food Price Index, a measure of the monthly change in international prices of a basket of food commodities, rose by over 10% in the last month. The increase is attributed to a combination of factors, including extreme weather events, supply chain disruptions, and the ongoing conflict in Ukraine. The rising prices are a major concern for developing nations and could lead to food insecurity for millions. The FAO is urging international cooperation to address the crisis."
   },
   {
+    "id": "1e2c9d8a-6f7e-4b9d-8c1f-2a4b8c7d9e2a",
     "title": "Fashion house launches NFT",
     "summary": "A renowned fashion house debuts a new collection of digital-only clothing as NFTs.",
-    "daysAgo": "7",
+    "daysAgo": 7,
     "country": "FR",
     "tags": ["crypto", "entertainment"],
-    "sourceUrl": "www.vogue.com/business"
+    "sourceUrl": "https://www.vogue.com/business/articles/chanel-nft-collection-debuts-digital-fashion-1234567",
+    "fullContent": "Chanel, the iconic French fashion house, has entered the metaverse with a new collection of digital-only clothing. The collection, which was launched as a series of Non-Fungible Tokens (NFTs), includes a digital dress, a virtual handbag, and a pair of augmented reality sunglasses. The NFTs are designed to be worn by avatars in virtual worlds and can also be used as filters on social media. The move is a sign of the fashion industry's growing interest in Web3 and digital assets. Critics are divided on the value of digital clothing, but the collection has already sold out."
   },
   {
+    "id": "4b2c1d9a-8e7f-4c3b-8d6a-1e9f5c4d6b7e",
     "title": "Political leader resigns",
     "summary": "A long-serving political leader steps down from their position amid a scandal.",
-    "daysAgo": "2",
+    "daysAgo": 2,
     "country": "GB",
     "tags": ["politics", "scandal"],
-    "sourceUrl": "www.thetimes.co.uk"
+    "sourceUrl": "https://www.thetimes.co.uk/news/politics/pm-david-cameron-resigns-amid-scandal-gh234s",
+    "fullContent": "Prime Minister David Cameron has announced his resignation amidst a widening scandal involving his financial dealings. The Prime Minister, who has led the country for over a decade, has faced growing pressure to step down after a series of leaked documents revealed he had failed to declare millions in foreign investments. The resignation has thrown the government into disarray and has triggered a new leadership contest within the Conservative party. The scandal is a major blow to the party and a sign of growing public discontent with political corruption. A new Prime Minister is expected to be announced in the coming weeks."
   },
   {
+    "id": "e4c1f9d2-7b8e-4a6c-9d1f-1e9d2a3c5d7b",
     "title": "New gene therapy approved",
     "summary": "A new gene therapy to treat a rare genetic disorder receives regulatory approval.",
-    "daysAgo": "3",
+    "daysAgo": 3,
     "country": "US",
     "tags": ["health", "science"],
-    "sourceUrl": "www.nih.gov"
+    "sourceUrl": "https://www.nih.gov/news/press-releases/fda-approves-gene-therapy-for-sma-2025-11-07",
+    "fullContent": "The U.S. Food and Drug Administration (FDA) has granted regulatory approval to 'Gene-Cure,' a groundbreaking new gene therapy for treating a rare genetic disorder known as SMA. The therapy, which is administered as a single dose, works by replacing a defective gene with a healthy one. The approval is a major victory for patients with SMA, a disease that causes progressive muscle weakness and paralysis. The therapy, which has been in development for over 15 years, is a testament to the power of genetic research and a beacon of hope for those with rare diseases."
   },
   {
+    "id": "1c9d2f3a-6e5b-4c8d-8a9e-1d5c7f8e1a9d",
     "title": "Cybersecurity firm raises funds",
     "summary": "A startup focused on AI-driven cybersecurity raises a new round of funding.",
-    "daysAgo": "5",
+    "daysAgo": 5,
     "country": "IL",
     "tags": ["technology", "business"],
-    "sourceUrl": "www.calcalistech.com"
+    "sourceUrl": "https://www.calcalistech.com/israeli-tech/article/cynet-raises-40m-in-new-funding-round-a12345",
+    "fullContent": "Cynet, an Israeli cybersecurity startup, has announced it has raised $40 million in a new funding round. The company, which uses artificial intelligence to detect and respond to advanced cyber threats, plans to use the capital to expand its global operations and accelerate product development. The funding round was led by a major venture capital firm and includes several other prominent investors. The investment signals strong confidence in the future of the cybersecurity market and a recognition of Israel's role as a leader in the field. Cynet's technology is designed to protect businesses from a wide range of cyberattacks, from ransomware to phishing."
   },
   {
+    "id": "5f6d7e8b-1a9c-4e7a-8f1d-2b3c5d4a6e9f",
     "title": "New research on black holes",
     "summary": "Astronomers publish a new study that sheds light on the behavior of black holes.",
-    "daysAgo": "6",
+    "daysAgo": 6,
     "country": "none",
     "tags": ["science", "space"],
-    "sourceUrl": "www.hubblesite.org"
+    "sourceUrl": "https://hubblesite.org/news_release/news/2025/11/04/new-research-on-black-hole-growth",
+    "fullContent": "A new study published in the Astrophysical Journal reveals new insights into the behavior of black holes. The research, which was conducted using data from the Hubble Space Telescope, found that black holes grow much faster than previously thought. The astronomers discovered that black holes are capable of 'eating' vast amounts of matter in a short period, a process that is far more violent than earlier models suggested. The findings challenge existing theories about the formation and evolution of galaxies. The research is a major step forward in our understanding of these mysterious cosmic objects."
   },
   {
+    "id": "a9b8c7d6-e1f2-4a5b-8c9d-1f2e3d4c5b6a",
     "title": "Bank raises interest rates",
     "summary": "The central bank unexpectedly raises interest rates to combat rising inflation.",
-    "daysAgo": "1",
+    "daysAgo": 1,
     "country": "CA",
     "tags": ["business", "finance"],
-    "sourceUrl": "www.bnnbloomberg.ca"
+    "sourceUrl": "https://www.bnnbloomberg.ca/bank-of-canada-raises-interest-rates-to-combat-inflation-1.2345678",
+    "fullContent": "The Bank of Canada has surprised markets by raising its key interest rate by 50 basis points. The move is a response to persistent and higher-than-expected inflation figures. The central bank's governor stated that the decision was necessary to prevent inflation from becoming entrenched in the economy. The rate hike is expected to impact mortgages, loans, and credit card debt. While the move is aimed at cooling the economy, it has raised concerns about a potential economic slowdown. The bank's decision is a clear signal of its commitment to price stability."
   },
   {
+    "id": "e1f2c9d8-5b7a-4e6c-9d8f-1a2b3c4d5e6f",
     "title": "New travel destination popular",
     "summary": "A small island nation sees a surge in tourism after being featured in a travel show.",
-    "daysAgo": "7",
+    "daysAgo": 7,
     "country": "IS",
     "tags": ["travel", "lifestyle"],
-    "sourceUrl": "www.lonelyplanet.com"
+    "sourceUrl": "https://www.lonelyplanet.com/news/faroe-islands-tourism-boom-after-netflix-show",
+    "fullContent": "The Faroe Islands, a remote archipelago in the North Atlantic, has seen a dramatic increase in tourism after being featured in a popular Netflix travel documentary. The show highlighted the islands' stunning natural beauty, including its rugged coastline, green valleys, and unique cultural heritage. Local tourism officials have been overwhelmed by the sudden influx of visitors, which has put a strain on local infrastructure. The government is now considering ways to manage the tourism boom and ensure it is sustainable for the local community. The islands are quickly becoming a must-visit destination for nature lovers."
   },
   {
+    "id": "3a7b9c1d-8e6f-4c5d-9e7f-1d2a3c5b8e9f",
     "title": "Study on renewable energy",
     "summary": "A new study reveals that wind power is now the cheapest source of new electricity generation.",
-    "daysAgo": "4",
+    "daysAgo": 4,
     "country": "ES",
     "tags": ["energy", "environment"],
-    "sourceUrl": "www.irena.org"
+    "sourceUrl": "https://www.irena.org/press-release/irena-study-wind-power-cheapest-source-of-electricity",
+    "fullContent": "A new report from the International Renewable Energy Agency (IRENA) has found that wind power is now the most cost-effective source of new electricity generation globally. The report, which analyzed data from thousands of wind farms, found that the cost of generating electricity from wind has fallen by over 50% in the last five years. The decline is due to advancements in turbine technology and economies of scale. The findings are a major boost for the renewable energy sector, as it makes wind power a more attractive alternative to fossil fuels. The trend is expected to accelerate the transition to a clean energy grid."
   },
   {
+    "id": "5f4d1e2c-9b7e-4a6c-8d9f-1c3a6e9f8d2a",
     "title": "Stock market index plunges",
     "summary": "A major stock market index suffers a sharp decline, causing investor panic.",
-    "daysAgo": "3",
+    "daysAgo": 3,
     "country": "JP",
     "tags": ["business", "finance"],
-    "sourceUrl": "www.nikkei.com"
+    "sourceUrl": "https://www.nikkei.com/article/nikkei-225-plunges-as-investors-panic-amid-economic-fears-12345",
+    "fullContent": "The Nikkei 225, Japan's leading stock market index, experienced a significant drop, falling over 4% in a single day of trading. The decline was triggered by concerns about a potential global economic slowdown and a weak yen. The plunge erased billions of dollars from market capitalization and has led to a wave of investor panic. The Bank of Japan is now considering intervention to stabilize the currency and the market. The sudden drop is a reminder of the fragility of the global economy and the interconnectedness of financial markets. Analysts are now closely watching for further market volatility."
   },
   {
+    "id": "c1a9d8b7-4e6f-4d3b-8a9d-1b2c3d4e5f6a",
     "title": "New AI models released",
     "summary": "A tech company releases a new set of open-source AI models for public use.",
-    "daysAgo": "2",
+    "daysAgo": 2,
     "country": "none",
     "tags": ["technology", "ai"],
-    "sourceUrl": "www.openai.com/blog"
+    "sourceUrl": "https://www.openai.com/blog/open-source-ai-models-released-to-public-for-accelerated-innovation",
+    "fullContent": "OpenAI has made a groundbreaking move by releasing a new set of its large language models as open-source for public use. The new models, which are more powerful and efficient than previous versions, are now available for developers and researchers to use and modify. This decision is seen as a major step forward for the AI community, as it will accelerate innovation and foster greater collaboration. The company's goal is to make AI more accessible and to ensure that the technology is developed responsibly. The release is expected to spark a wave of new AI applications and research projects."
   },
   {
+    "id": "e4c1f9d2-7b8e-4a6c-9d1f-1e9d2a3c5d7a",
     "title": "New book on global politics",
     "summary": "A new non-fiction book analyzes the changing landscape of global political power.",
-    "daysAgo": "5",
+    "daysAgo": 5,
     "country": "none",
     "tags": ["politics", "books"],
-    "sourceUrl": "www.foreignaffairs.com"
+    "sourceUrl": "https://www.foreignaffairs.com/articles/book-review/condoleezza-rice-the-new-world-order-analysis",
+    "fullContent": "Former Secretary of State Condoleezza Rice has released a new book, 'The New World Order,' which offers a compelling analysis of the shifting dynamics of global political power. The book examines the rise of new powers like China and India, the decline of American influence, and the growing importance of non-state actors. Rice argues that the world is becoming more multipolar and that the United States must adapt its foreign policy to this new reality. The book has been praised for its insightful analysis and has become a must-read for anyone interested in international relations. It is sparking conversations in foreign policy circles."
   },
   {
+    "id": "1c3a6b8e-9d7f-4c5b-8e9d-1f2a3c5d7e8a",
     "title": "Archaeologists discover tomb",
     "summary": "A previously unknown tomb from the Roman Empire era is discovered in Italy.",
-    "daysAgo": "6",
+    "daysAgo": 6,
     "country": "IT",
     "tags": ["history", "discovery"],
-    "sourceUrl": "www.archaeology.org"
+    "sourceUrl": "https://www.archaeology.org/news/pompeii-roman-tomb-discovered-intact-with-artifacts",
+    "fullContent": "Archaeologists working near the ancient city of Pompeii have unearthed a perfectly preserved Roman tomb. The tomb, which dates back to the 1st century AD, was found to be completely intact, containing a wealth of artifacts and a number of human remains. The discovery is a major find for Roman history, as it provides a rare glimpse into the burial rituals and daily life of the Roman elite. The artifacts, which include intricate pottery, gold jewelry, and a set of well-preserved frescoes, are now being carefully studied. The find highlights the richness of Italy's cultural heritage."
   },
   {
+    "id": "b3f5c2a1-8d7e-4c9f-9b1d-2a3c5e7f8b9c",
     "title": "New therapy for chronic pain",
     "summary": "A new non-invasive therapy shows promising results in treating chronic pain.",
-    "daysAgo": "7",
+    "daysAgo": 7,
     "country": "AU",
     "tags": ["health", "science"],
-    "sourceUrl": "www.medicalxpress.com"
+    "sourceUrl": "https://medicalxpress.com/news/2025-11-03-non-invasive-therapy-chronic-pain-shows-promising-results.html",
+    "fullContent": "Researchers at the University of Sydney have developed a new, non-invasive therapy that has shown remarkable success in treating chronic pain. The therapy, which is based on a form of neurostimulation, works by retraining the brain to reduce the perception of pain. The treatment, which is administered through a headset, has no known side effects and can be used at home. The discovery is a major breakthrough for the millions of people who suffer from chronic pain, a condition that has been notoriously difficult to treat. Clinical trials are now underway to test the therapy's effectiveness on a larger scale."
   },
   {
+    "id": "9b7a1d3c-8e9f-4c5a-8b1d-2e3c4d5e7f8b",
     "title": "Sports team wins championship",
     "summary": "A local sports team wins its first national championship in over 50 years.",
-    "daysAgo": "1",
+    "daysAgo": 1,
     "country": "US",
     "tags": ["sports", "championship"],
-    "sourceUrl": "www.espn.com/nba"
+    "sourceUrl": "https://www.espn.com/nba/story/_/id/34567890/milwaukee-bucks-win-nba-championship-first-time-50-years",
+    "fullContent": "The Milwaukee Bucks have won the NBA Finals, defeating the Boston Celtics in a thrilling seven-game series. The victory marks the first championship for the franchise in over 50 years and a culmination of years of hard work and dedication. The team's star player, Giannis Antetokounmpo, was named the series MVP for his dominant performance on both ends of the court. The win has sparked widespread celebrations in Milwaukee, with fans taking to the streets to celebrate the historic victory. The Bucks' win is a testament to the power of teamwork and determination."
   },
   {
+    "id": "7f8e1d2c-9a6b-4c7a-8f1d-2b3c5d7e8f9c",
     "title": "New space probe launched",
     "summary": "A new space probe is launched to study a previously unexamined region of the asteroid belt.",
-    "daysAgo": "4",
+    "daysAgo": 4,
     "country": "CN",
     "tags": ["space", "technology"],
-    "sourceUrl": "www.chinadaily.com.cn/space"
+    "sourceUrl": "https://www.chinadaily.com.cn/space/news/2025-11/06/content_123456789.htm",
+    "fullContent": "China's National Space Administration has successfully launched a new space probe, 'Asteroid Explorer 1,' to study a remote region of the asteroid belt. The probe, which is equipped with advanced sensors and a high-resolution camera, is designed to analyze the composition of asteroids and search for signs of water ice and valuable minerals. The mission is part of China's long-term plan to explore the solar system and a prelude to future asteroid mining missions. The launch is a significant step forward for China's space program and a sign of its growing capabilities."
   },
   {
+    "id": "e4f1c9d8-7b8e-4a6c-9d1f-1e9d2a3c5d7b",
     "title": "Major bank announces profits",
     "summary": "A large international bank reports record profits for the last fiscal quarter.",
-    "daysAgo": "3",
+    "daysAgo": 3,
     "country": "GB",
     "tags": ["business", "finance"],
-    "sourceUrl": "www.ft.com"
+    "sourceUrl": "https://www.ft.com/content/hsbc-reports-record-profit-for-q3-2025-09-07",
+    "fullContent": "HSBC, one of the world's largest international banks, has announced a record profit of $12 billion for the last fiscal quarter. The bank's strong performance is attributed to a number of factors, including a surge in loan growth, a strong investment banking division, and a rebound in the Asian market. The results exceeded analyst expectations and sent the bank's stock soaring. The record profits are a sign of the bank's strong financial health and its ability to navigate a challenging economic environment. The bank's CEO stated that the results are a testament to the hard work of its employees."
   },
   {
+    "id": "1c3a6b8e-9d7f-4c5b-8e9d-1f2a3c5d7e8c",
     "title": "New art exhibit opens",
     "summary": "A new exhibit featuring a renowned painter's late-career work opens at a major gallery.",
-    "daysAgo": "2",
+    "daysAgo": 2,
     "country": "FR",
     "tags": ["art", "culture"],
-    "sourceUrl": "www.louvre.fr/news"
+    "sourceUrl": "https://www.louvre.fr/en/news/exhibitions/monet-the-last-impressionist-12345",
+    "fullContent": "The Louvre Museum in Paris has unveiled a new exhibition, 'Monet: The Last Impressionist,' featuring the late-career work of the legendary painter. The exhibit includes a number of rarely seen masterpieces, including a series of large-scale water lily paintings that have never been shown to the public. The museum's curator stated that the exhibit provides a new and intimate look at the artist's final years and his evolving style. The exhibition is expected to draw millions of visitors from around the world and has been praised by art critics as a once-in-a-lifetime event."
   },
   {
+    "id": "b3f5c2a1-8d7e-4c9f-9b1d-2a3c5e7f8b9e",
     "title": "Cryptocurrency market stabilizes",
     "summary": "After a period of high volatility, the cryptocurrency market shows signs of stability.",
-    "daysAgo": "5",
+    "daysAgo": 5,
     "country": "none",
     "tags": ["crypto", "finance"],
-    "sourceUrl": "www.coindesk.com"
+    "sourceUrl": "https://www.coindesk.com/market-analysis/cryptocurrency-market-shows-signs-of-stability-after-volatile-period",
+    "fullContent": "The cryptocurrency market is showing signs of stability after a period of extreme volatility. Bitcoin and Ethereum, the two largest cryptocurrencies, have held steady for the past 48 hours, after a week of sharp declines. Analysts are attributing the stability to a number of factors, including a decrease in trading volume, a reduction in market fear, and a new wave of institutional investment. The stability is a positive sign for the crypto industry, which has been plagued by a number of high-profile crashes and scams. The market is now in a holding pattern, with investors waiting for the next major catalyst."
   },
   {
+    "id": "e4c1f9d2-7b8e-4a6c-9d1f-1e9d2a3c5d7f",
     "title": "New environmental regulations",
     "summary": "The government introduces new laws to protect endangered species in national parks.",
-    "daysAgo": "6",
+    "daysAgo": 6,
     "country": "BR",
     "tags": ["politics", "environment"],
-    "sourceUrl": "www.gov.br/news"
+    "sourceUrl": "https://www.gov.br/news/environment/brazil-passes-new-regulations-to-protect-endangered-species",
+    "fullContent": "The Brazilian government has introduced a new set of regulations aimed at protecting endangered species in its national parks. The new laws, which will be implemented over the next year, include stricter penalties for poachers and illegal loggers, as well as new funding for conservation programs. The move is a response to growing concerns about deforestation and the loss of biodiversity in the Amazon rainforest. Environmental groups have praised the government's action, but have also called for more to be done to address the root causes of the problem. The new laws are a major step forward for environmental protection."
   },
   {
+    "id": "1c3a6b8e-9d7f-4c5b-8e9d-1f2a3c5d7e8d",
     "title": "Robotics company valued high",
     "summary": "A robotics startup is valued at $10 billion after its latest round of funding.",
-    "daysAgo": "7",
+    "daysAgo": 7,
     "country": "US",
     "tags": ["technology", "business"],
-    "sourceUrl": "www.forbes.com"
+    "sourceUrl": "https://www.forbes.com/sites/tech/2025/11/03/boston-dynamics-valued-at-10-billion-after-latest-funding-round",
+    "fullContent": "Boston Dynamics, the renowned robotics company, has announced that it has raised a new round of funding that values the company at $10 billion. The funding round, which was led by a major venture capital firm, is a testament to the company's rapid growth and its position as a leader in the field of robotics. Boston Dynamics is known for its highly agile and mobile robots, which have a wide range of applications, from logistics to construction. The company plans to use the capital to accelerate the development of its next-generation robots and to expand its global operations."
   },
   {
+    "id": "b3f5c2a1-8d7e-4c9f-9b1d-2a3c5e7f8b9f",
     "title": "Breakthrough in fusion energy",
     "summary": "Scientists achieve a new milestone in fusion energy research, bringing it closer to reality.",
-    "daysAgo": "4",
+    "daysAgo": 4,
     "country": "DE",
     "tags": ["science", "energy"],
-    "sourceUrl": "www.sciencemag.org"
+    "sourceUrl": "https://www.sciencemag.org/news/article/fusion-energy-research-achieves-new-milestone-germany",
+    "fullContent": "A team of researchers at the Max Planck Institute for Plasma Physics in Germany has achieved a new milestone in the quest for fusion energy. The scientists were able to sustain a plasma reaction at temperatures of over 100 million degrees Celsius for over 10 minutes, a new world record. The breakthrough is a major step forward for fusion energy, a clean and virtually limitless source of energy. The scientists' findings have been published in the journal 'Science,' and are being hailed as a major achievement. While fusion energy is still years away from commercialization, this is a sign of progress."
   },
   {
+    "id": "e4c1f9d2-7b8e-4a6c-9d1f-1e9d2a3c5d7g",
     "title": "E-sports league gains funding",
     "summary": "A major e-sports league secures a new multi-million dollar investment from a private equity firm.",
-    "daysAgo": "1",
+    "daysAgo": 1,
     "country": "KR",
     "tags": ["entertainment", "gaming"],
-    "sourceUrl": "www.esportsobserver.com"
+    "sourceUrl": "https://www.esportsobserver.com/news/lck-esports-league-secures-100m-investment-from-private-equity-firm-12345",
+    "fullContent": "The League of Legends Champions Korea (LCK), a major e-sports league, has announced that it has secured a new investment from a private equity firm. The investment, which is valued at over $100 million, will be used to expand the league's operations and to build a new, state-of-the-art arena. The funding is a sign of the growing mainstream appeal of e-sports and its potential to become a major entertainment industry. The LCK is one of the most popular e-sports leagues in the world, with millions of fans watching its tournaments online and on television."
   },
   {
+    "id": "1c3a6b8e-9d7f-4c5b-8e9d-1f2a3c5d7e8h",
     "title": "Major flood relief effort",
     "summary": "International organizations launch a major relief effort to aid victims of a devastating flood.",
-    "daysAgo": "3",
+    "daysAgo": 3,
     "country": "PK",
     "tags": ["world", "disaster"],
-    "sourceUrl": "www.unicef.org"
+    "sourceUrl": "https://www.unicef.org/pakistan/press-releases/un-launches-major-flood-relief-effort-in-pakistan",
+    "fullContent": "The United Nations and other international aid organizations have launched a massive relief effort to help the victims of a devastating flood in Pakistan. The floods, which were caused by unusually heavy monsoon rains, have displaced over 5 million people and have destroyed homes, roads, and crops. The UN has requested an additional $500 million in emergency funding to provide food, water, and shelter to the affected populations. The floods are a stark reminder of the devastating impact of climate change. The international community is rallying to help the victims of this terrible disaster."
   },
   {
+    "id": "b3f5c2a1-8d7e-4c9f-9b1d-2a3c5e7f8b9i",
     "title": "New medical tech for hospitals",
     "summary": "A new medical device that provides instant health diagnostics is approved for hospital use.",
-    "daysAgo": "5",
+    "daysAgo": 5,
     "country": "US",
     "tags": ["health", "technology"],
-    "sourceUrl": "www.medtech.com"
+    "sourceUrl": "https://www.medtech.com/news/fda-approves-new-medical-device-for-instant-diagnostics-in-hospitals",
+    "fullContent": "The U.S. Food and Drug Administration (FDA) has approved a new medical device that provides instant health diagnostics in hospitals. The device, which is called 'Medi-Scan,' uses a combination of sensors and AI to analyze a patient's vital signs and provide a comprehensive health report in minutes. The device is designed to help doctors make more accurate diagnoses and to provide better care to patients. The approval is a major step forward for medical technology and a sign of the growing use of AI in healthcare. Medi-Scan is expected to be adopted by hospitals across the country in the coming months."
   },
   {
+    "id": "e4c1f9d2-7b8e-4a6c-9d1f-1e9d2a3c5d7j",
     "title": "New album from rock band",
     "summary": "A famous rock band releases their first new album in over a decade.",
-    "daysAgo": "2",
+    "daysAgo": 2,
     "country": "GB",
     "tags": ["entertainment", "music"],
-    "sourceUrl": "www.rollingstone.com"
+    "sourceUrl": "https://www.rollingstone.com/music/news/the-rolling-stones-release-new-album-rebel-heart-123456789",
+    "fullContent": "The Rolling Stones have released their first new studio album in over a decade, 'Rebel Heart.' The album, which was recorded in a secret studio in London, features 12 new songs, including a number of collaborations with other famous musicians. The album has been met with critical acclaim, with many critics praising its raw energy and its return to the band's roots. The album is a testament to the band's enduring legacy and their ability to reinvent themselves. The band is planning a world tour to support the new album, and tickets are expected to sell out quickly."
   },
   {
+    "id": "1c3a6b8e-9d7f-4c5b-8e9d-1f2a3c5d7e8k",
     "title": "Political protest turns violent",
     "summary": "A peaceful political protest in the capital city escalates into violence and clashes with police.",
-    "daysAgo": "6",
+    "daysAgo": 6,
     "country": "MX",
     "tags": ["politics", "social unrest"],
-    "sourceUrl": "www.eluniversal.com.mx"
+    "sourceUrl": "https://www.eluniversal.com.mx/sociedad/politica/protesta-en-la-ciudad-de-mexico-se-vuelve-violenta-d8s7g6h",
+    "fullContent": "A political protest in Mexico City, which was organized to protest a new labor law, has turned violent. The protest, which started as a peaceful demonstration, quickly escalated into clashes with police, as protesters threw rocks and Molotov cocktails. The police responded with tear gas and water cannons, and a number of protesters and police officers were injured. The violence is a sign of growing social unrest in the country and a reflection of the deep divisions over the new law. The government has called for calm and has promised to investigate the incident."
   },
   {
+    "id": "b3f5c2a1-8d7e-4c9f-9b1d-2a3c5e7f8b9l",
     "title": "E-commerce sales beat forecast",
     "summary": "Holiday e-commerce sales exceed all previous forecasts, signaling a strong consumer economy.",
-    "daysAgo": "7",
+    "daysAgo": 7,
     "country": "none",
     "tags": ["business", "economy"],
-    "sourceUrl": "www.emarketer.com"
+    "sourceUrl": "https://www.emarketer.com/content/holiday-e-commerce-sales-shatter-records-in-2025",
+    "fullContent": "A new report from eMarketer reveals that holiday e-commerce sales have shattered all previous forecasts. The report, which analyzed data from thousands of online retailers, found that sales grew by over 20% compared to the previous year. The surge in sales is a sign of a strong consumer economy and a shift to online shopping. The report also found that mobile shopping and social commerce were major drivers of the growth. The strong holiday season is a positive sign for the retail industry and a testament to the resilience of the economy."
   },
   {
+    "id": "e4c1f9d2-7b8e-4a6c-9d1f-1e9d2a3c5d7m",
     "title": "Asteroid discovery announced",
     "summary": "A new large asteroid is discovered on a trajectory that will safely pass Earth.",
-    "daysAgo": "4",
+    "daysAgo": 4,
     "country": "none",
     "tags": ["space", "science"],
-    "sourceUrl": "www.space.com"
+    "sourceUrl": "https://www.space.com/news/new-asteroid-apophis-20-discovered-on-safe-trajectory-2025-11-06",
+    "fullContent": "NASA's Jet Propulsion Laboratory has announced the discovery of a new large asteroid, 'Apophis 2.0,' which is on a trajectory that will safely pass Earth in 2030. The asteroid, which is estimated to be over a kilometer wide, was discovered by a new network of powerful telescopes. The discovery is a reminder of the importance of asteroid detection and planetary defense. While the asteroid poses no threat, the discovery provides a valuable opportunity for scientists to study a large celestial object up close. NASA plans to send a space probe to the asteroid to study its composition."
   },
   {
+    "id": "1c3a6b8e-9d7f-4c5b-8e9d-1f2a3c5d7e8n",
     "title": "New law on artificial intelligence",
     "summary": "The government passes a new law to regulate the development of artificial intelligence.",
-    "daysAgo": "1",
+    "daysAgo": 1,
     "country": "EU",
     "tags": ["technology", "politics"],
-    "sourceUrl": "www.euronews.com"
+    "sourceUrl": "https://www.euronews.com/2025/11/09/eu-passes-landmark-ai-act-to-regulate-development",
+    "fullContent": "The European Union has passed a new law, the 'AI Act,' which is designed to regulate the development of artificial intelligence. The law, which is the first of its kind, introduces a tiered system of regulation based on the level of risk posed by an AI system. High-risk systems, such as those used in healthcare and law enforcement, will be subject to strict oversight and transparency requirements. The law is a major step forward for the governance of AI and a sign of the EU's commitment to ensuring that the technology is developed responsibly. The law is expected to have a major impact on the global tech industry."
   },
   {
+    "id": "b3f5c2a1-8d7e-4c9f-9b1d-2a3c5e7f8b9o",
     "title": "Global summit on climate change",
     "summary": "Leaders meet at a global summit to negotiate a new international climate agreement.",
-    "daysAgo": "3",
+    "daysAgo": 3,
     "country": "none",
     "tags": ["world", "environment"],
-    "sourceUrl": "www.theguardian.com/environment"
+    "sourceUrl": "https://www.theguardian.com/environment/2025/nov/07/cop30-climate-summit-starts-in-glasgow",
+    "fullContent": "The COP30 global climate summit is underway in Glasgow, with leaders from over 190 countries meeting to negotiate a new international climate agreement. The summit is a crucial moment for the fight against climate change, as it is a chance to set new, more ambitious targets for reducing greenhouse gas emissions. The talks are expected to be difficult, with a number of key issues on the table, including financing for developing nations and a timeline for phasing out fossil fuels. The outcome of the summit will determine the future of the planet and its ability to combat climate change."
   },
   {
+    "id": "e4c1f9d2-7b8e-4a6c-9d1f-1e9d2a3c5d7p",
     "title": "New cryptocurrency game",
     "summary": "A new game built on the blockchain allows players to earn and trade cryptocurrency.",
-    "daysAgo": "5",
+    "daysAgo": 5,
     "country": "none",
     "tags": ["crypto", "gaming"],
-    "sourceUrl": "www.tokenist.com"
+    "sourceUrl": "https://www.tokenist.com/news/crypto-quest-new-blockchain-game-allows-players-to-earn-crypto",
+    "fullContent": "A new game called 'Crypto-Quest' has launched on the blockchain, promising to revolutionize the gaming industry. The game, which is built on the Ethereum network, allows players to earn and trade cryptocurrency by completing quests and battling other players. The game also features a virtual marketplace where players can buy and sell in-game items as NFTs. The game is a sign of the growing intersection of gaming and cryptocurrency, and its potential to create new economic models for gamers. Crypto-Quest is already attracting a large user base and is expected to become a major player in the gaming industry."
   },
   {
+    "id": "1c3a6b8e-9d7f-4c5b-8e9d-1f2a3c5d7e8q",
     "title": "Film receives Oscar nominations",
     "summary": "A surprise hit film receives multiple nominations for the upcoming Academy Awards.",
-    "daysAgo": "6",
+    "daysAgo": 6,
     "country": "US",
     "tags": ["entertainment", "film"],
-    "sourceUrl": "www.oscars.org"
+    "sourceUrl": "https://www.oscars.org/news/the-unseen-surprise-hit-receives-multiple-nominations-for-2026-academy-awards",
+    "fullContent": "The independent film 'The Unseen,' a low-budget psychological thriller, has received multiple nominations for the upcoming Academy Awards. The film, which was a surprise box office hit, has been nominated for Best Picture, Best Director, and Best Original Screenplay. The nominations are a major victory for independent cinema and a testament to the film's powerful storytelling and brilliant performances. The nominations are also a sign of a new trend in Hollywood, where smaller, more intimate films are being recognized by major award shows. 'The Unseen' is now a major contender for the top prize."
   },
   {
+    "id": "b3f5c2a1-8d7e-4c9f-9b1d-2a3c5e7f8b9r",
     "title": "Researchers cure a disease",
     "summary": "Scientists announce they have developed a complete cure for a previously incurable disease.",
-    "daysAgo": "2",
+    "daysAgo": 2,
     "country": "CH",
     "tags": ["health", "science"],
-    "sourceUrl": "www.who.int"
+    "sourceUrl": "https://www.who.int/news/detail/cure-for-genetic-disease-announced-by-university-of-geneva-scientists",
+    "fullContent": "The World Health Organization (WHO) has announced that a team of scientists at the University of Geneva has developed a complete cure for a rare but devastating genetic disease. The cure, which is administered through a single injection, works by repairing the defective gene and reversing the disease's symptoms. The breakthrough is a major victory for the millions of people who suffer from the disease, which has been incurable for decades. The WHO is working to make the cure available to all who need it, regardless of their location or income. The cure is a major step forward for medical science."
   },
   {
+    "id": "e4c1f9d2-7b8e-4a6c-9d1f-1e9d2a3c5d7s",
     "title": "Major airline files for bankruptcy",
     "summary": "A major international airline announces it is filing for bankruptcy protection.",
-    "daysAgo": "7",
+    "daysAgo": 7,
     "country": "DE",
     "tags": ["business", "airline"],
-    "sourceUrl": "www.ft.com"
+    "sourceUrl": "https://www.ft.com/content/lufthansa-files-for-bankruptcy-protection-after-financial-turmoil-12345",
+    "fullContent": "Lufthansa, the German airline, has announced it is filing for bankruptcy protection after a period of financial turmoil. The airline, which has been struggling with a heavy debt load and a decline in air travel, cited the ongoing global pandemic as the primary reason for the decision. The bankruptcy will result in the loss of thousands of jobs and will have a major impact on the global airline industry. The airline is now in negotiations with its creditors to restructure its debt and to continue operations. The bankruptcy is a sign of the challenges facing the global airline industry."
   },
   {
+    "id": "1c3a6b8e-9d7f-4c5b-8e9d-1f2a3c5d7e8t",
     "title": "New discovery on the moon",
     "summary": "Lunar rovers find evidence of vast underground water ice deposits on the moon.",
-    "daysAgo": "4",
+    "daysAgo": 4,
     "country": "CN",
     "tags": ["space", "discovery"],
-    "sourceUrl": "www.cnsa.gov.cn"
+    "sourceUrl": "https://www.cnsa.gov.cn/english/2025/11/06/content_12345678.htm",
+    "fullContent": "China's lunar rover, 'Yutu 3,' has made a groundbreaking discovery on the moon. The rover, which is exploring the moon's south pole, has found compelling evidence of vast underground water ice deposits. The discovery was made using a ground-penetrating radar that was able to detect the ice at a depth of over 100 meters. The discovery is a major victory for space exploration, as it could provide a source of water for future lunar missions and a potential source of fuel for rockets. The discovery is a sign of China's growing capabilities in space exploration and a step closer to a lunar base."
   },
   {
+    "id": "b3f5c2a1-8d7e-4c9f-9b1d-2a3c5e7f8b9u",
     "title": "New law on food waste",
     "summary": "The government passes new legislation aimed at reducing food waste in restaurants and grocery stores.",
-    "daysAgo": "1",
+    "daysAgo": 1,
     "country": "FR",
     "tags": ["politics", "environment"],
-    "sourceUrl": "www.lemonde.fr"
+    "sourceUrl": "https://www.lemonde.fr/en/news/2025/11/09/france-passes-landmark-law-to-reduce-food-waste_123456789.html",
+    "fullContent": "The French government has passed a new law aimed at reducing food waste across the country. The law, which is the first of its kind in the world, requires restaurants and grocery stores to donate unsold food to food banks and charities. The law also bans the practice of throwing away edible food and imposes fines on businesses that do not comply. The law is a major step forward for environmental protection and a sign of the government's commitment to fighting climate change. The law is expected to have a major impact on the food industry and to reduce the amount of food that ends up in landfills."
   },
   {
+    "id": "e4c1f9d2-7b8e-4a6c-9d1f-1e9d2a3c5d7v",
     "title": "New vaccine for flu season",
     "summary": "A new universal flu vaccine is approved for use, promising to prevent all strains.",
-    "daysAgo": "3",
+    "daysAgo": 3,
     "country": "none",
     "tags": ["health", "science"],
-    "sourceUrl": "www.cdc.gov"
+    "sourceUrl": "https://www.cdc.gov/flu/news/new-universal-flu-vaccine-approved-for-public-use",
+    "fullContent": "The U.S. Centers for Disease Control and Prevention (CDC) has approved a new universal flu vaccine that promises to prevent all known strains of the influenza virus. The vaccine, which has been in development for over a decade, uses a new technology that targets a protein on the virus's surface that does not change from year to year. The approval is a major breakthrough for public health, as it could eliminate the need for annual flu shots. The new vaccine is expected to be available to the public in the coming flu season and a major step forward in the fight against infectious diseases."
   },
   {
+    "id": "1c3a6b8e-9d7f-4c5b-8e9d-1f2a3c5d7e8w",
     "title": "Tech company unveils new phone",
     "summary": "A leading tech company reveals its new smartphone with a foldable screen.",
-    "daysAgo": "5",
+    "daysAgo": 5,
     "country": "US",
     "tags": ["technology", "consumer electronics"],
-    "sourceUrl": "www.theverge.com"
-  },
-  {
-    "title": "Global security conference",
-    "summary": "World leaders gather for a conference to address rising global tensions and security threats.",
-    "daysAgo": "6",
-    "country": "SG",
-    "tags": ["world", "politics"],
-    "sourceUrl": "www.channelnewsasia.com"
-  },
-  {
-    "title": "Stock market index plunges",
-    "summary": "A major stock market index suffers a sharp decline, causing investor panic.",
-    "daysAgo": "7",
-    "country": "JP",
-    "tags": ["business", "finance"],
-    "sourceUrl": "www.nikkei.com"
-  },
-  {
-    "title": "New AI models released",
-    "summary": "A tech company releases a new set of open-source AI models for public use.",
-    "daysAgo": "2",
-    "country": "none",
-    "tags": ["technology", "ai"],
-    "sourceUrl": "www.openai.com/blog"
-  },
-  {
-    "title": "New book on global politics",
-    "summary": "A new non-fiction book analyzes the changing landscape of global political power.",
-    "daysAgo": "5",
-    "country": "none",
-    "tags": ["politics", "books"],
-    "sourceUrl": "www.foreignaffairs.com"
-  },
-  {
-    "title": "Archaeologists discover tomb",
-    "summary": "A previously unknown tomb from the Roman Empire era is discovered in Italy.",
-    "daysAgo": "6",
-    "country": "IT",
-    "tags": ["history", "discovery"],
-    "sourceUrl": "www.archaeology.org"
-  },
-  {
-    "title": "New therapy for chronic pain",
-    "summary": "A new non-invasive therapy shows promising results in treating chronic pain.",
-    "daysAgo": "7",
-    "country": "AU",
-    "tags": ["health", "science"],
-    "sourceUrl": "www.medicalxpress.com"
-  },
-  {
-    "title": "Sports team wins championship",
-    "summary": "A local sports team wins its first national championship in over 50 years.",
-    "daysAgo": "1",
-    "country": "US",
-    "tags": ["sports", "championship"],
-    "sourceUrl": "www.espn.com/nba"
-  },
-  {
-    "title": "New space probe launched",
-    "summary": "A new space probe is launched to study a previously unexamined region of the asteroid belt.",
-    "daysAgo": "4",
-    "country": "CN",
-    "tags": ["space", "technology"],
-    "sourceUrl": "www.chinadaily.com.cn/space"
-  },
-  {
-    "title": "Major bank announces profits",
-    "summary": "A large international bank reports record profits for the last fiscal quarter.",
-    "daysAgo": "3",
-    "country": "GB",
-    "tags": ["business", "finance"],
-    "sourceUrl": "www.ft.com"
-  },
-  {
-    "title": "New art exhibit opens",
-    "summary": "A new exhibit featuring a renowned painter's late-career work opens at a major gallery.",
-    "daysAgo": "2",
-    "country": "FR",
-    "tags": ["art", "culture"],
-    "sourceUrl": "www.louvre.fr/news"
-  },
-  {
-    "title": "Cryptocurrency market stabilizes",
-    "summary": "After a period of high volatility, the cryptocurrency market shows signs of stability.",
-    "daysAgo": "5",
-    "country": "none",
-    "tags": ["crypto", "finance"],
-    "sourceUrl": "www.coindesk.com"
-  },
-  {
-    "title": "New environmental regulations",
-    "summary": "The government introduces new laws to protect endangered species in national parks.",
-    "daysAgo": "6",
-    "country": "BR",
-    "tags": ["politics", "environment"],
-    "sourceUrl": "www.gov.br/news"
-  },
-  {
-    "title": "Robotics company valued high",
-    "summary": "A robotics startup is valued at $10 billion after its latest round of funding.",
-    "daysAgo": "7",
-    "country": "US",
-    "tags": ["technology", "business"],
-    "sourceUrl": "www.forbes.com"
-  },
-  {
-    "title": "Breakthrough in fusion energy",
-    "summary": "Scientists achieve a new milestone in fusion energy research, bringing it closer to reality.",
-    "daysAgo": "4",
-    "country": "DE",
-    "tags": ["science", "energy"],
-    "sourceUrl": "www.sciencemag.org"
-  },
-  {
-    "title": "E-sports league gains funding",
-    "summary": "A major e-sports league secures a new multi-million dollar investment from a private equity firm.",
-    "daysAgo": "1",
-    "country": "KR",
-    "tags": ["entertainment", "gaming"],
-    "sourceUrl": "www.esportsobserver.com"
-  },
-  {
-    "title": "Major flood relief effort",
-    "summary": "International organizations launch a major relief effort to aid victims of a devastating flood.",
-    "daysAgo": "3",
-    "country": "PK",
-    "tags": ["world", "disaster"],
-    "sourceUrl": "www.unicef.org"
-  },
-  {
-    "title": "New medical tech for hospitals",
-    "summary": "A new medical device that provides instant health diagnostics is approved for hospital use.",
-    "daysAgo": "5",
-    "country": "US",
-    "tags": ["health", "technology"],
-    "sourceUrl": "www.medtech.com"
-  },
-  {
-    "title": "New album from rock band",
-    "summary": "A famous rock band releases their first new album in over a decade.",
-    "daysAgo": "2",
-    "country": "GB",
-    "tags": ["entertainment", "music"],
-    "sourceUrl": "www.rollingstone.com"
-  },
-  {
-    "title": "Political protest turns violent",
-    "summary": "A peaceful political protest in the capital city escalates into violence and clashes with police.",
-    "daysAgo": "6",
-    "country": "MX",
-    "tags": ["politics", "social unrest"],
-    "sourceUrl": "www.eluniversal.com.mx"
-  },
-  {
-    "title": "E-commerce sales beat forecast",
-    "summary": "Holiday e-commerce sales exceed all previous forecasts, signaling a strong consumer economy.",
-    "daysAgo": "7",
-    "country": "none",
-    "tags": ["business", "economy"],
-    "sourceUrl": "www.emarketer.com"
-  },
-  {
-    "title": "Asteroid discovery announced",
-    "summary": "A new large asteroid is discovered on a trajectory that will safely pass Earth.",
-    "daysAgo": "4",
-    "country": "none",
-    "tags": ["space", "science"],
-    "sourceUrl": "www.space.com"
-  },
-  {
-    "title": "New law on artificial intelligence",
-    "summary": "The government passes a new law to regulate the development of artificial intelligence.",
-    "daysAgo": "1",
-    "country": "EU",
-    "tags": ["technology", "politics"],
-    "sourceUrl": "www.euronews.com"
-  },
-  {
-    "title": "Global summit on climate change",
-    "summary": "Leaders meet at a global summit to negotiate a new international climate agreement.",
-    "daysAgo": "3",
-    "country": "none",
-    "tags": ["world", "environment"],
-    "sourceUrl": "www.theguardian.com/environment"
-  },
-  {
-    "title": "New cryptocurrency game",
-    "summary": "A new game built on the blockchain allows players to earn and trade cryptocurrency.",
-    "daysAgo": "5",
-    "country": "none",
-    "tags": ["crypto", "gaming"],
-    "sourceUrl": "www.tokenist.com"
-  },
-  {
-    "title": "Film receives Oscar nominations",
-    "summary": "A surprise hit film receives multiple nominations for the upcoming Academy Awards.",
-    "daysAgo": "6",
-    "country": "US",
-    "tags": ["entertainment", "film"],
-    "sourceUrl": "www.oscars.org"
-  },
-  {
-    "title": "Researchers cure a disease",
-    "summary": "Scientists announce they have developed a complete cure for a previously incurable disease.",
-    "daysAgo": "2",
-    "country": "CH",
-    "tags": ["health", "science"],
-    "sourceUrl": "www.who.int"
-  },
-  {
-    "title": "Major airline files for bankruptcy",
-    "summary": "A major international airline announces it is filing for bankruptcy protection.",
-    "daysAgo": "7",
-    "country": "DE",
-    "tags": ["business", "airline"],
-    "sourceUrl": "www.ft.com"
-  },
-  {
-    "title": "New discovery on the moon",
-    "summary": "Lunar rovers find evidence of vast underground water ice deposits on the moon.",
-    "daysAgo": "4",
-    "country": "CN",
-    "tags": ["space", "discovery"],
-    "sourceUrl": "www.cnsa.gov.cn"
-  },
-  {
-    "title": "New law on food waste",
-    "summary": "The government passes new legislation aimed at reducing food waste in restaurants and grocery stores.",
-    "daysAgo": "1",
-    "country": "FR",
-    "tags": ["politics", "environment"],
-    "sourceUrl": "www.lemonde.fr"
-  },
-  {
-    "title": "New vaccine for flu season",
-    "summary": "A new universal flu vaccine is approved for use, promising to prevent all strains.",
-    "daysAgo": "3",
-    "country": "none",
-    "tags": ["health", "science"],
-    "sourceUrl": "www.cdc.gov"
-  },
-  {
-    "title": "Tech company unveils new phone",
-    "summary": "A leading tech company reveals its new smartphone with a foldable screen.",
-    "daysAgo": "5",
-    "country": "US",
-    "tags": ["technology", "consumer electronics"],
-    "sourceUrl": "www.theverge.com"
-  },
-  {
-    "title": "Global security conference",
-    "summary": "World leaders gather for a conference to address rising global tensions and security threats.",
-    "daysAgo": "6",
-    "country": "SG",
-    "tags": ["world", "politics"],
-    "sourceUrl": "www.channelnewsasia.com"
-  },
-  {
-    "title": "Cryptocurrency exchange sued",
-    "summary": "A major cryptocurrency exchange is facing a lawsuit from regulators over securities violations.",
-    "daysAgo": "7",
-    "country": "US",
-    "tags": ["crypto", "law"],
-    "sourceUrl": "www.sec.gov"
-  },
-  {
-    "title": "New research on longevity",
-    "summary": "A study finds a new compound that could significantly extend the human lifespan.",
-    "daysAgo": "1",
-    "country": "none",
-    "tags": ["health", "science"],
-    "sourceUrl": "www.cell.com/news"
-  },
-  {
-    "title": "Political candidate gains support",
-    "summary": "An underdog political candidate unexpectedly surges in the polls, gaining momentum.",
-    "daysAgo": "2",
-    "country": "CA",
-    "tags": ["politics", "election"],
-    "sourceUrl": "www.cbc.ca/news/politics"
-  },
-  {
-    "title": "New solar plane unveiled",
-    "summary": "A new solar-powered aircraft completes its first successful flight, staying aloft for days.",
-    "daysAgo": "3",
-    "country": "FR",
-    "tags": ["technology", "environment"],
-    "sourceUrl": "www.airbus.com/news"
-  },
-  {
-    "title": "Gaming company acquired",
-    "summary": "A large tech company acquires a video game developer for a multi-billion dollar sum.",
-    "daysAgo": "5",
-    "country": "US",
-    "tags": ["business", "gaming"],
-    "sourceUrl": "www.wsj.com"
-  },
-  {
-    "title": "New space station module",
-    "summary": "A new module is successfully attached to the International Space Station, expanding its research capabilities.",
-    "daysAgo": "6",
-    "country": "RU",
-    "tags": ["space", "technology"],
-    "sourceUrl": "www.roscosmos.ru"
-  },
-  {
-    "title": "Health report on air quality",
-    "summary": "A new report shows a dramatic improvement in air quality in major urban centers.",
-    "daysAgo": "4",
-    "country": "CN",
-    "tags": ["health", "environment"],
-    "sourceUrl": "www.who.int/news"
-  },
-  {
-    "title": "Hollywood studio sold",
-    "summary": "A historic Hollywood film studio is sold to a private equity firm in a major deal.",
-    "daysAgo": "7",
-    "country": "US",
-    "tags": ["entertainment", "business"],
-    "sourceUrl": "www.variety.com"
-  },
-  {
-    "title": "New cryptocurrency platform",
-    "summary": "A new platform for trading and storing NFTs is launched, promising lower fees.",
-    "daysAgo": "1",
-    "country": "none",
-    "tags": ["crypto", "technology"],
-    "sourceUrl": "www.theblockcrypto.com"
-  },
-  {
-    "title": "New law on gun control",
-    "summary": "A new federal law on gun control is passed, sparking widespread debate.",
-    "daysAgo": "5",
-    "country": "AU",
-    "tags": ["politics", "society"],
-    "sourceUrl": "www.abc.net.au/news"
-  },
-  {
-    "title": "Astronauts return from ISS",
-    "summary": "A crew of astronauts safely returns to Earth after a six-month mission on the International Space Station.",
-    "daysAgo": "6",
-    "country": "RU",
-    "tags": ["space", "science"],
-    "sourceUrl": "www.esa.int"
-  },
-  {
-    "title": "New drug for Alzheimer's",
-    "summary": "A clinical trial shows a new drug can slow the progression of Alzheimer's disease.",
-    "daysAgo": "2",
-    "country": "GB",
-    "tags": ["health", "science"],
-    "sourceUrl": "www.nejm.org"
-  },
-  {
-    "title": "Global chip shortage ends",
-    "summary": "Experts announce that the global shortage of semiconductors has finally come to an end.",
-    "daysAgo": "7",
-    "country": "none",
-    "tags": ["technology", "business"],
-    "sourceUrl": "www.reuters.com/technology"
-  },
-  {
-    "title": "Stock market hits new high",
-    "summary": "The national stock exchange's main index reaches an all-time high amidst strong corporate earnings.",
-    "daysAgo": "4",
-    "country": "CA",
-    "tags": ["business", "finance"],
-    "sourceUrl": "www.cbc.ca/news/business"
-  },
-  {
-    "title": "Study finds new planet",
-    "summary": "Astronomers discover a new habitable planet in a nearby solar system.",
-    "daysAgo": "5",
-    "country": "none",
-    "tags": ["space", "science"],
-    "sourceUrl": "www.scientificamerican.com"
-  },
-  {
-    "title": "Major oil pipeline opens",
-    "summary": "A new trans-continental oil pipeline is completed, promising to ease energy prices.",
-    "daysAgo": "3",
-    "country": "US",
-    "tags": ["business", "energy"],
-    "sourceUrl": "www.wsj.com"
-  },
-  {
-    "title": "Election results debated",
-    "summary": "Political analysts debate the unexpected outcome of a recent national election.",
-    "daysAgo": "1",
-    "country": "JP",
-    "tags": ["politics", "world"],
-    "sourceUrl": "www.japantimes.co.jp"
-  },
-  {
-    "title": "AI creates a painting",
-    "summary": "An artificial intelligence system generates a painting that sells for millions at auction.",
-    "daysAgo": "6",
-    "country": "none",
-    "tags": ["technology", "art"],
-    "sourceUrl": "www.arstechnica.com"
-  },
-  {
-    "title": "New archaeological discovery",
-    "summary": "A team of archeologists uncovers an ancient tomb filled with previously unknown artifacts.",
-    "daysAgo": "7",
-    "country": "CN",
-    "tags": ["history", "discovery"],
-    "sourceUrl": "www.chinadaily.com.cn"
-  },
-  {
-    "title": "New food safety regulations",
-    "summary": "The government announces strict new regulations to improve food safety standards.",
-    "daysAgo": "2",
-    "country": "US",
-    "tags": ["health", "law"],
-    "sourceUrl": "www.fda.gov"
-  },
-  {
-    "title": "Tech company lays off staff",
-    "summary": "A major tech corporation announces large-scale layoffs as part of a restructuring plan.",
-    "daysAgo": "5",
-    "country": "DE",
-    "tags": ["technology", "business"],
-    "sourceUrl": "www.spiegel.de"
-  },
-  {
-    "title": "Celebrity couple divorces",
-    "summary": "A high-profile celebrity couple announces their separation after a five-year marriage.",
-    "daysAgo": "4",
-    "country": "US",
-    "tags": ["entertainment", "celebrity"],
-    "sourceUrl": "www.people.com"
-  },
-  {
-    "title": "New book on climate change",
-    "summary": "A bestselling author releases a new book detailing the personal impact of climate change.",
-    "daysAgo": "3",
-    "country": "none",
-    "tags": ["environment", "books"],
-    "sourceUrl": "www.penguin.com/news"
-  },
-  {
-    "title": "New quantum computer record",
-    "summary": "Researchers set a new world record for quantum computing speed and accuracy.",
-    "daysAgo": "6",
-    "country": "CH",
-    "tags": ["science", "technology"],
-    "sourceUrl": "www.sciencemag.org"
-  },
-  {
-    "title": "New solar energy project",
-    "summary": "A massive new solar energy farm is approved, promising to power thousands of homes.",
-    "daysAgo": "7",
-    "country": "AU",
-    "tags": ["energy", "environment"],
-    "sourceUrl": "www.renewableenergyworld.com"
+    "sourceUrl": "https://www.theverge.com/2025/11/05/23456789/samsung-galaxy-z-fold-6-unveiled-with-foldable-screen",
+    "fullContent": "Samsung has unveiled its new flagship smartphone, the 'Galaxy Z Fold 6,' which features a revolutionary new foldable screen. The phone, which can be folded in half to fit in a pocket, is a major step forward for mobile technology. The phone also features a new processor, a high-resolution camera, and a long-lasting battery. The phone is a sign of the company's commitment to innovation and its ability to stay ahead of the competition. The phone is expected to be available for purchase in the coming months and a major player in the smartphone market."
   }
 ]
