@@ -26,7 +26,7 @@ const Content: React.FC = () => {
 
   return (
     <>
-      <div className="my-1 flex items-center gap-4 px-2 justify-center">
+      <div className="pt-3 pb-2 flex items-center gap-4 px-2 justify-center">
         {selectedTags.map((tag, index) => (
           <a href="#" key={index} className="text-blue-500 underline text-xs">
             #{tag}
