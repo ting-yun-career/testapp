@@ -41,13 +41,13 @@ const Content: React.FC = () => {
           </a>
         ))}
       </div>
-      <div className="columns-1 md:columns-2 lg:columns-3 gap-0 px-1">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-1">
         {[...data]
           .sort((a, b) => a.daysAgo - b.daysAgo)
           .map((item, i) => (
             <div
               key={i}
-              className="flex items-center gap-2 px-1 py-2 min-h-12 break-inside-avoid"
+              className="flex items-center gap-2 px-1 py-2"
             >
               <div className="flex-none flex items-center justify-center">
                 <div
