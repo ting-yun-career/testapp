@@ -32,6 +32,55 @@ const Content: React.FC = () => {
     'sports',
   ];
 
+  const sortedData = [...data].sort((a, b) => a.daysAgo - b.daysAgo);
+
+  const renderNewsItem = (item: typeof data[0], i: number) => (
+    <div
+      key={item.id}
+      className="flex items-center gap-2 px-1 py-2"
+    >
+      <div className="flex-none flex items-center justify-center">
+        <div
+          className={`w-6 h-6 rounded-full border flex items-center justify-center text-xs font-bold mr-1 ${getBorderColorClass(item.daysAgo)}`}
+        >
+          <span className={getTextColorClass(item.daysAgo)}>
+            {item.daysAgo}
+          </span>
+        </div>
+      </div>
+      <div className="flex-1 text-left cursor-pointer" onClick={() => handleMoreClick(item.id)}>
+        <b>{item.title}</b> {item.summary}
+        {expandedItemId === item.id && (
+          <p className="mt-2 text-sm">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Sed do eiusmod tempor incididunt ut labore et dolore magna
+            aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+            ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            Duis aute irure dolor in reprehenderit in voluptate velit
+            esse cillum dolore eu fugiat nulla pariatur. Excepteur
+            sint occaecat cupidatat non proident, sunt in culpa qui
+            officia deserunt mollit anim id est laborum.
+          </p>
+        )}
+        <span className="text-blue-500 text-xs ml-1">
+          {expandedItemId === item.id ? 'Collapse' : 'Expand'}
+        </span>
+        <div className="flex flex-wrap gap-2 mt-1">
+          {item.tags.map((tag, index) => (
+            <a
+              href="#"
+              key={index}
+              className="text-blue-500 !underline text-xs"
+              onClick={(e) => e.stopPropagation()}
+            >
+              #{tag}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <>
       <div className="pt-3 pb-2 flex items-center gap-4 px-2 justify-center">
@@ -41,55 +90,21 @@ const Content: React.FC = () => {
           </a>
         ))}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-1">
-        {[...data]
-          .sort((a, b) => a.daysAgo - b.daysAgo)
-          .map((item, i) => (
-            <div
-              key={i}
-              className="flex items-center gap-2 px-1 py-2"
-            >
-              <div className="flex-none flex items-center justify-center">
-                <div
-                  className={`w-6 h-6 rounded-full border flex items-center justify-center text-xs font-bold mr-1 ${getBorderColorClass(item.daysAgo)}`}
-                >
-                  <span className={getTextColorClass(item.daysAgo)}>
-                    {item.daysAgo}
-                  </span>
-                </div>
-              </div>
-              <div className="flex-1 text-left cursor-pointer" onClick={() => handleMoreClick(item.id)}>
-                <b>{item.title}</b> {item.summary}
-                {expandedItemId === item.id && (
-                  <p className="mt-2 text-sm">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit
-                    esse cillum dolore eu fugiat nulla pariatur. Excepteur
-                    sint occaecat cupidatat non proident, sunt in culpa qui
-                    officia deserunt mollit anim id est laborum.
-                  </p>
-                )}
-                <span className="text-blue-500 text-xs ml-1">
-                  {expandedItemId === item.id ? 'Collapse' : 'Expand'}
-                </span>
-                <div className="flex flex-wrap gap-2 mt-1">
-                  {item.tags.map((tag, index) => (
-                    <a
-                      href="#"
-                      key={index}
-                      className="text-blue-500 !underline text-xs"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      #{tag}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
+      <div className="flex flex-col md:flex-row lg:flex-row gap-4 px-1">
+        {/* Column 1 */}
+        <div className="flex-1 flex flex-col gap-4">
+          {sortedData.filter((_, index) => index % 3 === 0).map(renderNewsItem)}
+        </div>
+
+        {/* Column 2 (hidden on small, flex on md and lg) */}
+        <div className="flex-1 flex flex-col gap-4 hidden md:flex">
+          {sortedData.filter((_, index) => index % 3 === 1).map(renderNewsItem)}
+        </div>
+
+        {/* Column 3 (hidden on small and md, flex on lg) */}
+        <div className="flex-1 flex flex-col gap-4 hidden lg:flex">
+          {sortedData.filter((_, index) => index % 3 === 2).map(renderNewsItem)}
+        </div>
       </div>
     </>
   );
