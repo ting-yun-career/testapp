@@ -16,21 +16,22 @@ const Content: React.FC = () => {
     return 'border-black';
   };
 
-  const selectedTags = ["business", "technology", "science", "health", "sports"];
+  const selectedTags = [
+    'business',
+    'technology',
+    'science',
+    'health',
+    'sports',
+  ];
 
   return (
     <>
-      <div className="my-1 flex items-center gap-4 px-2">
-        <div className="flex items-center">
-          <span className="material-symbols-outlined">wb_sunny</span>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {selectedTags.map((tag, index) => (
-            <a href="#" key={index} className="text-blue-500 underline text-xs">
-              #{tag}
-            </a>
-          ))}
-        </div>
+      <div className="my-1 flex items-center gap-4 px-2 justify-center">
+        {selectedTags.map((tag, index) => (
+          <a href="#" key={index} className="text-blue-500 underline text-xs">
+            #{tag}
+          </a>
+        ))}
       </div>
       <div className="columns-1 md:columns-2 lg:columns-3 gap-0 px-1">
         {[...data]
