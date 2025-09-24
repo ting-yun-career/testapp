@@ -2,6 +2,14 @@ import React from 'react';
 import data from './data.json';
 
 const Content: React.FC = () => {
+  const [expandedItemId, setExpandedItemId] = React.useState<string | null>(
+    null
+  );
+
+  const handleMoreClick = (id: string) => {
+    setExpandedItemId(expandedItemId === id ? null : id); // Toggle expanded state
+  };
+
   const getTextColorClass = (days: number) => {
     if (days === 1) return 'text-red-500';
     if (days === 2) return 'text-orange-500';
@@ -50,14 +58,30 @@ const Content: React.FC = () => {
                   </span>
                 </div>
               </div>
-              <div className="flex-1 text-left">
+              <div className="flex-1 text-left cursor-pointer" onClick={() => handleMoreClick(item.id)}>
                 <b>{item.title}</b> {item.summary}
+                {expandedItemId === item.id && (
+                  <p className="mt-2 text-sm">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Sed do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit
+                    esse cillum dolore eu fugiat nulla pariatur. Excepteur
+                    sint occaecat cupidatat non proident, sunt in culpa qui
+                    officia deserunt mollit anim id est laborum.
+                  </p>
+                )}
+                <span className="text-blue-500 text-xs ml-1">
+                  {expandedItemId === item.id ? 'Collapse' : 'Expand'}
+                </span>
                 <div className="flex flex-wrap gap-2 mt-1">
                   {item.tags.map((tag, index) => (
                     <a
                       href="#"
                       key={index}
                       className="text-blue-500 !underline text-xs"
+                      onClick={(e) => e.stopPropagation()}
                     >
                       #{tag}
                     </a>
