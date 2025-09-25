@@ -34,7 +34,7 @@ const Content: React.FC = () => {
 
   const sortedData = [...data].sort((a, b) => a.daysAgo - b.daysAgo);
 
-  const renderNewsItem = (item: (typeof data)[0], i: number) => (
+  const renderNewsItem = (item: (typeof data)[0]) => (
     <div key={item.id} className="flex items-center gap-2 px-1 py-2">
       <div className="flex-none flex items-center justify-center">
         <div
