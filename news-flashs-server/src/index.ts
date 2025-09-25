@@ -9,6 +9,15 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/news", (req, res) => {
+  const tags = req.query.tags as string;
+
+  if (!tags) {
+    return res.json(newsData);
+  }
+
+  const requestedTags = tags.split(",");
+  console.log("Requested tags:", requestedTags);
+
   res.json(newsData);
 });
 
