@@ -1,9 +1,11 @@
 import axios from 'axios';
 
-export const getNewsByHashtag = async (hashtags: string[]) => {
+export const getNewsByHashtag = async (hashtags?: string[]) => {
   try {
     const params = new URLSearchParams();
-    params.append('tags', hashtags.join(','));
+    if (hashtags) {
+      params.append('tags', hashtags.join(','));
+    }
     const response = await axios.get('api/news', { params });
     return response.data;
   } catch (error) {
