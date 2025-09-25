@@ -1,10 +1,35 @@
-import React from 'react';
-import data from './data.json';
+import React, { useState, useEffect } from 'react';
+import { getNewsByHashtag } from '../api/api';
+
+// Define the type for a news item
+interface NewsItem {
+  id: string;
+  title: string;
+  summary: string;
+  fullContent: string;
+  daysAgo: number;
+  tags: string[];
+}
 
 const Content: React.FC = () => {
   const [expandedItemId, setExpandedItemId] = React.useState<string | null>(
     null
   );
+  const [news, setNews] = useState<NewsItem[]>([]);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const hashtags = ['business', 'technology', 'science', 'health', 'sports'];
+        const data = await getNewsByHashtag(hashtags);
+        setNews(data);
+      } catch (error) {
+        console.error('Error fetching news:', error);
+      }
+    };
+
+    fetchNews();
+  }, []);
 
   const handleMoreClick = (id: string) => {
     setExpandedItemId(expandedItemId === id ? null : id); // Toggle expanded state
@@ -32,9 +57,9 @@ const Content: React.FC = () => {
     'sports',
   ];
 
-  const sortedData = [...data].sort((a, b) => a.daysAgo - b.daysAgo);
+  const sortedData = [...news].sort((a, b) => a.daysAgo - b.daysAgo);
 
-  const renderNewsItem = (item: (typeof data)[0]) => (
+  const renderNewsItem = (item: NewsItem) => (
     <div key={item.id} className="flex items-center gap-2 px-1 py-2">
       <div className="flex-none flex items-center justify-center">
         <div
