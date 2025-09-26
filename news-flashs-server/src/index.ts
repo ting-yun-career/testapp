@@ -11,14 +11,26 @@ app.use(express.json());
 app.get("/news", (req, res) => {
   const tags = req.query.tags as string;
 
+  const newsItems = newsData;
+
   if (!tags) {
-    return res.json(newsData);
+    return res.json(newsItems);
   }
 
+  // filter by tags
   const requestedTags = tags.split(",");
-  console.log("Requested tags:", requestedTags);
+  const filteredNews = newsItems.filter((news) =>
+    news.tags.some((tag) => requestedTags.includes(tag))
+  );
 
-  res.json(newsData);
+  res.json(filteredNews);
+});
+
+app.get("/tags", (req, res) => {
+  const tags: string[] = Array.from(
+    new Set(newsData.flatMap((news) => news.tags))
+  );
+  res.json(tags);
 });
 
 app.listen(port, () => {
