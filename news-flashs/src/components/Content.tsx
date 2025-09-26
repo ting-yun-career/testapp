@@ -142,7 +142,7 @@ const Content: React.FC = () => {
           </div>
           {showDropdown && (
             <div
-              className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+              className="origin-top-right absolute right-0 w-56 rounded-xs hadow-lg bg-white ring-1 ring-gray-300 ring-opacity-5 focus:outline-none z-10"
               role="menu"
               aria-orientation="vertical"
               aria-labelledby="options-menu"
@@ -157,20 +157,35 @@ const Content: React.FC = () => {
                     onClick={(e) => {
                       e.preventDefault();
                       if (!selectedTags.includes(tag)) {
-                        const newTags = [...selectedTags, tag];
-                        setSelectedTags(newTags);
+                        setSelectedTags([...selectedTags, tag]);
                         localStorage.setItem(
                           'selectedHashtags',
-                          JSON.stringify(newTags)
+                          JSON.stringify([...selectedTags, tag])
                         );
                         // fetch news with new tags
-                        getNewsByHashtag(newTags).then(setNews);
+                        getNewsByHashtag([...selectedTags, tag]).then(setNews);
                       }
                     }}
                   >
                     #{tag}
                   </a>
                 ))}
+                <div className="border-t border-gray-100"></div>
+                <button
+                  type="button"
+                  className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    try {
+                      const tags = await getRandomTags();
+                      setRandomTags(tags);
+                    } catch (error) {
+                      console.error('Error fetching tags:', error);
+                    }
+                  }}
+                >
+                  <span className="material-symbols-outlined">refresh</span>
+                </button>
               </div>
             </div>
           )}
