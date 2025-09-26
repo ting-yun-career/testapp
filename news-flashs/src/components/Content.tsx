@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getNewsByHashtag } from '../api/api';
+import { getTags, getNewsByHashtag } from '../api/api';
 
 // Define the type for a news item
 interface NewsItem {
@@ -20,7 +20,13 @@ const Content: React.FC = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const hashtags = ['business', 'technology', 'science', 'health', 'sports'];
+        const hashtags = [
+          'business',
+          'technology',
+          'science',
+          'health',
+          'sports',
+        ];
         const data = await getNewsByHashtag(hashtags);
         setNews(data);
       } catch (error) {
@@ -49,13 +55,22 @@ const Content: React.FC = () => {
     return 'border-black';
   };
 
-  const selectedTags = [
-    'business',
-    'technology',
-    'science',
-    'health',
-    'sports',
-  ];
+  // get all tags by getAllTags
+  // useEffect to fetch tags
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const tags = await getTags();
+        setSelectedTags(tags);
+      } catch (error) {
+        console.error('Error fetching tags:', error);
+      }
+    };
+
+    fetchTags();
+  }, []);
 
   const sortedData = [...news].sort((a, b) => a.daysAgo - b.daysAgo);
 

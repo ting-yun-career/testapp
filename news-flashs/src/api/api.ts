@@ -13,3 +13,13 @@ export const getNewsByHashtag = async (hashtags?: string[]) => {
     throw error;
   }
 };
+
+export const getTags = async () => {
+  try {
+    const response = await axios.get('api/tags/random');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching tags:', error);
+    throw error;
+  }
+};

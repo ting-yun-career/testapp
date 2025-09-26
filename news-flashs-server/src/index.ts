@@ -26,11 +26,10 @@ app.get("/news", (req, res) => {
   res.json(filteredNews);
 });
 
-app.get("/tags", (req, res) => {
-  const tags: string[] = Array.from(
-    new Set(newsData.flatMap((news) => news.tags))
-  );
-  res.json(tags);
+app.get("/tags/random", (req, res) => {
+  const tags: string[] = newsData.flatMap((news) => news.tags);
+  const randomTags = tags.sort(() => 0.5 - Math.random()).slice(0, 5);
+  res.json(randomTags);
 });
 
 app.listen(port, () => {
