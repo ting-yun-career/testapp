@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getTags, getNewsByHashtag } from '../api/api';
+import { getTags as getRandomTags, getNewsByHashtag } from '../api/api';
 
 // Define the type for a news item
 interface NewsItem {
@@ -16,17 +16,20 @@ const Content: React.FC = () => {
     null
   );
   const [news, setNews] = useState<NewsItem[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const hashtags = [
-          'business',
-          'technology',
-          'science',
-          'health',
-          'sports',
-        ];
+        // try to read hashtags from local storage
+        const storedHashtags = localStorage.getItem('selectedHashtags');
+        const hashtags = storedHashtags
+          ? JSON.parse(storedHashtags)
+          : ['business', 'technology', 'science', 'health'];
+
+        setSelectedTags(hashtags);
+
         const data = await getNewsByHashtag(hashtags);
         setNews(data);
       } catch (error) {
@@ -57,13 +60,13 @@ const Content: React.FC = () => {
 
   // get all tags by getAllTags
   // useEffect to fetch tags
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [randomTags, setRandomTags] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const tags = await getTags();
-        setSelectedTags(tags);
+        const tags = await getRandomTags();
+        setRandomTags(tags);
       } catch (error) {
         console.error('Error fetching tags:', error);
       }
@@ -120,6 +123,58 @@ const Content: React.FC = () => {
             #{tag}
           </a>
         ))}
+        <div className="relative inline-block text-left">
+          <div>
+            <button
+              type="button"
+              className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-2 py-1 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+              id="options-menu"
+              aria-expanded="true"
+              aria-haspopup="true"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowDropdown((prev) => !prev);
+              }}
+            >
+              +
+            </button>
+          </div>
+          {showDropdown && (
+            <div
+              className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="options-menu"
+            >
+              <div className="py-1" role="none">
+                {randomTags.map((tag, index) => (
+                  <a
+                    href="#"
+                    key={index}
+                    className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                    role="menuitem"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (!selectedTags.includes(tag)) {
+                        const newTags = [...selectedTags, tag];
+                        setSelectedTags(newTags);
+                        localStorage.setItem(
+                          'selectedHashtags',
+                          JSON.stringify(newTags)
+                        );
+                        // fetch news with new tags
+                        getNewsByHashtag(newTags).then(setNews);
+                      }
+                    }}
+                  >
+                    #{tag}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
       <div className="flex flex-col md:hidden gap-4 px-1">
         <div className="flex-1 flex flex-col gap-4">
