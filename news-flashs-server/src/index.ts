@@ -60,7 +60,8 @@ app.get("/news", (req, res) => {
 app.get("/tags/random", (req, res) => {
   const count = parseInt(req.query.count as string) || 10;
   const tags: string[] = newsData.flatMap((news) => news.tags);
-  const randomTags = tags.sort(() => 0.5 - Math.random()).slice(0, count);
+  const uniqueTags = Array.from(new Set(tags));
+  const randomTags = uniqueTags.sort(() => 0.5 - Math.random()).slice(0, count);
   res.json(randomTags);
 });
 
