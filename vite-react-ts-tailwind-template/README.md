@@ -22,3 +22,29 @@ Use this repository as a starting point for your own projects. Clone or fork it,
 ---
 
 Feel free to customize and extend this template to fit your needs.
+
+## Elasticsearch Setup
+
+To set up and run Elasticsearch for the `news-flashs-server`, follow these steps:
+
+1. **Navigate to the server directory:**
+
+   ```bash
+   cd ../news-flashs-server
+   ```
+
+2. **Create the Elasticsearch Docker container:**
+
+   ```bash
+   yarn create:es
+   ```
+
+   This will create a Docker container named `es01` with Elasticsearch.
+
+3. **Start the Elasticsearch container:**
+
+   ```bash
+   yarn start:es
+   ```
+
+   This will start the `es01` container.

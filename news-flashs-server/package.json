@@ -6,13 +6,16 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:es": "node start-es.js",
+    "create:es": "node create-es.js",
+    "stop:es": "node stop-es.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@elastic/elasticsearch": "8",
     "cors": "^2.8.5",
     "express": "^5.1.0"
   },
