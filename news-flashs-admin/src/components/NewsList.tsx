@@ -4,10 +4,9 @@ const NewsList = ({ news, onEdit, onDelete }) => {
   return (
     <ul className="divide-y divide-gray-200">
       {news.map((item) => (
-        <li key={item.id} className="py-4">
+        <li key={item.id} className="py-2">
           <div className="flex space-x-3">
             <div className="flex-1 space-y-1">
-              {console.log(item)}
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-medium text-black">{item.title}</h3>
               </div>

@@ -45,22 +45,9 @@ function App() {
     setIsFormVisible(false);
   };
 
-  const handleAddNew = () => {
-    setSelectedNews(null);
-    setIsFormVisible(true);
-  };
-
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">News Flash Admin</h1>
-      <div className="mb-4">
-        <button
-          onClick={handleAddNew}
-          className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
-        >
-          Add News
-        </button>
-      </div>
+      <h1 className="text-2xl font-bold text-black mb-4">News Flash Admin</h1>
       {isFormVisible && (
         <div className="mb-4">
           <NewsForm
