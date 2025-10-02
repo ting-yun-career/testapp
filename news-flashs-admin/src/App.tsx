@@ -18,6 +18,11 @@ const App: React.FC = () => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold text-black mb-4">News Flash Admin</h1>
+      <div className="mb-4">
+        <button className="text-xs bg-green-600 text-white px-3 py-2 rounded">
+          Create News
+        </button>
+      </div>
       <NewsList newsItems={newsItems} />
     </div>
   );
