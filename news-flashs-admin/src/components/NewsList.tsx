@@ -9,7 +9,7 @@ const NewsList: React.FC<NewsListProps> = ({ newsItems }) => {
   return (
     <ul className="divide-y divide-gray-200">
       {newsItems.map(({ id, title, summary, tags }) => (
-        <li key={id} className="py-4 text-gray-500">
+        <li key={id} className="mb-4 text-gray-500 last:mb-0">
           <div className="flex space-x-3">
             <div className="flex-1 space-y-1">
               <div className="flex items-center justify-between">
