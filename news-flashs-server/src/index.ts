@@ -127,33 +127,15 @@ app.delete("/news/:id", async (req, res) => {
   }
 });
 
-// GET /news
-// @tags News
-// @summary Get news items, optionally filtered by tags
-// @param {string} tags.query - Comma-separated list of tags to filter news items
-// @return {array<NewsItem>} 200 - List of news items
-// @example request - Example request
-// /news?tags=business,technology
-// @example response - 200 - Example response
-// [
-//   {
-//     "id": "1",
-//     "title": "Sample News Title",
-//     "content": "This is a sample news content.",
-//     "date": "2023-10-01T12:00:00Z",
-//     "tags": ["business", "technology"]
-//   }
-// ]
-//
 app.get("/news", async (req, res) => {
-  console.log("/news");
   const tags = req.query.tags as string;
-  console.log("tags:", tags);
+  const size = parseInt(req.query.size as string) || 100;
 
   try {
     if (!tags) {
       const result = await client.search({
         index: INDEX_NAME,
+        size: size,
         body: {
           query: {
             match_all: {},
@@ -162,13 +144,13 @@ app.get("/news", async (req, res) => {
       });
       console.log("result:", result);
       const hits = result.hits.hits.map((hit) => hit._source);
-      console.log("hits:", hits);
       return res.json(hits);
     }
 
     const requestedTags = tags.split(",");
     const result = await client.search({
       index: INDEX_NAME,
+      size: size,
       body: {
         query: {
           terms: {
@@ -185,19 +167,6 @@ app.get("/news", async (req, res) => {
   }
 });
 
-// GET /tags/random
-// @tags Tags
-// @summary Get a list of random tags
-// @param {integer} count.query - Number of random tags to return (default is 10)
-// @return {array<string>} 200 - List of random tags
-// @example request - Example request
-// /tags/random?count=5
-// @example response - 200 - Example response
-// [
-//   "business",
-//   "technology",
-//   "health"
-// ]
 app.get("/tags/random", async (req, res) => {
   const count = parseInt(req.query.count as string) || 10;
   try {
