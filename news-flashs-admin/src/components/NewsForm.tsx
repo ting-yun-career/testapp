@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { NewsItem } from '../types';
 
-const NewsForm = ({ selectedNews, onSave, onCancel }) => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [tags, setTags] = useState('');
+interface NewsFormProps {
+  selectedNews: NewsItem | null;
+  onSave: (newsItem: Omit<NewsItem, 'id'>) => void;
+  onCancel: () => void;
+}
+
+const NewsForm: React.FC<NewsFormProps> = ({ selectedNews, onSave, onCancel }) => {
+  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>('');
+  const [tags, setTags] = useState<string>('');
 
   useEffect(() => {
     if (selectedNews) {
@@ -17,7 +24,7 @@ const NewsForm = ({ selectedNews, onSave, onCancel }) => {
     }
   }, [selectedNews]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave({ title, content, tags: tags.split(',').map(tag => tag.trim()) });
   };
