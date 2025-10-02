@@ -127,6 +127,23 @@ app.delete("/news/:id", async (req, res) => {
   }
 });
 
+// Delete all news items
+app.delete("/news", async (req, res) => {
+  try {
+    await client.deleteByQuery({
+      index: INDEX_NAME,
+      body: {
+        query: {
+          match_all: {},
+        },
+      },
+    });
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete news items" });
+  }
+});
+
 app.get("/news", async (req, res) => {
   const tags = req.query.tags as string;
   const size = parseInt(req.query.size as string) || 100;
