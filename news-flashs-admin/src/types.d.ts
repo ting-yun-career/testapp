@@ -1,6 +1,11 @@
-export interface NewsItem {
+export type NewsItem = {
   id: string;
   title: string;
-  content: string;
+  summary: string;
+  daysAgo: number;
+  fullContent: string;
   tags: string[];
-}
+  country: string;
+  sourceUrl: string;
+  fullContent: string;
+};

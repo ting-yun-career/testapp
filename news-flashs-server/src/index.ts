@@ -162,6 +162,7 @@ app.get("/news", async (req, res) => {
       });
       console.log("result:", result);
       const hits = result.hits.hits.map((hit) => hit._source);
+      console.log("hits:", hits);
       return res.json(hits);
     }
 
