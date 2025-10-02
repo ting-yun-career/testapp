@@ -86,28 +86,6 @@ app.get("/news/:id", async (req, res) => {
   }
 });
 
-// Update a news item by ID
-app.put("/news/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const result = await client.update({
-      index: INDEX_NAME,
-      id: id,
-      body: {
-        doc: req.body,
-      },
-      refresh: "wait_for",
-    });
-    res.json(result);
-  } catch (error: any) {
-    if (error.meta.statusCode === 404) {
-      res.status(404).json({ error: "News item not found" });
-    } else {
-      res.status(500).json({ error: "Failed to update news item" });
-    }
-  }
-});
-
 // Delete a news item by ID
 app.delete("/news/:id", async (req, res) => {
   try {
