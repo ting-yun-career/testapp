@@ -19,12 +19,17 @@ async function setupElasticsearch() {
     const indexExists = await client.indices.exists({ index: INDEX_NAME });
 
     if (!indexExists) {
-      console.log(`Index "${INDEX_NAME}" does not exist. Creating and indexing data...`);
+      console.log(
+        `Index "${INDEX_NAME}" does not exist. Creating and indexing data...`
+      );
       // Create the index
       await client.indices.create({ index: INDEX_NAME });
 
       // Index the data from data.json
-      const body = newsData.flatMap((doc) => [{ index: { _index: INDEX_NAME, _id: doc.id } }, doc]);
+      const body = newsData.flatMap((doc) => [
+        { index: { _index: INDEX_NAME, _id: doc.id } },
+        doc,
+      ]);
       const res = await client.bulk({ refresh: true, body });
 
       if (res.errors) {
@@ -122,7 +127,6 @@ app.delete("/news/:id", async (req, res) => {
   }
 });
 
-
 // GET /news
 // @tags News
 // @summary Get news items, optionally filtered by tags
@@ -142,7 +146,9 @@ app.delete("/news/:id", async (req, res) => {
 // ]
 //
 app.get("/news", async (req, res) => {
+  console.log("/news");
   const tags = req.query.tags as string;
+  console.log("tags:", tags);
 
   try {
     if (!tags) {
@@ -154,6 +160,7 @@ app.get("/news", async (req, res) => {
           },
         },
       });
+      console.log("result:", result);
       const hits = result.hits.hits.map((hit) => hit._source);
       return res.json(hits);
     }
@@ -201,11 +208,11 @@ app.get("/tags/random", async (req, res) => {
           random_tags: {
             terms: {
               field: "tags.keyword",
-              size: 1000
-            }
-          }
-        }
-      }
+              size: 1000,
+            },
+          },
+        },
+      },
     });
 
     const random_tags_agg = result.aggregations?.random_tags as any;
@@ -213,7 +220,9 @@ app.get("/tags/random", async (req, res) => {
       return res.status(500).json({ error: "Failed to retrieve tags" });
     }
 
-    const tags: string[] = random_tags_agg.buckets.map((bucket: any) => bucket.key);
+    const tags: string[] = random_tags_agg.buckets.map(
+      (bucket: any) => bucket.key
+    );
     const randomTags = tags.sort(() => 0.5 - Math.random()).slice(0, count);
     res.json(randomTags);
   } catch (error) {
