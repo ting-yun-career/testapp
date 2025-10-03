@@ -44,42 +44,7 @@ async function setupElasticsearch() {
 app.use(cors());
 app.use(express.json());
 
-app.get("/news/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const result = await client.get({
-      index: INDEX_NAME,
-      id: id,
-    });
-    res.json(result._source);
-  } catch (error: any) {
-    if (error.meta.statusCode === 404) {
-      res.status(404).json({ error: "News item not found" });
-    } else {
-      res.status(500).json({ error: "Failed to retrieve news item" });
-    }
-  }
-});
-
-app.delete("/news/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    await client.delete({
-      index: INDEX_NAME,
-      id: id,
-      refresh: "wait_for",
-    });
-    res.status(204).send();
-  } catch (error: any) {
-    if (error.meta.statusCode === 404) {
-      res.status(404).json({ error: "News item not found" });
-    } else {
-      res.status(500).json({ error: "Failed to delete news item" });
-    }
-  }
-});
-
-app.delete("/news", async (req, res) => {
+app.post("/news/refresh", async (req, res) => {
   try {
     await client.deleteByQuery({
       index: INDEX_NAME,
@@ -89,9 +54,20 @@ app.delete("/news", async (req, res) => {
         },
       },
     });
+
+    const body = newsData.flatMap((doc) => [
+      { index: { _index: INDEX_NAME, _id: doc.id } },
+      doc,
+    ]);
+    const response = await client.bulk({ refresh: true, body });
+    if (response.errors) {
+      console.error("Failed to index data:", response.errors);
+      return res.status(500).json({ error: "Failed to refresh news items" });
+    }
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({ error: "Failed to delete news items" });
+    console.error("Error refreshing news items:", error);
+    res.status(500).json({ error: "Failed to refresh news items" });
   }
 });
 
