@@ -50,25 +50,6 @@ async function setupElasticsearch() {
 app.use(cors());
 app.use(express.json());
 
-// CRUD Operations for Elasticsearch
-
-// Create a new news item
-app.post("/news", async (req, res) => {
-  try {
-    const { id, ...body } = req.body;
-    const result = await client.index({
-      index: INDEX_NAME,
-      id: id,
-      body: body,
-      refresh: "wait_for",
-    });
-    res.status(201).json(result);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create news item" });
-  }
-});
-
-// Read a news item by ID
 app.get("/news/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -86,7 +67,6 @@ app.get("/news/:id", async (req, res) => {
   }
 });
 
-// Delete a news item by ID
 app.delete("/news/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -105,7 +85,6 @@ app.delete("/news/:id", async (req, res) => {
   }
 });
 
-// Delete all news items
 app.delete("/news", async (req, res) => {
   try {
     await client.deleteByQuery({
