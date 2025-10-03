@@ -11,21 +11,16 @@ const INDEX_NAME = "news";
 
 async function setupElasticsearch() {
   try {
-    // Ping the cluster to see if it's available
     await client.ping();
-    console.log("Elasticsearch cluster is up!");
 
-    // Check if the index exists
     const indexExists = await client.indices.exists({ index: INDEX_NAME });
 
     if (!indexExists) {
       console.log(
         `Index "${INDEX_NAME}" does not exist. Creating and indexing data...`
       );
-      // Create the index
       await client.indices.create({ index: INDEX_NAME });
 
-      // Index the data from data.json
       const body = newsData.flatMap((doc) => [
         { index: { _index: INDEX_NAME, _id: doc.id } },
         doc,
@@ -42,7 +37,6 @@ async function setupElasticsearch() {
     }
   } catch (error) {
     console.error("Error connecting to or setting up Elasticsearch:", error);
-    // Exit the process if we can't connect to Elasticsearch
     process.exit(1);
   }
 }
