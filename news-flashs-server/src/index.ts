@@ -144,6 +144,37 @@ app.get("/tags/random", async (req, res) => {
   }
 });
 
+app.get("/tags", async (req, res) => {
+  try {
+    const result = await client.search({
+      index: INDEX_NAME,
+      body: {
+        size: 0,
+        aggs: {
+          all_tags: {
+            terms: {
+              field: "tags.keyword",
+              size: 1000,
+            },
+          },
+        },
+      },
+    });
+
+    const all_tags_agg = result.aggregations?.all_tags as any;
+    if (!all_tags_agg || !all_tags_agg.buckets) {
+      return res.status(500).json({ error: "Failed to retrieve tags" });
+    }
+
+    const tags: string[] = all_tags_agg.buckets.map(
+      (bucket: any) => bucket.key
+    );
+    res.json(tags);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve tags" });
+  }
+});
+
 setupElasticsearch().then(() => {
   app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
