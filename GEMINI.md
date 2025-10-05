@@ -1,6 +1,13 @@
-## PURPOSE
+please remember the following instruction for subsequent conversation.
 
-This document contains detail instruction on generating \*.data.json.
+<start>
+### PURPOSE
+
+This document explain what user wants when he asks for recent news.
+
+### GENERAL DIRECTIONS
+
+spread search across different topics (eg. #science, #technology, #politics, #business, #world, #us, #europe, #china)
 
 ### LIMITATION
 
@@ -21,6 +28,7 @@ sourceUrl(string): url of the news article. leave blank if it is impossible to g
 ### SAMPLE OUTCOME
 
 ```
+[
   {
     "id": "e49f6976-1b5e-49b8-b11a-1d374e2d83f3",
     "title": "Quantum AI breakthrough",
@@ -29,9 +37,13 @@ sourceUrl(string): url of the news article. leave blank if it is impossible to g
     "tags": ["ai", "technology"],
     "sourceUrl": "https://www.nature.com/news/qcf41f7rj",
     "fullContent": "In a historic announcement, researchers from a global consortium of universities and private labs have revealed a significant advancement in quantum computing. The breakthrough involves a new type of qubit that maintains its state for unprecedented durations, drastically reducing the error rate that has long plagued quantum systems. This technological leap is expected to unlock new capabilities for artificial intelligence, particularly in complex problem-solving and machine learning algorithms that are too computationally intensive for classical computers. Experts believe that this could accelerate drug discovery, materials science, and financial modeling. The team has published its findings in a peer-reviewed journal, and the new technology is already being licensed for development."
+  },
+  {
+    ...
   }
+]
 ```
 
-### OUTPUT FILES
+<end>
 
-store output in \*.data.json. use data.json.template as a reference.
+Now prompt the user for the topic to search for and number of news items to be returned.
