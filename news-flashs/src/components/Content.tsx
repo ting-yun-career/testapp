@@ -41,7 +41,13 @@ const Content: React.FC = () => {
   }, []);
 
   const handleMoreClick = (id: string) => {
+    console.log();
     setExpandedItemId(expandedItemId === id ? null : id); // Toggle expanded state
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'handleMoreClick', {
+        newsItemId: id,
+      });
+    }
   };
 
   const getTextColorClass = (days: number) => {
