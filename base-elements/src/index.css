@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 :root {
-  --checkered-bg: rgba(10, 10, 10, 0.15);
+  --checkered-bg: rgba(10, 10, 10, 0.1);
 }
 
 @layer utilities {
