@@ -5,7 +5,7 @@
 html {
   line-height: 1.5;
   font-weight: 400;
-  font-size: 12px;
+  font-size: 16px;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   scrollbar-width: thin;
   scrollbar-color: theme('colors.slate.500') theme('colors.slate.200');
