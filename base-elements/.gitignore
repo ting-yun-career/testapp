@@ -1,0 +1,57 @@
+# Node modules and build output
+node_modules/
+dist/
+dist-ssr/
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Local environment files
+.env
+.env.*.local
+
+# Editor directories and files
+.vscode/
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Mac system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Test coverage
+coverage/
+*.lcov
+
+# Optional: lock files (if you want to ignore them, but usually you should commit them)
+# yarn.lock
+# package-lock.json
+# pnpm-lock.yaml
+
+# Optional: output from build tools
+out/
+build/
+.cache/
+.next/
+.nuxt/
+.svelte-kit/
