@@ -1,4 +1,7 @@
 @import 'tailwindcss';
+
+@variant dark (&:is(.dark *));
+
 :root {
   --checkered-bg: rgba(10, 10, 10, 0.1);
 }
