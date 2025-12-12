@@ -1,40 +1,82 @@
 # GEMINI.md
 
-## News Data Format Instructions
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-### Field Types and Description
+## Project Structure
 
-```typescript
-{
-  id: string;           // base64 hash of the summary field
-  title: string;        // Brief headline describing the factual event/impact
-  summary: string;      // 1-3 sentences summary
-  fullContent: string;  // 3-8 sentences (expanded content)
-  daysAgo: number;      // 0-7 (days since publication)
-  tags: string[];       // 1-3 topic tags (e.g. #science, #technology, #politics)
-  sourceUrl: string;    // Article URL (optional)
-}
+- **base-elements/**: React + TypeScript + Vite base template with Tailwind CSS
+
+## Tech Stack
+
+- **React 19** - Latest React with concurrent features
+- **TypeScript** - Type safety and better DX
+- **Vite** - Fast build tool and dev server
+- **Tailwind CSS v4** - Utility-first CSS framework
+- **ESLint** - Code linting and quality
+- **Prettier** - Code formatting
+- **Axios** - HTTP client (pre-configured)
+- **Lodash** - Utility library (pre-configured)
+
+## Commands
+
+### Base Elements (React Template)
+
+```bash
+cd base-elements
+yarn dev              # Start Vite dev server (http://localhost:5173)
+yarn build            # Build for production
+yarn lint             # ESLint check
+yarn format           # Format code with Prettier
+yarn preview          # Preview production build
+yarn clean            # Clean node_modules and dist
 ```
 
-### Guidelines
+## Architecture
 
-- Spread search across different topics
-- Do not fetch news older than a week ago  
-- Include only relevant news content
-- Replace special characters with browser-friendly ASCII
-
-### Sample Output
-
-```json
-[
-  {
-    "id": "e49f6976-1b5e-49b8-b11a-1d374e2d83f3",
-    "title": "Quantum AI breakthrough",
-    "summary": "Scientists announce a major leap in quantum computing, enabling new AI capabilities.",
-    "daysAgo": 1,
-    "tags": ["ai", "technology"],
-    "sourceUrl": "https://www.nature.com/news/qcf41f7rj",
-    "fullContent": "In a historic announcement, researchers from a global consortium of universities and private labs have revealed a significant advancement in quantum computing. The breakthrough involves a new type of qubit that maintains its state for unprecedented durations, drastically reducing the error rate that has long plagued quantum systems. This technological leap is expected to unlock new capabilities for artificial intelligence, particularly in complex problem-solving and machine learning algorithms that are too computationally intensive for classical computers."
-  }
-]
 ```
+base-elements/          # React + TypeScript + Vite template
+├── src/
+│   ├── App.tsx         # Main application component
+│   ├── main.tsx        # Application entry point
+│   ├── index.css       # Global styles + Tailwind + custom utilities
+│   ├── vite-env.d.ts   # Vite type declarations
+│   └── assets/         # Static assets (react.svg)
+├── public/             # Public static files
+├── index.html          # HTML entry point
+├── package.json        # Dependencies and scripts
+├── tsconfig.json       # TypeScript configuration
+├── vite.config.ts      # Vite configuration
+├── tailwind.config.js  # Tailwind CSS configuration
+├── eslint.config.js    # ESLint configuration
+└── .prettierrc        # Prettier configuration
+```
+
+## Development Setup
+
+1. **Install dependencies**: `cd base-elements && yarn install`
+2. **Start development server**: `yarn dev` (http://localhost:5173)
+3. **Build for production**: `yarn build`
+4. **Run linting**: `yarn lint`
+5. **Format code**: `yarn format`
+
+## Key Features
+
+### Checkered Background Utility
+
+The template includes a custom Tailwind utility class `.bg-checkerboard` that creates a subtle checkered pattern (defined in `src/index.css`).
+
+### Global Styles
+
+- Base font size: **16px**
+- Custom scrollbar styling for WebKit browsers
+- Light/dark color scheme support
+- System font stack
+
+## Available Scripts
+
+- `yarn dev` - Start Vite development server (port 5173)
+- `yarn build` - Build for production
+- `yarn lint` - Run ESLint
+- `yarn format` - Format code with Prettier
+- `yarn preview` - Preview production build
+- `yarn clean` - Clean node_modules and dist
