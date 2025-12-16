@@ -49,13 +49,13 @@ const ScrollSnapDial: React.FC = () => {
       oscillator.connect(gainNode);
       gainNode.connect(audioContext.destination);
 
-      oscillator.frequency.value = 800;
+      oscillator.frequency.value = 200;
       oscillator.type = 'sine';
 
-      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
       gainNode.gain.exponentialRampToValueAtTime(
-        0.01,
-        audioContext.currentTime + 0.05
+        0.1,
+        audioContext.currentTime + 0.15
       );
 
       oscillator.start(audioContext.currentTime);
