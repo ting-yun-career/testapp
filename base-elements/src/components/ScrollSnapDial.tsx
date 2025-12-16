@@ -34,7 +34,7 @@ const ScrollSnapDial: React.FC = () => {
   const getAudioContext = useCallback(() => {
     if (!audioContextRef.current) {
       audioContextRef.current = new (window.AudioContext ||
-        (window as any).webkitAudioContext)();
+        window.webkitAudioContext)();
     }
     return audioContextRef.current;
   }, []);
@@ -72,7 +72,6 @@ const ScrollSnapDial: React.FC = () => {
 
       const containerRect = containerRef.current.getBoundingClientRect();
       const relativeX = mouseX - containerRect.left;
-      const containerWidth = containerRect.width;
 
       // Find closest marker
       let closestIndex = -1;
