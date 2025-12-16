@@ -49,7 +49,7 @@ const ScrollSnapDial: React.FC = () => {
       oscillator.connect(gainNode);
       gainNode.connect(audioContext.destination);
 
-      oscillator.frequency.value = 200;
+      oscillator.frequency.value = 300;
       oscillator.type = 'sine';
 
       gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
@@ -163,7 +163,7 @@ const ScrollSnapDial: React.FC = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-900 font-sans">
-      <div className="w-[600px] px-5 pt-16 pb-5 relative">
+      <div className="w-[300px] px-5 pt-16 pb-5 relative">
         {/* Value Display */}
         <div
           className={`absolute top-2 left-1/2 transform -translate-x-1/2 text-5xl font-light text-cyan-400 transition-opacity duration-200 ${
