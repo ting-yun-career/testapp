@@ -13,6 +13,7 @@ const ScrollSnapDial: React.FC = () => {
   }>({});
   const containerRef = useRef<HTMLDivElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
+  const clickSoundBufferRef = useRef<AudioBuffer | null>(null);
 
   const minValue = 0;
   const maxValue = 100;
@@ -39,31 +40,45 @@ const ScrollSnapDial: React.FC = () => {
     return audioContextRef.current;
   }, []);
 
-  // Play click sound
-  const playClickSound = useCallback(() => {
+  // Load click sound audio file
+  const loadClickSound = useCallback(async () => {
+    if (clickSoundBufferRef.current) return;
+
     try {
       const audioContext = getAudioContext();
-      const oscillator = audioContext.createOscillator();
+      const response = await fetch('/click.wav');
+      const arrayBuffer = await response.arrayBuffer();
+      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+      clickSoundBufferRef.current = audioBuffer;
+    } catch (error) {
+      console.warn('Failed to load click sound:', error);
+    }
+  }, [getAudioContext]);
+
+  // Play click sound
+  const playClickSound = useCallback(async () => {
+    try {
+      // Load audio buffer if not already loaded
+      await loadClickSound();
+
+      const audioContext = getAudioContext();
+      if (!audioContext || !clickSoundBufferRef.current) return;
+
+      const source = audioContext.createBufferSource();
       const gainNode = audioContext.createGain();
 
-      oscillator.connect(gainNode);
+      source.buffer = clickSoundBufferRef.current;
+      source.connect(gainNode);
       gainNode.connect(audioContext.destination);
 
-      oscillator.frequency.value = 300;
-      oscillator.type = 'sine';
-
+      // Set volume
       gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(
-        0.1,
-        audioContext.currentTime + 0.15
-      );
 
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.05);
+      source.start(audioContext.currentTime);
     } catch (error) {
       console.warn('Audio context not available:', error);
     }
-  }, [getAudioContext]);
+  }, [getAudioContext, loadClickSound]);
 
   // Update markers based on mouse position
   const updateMarkers = useCallback(
