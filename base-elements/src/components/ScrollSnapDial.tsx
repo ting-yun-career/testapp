@@ -139,9 +139,8 @@ const ScrollSnapDial: React.FC = () => {
 
       setMarkerStates(newStates);
 
-      // Hide value display if no marker is active
+      // Only update active index, keep the display value showing last known number
       if (closestIndex === -1 || minDistance >= 40) {
-        setDisplayValue('');
         setCurrentActiveIndex(-1);
       }
     },
@@ -157,7 +156,7 @@ const ScrollSnapDial: React.FC = () => {
 
   const handleMouseLeave = useCallback(() => {
     setMarkerStates({});
-    setDisplayValue('');
+    // Keep the display value showing the last known number
     setCurrentActiveIndex(-1);
   }, []);
 
