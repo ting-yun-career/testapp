@@ -72,3 +72,9 @@ a:hover {
 ::-webkit-scrollbar-thumb:hover {
   background-color: theme('colors.slate.600');
 }
+
+h1 {
+  line-height: 1;
+  font-size: clamp(42px, -3.0704225352px + 9.014084507vw, 170px);
+  font-weight: 600;
+}
