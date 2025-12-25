@@ -4,11 +4,13 @@ import mountain from './assets/mountain.webp';
 const App: React.FC = () => {
   return (
     <div className="w-[100dvw] h-[100dvh] relative flex items-center justify-center">
-      <img
-        src={mountain}
-        alt="Mountain"
-        className="absolute bottom-0 left-0 w-full h-auto object-bottom pointer-events-none"
-      />
+      <div className="absolute bottom-0 inset-x-0 border-t border-dashed border-t-gray-500">
+        <img
+          src={mountain}
+          alt="Mountain"
+          className="w-full h-auto object-bottom pointer-events-none"
+        />
+      </div>
       <h1>Hello</h1>
     </div>
   );
