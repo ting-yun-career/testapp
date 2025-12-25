@@ -1,8 +1,7 @@
 import React from 'react';
-import ScrollSnapDial from './components/ScrollSnapDial';
 
 const App: React.FC = () => {
-  return <ScrollSnapDial />;
+  return <div>Hello World</div>;
 };
 
 export default App;
