@@ -1,7 +1,7 @@
 import React from 'react';
-import mountain from './assets/mountain.webp';
+import mountain from '../assets/mountain.webp';
 
-const App: React.FC = () => {
+const SVGMountain: React.FC = () => {
   return (
     <div className="w-[100dvw] h-[100dvh] relative flex items-center justify-center">
       <div className="absolute bottom-0 inset-x-0 border-t border-dashed border-t-gray-500">
@@ -16,4 +16,5 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default SVGMountain;
+
