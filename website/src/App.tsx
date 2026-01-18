@@ -1,8 +1,8 @@
 import React from 'react';
-import SVGMountain from './components/SVGMountain';
+import { AnimatedFrame } from './components/AnimatedFrame';
 
 const App: React.FC = () => {
-  return <SVGMountain />;
+  return <AnimatedFrame />
 };
 
 export default App;
