@@ -27,6 +27,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <header className="h-[30px] bg-[#191919] text-white shrink-0 border-b border-gray-800 flex items-center px-4">
+          <span className="text-sm font-medium">My App</span>
+        </header>
         {children}
       </body>
     </html>
