@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 
 const domain = import.meta.env.VITE_AUTH0_DOMAIN
 const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID
+export const auth0Connection = import.meta.env.VITE_AUTH0_CONNECTION
 
 export const hasAuth0Config = Boolean(domain && clientId)
 
