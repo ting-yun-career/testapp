@@ -151,11 +151,11 @@ export default function BookingCalendar({
                   <div className="flex gap-1">
                     <MonthArrow
                       direction="prev"
-                      onClick={() => shiftSelectedDate(-1, setSelectedDate)}
+                      onClick={() => shiftSelectedDate(-7, setSelectedDate)}
                     />
                     <MonthArrow
                       direction="next"
-                      onClick={() => shiftSelectedDate(1, setSelectedDate)}
+                      onClick={() => shiftSelectedDate(7, setSelectedDate)}
                     />
                   </div>
                 </div>
