@@ -415,7 +415,7 @@ function OverlayBoard({
   const hours = Array.from({ length: 18 }, (_, index) => index + 7)
 
   return (
-    <div className="overlay-grid min-w-[940px]">
+    <div className="overlay-grid">
       <div className="overlay-grid__top" />
       {weekDays.map((day) => (
         <div key={day.toISOString()} className="overlay-grid__day-label">
