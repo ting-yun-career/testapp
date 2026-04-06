@@ -50,7 +50,7 @@ type OverlayBlock = {
   endHour: number
 }
 
-type ViewMode = 'calendar' | 'grid' | 'agenda'
+type ViewMode = 'calendar' | 'agenda'
 
 const OVERLAY_BLOCKS: OverlayBlock[] = [
   { dayOffset: 0, startHour: 9, endHour: 16.5 },
@@ -226,13 +226,6 @@ function App() {
                     <CalendarIcon />
                   </IconButton>
                   <IconButton
-                    active={viewMode === 'grid'}
-                    label="Grid"
-                    onClick={() => setViewMode('grid')}
-                  >
-                    <GridIcon />
-                  </IconButton>
-                  <IconButton
                     active={viewMode === 'agenda'}
                     label="Agenda"
                     onClick={() => setViewMode('agenda')}
@@ -249,14 +242,6 @@ function App() {
                   selectedDate={selectedDate}
                   weekDays={weekDays}
                   is24Hour={is24Hour}
-                />
-              ) : viewMode === 'grid' ? (
-                <MultiDaySlotsBoard
-                  is24Hour={is24Hour}
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
-                  setSelectedSlot={setSelectedSlot}
-                  weekDays={weekDays}
                 />
               ) : (
                 <div className="flex h-full flex-col gap-5 xl:flex-row">
@@ -474,66 +459,6 @@ function OverlayBoard({
   )
 }
 
-function MultiDaySlotsBoard({
-  is24Hour,
-  selectedDate,
-  setSelectedDate,
-  setSelectedSlot,
-  weekDays,
-}: {
-  is24Hour: boolean
-  selectedDate: Date
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>
-  setSelectedSlot: React.Dispatch<React.SetStateAction<string | null>>
-  weekDays: Date[]
-}) {
-  const sharedSlots = buildSlotsForDate(selectedDate, formatDateKey(selectedDate))
-
-  return (
-    <div className="grid min-w-[980px] grid-cols-6 gap-4">
-      {weekDays.slice(0, 6).map((day) => {
-        const dayKey = formatDateKey(day)
-        const daySlots = buildSlotsForDate(day, dayKey)
-
-        return (
-          <section key={dayKey} className="min-w-0">
-            <header className="mb-3 text-center">
-              <p className="text-xs uppercase tracking-[0.22em] text-white/45">
-                {WEEKDAY_SHORT[day.getDay()]}
-              </p>
-              <p className="mt-1 text-sm font-medium text-white/74">
-                {pad(day.getDate())}
-              </p>
-            </header>
-
-            <div className="space-y-2.5">
-              {daySlots.slice(0, sharedSlots.length).map((slot) => (
-                <button
-                  key={`${dayKey}-${slot.time}`}
-                  className={[
-                    'slot-pill slot-pill--compact w-full',
-                    slot.booked ? 'slot-pill--booked' : '',
-                    isSameDate(day, selectedDate) && !slot.booked
-                      ? 'border-white/16'
-                      : '',
-                  ].join(' ')}
-                  disabled={slot.booked}
-                  onClick={() => {
-                    setSelectedDate(day)
-                    setSelectedSlot(slot.time)
-                  }}
-                >
-                  <span>{formatTimeLabel(slot.time, is24Hour)}</span>
-                </button>
-              ))}
-            </div>
-          </section>
-        )
-      })}
-    </div>
-  )
-}
-
 function buildCalendarDays(month: Date, selectedDate: Date): CalendarDay[] {
   const firstOfMonth = new Date(month.getFullYear(), month.getMonth(), 1)
   const lastOfMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0)
@@ -715,23 +640,6 @@ function CalendarIcon() {
         y="5"
       />
       <path d="M8 3v4M16 3v4M3 10h18" stroke="currentColor" strokeWidth="1.8" />
-    </svg>
-  )
-}
-
-function GridIcon() {
-  return (
-    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24">
-      <rect
-        height="16"
-        rx="3"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        width="16"
-        x="4"
-        y="4"
-      />
-      <path d="M12 4v16M4 12h16" stroke="currentColor" strokeWidth="1.8" />
     </svg>
   )
 }

@@ -132,13 +132,6 @@ input {
   opacity: 0.38;
 }
 
-.slot-pill--compact {
-  min-height: 3rem;
-  justify-content: center;
-  padding: 0 0.9rem;
-  font-size: 1.2rem;
-}
-
 .overlay-grid {
   display: grid;
   grid-template-columns: 58px repeat(7, minmax(150px, 1fr));
