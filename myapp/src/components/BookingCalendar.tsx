@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 const MONTH_NAMES = [
   'January',
@@ -17,6 +17,7 @@ const MONTH_NAMES = [
 
 const WEEKDAY_LABELS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
 const WEEKDAY_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
 type CalendarDay = {
   date: Date
   inMonth: boolean
@@ -38,9 +39,36 @@ type BookingCalendarProps = {
   workingDays?: number[]
 }
 
+type DragSelection = {
+  dayIndex: number
+  endSlot: number
+  startSlot: number
+}
+
+type AppointmentDraft = {
+  dayIndex: number
+  endSlot: number
+  startSlot: number
+}
+
+type RequestDetails = {
+  additionalInfo: string
+  email: string
+  meetingLinkOrPhone: string
+  name: string
+}
+
+const DEFAULT_REQUEST_DETAILS: RequestDetails = {
+  additionalInfo: '',
+  email: '',
+  meetingLinkOrPhone: '',
+  name: '',
+}
+
 export default function BookingCalendar({
-  endHour = 24,
+  endHour = 21,
   overlayBlocks = [
+    // { dayOffset: 0, startHour: 9, endHour: 17 },
     { dayOffset: 1, startHour: 9, endHour: 17 },
     { dayOffset: 2, startHour: 9, endHour: 17 },
     { dayOffset: 3, startHour: 9, endHour: 17 },
@@ -56,6 +84,10 @@ export default function BookingCalendar({
   )
   const [selectedDate, setSelectedDate] = useState(initialDate)
   const [is24Hour, setIs24Hour] = useState(true)
+  const [dragSelection, setDragSelection] = useState<DragSelection | null>(null)
+  const [appointmentDraft, setAppointmentDraft] =
+    useState<AppointmentDraft | null>(null)
+  const [requestDetails, setRequestDetails] = useState(DEFAULT_REQUEST_DETAILS)
 
   const calendarDays = useMemo(
     () => buildCalendarDays(visibleMonth, selectedDate, workingDays),
@@ -66,6 +98,37 @@ export default function BookingCalendar({
     () => getWeekDaysStarting(selectedDate),
     [selectedDate],
   )
+
+  useEffect(() => {
+    if (!dragSelection) {
+      return
+    }
+
+    const handleMouseUp = () => {
+      setAppointmentDraft(normalizeSelection(dragSelection))
+      setDragSelection(null)
+    }
+
+    window.addEventListener('mouseup', handleMouseUp)
+
+    return () => {
+      window.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [dragSelection])
+
+  const draftDay = appointmentDraft
+    ? (weekDays[appointmentDraft.dayIndex] ?? selectedDate)
+    : null
+  const draftStartMinutes = appointmentDraft
+    ? slotIndexToMinutes(appointmentDraft.startSlot, startHour)
+    : null
+  const draftEndMinutes = appointmentDraft
+    ? slotIndexToMinutes(appointmentDraft.endSlot + 1, startHour)
+    : null
+  const draftDurationMinutes =
+    draftStartMinutes !== null && draftEndMinutes !== null
+      ? draftEndMinutes - draftStartMinutes
+      : 0
 
   return (
     <main className="min-h-screen bg-[var(--app-bg)] text-[var(--text-primary)]">
@@ -146,7 +209,7 @@ export default function BookingCalendar({
               <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
                 <div className="flex items-center gap-4">
                   <h2 className="text-2xl font-semibold text-white">
-                    {formatRangeTitle(selectedDate)}
+                    {formatRangeTitle(weekDays)}
                   </h2>
                   <div className="flex gap-1">
                     <MonthArrow
@@ -181,8 +244,53 @@ export default function BookingCalendar({
 
             <div className="min-h-0 flex-1 overflow-auto px-5 py-5 sm:px-6 lg:px-8">
               <OverlayBoard
+                dragSelection={dragSelection}
                 endHour={endHour}
                 overlayBlocks={overlayBlocks}
+                onCellMouseDown={(dayIndex, slotIndex) => {
+                  if (
+                    isBusySlot({
+                      dayIndex,
+                      endHour,
+                      overlayBlocks,
+                      slotIndex,
+                      startHour,
+                    })
+                  ) {
+                    return
+                  }
+
+                  setSelectedDate(weekDays[dayIndex] ?? selectedDate)
+                  setDragSelection({
+                    dayIndex,
+                    endSlot: slotIndex,
+                    startSlot: slotIndex,
+                  })
+                }}
+                onCellMouseEnter={(dayIndex, slotIndex) => {
+                  if (
+                    !dragSelection ||
+                    dragSelection.dayIndex !== dayIndex ||
+                    isBusySlot({
+                      dayIndex,
+                      endHour,
+                      overlayBlocks,
+                      slotIndex,
+                      startHour,
+                    })
+                  ) {
+                    return
+                  }
+
+                  setDragSelection((current) =>
+                    current
+                      ? {
+                          ...current,
+                          endSlot: slotIndex,
+                        }
+                      : current,
+                  )
+                }}
                 selectedDate={selectedDate}
                 startHour={startHour}
                 weekDays={weekDays}
@@ -192,6 +300,27 @@ export default function BookingCalendar({
           </section>
         </section>
       </div>
+
+      {appointmentDraft &&
+      draftDay &&
+      draftStartMinutes !== null &&
+      draftEndMinutes !== null ? (
+        <AppointmentModal
+          day={draftDay}
+          details={requestDetails}
+          durationMinutes={draftDurationMinutes}
+          endMinutes={draftEndMinutes}
+          is24Hour={is24Hour}
+          onChangeDetails={(field, value) =>
+            setRequestDetails((current) => ({
+              ...current,
+              [field]: value,
+            }))
+          }
+          onClose={() => setAppointmentDraft(null)}
+          startMinutes={draftStartMinutes}
+        />
+      ) : null}
     </main>
   )
 }
@@ -216,15 +345,21 @@ function MonthArrow({
 }
 
 function OverlayBoard({
+  dragSelection,
   endHour,
   overlayBlocks,
+  onCellMouseDown,
+  onCellMouseEnter,
   selectedDate,
   startHour,
   weekDays,
   is24Hour,
 }: {
+  dragSelection: DragSelection | null
   endHour: number
   overlayBlocks: OverlayBlock[]
+  onCellMouseDown: (dayIndex: number, slotIndex: number) => void
+  onCellMouseEnter: (dayIndex: number, slotIndex: number) => void
   selectedDate: Date
   startHour: number
   weekDays: Date[]
@@ -232,17 +367,28 @@ function OverlayBoard({
 }) {
   const now = new Date()
   const normalizedStart = Math.max(0, Math.min(startHour, endHour))
-  const normalizedEnd = Math.max(normalizedStart, endHour)
-  const hours = Array.from(
-    { length: normalizedEnd - normalizedStart + 1 },
-    (_, index) => index + normalizedStart,
-  )
+  const normalizedEnd = Math.max(normalizedStart + 1, endHour)
+  const slotCount = (normalizedEnd - normalizedStart) * 4
+  const slotIndexes = Array.from({ length: slotCount }, (_, index) => index)
   const todayVisible = weekDays.some((day) => isSameDate(day, now))
+  const marker = getCurrentMarker({
+    endHour: normalizedEnd,
+    now,
+    startHour: normalizedStart,
+    todayVisible,
+    weekDays,
+  })
+  const normalizedSelection = dragSelection
+    ? normalizeSelection(dragSelection)
+    : null
 
   return (
     <div className="overlay-grid">
-      <div className="overlay-grid__top" />
-      {weekDays.map((day) => (
+      <div
+        className="overlay-grid__top"
+        style={{ gridColumn: 1, gridRow: 1 }}
+      />
+      {weekDays.map((day, dayIndex) => (
         <div
           key={day.toISOString()}
           className={[
@@ -254,51 +400,222 @@ function OverlayBoard({
           ]
             .filter(Boolean)
             .join(' ')}
+          style={{ gridColumn: dayIndex + 2, gridRow: 1 }}
         >
-          <span className="block text-xs uppercase tracking-[0.24em] text-white/46">
+          <span className="text-xs uppercase tracking-[0.24em] text-white/46">
             {WEEKDAY_SHORT[day.getDay()]}
           </span>
-          <span className="mt-1 block text-base font-medium text-white/75">
+          <span className="text-base font-medium text-white/75">
             {pad(day.getDate())}
           </span>
         </div>
       ))}
 
-      {hours.map((hour) => (
-        <div key={hour} className="contents">
-          <div className="overlay-grid__time">
-            {formatHourLabel(hour, is24Hour)}
+      {slotIndexes
+        .filter((slotIndex) => slotIndex % 4 === 0)
+        .map((slotIndex) => (
+          <div
+            key={`time-${slotIndex}`}
+            className={[
+              'overlay-grid__time',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+            style={{
+              gridColumn: 1,
+              gridRow: `${slotIndex + 2} / span 4`,
+            }}
+          >
+            {formatHourLabel(
+              normalizedStart + Math.floor(slotIndex / 4),
+              is24Hour,
+            )}
           </div>
-          {weekDays.map((day, dayIndex) => (
+        ))}
+
+      {slotIndexes.map((slotIndex) =>
+        weekDays.map((day, dayIndex) => {
+          const busy = isBusySlot({
+            dayIndex,
+            endHour: normalizedEnd,
+            overlayBlocks,
+            slotIndex,
+            startHour: normalizedStart,
+          })
+          const selectedColumn = isSameDate(day, selectedDate)
+          const isSelectedSlot = isSlotInSelection(
+            normalizedSelection,
+            dayIndex,
+            slotIndex,
+          )
+          const isSelectionStart =
+            normalizedSelection?.dayIndex === dayIndex &&
+            normalizedSelection.startSlot === slotIndex
+
+          return (
             <div
-              key={`${day.toISOString()}-${hour}`}
+              key={`${day.toISOString()}-${slotIndex}`}
               className={[
                 'overlay-grid__cell',
-                isSameDate(day, selectedDate)
-                  ? 'overlay-grid__cell--selected'
-                  : '',
+                selectedColumn ? 'overlay-grid__cell--selected' : '',
                 isSameDate(day, now) ? 'overlay-grid__cell--today' : '',
+                busy ? 'overlay-grid__cell--busy' : '',
+                isSelectedSlot ? 'overlay-grid__cell--active-selection' : '',
               ]
                 .filter(Boolean)
                 .join(' ')}
+              onMouseDown={(event) => {
+                if (event.button !== 0 || busy) {
+                  return
+                }
+
+                event.preventDefault()
+                onCellMouseDown(dayIndex, slotIndex)
+              }}
+              onMouseEnter={() => onCellMouseEnter(dayIndex, slotIndex)}
+              style={{
+                gridColumn: dayIndex + 2,
+                gridRow: slotIndex + 2,
+              }}
             >
-              {overlayBlocks.some(
-                (block) =>
-                  block.dayOffset === dayIndex &&
-                  hour >= block.startHour &&
-                  hour < block.endHour,
-              ) ? (
-                <div className="overlay-grid__busy" />
+              {busy ? <div className="overlay-grid__busy" /> : null}
+              {isSelectionStart ? (
+                <div className="overlay-grid__selection-chip">
+                  {formatMinutesLabel(
+                    slotIndexToMinutes(slotIndex, normalizedStart),
+                    is24Hour,
+                  )}
+                </div>
               ) : null}
-              {todayVisible && sameHour(now, day, hour) ? (
-                <div className="overlay-grid__now">
+              {marker &&
+              marker.dayIndex === dayIndex &&
+              marker.slotIndex === slotIndex ? (
+                <div
+                  className="overlay-grid__now"
+                  style={{ top: `${marker.topOffsetPercent}%` }}
+                >
                   <span>{formatDateTimeLabel(now, is24Hour)}</span>
                 </div>
               ) : null}
             </div>
-          ))}
+          )
+        }),
+      )}
+    </div>
+  )
+}
+
+function AppointmentModal({
+  day,
+  details,
+  durationMinutes,
+  endMinutes,
+  is24Hour,
+  onChangeDetails,
+  onClose,
+  startMinutes,
+}: {
+  day: Date
+  details: RequestDetails
+  durationMinutes: number
+  endMinutes: number
+  is24Hour: boolean
+  onChangeDetails: (field: keyof RequestDetails, value: string) => void
+  onClose: () => void
+  startMinutes: number
+}) {
+  const displayDate = `${WEEKDAY_SHORT[day.getDay()]}, ${MONTH_NAMES[day.getMonth()]} ${day.getDate()}, ${day.getFullYear()}`
+
+  return (
+    <div
+      className="booking-modal-backdrop"
+      onClick={onClose}
+      role="presentation"
+    >
+      <section
+        aria-modal="true"
+        className="booking-modal"
+        onClick={(event) => event.stopPropagation()}
+        role="dialog"
+      >
+        <div className="booking-modal__body">
+          <h2 className="booking-modal__title">Confirm your details</h2>
+
+          <div className="booking-modal__chips">
+            <span className="booking-modal__chip">
+              <CalendarSmallIcon />
+              {displayDate}, {formatMinutesLabel(startMinutes, is24Hour)} -{' '}
+              {formatMinutesLabel(endMinutes, is24Hour)}
+            </span>
+            <span className="booking-modal__chip">
+              <ClockSmallIcon />
+              {durationMinutes}m
+            </span>
+          </div>
+
+          <label className="booking-modal__field">
+            <span className="booking-modal__label">Your name *</span>
+            <input
+              className="booking-modal__input"
+              onChange={(event) => onChangeDetails('name', event.target.value)}
+              placeholder="Alex Chen"
+              value={details.name}
+            />
+          </label>
+
+          <label className="booking-modal__field">
+            <span className="booking-modal__label">Email address *</span>
+            <input
+              className="booking-modal__input"
+              onChange={(event) => onChangeDetails('email', event.target.value)}
+              placeholder="alex@example.com"
+              type="email"
+              value={details.email}
+            />
+          </label>
+
+          <label className="booking-modal__field">
+            <span className="booking-modal__label">Phone or meeting link</span>
+            <input
+              className="booking-modal__input"
+              onChange={(event) =>
+                onChangeDetails('meetingLinkOrPhone', event.target.value)
+              }
+              placeholder="Phone number or Zoom/Meet link"
+              value={details.meetingLinkOrPhone}
+            />
+          </label>
+
+          <label className="booking-modal__field">
+            <span className="booking-modal__label">Additional info</span>
+            <textarea
+              className="booking-modal__textarea"
+              onChange={(event) =>
+                onChangeDetails('additionalInfo', event.target.value)
+              }
+              placeholder="Share anything that will help prepare for this appointment."
+              rows={5}
+              value={details.additionalInfo}
+            />
+          </label>
         </div>
-      ))}
+
+        <footer className="booking-modal__footer">
+          <button
+            className="booking-modal__button booking-modal__button--ghost"
+            onClick={onClose}
+            type="button"
+          >
+            Back
+          </button>
+          <button
+            className="booking-modal__button booking-modal__button--primary"
+            type="button"
+          >
+            Confirm
+          </button>
+        </footer>
+      </section>
     </div>
   )
 }
@@ -354,10 +671,19 @@ function shiftSelectedDate(
   })
 }
 
-function formatRangeTitle(date: Date) {
-  const end = new Date(date)
-  end.setDate(date.getDate() + 6)
-  return `${MONTH_NAMES[date.getMonth()]} ${date.getDate()}-${end.getDate()}, ${date.getFullYear()}`
+function formatRangeTitle(weekDays: Date[]) {
+  const start = weekDays[0]
+  const end = weekDays[weekDays.length - 1]
+
+  if (!start || !end) {
+    return ''
+  }
+
+  if (start.getMonth() === end.getMonth()) {
+    return `${MONTH_NAMES[start.getMonth()]} ${start.getDate()}-${end.getDate()}, ${start.getFullYear()}`
+  }
+
+  return `${MONTH_NAMES[start.getMonth()]} ${start.getDate()}-${MONTH_NAMES[end.getMonth()]} ${end.getDate()}, ${end.getFullYear()}`
 }
 
 function formatTimeLabel(time: string, is24Hour: boolean) {
@@ -378,6 +704,16 @@ function formatHourLabel(hour: number, is24Hour: boolean) {
   return formatTimeLabel(`${pad(hour)}:00`, is24Hour)
 }
 
+function formatMinutesLabel(totalMinutes: number, is24Hour: boolean) {
+  const hours = Math.floor(totalMinutes / 60)
+  const minutes = totalMinutes % 60
+  return formatTimeLabel(`${pad(hours)}:${pad(minutes)}`, is24Hour)
+}
+
+function formatDateTimeLabel(date: Date, is24Hour: boolean) {
+  return formatMinutesLabel(date.getHours() * 60 + date.getMinutes(), is24Hour)
+}
+
 function hourToggleClass(active: boolean) {
   return [
     'rounded-[3px] px-3 py-2 text-sm transition',
@@ -393,19 +729,130 @@ function isSameDate(left: Date, right: Date) {
   )
 }
 
-function sameHour(currentDate: Date, day: Date, hour: number) {
-  return isSameDate(currentDate, day) && hour === currentDate.getHours()
+function pad(value: number) {
+  return String(value).padStart(2, '0')
 }
 
-function formatDateTimeLabel(date: Date, is24Hour: boolean) {
-  return formatTimeLabel(
-    `${pad(date.getHours())}:${pad(date.getMinutes())}`,
-    is24Hour,
+function normalizeSelection(selection: DragSelection): AppointmentDraft {
+  return {
+    dayIndex: selection.dayIndex,
+    endSlot: Math.max(selection.startSlot, selection.endSlot),
+    startSlot: Math.min(selection.startSlot, selection.endSlot),
+  }
+}
+
+function slotIndexToMinutes(slotIndex: number, startHour: number) {
+  return startHour * 60 + slotIndex * 15
+}
+
+function isSlotInSelection(
+  selection: AppointmentDraft | null,
+  dayIndex: number,
+  slotIndex: number,
+) {
+  if (!selection || selection.dayIndex !== dayIndex) {
+    return false
+  }
+
+  return slotIndex >= selection.startSlot && slotIndex <= selection.endSlot
+}
+
+function isBusySlot({
+  dayIndex,
+  endHour,
+  overlayBlocks,
+  slotIndex,
+  startHour,
+}: {
+  dayIndex: number
+  endHour: number
+  overlayBlocks: OverlayBlock[]
+  slotIndex: number
+  startHour: number
+}) {
+  const slotStartMinutes = slotIndexToMinutes(slotIndex, startHour)
+  const slotEndMinutes = slotStartMinutes + 15
+  const rangeEndMinutes = endHour * 60
+
+  if (slotStartMinutes >= rangeEndMinutes) {
+    return true
+  }
+
+  return !overlayBlocks.some(
+    (block) =>
+      block.dayOffset === dayIndex &&
+      slotStartMinutes < block.endHour * 60 &&
+      slotEndMinutes > block.startHour * 60,
   )
 }
 
-function pad(value: number) {
-  return String(value).padStart(2, '0')
+function getCurrentMarker({
+  endHour,
+  now,
+  startHour,
+  todayVisible,
+  weekDays,
+}: {
+  endHour: number
+  now: Date
+  startHour: number
+  todayVisible: boolean
+  weekDays: Date[]
+}) {
+  if (!todayVisible) {
+    return null
+  }
+
+  const dayIndex = weekDays.findIndex((day) => isSameDate(day, now))
+  const totalMinutes = now.getHours() * 60 + now.getMinutes()
+  const startMinutes = startHour * 60
+  const endMinutes = endHour * 60
+
+  if (
+    dayIndex === -1 ||
+    totalMinutes < startMinutes ||
+    totalMinutes >= endMinutes
+  ) {
+    return null
+  }
+
+  const minutesFromStart = totalMinutes - startMinutes
+  return {
+    dayIndex,
+    slotIndex: Math.floor(minutesFromStart / 15),
+    topOffsetPercent: ((minutesFromStart % 15) / 15) * 100,
+  }
+}
+
+function CalendarSmallIcon() {
+  return (
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24">
+      <rect
+        height="15"
+        rx="3"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        width="18"
+        x="3"
+        y="5"
+      />
+      <path d="M8 3v4M16 3v4M3 10h18" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  )
+}
+
+function ClockSmallIcon() {
+  return (
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
+      <path
+        d="M12 7v5l3 2"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.8"
+      />
+    </svg>
+  )
 }
 
 function ChevronLeftIcon() {
