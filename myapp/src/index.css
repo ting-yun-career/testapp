@@ -140,6 +140,8 @@ input {
   grid-template-columns: minmax(70px, 0.5fr) repeat(7, minmax(30px, 1fr));
   border-top: 1px solid var(--line-soft);
   border-left: 1px solid var(--line-soft);
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .overlay-grid__top,
@@ -153,6 +155,13 @@ input {
 .overlay-grid__day-label {
   padding: 0.85rem 0.75rem;
   text-align: center;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.overlay-grid__day-label--today,
+.overlay-grid__cell--today {
+  background: rgba(255, 255, 255, 0.035);
 }
 
 .overlay-grid__time {
@@ -162,6 +171,8 @@ input {
   padding-top: 0.5rem;
   font-size: 0.88rem;
   color: rgba(255, 255, 255, 0.46);
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .overlay-grid__cell {

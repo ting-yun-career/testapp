@@ -184,7 +184,6 @@ export default function BookingCalendar({
                 endHour={endHour}
                 overlayBlocks={overlayBlocks}
                 startHour={startHour}
-                selectedDate={selectedDate}
                 weekDays={weekDays}
                 is24Hour={is24Hour}
               />
@@ -219,29 +218,37 @@ function OverlayBoard({
   endHour,
   overlayBlocks,
   startHour,
-  selectedDate,
   weekDays,
   is24Hour,
 }: {
   endHour: number
   overlayBlocks: OverlayBlock[]
   startHour: number
-  selectedDate: Date
   weekDays: Date[]
   is24Hour: boolean
 }) {
+  const now = new Date()
   const normalizedStart = Math.max(0, Math.min(startHour, endHour))
   const normalizedEnd = Math.max(normalizedStart, endHour)
   const hours = Array.from(
     { length: normalizedEnd - normalizedStart + 1 },
     (_, index) => index + normalizedStart,
   )
+  const todayVisible = weekDays.some((day) => isSameDate(day, now))
 
   return (
     <div className="overlay-grid">
       <div className="overlay-grid__top" />
       {weekDays.map((day) => (
-        <div key={day.toISOString()} className="overlay-grid__day-label">
+        <div
+          key={day.toISOString()}
+          className={[
+            'overlay-grid__day-label',
+            isSameDate(day, now) ? 'overlay-grid__day-label--today' : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+        >
           <span className="block text-xs uppercase tracking-[0.24em] text-white/46">
             {WEEKDAY_SHORT[day.getDay()]}
           </span>
@@ -259,7 +266,12 @@ function OverlayBoard({
           {weekDays.map((day, dayIndex) => (
             <div
               key={`${day.toISOString()}-${hour}`}
-              className="overlay-grid__cell"
+              className={[
+                'overlay-grid__cell',
+                isSameDate(day, now) ? 'overlay-grid__cell--today' : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
             >
               {overlayBlocks.some(
                 (block) =>
@@ -269,9 +281,9 @@ function OverlayBoard({
               ) ? (
                 <div className="overlay-grid__busy" />
               ) : null}
-              {sameHour(selectedDate, day, hour) ? (
+              {todayVisible && sameHour(now, day, hour) ? (
                 <div className="overlay-grid__now">
-                  <span>{formatTimeLabel('16:37', is24Hour)}</span>
+                  <span>{formatDateTimeLabel(now, is24Hour)}</span>
                 </div>
               ) : null}
             </div>
@@ -287,6 +299,7 @@ function buildCalendarDays(
   selectedDate: Date,
   workingDays: number[],
 ): CalendarDay[] {
+  const today = new Date()
   const firstOfMonth = new Date(month.getFullYear(), month.getMonth(), 1)
   const lastOfMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0)
   const leading = firstOfMonth.getDay()
@@ -305,7 +318,7 @@ function buildCalendarDays(
       inMonth,
       isAvailable,
       isSelected,
-      isToday: formatDateKey(date) === '2026-04-05',
+      isToday: isSameDate(date, today),
     }
   })
 }
@@ -375,8 +388,15 @@ function isSameDate(left: Date, right: Date) {
   )
 }
 
-function sameHour(selectedDate: Date, day: Date, hour: number) {
-  return isSameDate(selectedDate, day) && hour === 16
+function sameHour(currentDate: Date, day: Date, hour: number) {
+  return isSameDate(currentDate, day) && hour === currentDate.getHours()
+}
+
+function formatDateTimeLabel(date: Date, is24Hour: boolean) {
+  return formatTimeLabel(
+    `${pad(date.getHours())}:${pad(date.getMinutes())}`,
+    is24Hour,
+  )
 }
 
 function pad(value: number) {
