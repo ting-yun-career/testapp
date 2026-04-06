@@ -94,7 +94,7 @@ export default function BookingCalendar({
     () => getWeekDaysStarting(selectedDate),
     [selectedDate],
   )
-  const { endHour, startHour } = useMemo(
+  const hourBounds = useMemo(
     () => getHourBounds(availabilities),
     [availabilities],
   )
@@ -120,10 +120,10 @@ export default function BookingCalendar({
     ? (weekDays[appointmentDraft.dayIndex] ?? selectedDate)
     : null
   const draftStartMinutes = appointmentDraft
-    ? slotIndexToMinutes(appointmentDraft.startSlot, startHour)
+    ? slotIndexToMinutes(appointmentDraft.startSlot, hourBounds.startHour)
     : null
   const draftEndMinutes = appointmentDraft
-    ? slotIndexToMinutes(appointmentDraft.endSlot + 1, startHour)
+    ? slotIndexToMinutes(appointmentDraft.endSlot + 1, hourBounds.startHour)
     : null
   const draftDurationMinutes =
     draftStartMinutes !== null && draftEndMinutes !== null
@@ -246,15 +246,14 @@ export default function BookingCalendar({
               <AppointmentTimeGrid
                 availabilities={availabilities}
                 dragSelection={dragSelection}
-                endHour={endHour}
                 onCellMouseDown={(dayIndex, slotIndex) => {
                   if (
                     isBusySlot({
                       availabilities,
                       dayIndex,
-                      endHour,
+                      endHour: hourBounds.endHour,
                       slotIndex,
-                      startHour,
+                      startHour: hourBounds.startHour,
                     })
                   ) {
                     return
@@ -274,9 +273,9 @@ export default function BookingCalendar({
                     isBusySlot({
                       availabilities,
                       dayIndex,
-                      endHour,
+                      endHour: hourBounds.endHour,
                       slotIndex,
-                      startHour,
+                      startHour: hourBounds.startHour,
                     })
                   ) {
                     return
@@ -292,7 +291,6 @@ export default function BookingCalendar({
                   )
                 }}
                 selectedDate={selectedDate}
-                startHour={startHour}
                 weekDays={weekDays}
                 is24Hour={is24Hour}
               />
@@ -309,14 +307,14 @@ export default function BookingCalendar({
           footer={
             <>
               <button
-                className="booking-modal__button booking-modal__button--ghost"
+                className="min-w-[8.5rem] rounded-[3px] border border-transparent bg-transparent px-[1.4rem] py-[0.9rem] text-base font-semibold text-white/72 transition hover:text-white"
                 onClick={() => setAppointmentDraft(null)}
                 type="button"
               >
                 Back
               </button>
               <button
-                className="booking-modal__button booking-modal__button--primary"
+                className="min-w-[8.5rem] rounded-[3px] border border-transparent bg-white px-[1.4rem] py-[0.9rem] text-base font-semibold text-[#111] transition hover:bg-[#e8e8e8]"
                 type="button"
               >
                 Confirm
@@ -418,25 +416,22 @@ function MonthArrow({
 function AppointmentTimeGrid({
   availabilities,
   dragSelection,
-  endHour,
   onCellMouseDown,
   onCellMouseEnter,
   selectedDate,
-  startHour,
   weekDays,
   is24Hour,
 }: {
   availabilities: Availability[]
   dragSelection: DragSelection | null
-  endHour: number
   onCellMouseDown: (dayIndex: number, slotIndex: number) => void
   onCellMouseEnter: (dayIndex: number, slotIndex: number) => void
   selectedDate: Date
-  startHour: number
   weekDays: Date[]
   is24Hour: boolean
 }) {
   const now = new Date()
+  const { endHour, startHour } = getHourBounds(availabilities)
   const normalizedStart = Math.max(0, Math.min(startHour, endHour))
   const normalizedEnd = Math.max(normalizedStart + 1, endHour)
   const slotCount = (normalizedEnd - normalizedStart) * 4

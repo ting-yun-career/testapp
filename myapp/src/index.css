@@ -341,37 +341,6 @@ input {
   padding: 1.5rem 2.5rem;
 }
 
-.booking-modal__button {
-  min-width: 8.5rem;
-  border: 1px solid transparent;
-  border-radius: 20px;
-  padding: 0.9rem 1.4rem;
-  font-size: 1rem;
-  font-weight: 600;
-  transition:
-    background-color 160ms ease,
-    color 160ms ease,
-    border-color 160ms ease;
-}
-
-.booking-modal__button--ghost {
-  background: transparent;
-  color: rgba(255, 255, 255, 0.72);
-}
-
-.booking-modal__button--ghost:hover {
-  color: white;
-}
-
-.booking-modal__button--primary {
-  background: white;
-  color: #111;
-}
-
-.booking-modal__button--primary:hover {
-  background: #e8e8e8;
-}
-
 @media (max-width: 1279px) {
   .booking-shell {
     grid-template-columns: 1fr;
