@@ -16,7 +16,7 @@ export default function Button({
     'min-w-[8.5rem] rounded-[3px] border border-transparent px-[1.4rem] py-[0.9rem] text-base font-semibold transition'
   const variantClassName =
     variant === 'solid'
-      ? 'bg-white text-[#111] hover:bg-[#e8e8e8]'
+      ? 'bg-slate-100 text-[#111] hover:bg-slate-200:text-[#222]'
       : 'bg-transparent text-white/72 hover:text-white'
 
   return (
