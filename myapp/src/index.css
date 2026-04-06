@@ -1,1 +1,226 @@
 @import 'tailwindcss';
+
+:root {
+  color-scheme: dark;
+  --app-bg: #0c0c0c;
+  --panel-bg: rgba(23, 23, 23, 0.96);
+  --card-bg: rgba(28, 28, 28, 0.92);
+  --text-primary: rgba(255, 255, 255, 0.96);
+  --text-muted: rgba(255, 255, 255, 0.55);
+  --line-soft: rgba(255, 255, 255, 0.08);
+  --tile: #4a4a4a;
+  --tile-hover: #595959;
+  --tile-selected: #f3f0ee;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(
+      circle at top center,
+      rgba(255, 255, 255, 0.05),
+      transparent 28%
+    ),
+    linear-gradient(180deg, #101010 0%, #0a0a0a 100%);
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.booking-shell {
+  display: grid;
+  grid-template-columns: minmax(320px, 390px) minmax(0, 1fr);
+}
+
+.calendar-day {
+  position: relative;
+  display: flex;
+  aspect-ratio: 1 / 1;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 1rem;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease,
+    border-color 160ms ease;
+}
+
+.calendar-day--available {
+  background: var(--tile);
+  color: white;
+}
+
+.calendar-day--available:hover {
+  background: var(--tile-hover);
+  transform: translateY(-1px);
+}
+
+.calendar-day--selected {
+  background: var(--tile-selected);
+  color: black;
+}
+
+.calendar-day--outside {
+  color: rgba(255, 255, 255, 0.28);
+}
+
+.calendar-day:disabled {
+  cursor: default;
+}
+
+.calendar-day__dot {
+  position: absolute;
+  bottom: 0.55rem;
+  left: 50%;
+  height: 0.38rem;
+  width: 0.38rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.slot-pill {
+  display: flex;
+  min-height: 4.6rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 1.25rem;
+  background: rgba(14, 14, 14, 0.9);
+  padding: 0 1.2rem;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 1.55rem;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+
+.slot-pill:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.slot-pill--selected {
+  border-color: rgba(255, 255, 255, 0.42);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.slot-pill--booked {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+.overlay-grid {
+  display: grid;
+  grid-template-columns: 58px repeat(7, minmax(150px, 1fr));
+  border-top: 1px solid var(--line-soft);
+  border-left: 1px solid var(--line-soft);
+}
+
+.overlay-grid__top,
+.overlay-grid__day-label,
+.overlay-grid__time,
+.overlay-grid__cell {
+  border-right: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.overlay-grid__day-label {
+  padding: 0.85rem 0.75rem;
+  text-align: center;
+}
+
+.overlay-grid__time {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 0.5rem;
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.46);
+}
+
+.overlay-grid__cell {
+  position: relative;
+  height: 3.3rem;
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.overlay-grid__busy {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.06) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.06) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 12px 12px;
+}
+
+.overlay-grid__now {
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transform: translateY(-50%);
+  color: white;
+  font-size: 0.86rem;
+}
+
+.overlay-grid__now::before {
+  content: '';
+  flex: 1;
+  border-top: 1px solid rgba(255, 255, 255, 0.95);
+}
+
+.overlay-grid__now span {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.15rem 0.5rem;
+}
+
+@media (max-width: 1279px) {
+  .booking-shell {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .calendar-day {
+    border-radius: 3px;
+    font-size: 1.45rem;
+  }
+
+  .slot-pill {
+    min-height: 4rem;
+    font-size: 1.3rem;
+  }
+}

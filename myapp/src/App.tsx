@@ -1,375 +1,734 @@
-import { useAuth0 } from '@auth0/auth0-react'
-import { useEffect, useState } from 'react'
-import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import { auth0Connection, hasAuth0Config } from './auth'
+import { useMemo, useState } from 'react'
 
-type ConfigResponse = {
-  appEnv: string
-  apiBaseUrl: string
-  featureSignup: boolean
-  hasApiSecret: boolean
+const HOST = {
+  name: 'Ting Yun',
+  initials: 'T',
+  title: '30 min meeting',
+  duration: 30,
+  location: 'Cal Video',
+  timezone: 'America/Vancouver',
 }
 
-type AuthControlsProps = {
-  isAuthenticated: boolean
-  onLogin: () => Promise<void>
-  onLogout: () => void
+const MONTH_NAMES = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+]
+
+const WEEKDAY_LABELS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+const WEEKDAY_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const WORKING_DAYS = [1, 2, 3, 4, 5]
+const BOOKED_SLOT_MAP: Record<string, string[]> = {
+  '2026-04-09': ['04:00'],
+  '2026-04-10': ['03:30'],
+  '2026-04-13': ['01:30', '05:00'],
+  '2026-04-14': ['02:30', '06:00'],
+  '2026-04-15': ['04:30'],
+  '2026-04-16': ['01:00', '07:00'],
 }
 
-type WorkerPanelProps = {
-  config: ConfigResponse | null
-  error: string | null
+type CalendarDay = {
+  date: Date
+  inMonth: boolean
+  isAvailable: boolean
+  isSelected: boolean
+  isToday: boolean
 }
 
-type ProfilePanelProps = {
-  isAuthLoading: boolean
-  isAuthenticated: boolean
-  user?: {
-    name?: string | null
-    email?: string | null
-  }
+type OverlayBlock = {
+  dayOffset: number
+  startHour: number
+  endHour: number
 }
 
-function Shell({
-  children,
-  isAuthenticated,
-  onLogin,
-  onLogout,
-}: React.PropsWithChildren<AuthControlsProps>) {
+const OVERLAY_BLOCKS: OverlayBlock[] = [
+  { dayOffset: 0, startHour: 9, endHour: 16.5 },
+  { dayOffset: 1, startHour: 9, endHour: 16.5 },
+  { dayOffset: 2, startHour: 7, endHour: 24 },
+  { dayOffset: 3, startHour: 7, endHour: 24 },
+  { dayOffset: 4, startHour: 9, endHour: 24 },
+  { dayOffset: 5, startHour: 9, endHour: 24 },
+  { dayOffset: 6, startHour: 9, endHour: 24 },
+]
+
+function App() {
+  const initialDate = new Date('2026-04-09T12:00:00')
+  const [visibleMonth, setVisibleMonth] = useState(
+    new Date(initialDate.getFullYear(), initialDate.getMonth(), 1),
+  )
+  const [selectedDate, setSelectedDate] = useState(initialDate)
+  const [selectedSlot, setSelectedSlot] = useState<string | null>('01:00')
+  const [is24Hour, setIs24Hour] = useState(true)
+  const [showOverlay, setShowOverlay] = useState(false)
+
+  const calendarDays = useMemo(
+    () => buildCalendarDays(visibleMonth, selectedDate),
+    [selectedDate, visibleMonth],
+  )
+
+  const selectedDateKey = formatDateKey(selectedDate)
+  const availableSlots = useMemo(
+    () => buildSlotsForDate(selectedDate, selectedDateKey),
+    [selectedDate, selectedDateKey],
+  )
+
+  const weekDays = useMemo(
+    () => getWeekDaysStarting(selectedDate),
+    [selectedDate],
+  )
+
+  const selectedSlotLabel = selectedSlot
+    ? formatTimeLabel(selectedSlot, is24Hour)
+    : null
+
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-16 text-neutral-50">
-      <div className="mx-auto max-w-5xl">
-        <header className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-orange-400">
-              React + Worker example
+    <main className="min-h-screen bg-[var(--app-bg)] text-[var(--text-primary)]">
+      <div className="mx-auto flex min-h-screen max-w-[1800px] flex-col px-4 py-4 sm:px-6 lg:px-8">
+        <section className="booking-shell flex-1 overflow-hidden rounded-[32px] border border-white/8 bg-[var(--panel-bg)] shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+          <aside className="border-b border-white/8 p-6 lg:border-b-0 lg:border-r lg:p-8">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#72889b] text-sm font-semibold text-white">
+              {HOST.initials}
+            </div>
+            <p className="mt-5 text-xl font-medium text-white/82">
+              {HOST.name}
             </p>
-            <h1 className="mt-4 text-5xl font-semibold tracking-tight">
-              MyApp
+            <h1 className="mt-4 text-3xl font-semibold tracking-tight text-white lg:text-[2.15rem]">
+              {HOST.title}
             </h1>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-neutral-300">
-              A small React app with public and protected routes backed by Auth0
-              and a Cloudflare Worker.
-            </p>
-          </div>
 
-          <div className="flex items-center gap-3">
-            {hasAuth0Config ? (
-              isAuthenticated ? (
-                <button
-                  className="rounded-full bg-white px-5 py-2 text-sm font-medium text-neutral-950"
-                  onClick={onLogout}
-                >
-                  Log out
-                </button>
+            <div className="mt-6 space-y-4 text-lg text-white/82">
+              <DetailRow icon={<ClockIcon />} label={`${HOST.duration}m`} />
+              <DetailRow icon={<VideoIcon />} label={HOST.location} />
+              <DetailRow icon={<GlobeIcon />} label={HOST.timezone} />
+            </div>
+
+            <div className="mt-12">
+              <div className="flex items-center justify-between">
+                <h2 className="text-[1.6rem] font-semibold text-white">
+                  {MONTH_NAMES[visibleMonth.getMonth()]}{' '}
+                  <span className="text-white/58">
+                    {visibleMonth.getFullYear()}
+                  </span>
+                </h2>
+                <div className="flex items-center gap-2">
+                  <MonthArrow
+                    direction="prev"
+                    onClick={() => {
+                      setVisibleMonth(
+                        new Date(
+                          visibleMonth.getFullYear(),
+                          visibleMonth.getMonth() - 1,
+                          1,
+                        ),
+                      )
+                    }}
+                  />
+                  <MonthArrow
+                    direction="next"
+                    onClick={() => {
+                      setVisibleMonth(
+                        new Date(
+                          visibleMonth.getFullYear(),
+                          visibleMonth.getMonth() + 1,
+                          1,
+                        ),
+                      )
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="mt-6 grid grid-cols-7 gap-x-3 gap-y-4 text-center text-xs font-semibold tracking-[0.24em] text-white/78">
+                {WEEKDAY_LABELS.map((label) => (
+                  <div key={label}>{label}</div>
+                ))}
+              </div>
+
+              <div className="mt-6 grid grid-cols-7 gap-3">
+                {calendarDays.map((day) => (
+                  <button
+                    key={day.date.toISOString()}
+                    className={[
+                      'calendar-day',
+                      day.inMonth ? '' : 'calendar-day--outside',
+                      day.isAvailable ? 'calendar-day--available' : '',
+                      day.isSelected ? 'calendar-day--selected' : '',
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
+                    disabled={!day.isAvailable}
+                    onClick={() => {
+                      setSelectedDate(day.date)
+                      setSelectedSlot(null)
+                    }}
+                  >
+                    <span>{day.date.getDate()}</span>
+                    {day.isToday ? (
+                      <span className="calendar-day__dot" />
+                    ) : null}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </aside>
+
+          <section className="flex min-h-0 flex-col">
+            <div className="border-b border-white/8 px-5 py-4 sm:px-6 lg:px-8">
+              <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                <div className="flex items-center gap-4">
+                  <h2 className="text-2xl font-semibold text-white">
+                    {formatRangeTitle(selectedDate, showOverlay)}
+                  </h2>
+                  <div className="flex gap-1">
+                    <MonthArrow
+                      direction="prev"
+                      onClick={() => shiftSelectedDate(-1, setSelectedDate)}
+                    />
+                    <MonthArrow
+                      direction="next"
+                      onClick={() => shiftSelectedDate(1, setSelectedDate)}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 text-sm text-white/88">
+                  <label className="inline-flex items-center gap-3">
+                    <span
+                      className={[
+                        'relative h-7 w-12 rounded-full border border-white/10 transition',
+                        showOverlay ? 'bg-white/16' : 'bg-black/30',
+                      ].join(' ')}
+                    >
+                      <input
+                        checked={showOverlay}
+                        className="sr-only"
+                        onChange={() => setShowOverlay((value) => !value)}
+                        type="checkbox"
+                      />
+                      <span
+                        className={[
+                          'absolute top-0.5 h-6 w-6 rounded-full bg-black shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition',
+                          showOverlay ? 'left-[22px]' : 'left-0.5',
+                        ].join(' ')}
+                      />
+                    </span>
+                    Overlay my calendar
+                  </label>
+
+                  <IconButton label="Settings">
+                    <CogIcon />
+                  </IconButton>
+
+                  <div className="inline-flex rounded-2xl border border-white/8 bg-white/4 p-1">
+                    <button
+                      className={hourToggleClass(!is24Hour)}
+                      onClick={() => setIs24Hour(false)}
+                    >
+                      12h
+                    </button>
+                    <button
+                      className={hourToggleClass(is24Hour)}
+                      onClick={() => setIs24Hour(true)}
+                    >
+                      24h
+                    </button>
+                  </div>
+
+                  <IconButton label="Calendar">
+                    <CalendarIcon />
+                  </IconButton>
+                  <IconButton label="Grid">
+                    <GridIcon />
+                  </IconButton>
+                  <IconButton label="Agenda">
+                    <ColumnsIcon />
+                  </IconButton>
+                </div>
+              </div>
+            </div>
+
+            <div className="min-h-0 flex-1 overflow-auto px-5 py-5 sm:px-6 lg:px-8">
+              {showOverlay ? (
+                <OverlayBoard
+                  selectedDate={selectedDate}
+                  weekDays={weekDays}
+                  is24Hour={is24Hour}
+                />
               ) : (
-                <button
-                  className="rounded-full bg-orange-400 px-5 py-2 text-sm font-medium text-neutral-950"
-                  onClick={() => void onLogin()}
-                >
-                  Log in
-                </button>
-              )
-            ) : null}
-          </div>
-        </header>
+                <div className="flex h-full flex-col gap-5 xl:flex-row">
+                  <section className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-3xl font-semibold text-white">
+                          {formatSelectedDay(selectedDate)}
+                        </p>
+                        <p className="mt-2 text-sm text-white/50">
+                          Pick a time to book this appointment.
+                        </p>
+                      </div>
+                      <div className="rounded-2xl border border-white/8 bg-white/4 px-4 py-2 text-sm text-white/66">
+                        {availableSlots.filter((slot) => !slot.booked).length}{' '}
+                        open slots
+                      </div>
+                    </div>
 
-        <nav className="mt-10 flex flex-wrap gap-3">
-          <Link
-            className="rounded-full border border-white/10 px-4 py-2 text-sm text-neutral-200"
-            to="/"
-          >
-            Home
-          </Link>
-          <Link
-            className="rounded-full border border-white/10 px-4 py-2 text-sm text-neutral-200"
-            to="/public"
-          >
-            Public page
-          </Link>
-          <Link
-            className="rounded-full border border-white/10 px-4 py-2 text-sm text-neutral-200"
-            to="/protected"
-          >
-            Protected page
-          </Link>
-        </nav>
+                    <div className="mt-6 grid gap-3 xl:grid-cols-2 2xl:grid-cols-3">
+                      {availableSlots.map((slot) => (
+                        <button
+                          key={slot.time}
+                          className={[
+                            'slot-pill',
+                            slot.booked ? 'slot-pill--booked' : '',
+                            selectedSlot === slot.time
+                              ? 'slot-pill--selected'
+                              : '',
+                          ].join(' ')}
+                          disabled={slot.booked}
+                          onClick={() => setSelectedSlot(slot.time)}
+                        >
+                          <span>{formatTimeLabel(slot.time, is24Hour)}</span>
+                          <span className="text-xs uppercase tracking-[0.24em] text-white/38">
+                            {slot.booked ? 'Booked' : 'Open'}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </section>
 
-        {children}
+                  <aside className="w-full shrink-0 xl:max-w-[360px]">
+                    <div className="rounded-[28px] border border-white/8 bg-[var(--card-bg)] p-5 shadow-[0_18px_48px_rgba(0,0,0,0.35)]">
+                      <p className="text-sm uppercase tracking-[0.28em] text-white/45">
+                        Booking summary
+                      </p>
+                      <h3 className="mt-4 text-3xl font-semibold text-white">
+                        {HOST.title}
+                      </h3>
+                      <div className="mt-6 space-y-4 text-base text-white/74">
+                        <DetailRow
+                          icon={<ClockIcon />}
+                          label={`${HOST.duration} minutes`}
+                        />
+                        <DetailRow icon={<VideoIcon />} label={HOST.location} />
+                        <DetailRow
+                          icon={<CalendarIcon />}
+                          label={`${formatLongDate(selectedDate)}${
+                            selectedSlotLabel ? ` at ${selectedSlotLabel}` : ''
+                          }`}
+                        />
+                      </div>
+
+                      <div className="mt-8 rounded-3xl border border-white/8 bg-black/20 p-4">
+                        <p className="text-sm text-white/55">Your selection</p>
+                        <p className="mt-3 text-2xl font-semibold text-white">
+                          {selectedSlotLabel ?? 'Choose a time'}
+                        </p>
+                        <p className="mt-2 text-sm leading-6 text-white/56">
+                          Times are shown in {HOST.timezone}. We can plug this
+                          into your real availability API and persist bookings
+                          next.
+                        </p>
+                      </div>
+
+                      <div className="mt-8 space-y-3">
+                        <input
+                          className="w-full rounded-2xl border border-white/10 bg-white/4 px-4 py-3 text-sm text-white outline-none placeholder:text-white/28 focus:border-white/25"
+                          defaultValue="Alex Chen"
+                          placeholder="Your name"
+                        />
+                        <input
+                          className="w-full rounded-2xl border border-white/10 bg-white/4 px-4 py-3 text-sm text-white outline-none placeholder:text-white/28 focus:border-white/25"
+                          defaultValue="alex@example.com"
+                          placeholder="Your email"
+                        />
+                        <button
+                          className="w-full rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-black transition hover:bg-neutral-200 disabled:cursor-not-allowed disabled:bg-white/20 disabled:text-white/35"
+                          disabled={!selectedSlot}
+                        >
+                          Confirm booking
+                        </button>
+                      </div>
+                    </div>
+                  </aside>
+                </div>
+              )}
+            </div>
+          </section>
+        </section>
       </div>
     </main>
   )
 }
 
-function AuthPanel({
-  isAuthLoading,
-  isAuthenticated,
-  user,
-}: ProfilePanelProps) {
+function IconButton({
+  children,
+  label,
+}: React.PropsWithChildren<{ label: string }>) {
   return (
-    <section className="mt-10 rounded-2xl border border-white/10 bg-white/5 p-6 shadow-2xl shadow-black/20">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h2 className="text-lg font-semibold">Auth0 authentication</h2>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-300">
-            This app can keep some routes public while requiring login for
-            others.
-          </p>
-        </div>
-      </div>
-
-      {!hasAuth0Config ? (
-        <div className="mt-6 rounded-xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-100">
-          Add{' '}
-          <code className="rounded bg-black/20 px-2 py-1">
-            VITE_AUTH0_DOMAIN
-          </code>
-          ,
-          <code className="mx-1 rounded bg-black/20 px-2 py-1">
-            VITE_AUTH0_CLIENT_ID
-          </code>
-          , and
-          <code className="ml-1 rounded bg-black/20 px-2 py-1">
-            VITE_AUTH0_CONNECTION
-          </code>{' '}
-          to enable Auth0.
-        </div>
-      ) : null}
-
-      {hasAuth0Config && auth0Connection ? (
-        <p className="mt-6 text-sm text-neutral-400">
-          Using Auth0 connection{' '}
-          <code className="rounded bg-black/20 px-2 py-1">
-            {auth0Connection}
-          </code>
-        </p>
-      ) : null}
-
-      {hasAuth0Config && isAuthLoading ? (
-        <p className="mt-6 text-neutral-300">Checking Auth0 session...</p>
-      ) : null}
-
-      {hasAuth0Config && isAuthenticated && user ? (
-        <dl className="mt-6 grid gap-4 sm:grid-cols-2">
-          <div className="rounded-xl border border-white/10 bg-black/20 p-4">
-            <dt className="text-sm text-neutral-400">Logged in as</dt>
-            <dd className="mt-2 text-xl font-medium">
-              {user.name ?? 'Unknown user'}
-            </dd>
-          </div>
-          <div className="rounded-xl border border-white/10 bg-black/20 p-4">
-            <dt className="text-sm text-neutral-400">Email</dt>
-            <dd className="mt-2 text-xl font-medium break-all">
-              {user.email ?? 'No email returned'}
-            </dd>
-          </div>
-        </dl>
-      ) : null}
-    </section>
+    <button
+      aria-label={label}
+      className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/8 bg-white/4 text-white/76 transition hover:bg-white/8 hover:text-white"
+      type="button"
+    >
+      {children}
+    </button>
   )
 }
 
-function WorkerPanel({ config, error }: WorkerPanelProps) {
+function DetailRow({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
-    <section className="mt-10 rounded-2xl border border-white/10 bg-white/5 p-6 shadow-2xl shadow-black/20">
-      <h2 className="text-lg font-semibold">Worker response</h2>
-
-      {!config && !error ? (
-        <p className="mt-4 text-neutral-300">Loading config...</p>
-      ) : null}
-
-      {error ? (
-        <p className="mt-4 text-red-300">Failed to load: {error}</p>
-      ) : null}
-
-      {config ? (
-        <dl className="mt-6 grid gap-4 sm:grid-cols-2">
-          <div className="rounded-xl border border-white/10 bg-black/20 p-4">
-            <dt className="text-sm text-neutral-400">APP_ENV</dt>
-            <dd className="mt-2 text-xl font-medium">{config.appEnv}</dd>
-          </div>
-          <div className="rounded-xl border border-white/10 bg-black/20 p-4">
-            <dt className="text-sm text-neutral-400">API_BASE_URL</dt>
-            <dd className="mt-2 text-xl font-medium break-all">
-              {config.apiBaseUrl}
-            </dd>
-          </div>
-          <div className="rounded-xl border border-white/10 bg-black/20 p-4">
-            <dt className="text-sm text-neutral-400">FEATURE_SIGNUP</dt>
-            <dd className="mt-2 text-xl font-medium">
-              {String(config.featureSignup)}
-            </dd>
-          </div>
-          <div className="rounded-xl border border-white/10 bg-black/20 p-4">
-            <dt className="text-sm text-neutral-400">API_SECRET present</dt>
-            <dd className="mt-2 text-xl font-medium">
-              {String(config.hasApiSecret)}
-            </dd>
-          </div>
-        </dl>
-      ) : null}
-    </section>
+    <div className="flex items-center gap-3">
+      <span className="text-white/82">{icon}</span>
+      <span>{label}</span>
+    </div>
   )
 }
 
-function HomePage(props: WorkerPanelProps & ProfilePanelProps) {
-  return (
-    <>
-      <section className="mt-10 rounded-2xl border border-white/10 bg-white/5 p-6 shadow-2xl shadow-black/20">
-        <h2 className="text-lg font-semibold">Home</h2>
-        <p className="mt-4 max-w-2xl text-neutral-300">
-          Start here, then try the public page and the protected page from the
-          navigation above.
-        </p>
-      </section>
-      <AuthPanel
-        isAuthLoading={props.isAuthLoading}
-        isAuthenticated={props.isAuthenticated}
-        user={props.user}
-      />
-      <WorkerPanel config={props.config} error={props.error} />
-    </>
-  )
-}
-
-function PublicPage() {
-  return (
-    <section className="mt-10 rounded-2xl border border-white/10 bg-white/5 p-6 shadow-2xl shadow-black/20">
-      <h2 className="text-lg font-semibold">Public page</h2>
-      <p className="mt-4 max-w-2xl text-neutral-300">
-        Anyone can visit this route without signing in. It is useful for
-        marketing content, docs, or other public sections of your app.
-      </p>
-    </section>
-  )
-}
-
-function ProtectedPage({
-  user,
+function MonthArrow({
+  direction,
+  onClick,
 }: {
-  user?: { name?: string | null; email?: string | null }
+  direction: 'prev' | 'next'
+  onClick: () => void
 }) {
   return (
-    <section className="mt-10 rounded-2xl border border-white/10 bg-white/5 p-6 shadow-2xl shadow-black/20">
-      <h2 className="text-lg font-semibold">Protected page</h2>
-      <p className="mt-4 max-w-2xl text-neutral-300">
-        You are signed in, so this route can now show private app data.
-      </p>
-      <div className="mt-6 rounded-xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-emerald-100">
-        <p>Welcome back{user?.name ? `, ${user.name}` : ''}.</p>
-        <p className="mt-2 text-sm text-emerald-50/80">
-          {user?.email ?? 'No email returned from Auth0.'}
-        </p>
-      </div>
-    </section>
+    <button
+      aria-label={direction === 'prev' ? 'Previous' : 'Next'}
+      className="inline-flex h-10 w-10 items-center justify-center rounded-full text-white/35 transition hover:bg-white/6 hover:text-white"
+      onClick={onClick}
+      type="button"
+    >
+      {direction === 'prev' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+    </button>
   )
 }
 
-function ProtectedRoute({
-  isAuthenticated,
-  isAuthLoading,
-  onLogin,
-  children,
-}: React.PropsWithChildren<{
-  isAuthenticated: boolean
-  isAuthLoading: boolean
-  onLogin: () => Promise<void>
-}>) {
-  const location = useLocation()
+function OverlayBoard({
+  selectedDate,
+  weekDays,
+  is24Hour,
+}: {
+  selectedDate: Date
+  weekDays: Date[]
+  is24Hour: boolean
+}) {
+  const hours = Array.from({ length: 18 }, (_, index) => index + 7)
 
-  useEffect(() => {
-    if (!isAuthLoading && !isAuthenticated) {
-      void onLogin()
-    }
-  }, [isAuthenticated, isAuthLoading, onLogin])
+  return (
+    <div className="overlay-grid min-w-[940px]">
+      <div className="overlay-grid__top" />
+      {weekDays.map((day) => (
+        <div key={day.toISOString()} className="overlay-grid__day-label">
+          <span className="block text-xs uppercase tracking-[0.24em] text-white/46">
+            {WEEKDAY_SHORT[day.getDay()]}
+          </span>
+          <span className="mt-1 block text-base font-medium text-white/75">
+            {pad(day.getDate())}
+          </span>
+        </div>
+      ))}
 
-  if (isAuthLoading) {
-    return <p className="mt-10 text-neutral-300">Checking your login...</p>
-  }
-
-  if (!isAuthenticated) {
-    return <Navigate to="/" replace state={{ from: location }} />
-  }
-
-  return <>{children}</>
+      {hours.map((hour) => (
+        <div key={hour} className="contents">
+          <div className="overlay-grid__time">
+            {formatHourLabel(hour, is24Hour)}
+          </div>
+          {weekDays.map((day, dayIndex) => (
+            <div
+              key={`${day.toISOString()}-${hour}`}
+              className="overlay-grid__cell"
+            >
+              {OVERLAY_BLOCKS.some(
+                (block) =>
+                  block.dayOffset === dayIndex &&
+                  hour >= block.startHour &&
+                  hour < block.endHour,
+              ) ? (
+                <div className="overlay-grid__busy" />
+              ) : null}
+              {sameHour(selectedDate, day, hour) ? (
+                <div className="overlay-grid__now">
+                  <span>{formatTimeLabel('16:37', is24Hour)}</span>
+                </div>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  )
 }
 
-function App() {
-  const [config, setConfig] = useState<ConfigResponse | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const {
-    isAuthenticated,
-    isLoading: isAuthLoading,
-    loginWithRedirect,
-    logout,
-    user,
-  } = useAuth0()
+function buildCalendarDays(month: Date, selectedDate: Date): CalendarDay[] {
+  const firstOfMonth = new Date(month.getFullYear(), month.getMonth(), 1)
+  const lastOfMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0)
+  const leading = firstOfMonth.getDay()
+  const totalCells = Math.ceil((leading + lastOfMonth.getDate()) / 7) * 7
+  const start = new Date(month.getFullYear(), month.getMonth(), 1 - leading)
 
-  useEffect(() => {
-    const loadConfig = async () => {
-      try {
-        const response = await fetch('/api/config')
+  return Array.from({ length: totalCells }, (_, index) => {
+    const date = new Date(start)
+    date.setDate(start.getDate() + index)
+    const inMonth = date.getMonth() === month.getMonth()
+    const isAvailable = inMonth && WORKING_DAYS.includes(date.getDay())
+    const isSelected = isSameDate(date, selectedDate)
 
-        if (!response.ok) {
-          throw new Error(`Request failed with ${response.status}`)
-        }
-
-        const data = (await response.json()) as ConfigResponse
-        setConfig(data)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error')
-      }
+    return {
+      date,
+      inMonth,
+      isAvailable,
+      isSelected,
+      isToday: formatDateKey(date) === '2026-04-05',
     }
+  })
+}
 
-    void loadConfig()
-  }, [])
+function buildSlotsForDate(date: Date, key: string) {
+  const slots: { time: string; booked: boolean }[] = []
 
-  const handleLogin = async () => {
-    await loginWithRedirect({
-      authorizationParams: auth0Connection
-        ? { connection: auth0Connection }
-        : undefined,
+  for (let minutes = 60; minutes <= 510; minutes += 30) {
+    const hours = Math.floor(minutes / 60)
+    const mins = minutes % 60
+    const time = `${pad(hours)}:${pad(mins)}`
+    slots.push({
+      time,
+      booked:
+        date.getDay() === 5
+          ? minutes >= 240 && minutes <= 270
+          : (BOOKED_SLOT_MAP[key] ?? []).includes(time),
     })
   }
 
+  return slots
+}
+
+function getWeekDaysStarting(selectedDate: Date) {
+  const start = new Date(selectedDate)
+  return Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(start)
+    date.setDate(start.getDate() + index)
+    return date
+  })
+}
+
+function shiftSelectedDate(
+  amount: number,
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>,
+) {
+  setSelectedDate((current) => {
+    const next = new Date(current)
+    next.setDate(next.getDate() + amount)
+    return next
+  })
+}
+
+function formatRangeTitle(date: Date, showOverlay: boolean) {
+  if (!showOverlay) {
+    return `${MONTH_NAMES[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
+  }
+
+  const end = new Date(date)
+  end.setDate(date.getDate() + 6)
+  return `${MONTH_NAMES[date.getMonth()]} ${date.getDate()}-${end.getDate()}, ${date.getFullYear()}`
+}
+
+function formatSelectedDay(date: Date) {
+  return `${WEEKDAY_SHORT[date.getDay()]} ${pad(date.getDate())}`
+}
+
+function formatLongDate(date: Date) {
+  return `${WEEKDAY_SHORT[date.getDay()]}, ${MONTH_NAMES[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
+}
+
+function formatTimeLabel(time: string, is24Hour: boolean) {
+  const [hoursText, minutesText] = time.split(':')
+  const hours = Number(hoursText)
+  const minutes = Number(minutesText)
+
+  if (is24Hour) {
+    return `${pad(hours)}:${pad(minutes)}`
+  }
+
+  const suffix = hours >= 12 ? 'PM' : 'AM'
+  const normalized = hours % 12 || 12
+  return `${normalized}:${pad(minutes)} ${suffix}`
+}
+
+function formatHourLabel(hour: number, is24Hour: boolean) {
+  return formatTimeLabel(`${pad(hour)}:00`, is24Hour)
+}
+
+function hourToggleClass(active: boolean) {
+  return [
+    'rounded-xl px-3 py-2 text-sm transition',
+    active ? 'bg-black text-white' : 'text-white/55 hover:text-white',
+  ].join(' ')
+}
+
+function formatDateKey(date: Date) {
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+}
+
+function isSameDate(left: Date, right: Date) {
   return (
-    <Shell
-      isAuthenticated={isAuthenticated}
-      onLogin={handleLogin}
-      onLogout={() =>
-        void logout({
-          logoutParams: { returnTo: window.location.origin },
-        })
-      }
-    >
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <HomePage
-              config={config}
-              error={error}
-              isAuthLoading={isAuthLoading}
-              isAuthenticated={isAuthenticated}
-              user={user}
-            />
-          }
-        />
-        <Route path="/public" element={<PublicPage />} />
-        <Route
-          path="/protected"
-          element={
-            <ProtectedRoute
-              isAuthenticated={isAuthenticated}
-              isAuthLoading={isAuthLoading}
-              onLogin={handleLogin}
-            >
-              <ProtectedPage user={user} />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </Shell>
+    left.getFullYear() === right.getFullYear() &&
+    left.getMonth() === right.getMonth() &&
+    left.getDate() === right.getDate()
+  )
+}
+
+function sameHour(selectedDate: Date, day: Date, hour: number) {
+  return isSameDate(selectedDate, day) && hour === 16
+}
+
+function pad(value: number) {
+  return String(value).padStart(2, '0')
+}
+
+function ClockIcon() {
+  return (
+    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
+      <path
+        d="M12 7v5l3 2"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.8"
+      />
+    </svg>
+  )
+}
+
+function VideoIcon() {
+  return (
+    <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+      <rect height="12" rx="3" width="12" x="3" y="6" />
+      <path d="M16 10.2 21 7v10l-5-3.2z" />
+    </svg>
+  )
+}
+
+function GlobeIcon() {
+  return (
+    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
+      <path
+        d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"
+        stroke="currentColor"
+        strokeWidth="1.4"
+      />
+      <path
+        d="m16.8 16.8 2.7 2.7"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.8"
+      />
+    </svg>
+  )
+}
+
+function CalendarIcon() {
+  return (
+    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24">
+      <rect
+        height="15"
+        rx="3"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        width="18"
+        x="3"
+        y="5"
+      />
+      <path d="M8 3v4M16 3v4M3 10h18" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  )
+}
+
+function GridIcon() {
+  return (
+    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24">
+      <rect
+        height="16"
+        rx="3"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        width="16"
+        x="4"
+        y="4"
+      />
+      <path d="M12 4v16M4 12h16" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  )
+}
+
+function ColumnsIcon() {
+  return (
+    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24">
+      <rect
+        height="16"
+        rx="3"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        width="16"
+        x="4"
+        y="4"
+      />
+      <path d="M10 4v16M16 4v16" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  )
+}
+
+function CogIcon() {
+  return (
+    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24">
+      <path
+        d="m12 3 1.4 2.2 2.5.4-.8 2.4 1.8 1.8-1.8 1.8.8 2.4-2.5.4L12 17l-1.4-2.2-2.5-.4.8-2.4-1.8-1.8L8.9 8l-.8-2.4 2.5-.4z"
+        stroke="currentColor"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <circle
+        cx="12"
+        cy="10.5"
+        r="2.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+    </svg>
+  )
+}
+
+function ChevronLeftIcon() {
+  return (
+    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24">
+      <path
+        d="m15 18-6-6 6-6"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.8"
+      />
+    </svg>
+  )
+}
+
+function ChevronRightIcon() {
+  return (
+    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24">
+      <path
+        d="m9 18 6-6-6-6"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.8"
+      />
+    </svg>
   )
 }
 
