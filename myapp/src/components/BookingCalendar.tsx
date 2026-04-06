@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import DialogLayer from './DialogLayer'
 
 const MONTH_NAMES = [
   'January',
@@ -304,21 +305,102 @@ export default function BookingCalendar({
       draftDay &&
       draftStartMinutes !== null &&
       draftEndMinutes !== null ? (
-        <AppointmentModal
-          day={draftDay}
-          details={requestDetails}
-          durationMinutes={draftDurationMinutes}
-          endMinutes={draftEndMinutes}
-          is24Hour={is24Hour}
-          onChangeDetails={(field, value) =>
-            setRequestDetails((current) => ({
-              ...current,
-              [field]: value,
-            }))
+        <DialogLayer
+          footer={
+            <>
+              <button
+                className="booking-modal__button booking-modal__button--ghost"
+                onClick={() => setAppointmentDraft(null)}
+                type="button"
+              >
+                Back
+              </button>
+              <button
+                className="booking-modal__button booking-modal__button--primary"
+                type="button"
+              >
+                Confirm
+              </button>
+            </>
           }
           onClose={() => setAppointmentDraft(null)}
-          startMinutes={draftStartMinutes}
-        />
+          title="Confirm your details"
+        >
+          <div className="booking-modal__chips">
+            <span className="booking-modal__chip">
+              <CalendarSmallIcon />
+              {`${WEEKDAY_SHORT[draftDay.getDay()]}, ${MONTH_NAMES[draftDay.getMonth()]} ${draftDay.getDate()}, ${draftDay.getFullYear()}, `}
+              {formatMinutesLabel(draftStartMinutes, is24Hour)} -{' '}
+              {formatMinutesLabel(draftEndMinutes, is24Hour)}
+            </span>
+            <span className="booking-modal__chip">
+              <ClockSmallIcon />
+              {draftDurationMinutes}m
+            </span>
+          </div>
+
+          <label className="booking-modal__field">
+            <span className="booking-modal__label">Your name *</span>
+            <input
+              className="booking-modal__input"
+              onChange={(event) =>
+                setRequestDetails((current) => ({
+                  ...current,
+                  name: event.target.value,
+                }))
+              }
+              placeholder="Alex Chen"
+              value={requestDetails.name}
+            />
+          </label>
+
+          <label className="booking-modal__field">
+            <span className="booking-modal__label">Email address *</span>
+            <input
+              className="booking-modal__input"
+              onChange={(event) =>
+                setRequestDetails((current) => ({
+                  ...current,
+                  email: event.target.value,
+                }))
+              }
+              placeholder="alex@example.com"
+              type="email"
+              value={requestDetails.email}
+            />
+          </label>
+
+          <label className="booking-modal__field">
+            <span className="booking-modal__label">Phone or meeting link</span>
+            <input
+              className="booking-modal__input"
+              onChange={(event) =>
+                setRequestDetails((current) => ({
+                  ...current,
+                  meetingLinkOrPhone: event.target.value,
+                }))
+              }
+              placeholder="Phone number or Zoom/Meet link"
+              value={requestDetails.meetingLinkOrPhone}
+            />
+          </label>
+
+          <label className="booking-modal__field">
+            <span className="booking-modal__label">Additional info</span>
+            <textarea
+              className="booking-modal__textarea"
+              onChange={(event) =>
+                setRequestDetails((current) => ({
+                  ...current,
+                  additionalInfo: event.target.value,
+                }))
+              }
+              placeholder="Share anything that will help prepare for this appointment."
+              rows={5}
+              value={requestDetails.additionalInfo}
+            />
+          </label>
+        </DialogLayer>
       ) : null}
     </main>
   )
@@ -496,121 +578,6 @@ function OverlayBoard({
           )
         }),
       )}
-    </div>
-  )
-}
-
-function AppointmentModal({
-  day,
-  details,
-  durationMinutes,
-  endMinutes,
-  is24Hour,
-  onChangeDetails,
-  onClose,
-  startMinutes,
-}: {
-  day: Date
-  details: RequestDetails
-  durationMinutes: number
-  endMinutes: number
-  is24Hour: boolean
-  onChangeDetails: (field: keyof RequestDetails, value: string) => void
-  onClose: () => void
-  startMinutes: number
-}) {
-  const displayDate = `${WEEKDAY_SHORT[day.getDay()]}, ${MONTH_NAMES[day.getMonth()]} ${day.getDate()}, ${day.getFullYear()}`
-
-  return (
-    <div
-      className="booking-modal-backdrop"
-      onClick={onClose}
-      role="presentation"
-    >
-      <section
-        aria-modal="true"
-        className="booking-modal"
-        onClick={(event) => event.stopPropagation()}
-        role="dialog"
-      >
-        <div className="booking-modal__body">
-          <h2 className="booking-modal__title">Confirm your details</h2>
-
-          <div className="booking-modal__chips">
-            <span className="booking-modal__chip">
-              <CalendarSmallIcon />
-              {displayDate}, {formatMinutesLabel(startMinutes, is24Hour)} -{' '}
-              {formatMinutesLabel(endMinutes, is24Hour)}
-            </span>
-            <span className="booking-modal__chip">
-              <ClockSmallIcon />
-              {durationMinutes}m
-            </span>
-          </div>
-
-          <label className="booking-modal__field">
-            <span className="booking-modal__label">Your name *</span>
-            <input
-              className="booking-modal__input"
-              onChange={(event) => onChangeDetails('name', event.target.value)}
-              placeholder="Alex Chen"
-              value={details.name}
-            />
-          </label>
-
-          <label className="booking-modal__field">
-            <span className="booking-modal__label">Email address *</span>
-            <input
-              className="booking-modal__input"
-              onChange={(event) => onChangeDetails('email', event.target.value)}
-              placeholder="alex@example.com"
-              type="email"
-              value={details.email}
-            />
-          </label>
-
-          <label className="booking-modal__field">
-            <span className="booking-modal__label">Phone or meeting link</span>
-            <input
-              className="booking-modal__input"
-              onChange={(event) =>
-                onChangeDetails('meetingLinkOrPhone', event.target.value)
-              }
-              placeholder="Phone number or Zoom/Meet link"
-              value={details.meetingLinkOrPhone}
-            />
-          </label>
-
-          <label className="booking-modal__field">
-            <span className="booking-modal__label">Additional info</span>
-            <textarea
-              className="booking-modal__textarea"
-              onChange={(event) =>
-                onChangeDetails('additionalInfo', event.target.value)
-              }
-              placeholder="Share anything that will help prepare for this appointment."
-              rows={5}
-              value={details.additionalInfo}
-            />
-          </label>
-        </div>
-
-        <footer className="booking-modal__footer">
-          <button
-            className="booking-modal__button booking-modal__button--ghost"
-            onClick={onClose}
-            type="button"
-          >
-            Back
-          </button>
-          <button
-            className="booking-modal__button booking-modal__button--primary"
-            type="button"
-          >
-            Confirm
-          </button>
-        </footer>
-      </section>
     </div>
   )
 }

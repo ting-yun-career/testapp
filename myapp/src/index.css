@@ -259,7 +259,7 @@ input {
   padding: 0.15rem 0.5rem;
 }
 
-.booking-modal-backdrop {
+.dialog-layer {
   position: fixed;
   inset: 0;
   z-index: 40;
@@ -270,7 +270,7 @@ input {
   padding: 1.25rem;
 }
 
-.booking-modal {
+.dialog-layer__panel {
   width: min(100%, 70rem);
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -279,11 +279,11 @@ input {
   box-shadow: 0 28px 90px rgba(0, 0, 0, 0.45);
 }
 
-.booking-modal__body {
+.dialog-layer__body {
   padding: 2.5rem 2.5rem 1.5rem;
 }
 
-.booking-modal__title {
+.dialog-layer__title {
   margin: 0;
   font-size: clamp(2rem, 3vw, 3rem);
   font-weight: 700;
@@ -348,7 +348,7 @@ input {
   color: rgba(255, 255, 255, 0.42);
 }
 
-.booking-modal__footer {
+.dialog-layer__footer {
   display: flex;
   justify-content: flex-end;
   gap: 0.8rem;
@@ -408,8 +408,8 @@ input {
     font-size: 1.3rem;
   }
 
-  .booking-modal__body,
-  .booking-modal__footer {
+  .dialog-layer__body,
+  .dialog-layer__footer {
     padding-inline: 1.25rem;
   }
 }
