@@ -27,14 +27,14 @@ type CalendarDay = {
   isToday: boolean
 }
 
-type OverlayBlock = {
+type Availability = {
   dayOffset: number
   startHour: number
   endHour: number
 }
 
 type BookingCalendarProps = {
-  overlayBlocks?: OverlayBlock[]
+  availabilities?: Availability[]
   workingDays?: number[]
 }
 
@@ -65,7 +65,7 @@ const DEFAULT_REQUEST_DETAILS: RequestDetails = {
 }
 
 export default function BookingCalendar({
-  overlayBlocks = [
+  availabilities = [
     { dayOffset: 1, startHour: 7, endHour: 16 },
     { dayOffset: 2, startHour: 9, endHour: 16 },
     { dayOffset: 3, startHour: 9, endHour: 16 },
@@ -74,7 +74,7 @@ export default function BookingCalendar({
   ],
   workingDays = [1, 2, 3, 4, 5],
 }: BookingCalendarProps) {
-  const initialDate = new Date('2026-04-09T12:00:00')
+  const initialDate = new Date()
   const [visibleMonth, setVisibleMonth] = useState(
     new Date(initialDate.getFullYear(), initialDate.getMonth(), 1),
   )
@@ -95,8 +95,8 @@ export default function BookingCalendar({
     [selectedDate],
   )
   const { endHour, startHour } = useMemo(
-    () => getHourBounds(overlayBlocks),
-    [overlayBlocks],
+    () => getHourBounds(availabilities),
+    [availabilities],
   )
 
   useEffect(() => {
@@ -244,15 +244,15 @@ export default function BookingCalendar({
 
             <div className="min-h-0 flex-1 overflow-auto px-5 py-5 sm:px-6 lg:px-8">
               <OverlayBoard
+                availabilities={availabilities}
                 dragSelection={dragSelection}
                 endHour={endHour}
-                overlayBlocks={overlayBlocks}
                 onCellMouseDown={(dayIndex, slotIndex) => {
                   if (
                     isBusySlot({
+                      availabilities,
                       dayIndex,
                       endHour,
-                      overlayBlocks,
                       slotIndex,
                       startHour,
                     })
@@ -272,9 +272,9 @@ export default function BookingCalendar({
                     !dragSelection ||
                     dragSelection.dayIndex !== dayIndex ||
                     isBusySlot({
+                      availabilities,
                       dayIndex,
                       endHour,
-                      overlayBlocks,
                       slotIndex,
                       startHour,
                     })
@@ -426,9 +426,9 @@ function MonthArrow({
 }
 
 function OverlayBoard({
+  availabilities,
   dragSelection,
   endHour,
-  overlayBlocks,
   onCellMouseDown,
   onCellMouseEnter,
   selectedDate,
@@ -436,9 +436,9 @@ function OverlayBoard({
   weekDays,
   is24Hour,
 }: {
+  availabilities: Availability[]
   dragSelection: DragSelection | null
   endHour: number
-  overlayBlocks: OverlayBlock[]
   onCellMouseDown: (dayIndex: number, slotIndex: number) => void
   onCellMouseEnter: (dayIndex: number, slotIndex: number) => void
   selectedDate: Date
@@ -513,9 +513,9 @@ function OverlayBoard({
       {slotIndexes.map((slotIndex) =>
         weekDays.map((day, dayIndex) => {
           const busy = isBusySlot({
+            availabilities,
             dayIndex,
             endHour: normalizedEnd,
-            overlayBlocks,
             slotIndex,
             startHour: normalizedStart,
           })
@@ -720,15 +720,15 @@ function isSlotInSelection(
 }
 
 function isBusySlot({
+  availabilities,
   dayIndex,
   endHour,
-  overlayBlocks,
   slotIndex,
   startHour,
 }: {
+  availabilities: Availability[]
   dayIndex: number
   endHour: number
-  overlayBlocks: OverlayBlock[]
   slotIndex: number
   startHour: number
 }) {
@@ -740,7 +740,7 @@ function isBusySlot({
     return true
   }
 
-  return !overlayBlocks.some(
+  return !availabilities.some(
     (block) =>
       block.dayOffset === dayIndex &&
       slotStartMinutes < block.endHour * 60 &&
@@ -786,15 +786,15 @@ function getCurrentMarker({
   }
 }
 
-function getHourBounds(overlayBlocks: OverlayBlock[]) {
-  if (overlayBlocks.length === 0) {
+function getHourBounds(availabilities: Availability[]) {
+  if (availabilities.length === 0) {
     return { endHour: 18, startHour: 8 }
   }
 
   const minStartHour = Math.min(
-    ...overlayBlocks.map((block) => block.startHour),
+    ...availabilities.map((block) => block.startHour),
   )
-  const maxEndHour = Math.max(...overlayBlocks.map((block) => block.endHour))
+  const maxEndHour = Math.max(...availabilities.map((block) => block.endHour))
 
   return {
     endHour: Math.min(24, maxEndHour + 1),
