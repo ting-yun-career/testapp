@@ -243,7 +243,7 @@ export default function BookingCalendar({
             </div>
 
             <div className="min-h-0 flex-1 overflow-auto px-5 py-5 sm:px-6 lg:px-8">
-              <OverlayBoard
+              <AppointmentTimeGrid
                 availabilities={availabilities}
                 dragSelection={dragSelection}
                 endHour={endHour}
@@ -415,7 +415,7 @@ function MonthArrow({
   )
 }
 
-function OverlayBoard({
+function AppointmentTimeGrid({
   availabilities,
   dragSelection,
   endHour,
