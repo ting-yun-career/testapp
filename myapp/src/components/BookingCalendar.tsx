@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react'
 const HOST = {
   name: 'Ting Yun',
   initials: 'T',
-  title: '30 min meeting',
+  title: 'Appointments',
   duration: 30,
   location: 'Cal Video',
   timezone: 'America/Vancouver',
@@ -97,21 +97,9 @@ export default function BookingCalendar() {
       <div className="mx-auto flex min-h-screen max-w-[1800px] flex-col px-4 py-4 sm:px-6 lg:px-8">
         <section className="booking-shell flex-1 overflow-hidden rounded-[3px] border border-white/8 bg-[var(--panel-bg)] shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
           <aside className="border-b border-white/8 p-6 lg:border-b-0 lg:border-r lg:p-8">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#72889b] text-sm font-semibold text-white">
-              {HOST.initials}
-            </div>
-            <p className="mt-5 text-xl font-medium text-white/82">
-              {HOST.name}
-            </p>
             <h1 className="mt-4 text-3xl font-semibold tracking-tight text-white lg:text-[2.15rem]">
-              {HOST.title}
+              Appointments
             </h1>
-
-            <div className="mt-6 space-y-4 text-lg text-white/82">
-              <DetailRow icon={<ClockIcon />} label={`${HOST.duration}m`} />
-              <DetailRow icon={<VideoIcon />} label={HOST.location} />
-              <DetailRow icon={<GlobeIcon />} label={HOST.timezone} />
-            </div>
 
             <div className="mt-12">
               <div className="flex items-center justify-between">
@@ -163,6 +151,7 @@ export default function BookingCalendar() {
                       'calendar-day',
                       day.inMonth ? '' : 'calendar-day--outside',
                       day.isAvailable ? 'calendar-day--available' : '',
+                      day.isToday ? 'calendar-day--today' : '',
                       day.isSelected ? 'calendar-day--selected' : '',
                     ]
                       .filter(Boolean)
@@ -174,9 +163,6 @@ export default function BookingCalendar() {
                     }}
                   >
                     <span>{day.date.getDate()}</span>
-                    {day.isToday ? (
-                      <span className="calendar-day__dot" />
-                    ) : null}
                   </button>
                 ))}
               </div>
@@ -560,7 +546,7 @@ function formatHourLabel(hour: number, is24Hour: boolean) {
 
 function hourToggleClass(active: boolean) {
   return [
-    'rounded-xl px-3 py-2 text-sm transition',
+    'rounded-[3px] px-3 py-2 text-sm transition',
     active ? 'bg-black text-white' : 'text-white/55 hover:text-white',
   ].join(' ')
 }
@@ -585,6 +571,23 @@ function pad(value: number) {
   return String(value).padStart(2, '0')
 }
 
+function CalendarIcon() {
+  return (
+    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24">
+      <rect
+        height="15"
+        rx="3"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        width="18"
+        x="3"
+        y="5"
+      />
+      <path d="M8 3v4M16 3v4M3 10h18" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  )
+}
+
 function ClockIcon() {
   return (
     <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24">
@@ -604,42 +607,6 @@ function VideoIcon() {
     <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
       <rect height="12" rx="3" width="12" x="3" y="6" />
       <path d="M16 10.2 21 7v10l-5-3.2z" />
-    </svg>
-  )
-}
-
-function GlobeIcon() {
-  return (
-    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
-      <path
-        d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"
-        stroke="currentColor"
-        strokeWidth="1.4"
-      />
-      <path
-        d="m16.8 16.8 2.7 2.7"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.8"
-      />
-    </svg>
-  )
-}
-
-function CalendarIcon() {
-  return (
-    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24">
-      <rect
-        height="15"
-        rx="3"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        width="18"
-        x="3"
-        y="5"
-      />
-      <path d="M8 3v4M16 3v4M3 10h18" stroke="currentColor" strokeWidth="1.8" />
     </svg>
   )
 }

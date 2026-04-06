@@ -84,19 +84,15 @@ input {
   color: rgba(255, 255, 255, 0.28);
 }
 
-.calendar-day:disabled {
-  cursor: default;
+.calendar-day--today {
+  background: #111;
+  font-weight: 700;
+  font-size: 1.2rem;
+  border: 1px solid white;
 }
 
-.calendar-day__dot {
-  position: absolute;
-  bottom: 0.55rem;
-  left: 50%;
-  height: 0.38rem;
-  width: 0.38rem;
-  transform: translateX(-50%);
-  border-radius: 999px;
-  background: currentColor;
+.calendar-day:disabled {
+  cursor: default;
 }
 
 .slot-pill {
