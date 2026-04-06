@@ -8,6 +8,7 @@
   --text-primary: rgba(255, 255, 255, 0.96);
   --text-muted: rgba(255, 255, 255, 0.55);
   --line-soft: rgba(255, 255, 255, 0.08);
+  --line-hard: rgba(255, 255, 255, 0.2);
   --tile: #4a4a4a;
   --tile-hover: #595959;
   --tile-selected: #f3f0ee;
@@ -147,11 +148,15 @@ input {
 }
 
 .overlay-grid__top,
-.overlay-grid__day-label,
 .overlay-grid__time,
+.overlay-grid__day-label,
 .overlay-grid__cell {
   border-right: 1px solid var(--line-soft);
   border-bottom: 1px solid var(--line-soft);
+}
+
+.overlay-grid__day-label {
+  border-bottom: 1px solid var(--line-hard);
 }
 
 .overlay-grid__day-label {

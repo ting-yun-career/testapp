@@ -480,7 +480,10 @@ function OverlayBoard({
           ]
             .filter(Boolean)
             .join(' ')}
-          style={{ gridColumn: dayIndex + 2, gridRow: 1 }}
+          style={{
+            gridColumn: dayIndex + 2,
+            gridRow: 1,
+          }}
         >
           <span className="text-xs uppercase tracking-[0.24em] text-white/46">
             {WEEKDAY_SHORT[day.getDay()]}
@@ -597,7 +600,8 @@ function buildCalendarDays(
     const date = new Date(start)
     date.setDate(start.getDate() + index)
     const inMonth = date.getMonth() === month.getMonth()
-    const isAvailable = inMonth && getAvailabilityForDay(availabilities, date.getDay()) !== null
+    const isAvailable =
+      inMonth && getAvailabilityForDay(availabilities, date.getDay()) !== null
     const isSelected = isSameDate(date, selectedDate)
 
     return {
