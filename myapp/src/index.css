@@ -202,15 +202,15 @@ input {
   inset: 0;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.06) 25%,
+    rgba(255, 255, 255, 0.045) 12.5%,
     transparent 25%,
     transparent 50%,
-    rgba(255, 255, 255, 0.06) 50%,
-    rgba(255, 255, 255, 0.06) 75%,
+    rgba(255, 255, 255, 0.045) 50%,
+    rgba(255, 255, 255, 0.045) 62.5%,
     transparent 75%,
     transparent
   );
-  background-size: 12px 12px;
+  background-size: 5px 5px;
 }
 
 .overlay-grid__cell--active-selection {
