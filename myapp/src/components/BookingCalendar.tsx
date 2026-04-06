@@ -34,7 +34,6 @@ type Availability = {
 
 type BookingCalendarProps = {
   availabilities?: Availability[]
-  workingDays?: number[]
 }
 
 type DragSelection = {
@@ -73,7 +72,6 @@ export default function BookingCalendar({
     { startHour: 9, endHour: 17 },
     {},
   ],
-  workingDays = [1, 2, 3, 4, 5],
 }: BookingCalendarProps) {
   const initialDate = new Date()
   const [visibleMonth, setVisibleMonth] = useState(
@@ -87,8 +85,8 @@ export default function BookingCalendar({
   const [requestDetails, setRequestDetails] = useState(DEFAULT_REQUEST_DETAILS)
 
   const calendarDays = useMemo(
-    () => buildCalendarDays(visibleMonth, selectedDate, workingDays),
-    [selectedDate, visibleMonth, workingDays],
+    () => buildCalendarDays(visibleMonth, selectedDate, availabilities),
+    [availabilities, selectedDate, visibleMonth],
   )
 
   const weekDays = useMemo(
@@ -586,7 +584,7 @@ function OverlayBoard({
 function buildCalendarDays(
   month: Date,
   selectedDate: Date,
-  workingDays: number[],
+  availabilities: Availability[],
 ): CalendarDay[] {
   const today = new Date()
   const firstOfMonth = new Date(month.getFullYear(), month.getMonth(), 1)
@@ -599,7 +597,7 @@ function buildCalendarDays(
     const date = new Date(start)
     date.setDate(start.getDate() + index)
     const inMonth = date.getMonth() === month.getMonth()
-    const isAvailable = inMonth && workingDays.includes(date.getDay())
+    const isAvailable = inMonth && getAvailabilityForDay(availabilities, date.getDay()) !== null
     const isSelected = isSameDate(date, selectedDate)
 
     return {
