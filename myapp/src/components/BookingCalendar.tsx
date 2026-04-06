@@ -17,7 +17,6 @@ const MONTH_NAMES = [
 
 const WEEKDAY_LABELS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
 const WEEKDAY_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-const WORKING_DAYS = [1, 2, 3, 4, 5]
 type CalendarDay = {
   date: Date
   inMonth: boolean
@@ -32,17 +31,25 @@ type OverlayBlock = {
   endHour: number
 }
 
-const OVERLAY_BLOCKS: OverlayBlock[] = [
-  { dayOffset: 0, startHour: 9, endHour: 17 },
-  { dayOffset: 1, startHour: 9, endHour: 17 },
-  { dayOffset: 2, startHour: 9, endHour: 17 },
-  { dayOffset: 3, startHour: 9, endHour: 17 },
-  { dayOffset: 4, startHour: 9, endHour: 17 },
-  // { dayOffset: 5, startHour: 9, endHour: 17 },
-  // { dayOffset: 6, startHour: 9, endHour: 17 },
-]
+type BookingCalendarProps = {
+  endHour?: number
+  overlayBlocks?: OverlayBlock[]
+  startHour?: number
+  workingDays?: number[]
+}
 
-export default function BookingCalendar() {
+export default function BookingCalendar({
+  endHour = 24,
+  overlayBlocks = [
+    { dayOffset: 0, startHour: 9, endHour: 17 },
+    { dayOffset: 1, startHour: 9, endHour: 17 },
+    { dayOffset: 2, startHour: 9, endHour: 17 },
+    { dayOffset: 3, startHour: 9, endHour: 17 },
+    { dayOffset: 4, startHour: 9, endHour: 17 },
+  ],
+  startHour = 7,
+  workingDays = [1, 2, 3, 4, 5],
+}: BookingCalendarProps) {
   const initialDate = new Date('2026-04-09T12:00:00')
   const [visibleMonth, setVisibleMonth] = useState(
     new Date(initialDate.getFullYear(), initialDate.getMonth(), 1),
@@ -51,8 +58,8 @@ export default function BookingCalendar() {
   const [is24Hour, setIs24Hour] = useState(true)
 
   const calendarDays = useMemo(
-    () => buildCalendarDays(visibleMonth, selectedDate),
-    [selectedDate, visibleMonth],
+    () => buildCalendarDays(visibleMonth, selectedDate, workingDays),
+    [selectedDate, visibleMonth, workingDays],
   )
 
   const weekDays = useMemo(
@@ -174,6 +181,9 @@ export default function BookingCalendar() {
 
             <div className="min-h-0 flex-1 overflow-auto px-5 py-5 sm:px-6 lg:px-8">
               <OverlayBoard
+                endHour={endHour}
+                overlayBlocks={overlayBlocks}
+                startHour={startHour}
                 selectedDate={selectedDate}
                 weekDays={weekDays}
                 is24Hour={is24Hour}
@@ -206,15 +216,26 @@ function MonthArrow({
 }
 
 function OverlayBoard({
+  endHour,
+  overlayBlocks,
+  startHour,
   selectedDate,
   weekDays,
   is24Hour,
 }: {
+  endHour: number
+  overlayBlocks: OverlayBlock[]
+  startHour: number
   selectedDate: Date
   weekDays: Date[]
   is24Hour: boolean
 }) {
-  const hours = Array.from({ length: 18 }, (_, index) => index + 7)
+  const normalizedStart = Math.max(0, Math.min(startHour, endHour))
+  const normalizedEnd = Math.max(normalizedStart, endHour)
+  const hours = Array.from(
+    { length: normalizedEnd - normalizedStart + 1 },
+    (_, index) => index + normalizedStart,
+  )
 
   return (
     <div className="overlay-grid">
@@ -240,7 +261,7 @@ function OverlayBoard({
               key={`${day.toISOString()}-${hour}`}
               className="overlay-grid__cell"
             >
-              {OVERLAY_BLOCKS.some(
+              {overlayBlocks.some(
                 (block) =>
                   block.dayOffset === dayIndex &&
                   hour >= block.startHour &&
@@ -261,7 +282,11 @@ function OverlayBoard({
   )
 }
 
-function buildCalendarDays(month: Date, selectedDate: Date): CalendarDay[] {
+function buildCalendarDays(
+  month: Date,
+  selectedDate: Date,
+  workingDays: number[],
+): CalendarDay[] {
   const firstOfMonth = new Date(month.getFullYear(), month.getMonth(), 1)
   const lastOfMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0)
   const leading = firstOfMonth.getDay()
@@ -272,7 +297,7 @@ function buildCalendarDays(month: Date, selectedDate: Date): CalendarDay[] {
     const date = new Date(start)
     date.setDate(start.getDate() + index)
     const inMonth = date.getMonth() === month.getMonth()
-    const isAvailable = inMonth && WORKING_DAYS.includes(date.getDay())
+    const isAvailable = inMonth && workingDays.includes(date.getDay())
     const isSelected = isSameDate(date, selectedDate)
 
     return {
