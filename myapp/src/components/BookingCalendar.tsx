@@ -28,9 +28,8 @@ type CalendarDay = {
 }
 
 type Availability = {
-  dayOffset: number
-  startHour: number
-  endHour: number
+  endHour?: number
+  startHour?: number
 }
 
 type BookingCalendarProps = {
@@ -66,11 +65,13 @@ const DEFAULT_REQUEST_DETAILS: RequestDetails = {
 
 export default function BookingCalendar({
   availabilities = [
-    { dayOffset: 1, startHour: 7, endHour: 16 },
-    { dayOffset: 2, startHour: 9, endHour: 16 },
-    { dayOffset: 3, startHour: 9, endHour: 16 },
-    { dayOffset: 4, startHour: 9, endHour: 16 },
-    { dayOffset: 5, startHour: 9, endHour: 18 },
+    {},
+    { startHour: 9, endHour: 17 },
+    { startHour: 9, endHour: 17 },
+    { startHour: 9, endHour: 17 },
+    { startHour: 9, endHour: 17 },
+    { startHour: 9, endHour: 17 },
+    {},
   ],
   workingDays = [1, 2, 3, 4, 5],
 }: BookingCalendarProps) {
@@ -735,16 +736,15 @@ function isBusySlot({
   const slotStartMinutes = slotIndexToMinutes(slotIndex, startHour)
   const slotEndMinutes = slotStartMinutes + 15
   const rangeEndMinutes = endHour * 60
+  const availability = getAvailabilityForDay(availabilities, dayIndex)
 
-  if (slotStartMinutes >= rangeEndMinutes) {
+  if (!availability || slotStartMinutes >= rangeEndMinutes) {
     return true
   }
 
-  return !availabilities.some(
-    (block) =>
-      block.dayOffset === dayIndex &&
-      slotStartMinutes < block.endHour * 60 &&
-      slotEndMinutes > block.startHour * 60,
+  return !(
+    slotStartMinutes < availability.endHour * 60 &&
+    slotEndMinutes > availability.startHour * 60
   )
 }
 
@@ -787,19 +787,59 @@ function getCurrentMarker({
 }
 
 function getHourBounds(availabilities: Availability[]) {
-  if (availabilities.length === 0) {
+  const validAvailabilities = availabilities
+    .map(normalizeAvailability)
+    .filter(
+      (availability): availability is { startHour: number; endHour: number } =>
+        availability !== null,
+    )
+
+  if (validAvailabilities.length === 0) {
     return { endHour: 18, startHour: 8 }
   }
 
   const minStartHour = Math.min(
-    ...availabilities.map((block) => block.startHour),
+    ...validAvailabilities.map((availability) => availability.startHour),
   )
-  const maxEndHour = Math.max(...availabilities.map((block) => block.endHour))
+  const maxEndHour = Math.max(
+    ...validAvailabilities.map((availability) => availability.endHour),
+  )
 
   return {
     endHour: Math.min(24, maxEndHour + 1),
     startHour: Math.max(0, minStartHour - 1),
   }
+}
+
+function getAvailabilityForDay(
+  availabilities: Availability[],
+  dayIndex: number,
+) {
+  return normalizeAvailability(availabilities[dayIndex])
+}
+
+function normalizeAvailability(availability?: Availability | null) {
+  if (!availability) {
+    return null
+  }
+
+  const { endHour, startHour } = availability
+
+  if (
+    typeof startHour !== 'number' ||
+    typeof endHour !== 'number' ||
+    !Number.isFinite(startHour) ||
+    !Number.isFinite(endHour) ||
+    startHour < 0 ||
+    endHour < 0 ||
+    endHour > 24 ||
+    startHour > 24 ||
+    endHour <= startHour
+  ) {
+    return null
+  }
+
+  return { endHour, startHour }
 }
 
 function CalendarSmallIcon() {
