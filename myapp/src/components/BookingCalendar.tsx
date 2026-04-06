@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import DialogLayer from './DialogLayer'
+import TextControl from './form/TextControl'
 
 const MONTH_NAMES = [
   'January',
@@ -338,56 +339,51 @@ export default function BookingCalendar({
             </span>
           </div>
 
-          <label className="booking-modal__field">
-            <span className="booking-modal__label">Your name *</span>
-            <input
-              className="booking-modal__input"
-              onChange={(event) =>
-                setRequestDetails((current) => ({
-                  ...current,
-                  name: event.target.value,
-                }))
-              }
-              placeholder="Alex Chen"
-              value={requestDetails.name}
-            />
-          </label>
+          <TextControl
+            label="Your name"
+            onChange={(value) =>
+              setRequestDetails((current) => ({
+                ...current,
+                name: value,
+              }))
+            }
+            placeholder="Alex Chen"
+            required
+            value={requestDetails.name}
+          />
 
-          <label className="booking-modal__field">
-            <span className="booking-modal__label">Email address *</span>
-            <input
-              className="booking-modal__input"
-              onChange={(event) =>
-                setRequestDetails((current) => ({
-                  ...current,
-                  email: event.target.value,
-                }))
-              }
-              placeholder="alex@example.com"
-              type="email"
-              value={requestDetails.email}
-            />
-          </label>
+          <TextControl
+            label="Email address"
+            onChange={(value) =>
+              setRequestDetails((current) => ({
+                ...current,
+                email: value,
+              }))
+            }
+            placeholder="alex@example.com"
+            required
+            type="email"
+            value={requestDetails.email}
+          />
 
-          <label className="booking-modal__field">
-            <span className="booking-modal__label">Phone or meeting link</span>
-            <input
-              className="booking-modal__input"
-              onChange={(event) =>
-                setRequestDetails((current) => ({
-                  ...current,
-                  meetingLinkOrPhone: event.target.value,
-                }))
-              }
-              placeholder="Phone number or Zoom/Meet link"
-              value={requestDetails.meetingLinkOrPhone}
-            />
-          </label>
+          <TextControl
+            label="Phone or meeting link"
+            onChange={(value) =>
+              setRequestDetails((current) => ({
+                ...current,
+                meetingLinkOrPhone: value,
+              }))
+            }
+            placeholder="Phone number or Zoom/Meet link"
+            value={requestDetails.meetingLinkOrPhone}
+          />
 
-          <label className="booking-modal__field">
-            <span className="booking-modal__label">Additional info</span>
+          <label className="mt-6 block">
+            <span className="mb-[0.7rem] block text-[0.95rem] font-semibold text-white/95">
+              Additional info
+            </span>
             <textarea
-              className="booking-modal__textarea"
+              className="min-h-[9rem] w-full resize-vertical rounded-[3px] border border-white/18 bg-black/18 p-4 text-white outline-none placeholder:text-white/42"
               onChange={(event) =>
                 setRequestDetails((current) => ({
                   ...current,

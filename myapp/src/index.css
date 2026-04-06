@@ -314,20 +314,6 @@ input {
   font-weight: 600;
 }
 
-.booking-modal__field {
-  display: block;
-  margin-top: 1.5rem;
-}
-
-.booking-modal__label {
-  display: block;
-  margin-bottom: 0.7rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.94);
-}
-
-.booking-modal__input,
 .booking-modal__textarea {
   width: 100%;
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -337,18 +323,12 @@ input {
   outline: none;
 }
 
-.booking-modal__input {
-  min-height: 3.55rem;
-  padding: 0 1rem;
-}
-
 .booking-modal__textarea {
   min-height: 9rem;
   padding: 1rem;
   resize: vertical;
 }
 
-.booking-modal__input::placeholder,
 .booking-modal__textarea::placeholder {
   color: rgba(255, 255, 255, 0.42);
 }
