@@ -95,7 +95,7 @@ function App() {
   return (
     <main className="min-h-screen bg-[var(--app-bg)] text-[var(--text-primary)]">
       <div className="mx-auto flex min-h-screen max-w-[1800px] flex-col px-4 py-4 sm:px-6 lg:px-8">
-        <section className="booking-shell flex-1 overflow-hidden rounded-[32px] border border-white/8 bg-[var(--panel-bg)] shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+        <section className="booking-shell flex-1 overflow-hidden rounded-[3px] border border-white/8 bg-[var(--panel-bg)] shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
           <aside className="border-b border-white/8 p-6 lg:border-b-0 lg:border-r lg:p-8">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#72889b] text-sm font-semibold text-white">
               {HOST.initials}
@@ -203,7 +203,7 @@ function App() {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3 text-sm text-white/88">
-                  <div className="inline-flex rounded-2xl border border-white/8 bg-white/4 p-1">
+                  <div className="inline-flex rounded-[3px] border border-white/8 bg-white/4 p-1">
                     <button
                       className={hourToggleClass(!is24Hour)}
                       onClick={() => setIs24Hour(false)}
@@ -255,7 +255,7 @@ function App() {
                           Pick a time to book this appointment.
                         </p>
                       </div>
-                      <div className="rounded-2xl border border-white/8 bg-white/4 px-4 py-2 text-sm text-white/66">
+                      <div className="rounded-[3px] border border-white/8 bg-white/4 px-4 py-2 text-sm text-white/66">
                         {availableSlots.filter((slot) => !slot.booked).length}{' '}
                         open slots
                       </div>
@@ -285,7 +285,7 @@ function App() {
                   </section>
 
                   <aside className="w-full shrink-0 xl:max-w-[360px]">
-                    <div className="rounded-[28px] border border-white/8 bg-[var(--card-bg)] p-5 shadow-[0_18px_48px_rgba(0,0,0,0.35)]">
+                    <div className="rounded-[3px] border border-white/8 bg-[var(--card-bg)] p-5 shadow-[0_18px_48px_rgba(0,0,0,0.35)]">
                       <p className="text-sm uppercase tracking-[0.28em] text-white/45">
                         Booking summary
                       </p>
@@ -306,7 +306,7 @@ function App() {
                         />
                       </div>
 
-                      <div className="mt-8 rounded-3xl border border-white/8 bg-black/20 p-4">
+                      <div className="mt-8 rounded-[3px] border border-white/8 bg-black/20 p-4">
                         <p className="text-sm text-white/55">Your selection</p>
                         <p className="mt-3 text-2xl font-semibold text-white">
                           {selectedSlotLabel ?? 'Choose a time'}
@@ -320,12 +320,12 @@ function App() {
 
                       <div className="mt-8 space-y-3">
                         <input
-                          className="w-full rounded-2xl border border-white/10 bg-white/4 px-4 py-3 text-sm text-white outline-none placeholder:text-white/28 focus:border-white/25"
+                          className="w-full rounded-[3px] border border-white/10 bg-white/4 px-4 py-3 text-sm text-white outline-none placeholder:text-white/28 focus:border-white/25"
                           defaultValue="Alex Chen"
                           placeholder="Your name"
                         />
                         <input
-                          className="w-full rounded-2xl border border-white/10 bg-white/4 px-4 py-3 text-sm text-white outline-none placeholder:text-white/28 focus:border-white/25"
+                          className="w-full rounded-[3px] border border-white/10 bg-white/4 px-4 py-3 text-sm text-white outline-none placeholder:text-white/28 focus:border-white/25"
                           defaultValue="alex@example.com"
                           placeholder="Your email"
                         />
@@ -362,7 +362,7 @@ function IconButton({
     <button
       aria-label={label}
       className={[
-        'inline-flex h-11 w-11 items-center justify-center rounded-2xl border transition',
+        'inline-flex h-11 w-11 items-center justify-center rounded-[3px] border transition',
         active
           ? 'border-white/16 bg-black text-white'
           : 'border-white/8 bg-white/4 text-white/76 hover:bg-white/8 hover:text-white',

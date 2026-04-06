@@ -106,7 +106,7 @@ input {
   justify-content: space-between;
   gap: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 1.25rem;
+  border-radius: 3px;
   background: rgba(14, 14, 14, 0.9);
   padding: 0 1.2rem;
   color: rgba(255, 255, 255, 0.92);
