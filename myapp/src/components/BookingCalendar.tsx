@@ -385,10 +385,6 @@ function hourToggleClass(active: boolean) {
   ].join(' ')
 }
 
-function formatDateKey(date: Date) {
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
-}
-
 function isSameDate(left: Date, right: Date) {
   return (
     left.getFullYear() === right.getFullYear() &&
