@@ -164,6 +164,11 @@ input {
   background: rgba(255, 255, 255, 0.035);
 }
 
+.overlay-grid__day-label--selected,
+.overlay-grid__cell--selected {
+  background: rgba(255, 255, 255, 0.06);
+}
+
 .overlay-grid__time {
   display: flex;
   align-items: flex-start;

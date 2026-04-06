@@ -183,6 +183,7 @@ export default function BookingCalendar({
               <OverlayBoard
                 endHour={endHour}
                 overlayBlocks={overlayBlocks}
+                selectedDate={selectedDate}
                 startHour={startHour}
                 weekDays={weekDays}
                 is24Hour={is24Hour}
@@ -217,12 +218,14 @@ function MonthArrow({
 function OverlayBoard({
   endHour,
   overlayBlocks,
+  selectedDate,
   startHour,
   weekDays,
   is24Hour,
 }: {
   endHour: number
   overlayBlocks: OverlayBlock[]
+  selectedDate: Date
   startHour: number
   weekDays: Date[]
   is24Hour: boolean
@@ -244,6 +247,9 @@ function OverlayBoard({
           key={day.toISOString()}
           className={[
             'overlay-grid__day-label',
+            isSameDate(day, selectedDate)
+              ? 'overlay-grid__day-label--selected'
+              : '',
             isSameDate(day, now) ? 'overlay-grid__day-label--today' : '',
           ]
             .filter(Boolean)
@@ -268,6 +274,9 @@ function OverlayBoard({
               key={`${day.toISOString()}-${hour}`}
               className={[
                 'overlay-grid__cell',
+                isSameDate(day, selectedDate)
+                  ? 'overlay-grid__cell--selected'
+                  : '',
                 isSameDate(day, now) ? 'overlay-grid__cell--today' : '',
               ]
                 .filter(Boolean)
