@@ -88,7 +88,14 @@ input {
   background: #111;
   font-weight: 700;
   font-size: 1.2rem;
-  border: 1px solid white;
+  color: white;
+}
+
+.calendar-day--today.calendar-day--selected {
+  background-color: #222;
+}
+.calendar-day--today:hover {
+  transform: translateY(-1px);
 }
 
 .calendar-day:disabled {
