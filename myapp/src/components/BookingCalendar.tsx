@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import DialogLayer from './DialogLayer'
 import TextControl from './form/TextControl'
+import Button from './web/Button'
 
 const MONTH_NAMES = [
   'January',
@@ -306,19 +307,15 @@ export default function BookingCalendar({
         <DialogLayer
           footer={
             <>
-              <button
-                className="min-w-[8.5rem] rounded-[3px] border border-transparent bg-transparent px-[1.4rem] py-[0.9rem] text-base font-semibold text-white/72 transition hover:text-white"
+              <Button
                 onClick={() => setAppointmentDraft(null)}
-                type="button"
+                variant="ghost"
               >
                 Back
-              </button>
-              <button
-                className="min-w-[8.5rem] rounded-[3px] border border-transparent bg-white px-[1.4rem] py-[0.9rem] text-base font-semibold text-[#111] transition hover:bg-[#e8e8e8]"
-                type="button"
-              >
+              </Button>
+              <Button variant="solid">
                 Confirm
-              </button>
+              </Button>
             </>
           }
           onClose={() => setAppointmentDraft(null)}
