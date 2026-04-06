@@ -211,6 +211,10 @@ input {
   .booking-shell {
     grid-template-columns: 1fr;
   }
+
+  .calendar-day {
+    font-size: 2rem;
+  }
 }
 
 @media (max-width: 640px) {
