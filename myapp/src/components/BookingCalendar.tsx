@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import DialogLayer from './DialogLayer'
 import TextControl from './form/TextControl'
 import Button from './web/Button'
+import Pill from './web/Pill'
 
 const MONTH_NAMES = [
   'January',
@@ -321,17 +322,15 @@ export default function BookingCalendar({
           onClose={() => setAppointmentDraft(null)}
           title="Confirm your details"
         >
-          <div className="booking-modal__chips">
-            <span className="booking-modal__chip">
-              <CalendarSmallIcon />
+          <div className="mt-6 flex flex-wrap gap-[0.85rem]">
+            <Pill icon={<CalendarSmallIcon />}>
               {`${WEEKDAY_SHORT[draftDay.getDay()]}, ${MONTH_NAMES[draftDay.getMonth()]} ${draftDay.getDate()}, ${draftDay.getFullYear()}, `}
               {formatMinutesLabel(draftStartMinutes, is24Hour)} -{' '}
               {formatMinutesLabel(draftEndMinutes, is24Hour)}
-            </span>
-            <span className="booking-modal__chip">
-              <ClockSmallIcon />
+            </Pill>
+            <Pill icon={<ClockSmallIcon />}>
               {draftDurationMinutes}m
-            </span>
+            </Pill>
           </div>
 
           <TextControl
