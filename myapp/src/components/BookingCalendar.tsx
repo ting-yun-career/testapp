@@ -312,6 +312,8 @@ function buildCalendarDays(
 
 function getWeekDaysStarting(selectedDate: Date) {
   const start = new Date(selectedDate)
+  start.setDate(start.getDate() - start.getDay())
+
   return Array.from({ length: 7 }, (_, index) => {
     const date = new Date(start)
     date.setDate(start.getDate() + index)
