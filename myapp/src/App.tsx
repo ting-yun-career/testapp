@@ -50,6 +50,8 @@ type OverlayBlock = {
   endHour: number
 }
 
+type ViewMode = 'calendar' | 'grid' | 'agenda'
+
 const OVERLAY_BLOCKS: OverlayBlock[] = [
   { dayOffset: 0, startHour: 9, endHour: 16.5 },
   { dayOffset: 1, startHour: 9, endHour: 16.5 },
@@ -68,7 +70,7 @@ function App() {
   const [selectedDate, setSelectedDate] = useState(initialDate)
   const [selectedSlot, setSelectedSlot] = useState<string | null>('01:00')
   const [is24Hour, setIs24Hour] = useState(true)
-  const [showOverlay, setShowOverlay] = useState(false)
+  const [viewMode, setViewMode] = useState<ViewMode>('calendar')
 
   const calendarDays = useMemo(
     () => buildCalendarDays(visibleMonth, selectedDate),
@@ -186,7 +188,7 @@ function App() {
               <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
                 <div className="flex items-center gap-4">
                   <h2 className="text-2xl font-semibold text-white">
-                    {formatRangeTitle(selectedDate, showOverlay)}
+                    {formatRangeTitle(selectedDate, viewMode)}
                   </h2>
                   <div className="flex gap-1">
                     <MonthArrow
@@ -201,33 +203,6 @@ function App() {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3 text-sm text-white/88">
-                  <label className="inline-flex items-center gap-3">
-                    <span
-                      className={[
-                        'relative h-7 w-12 rounded-full border border-white/10 transition',
-                        showOverlay ? 'bg-white/16' : 'bg-black/30',
-                      ].join(' ')}
-                    >
-                      <input
-                        checked={showOverlay}
-                        className="sr-only"
-                        onChange={() => setShowOverlay((value) => !value)}
-                        type="checkbox"
-                      />
-                      <span
-                        className={[
-                          'absolute top-0.5 h-6 w-6 rounded-full bg-black shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition',
-                          showOverlay ? 'left-[22px]' : 'left-0.5',
-                        ].join(' ')}
-                      />
-                    </span>
-                    Overlay my calendar
-                  </label>
-
-                  <IconButton label="Settings">
-                    <CogIcon />
-                  </IconButton>
-
                   <div className="inline-flex rounded-2xl border border-white/8 bg-white/4 p-1">
                     <button
                       className={hourToggleClass(!is24Hour)}
@@ -243,13 +218,25 @@ function App() {
                     </button>
                   </div>
 
-                  <IconButton label="Calendar">
+                  <IconButton
+                    active={viewMode === 'calendar'}
+                    label="Calendar"
+                    onClick={() => setViewMode('calendar')}
+                  >
                     <CalendarIcon />
                   </IconButton>
-                  <IconButton label="Grid">
+                  <IconButton
+                    active={viewMode === 'grid'}
+                    label="Grid"
+                    onClick={() => setViewMode('grid')}
+                  >
                     <GridIcon />
                   </IconButton>
-                  <IconButton label="Agenda">
+                  <IconButton
+                    active={viewMode === 'agenda'}
+                    label="Agenda"
+                    onClick={() => setViewMode('agenda')}
+                  >
                     <ColumnsIcon />
                   </IconButton>
                 </div>
@@ -257,11 +244,19 @@ function App() {
             </div>
 
             <div className="min-h-0 flex-1 overflow-auto px-5 py-5 sm:px-6 lg:px-8">
-              {showOverlay ? (
+              {viewMode === 'agenda' ? (
                 <OverlayBoard
                   selectedDate={selectedDate}
                   weekDays={weekDays}
                   is24Hour={is24Hour}
+                />
+              ) : viewMode === 'grid' ? (
+                <MultiDaySlotsBoard
+                  is24Hour={is24Hour}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
+                  setSelectedSlot={setSelectedSlot}
+                  weekDays={weekDays}
                 />
               ) : (
                 <div className="flex h-full flex-col gap-5 xl:flex-row">
@@ -369,13 +364,25 @@ function App() {
 }
 
 function IconButton({
+  active = false,
   children,
   label,
-}: React.PropsWithChildren<{ label: string }>) {
+  onClick,
+}: React.PropsWithChildren<{
+  active?: boolean
+  label: string
+  onClick?: () => void
+}>) {
   return (
     <button
       aria-label={label}
-      className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/8 bg-white/4 text-white/76 transition hover:bg-white/8 hover:text-white"
+      className={[
+        'inline-flex h-11 w-11 items-center justify-center rounded-2xl border transition',
+        active
+          ? 'border-white/16 bg-black text-white'
+          : 'border-white/8 bg-white/4 text-white/76 hover:bg-white/8 hover:text-white',
+      ].join(' ')}
+      onClick={onClick}
       type="button"
     >
       {children}
@@ -467,6 +474,66 @@ function OverlayBoard({
   )
 }
 
+function MultiDaySlotsBoard({
+  is24Hour,
+  selectedDate,
+  setSelectedDate,
+  setSelectedSlot,
+  weekDays,
+}: {
+  is24Hour: boolean
+  selectedDate: Date
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>
+  setSelectedSlot: React.Dispatch<React.SetStateAction<string | null>>
+  weekDays: Date[]
+}) {
+  const sharedSlots = buildSlotsForDate(selectedDate, formatDateKey(selectedDate))
+
+  return (
+    <div className="grid min-w-[980px] grid-cols-6 gap-4">
+      {weekDays.slice(0, 6).map((day) => {
+        const dayKey = formatDateKey(day)
+        const daySlots = buildSlotsForDate(day, dayKey)
+
+        return (
+          <section key={dayKey} className="min-w-0">
+            <header className="mb-3 text-center">
+              <p className="text-xs uppercase tracking-[0.22em] text-white/45">
+                {WEEKDAY_SHORT[day.getDay()]}
+              </p>
+              <p className="mt-1 text-sm font-medium text-white/74">
+                {pad(day.getDate())}
+              </p>
+            </header>
+
+            <div className="space-y-2.5">
+              {daySlots.slice(0, sharedSlots.length).map((slot) => (
+                <button
+                  key={`${dayKey}-${slot.time}`}
+                  className={[
+                    'slot-pill slot-pill--compact w-full',
+                    slot.booked ? 'slot-pill--booked' : '',
+                    isSameDate(day, selectedDate) && !slot.booked
+                      ? 'border-white/16'
+                      : '',
+                  ].join(' ')}
+                  disabled={slot.booked}
+                  onClick={() => {
+                    setSelectedDate(day)
+                    setSelectedSlot(slot.time)
+                  }}
+                >
+                  <span>{formatTimeLabel(slot.time, is24Hour)}</span>
+                </button>
+              ))}
+            </div>
+          </section>
+        )
+      })}
+    </div>
+  )
+}
+
 function buildCalendarDays(month: Date, selectedDate: Date): CalendarDay[] {
   const firstOfMonth = new Date(month.getFullYear(), month.getMonth(), 1)
   const lastOfMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0)
@@ -530,8 +597,8 @@ function shiftSelectedDate(
   })
 }
 
-function formatRangeTitle(date: Date, showOverlay: boolean) {
-  if (!showOverlay) {
+function formatRangeTitle(date: Date, viewMode: ViewMode) {
+  if (viewMode === 'calendar') {
     return `${MONTH_NAMES[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
   }
 
@@ -682,26 +749,6 @@ function ColumnsIcon() {
         y="4"
       />
       <path d="M10 4v16M16 4v16" stroke="currentColor" strokeWidth="1.8" />
-    </svg>
-  )
-}
-
-function CogIcon() {
-  return (
-    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24">
-      <path
-        d="m12 3 1.4 2.2 2.5.4-.8 2.4 1.8 1.8-1.8 1.8.8 2.4-2.5.4L12 17l-1.4-2.2-2.5-.4.8-2.4-1.8-1.8L8.9 8l-.8-2.4 2.5-.4z"
-        stroke="currentColor"
-        strokeLinejoin="round"
-        strokeWidth="1.5"
-      />
-      <circle
-        cx="12"
-        cy="10.5"
-        r="2.5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
     </svg>
   )
 }
