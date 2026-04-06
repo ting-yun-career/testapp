@@ -33,9 +33,7 @@ type OverlayBlock = {
 }
 
 type BookingCalendarProps = {
-  endHour?: number
   overlayBlocks?: OverlayBlock[]
-  startHour?: number
   workingDays?: number[]
 }
 
@@ -66,16 +64,13 @@ const DEFAULT_REQUEST_DETAILS: RequestDetails = {
 }
 
 export default function BookingCalendar({
-  endHour = 21,
   overlayBlocks = [
-    // { dayOffset: 0, startHour: 9, endHour: 17 },
-    { dayOffset: 1, startHour: 9, endHour: 17 },
-    { dayOffset: 2, startHour: 9, endHour: 17 },
-    { dayOffset: 3, startHour: 9, endHour: 17 },
-    { dayOffset: 4, startHour: 9, endHour: 17 },
-    { dayOffset: 5, startHour: 9, endHour: 17 },
+    { dayOffset: 1, startHour: 7, endHour: 16 },
+    { dayOffset: 2, startHour: 9, endHour: 16 },
+    { dayOffset: 3, startHour: 9, endHour: 16 },
+    { dayOffset: 4, startHour: 9, endHour: 16 },
+    { dayOffset: 5, startHour: 9, endHour: 18 },
   ],
-  startHour = 7,
   workingDays = [1, 2, 3, 4, 5],
 }: BookingCalendarProps) {
   const initialDate = new Date('2026-04-09T12:00:00')
@@ -97,6 +92,10 @@ export default function BookingCalendar({
   const weekDays = useMemo(
     () => getWeekDaysStarting(selectedDate),
     [selectedDate],
+  )
+  const { endHour, startHour } = useMemo(
+    () => getHourBounds(overlayBlocks),
+    [overlayBlocks],
   )
 
   useEffect(() => {
@@ -416,11 +415,7 @@ function OverlayBoard({
         .map((slotIndex) => (
           <div
             key={`time-${slotIndex}`}
-            className={[
-              'overlay-grid__time',
-            ]
-              .filter(Boolean)
-              .join(' ')}
+            className={['overlay-grid__time'].filter(Boolean).join(' ')}
             style={{
               gridColumn: 1,
               gridRow: `${slotIndex + 2} / span 4`,
@@ -821,6 +816,22 @@ function getCurrentMarker({
     dayIndex,
     slotIndex: Math.floor(minutesFromStart / 15),
     topOffsetPercent: ((minutesFromStart % 15) / 15) * 100,
+  }
+}
+
+function getHourBounds(overlayBlocks: OverlayBlock[]) {
+  if (overlayBlocks.length === 0) {
+    return { endHour: 18, startHour: 8 }
+  }
+
+  const minStartHour = Math.min(
+    ...overlayBlocks.map((block) => block.startHour),
+  )
+  const maxEndHour = Math.max(...overlayBlocks.map((block) => block.endHour))
+
+  return {
+    endHour: Math.min(24, maxEndHour + 1),
+    startHour: Math.max(0, minStartHour - 1),
   }
 }
 
