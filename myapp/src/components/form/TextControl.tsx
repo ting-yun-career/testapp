@@ -2,6 +2,7 @@ import type { HTMLInputTypeAttribute } from 'react'
 
 type TextControlProps = {
   label: string
+  lines?: number
   onChange: (value: string) => void
   placeholder?: string
   required?: boolean
@@ -11,6 +12,7 @@ type TextControlProps = {
 
 export default function TextControl({
   label,
+  lines,
   onChange,
   placeholder,
   required = false,
@@ -23,13 +25,23 @@ export default function TextControl({
         {label}
         {required ? <span className="text-red-400"> *</span> : ''}
       </span>
-      <input
-        className="min-h-[3.55rem] w-full rounded-[3px] border border-white/18 bg-black/18 px-4 text-white outline-none placeholder:text-white/42"
-        onChange={(event) => onChange(event.target.value)}
-        placeholder={placeholder}
-        type={type}
-        value={value}
-      />
+      {typeof lines === 'number' && lines > 1 ? (
+        <textarea
+          className="min-h-[9rem] w-full resize-vertical rounded-[3px] border border-white/18 bg-black/18 p-4 text-white outline-none placeholder:text-white/42"
+          onChange={(event) => onChange(event.target.value)}
+          placeholder={placeholder}
+          rows={lines}
+          value={value}
+        />
+      ) : (
+        <input
+          className="min-h-[3.55rem] w-full rounded-[3px] border border-white/18 bg-black/18 px-4 text-white outline-none placeholder:text-white/42"
+          onChange={(event) => onChange(event.target.value)}
+          placeholder={placeholder}
+          type={type}
+          value={value}
+        />
+      )}
     </label>
   )
 }

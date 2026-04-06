@@ -378,23 +378,18 @@ export default function BookingCalendar({
             value={requestDetails.meetingLinkOrPhone}
           />
 
-          <label className="mt-6 block">
-            <span className="mb-[0.7rem] block text-[0.95rem] font-semibold text-white/95">
-              Additional info
-            </span>
-            <textarea
-              className="min-h-[9rem] w-full resize-vertical rounded-[3px] border border-white/18 bg-black/18 p-4 text-white outline-none placeholder:text-white/42"
-              onChange={(event) =>
-                setRequestDetails((current) => ({
-                  ...current,
-                  additionalInfo: event.target.value,
-                }))
-              }
-              placeholder="Share anything that will help prepare for this appointment."
-              rows={5}
-              value={requestDetails.additionalInfo}
-            />
-          </label>
+          <TextControl
+            label="Additional info"
+            lines={5}
+            onChange={(value) =>
+              setRequestDetails((current) => ({
+                ...current,
+                additionalInfo: value,
+              }))
+            }
+            placeholder="Share anything that will help prepare for this appointment."
+            value={requestDetails.additionalInfo}
+          />
         </DialogLayer>
       ) : null}
     </main>
