@@ -204,11 +204,23 @@ export default function BookingCalendar({
                   <div className="flex gap-1">
                     <MonthArrow
                       direction="prev"
-                      onClick={() => shiftSelectedDate(-7, setSelectedDate)}
+                      onClick={() =>
+                        shiftSelectedDate(
+                          -7,
+                          setSelectedDate,
+                          setVisibleMonth,
+                        )
+                      }
                     />
                     <MonthArrow
                       direction="next"
-                      onClick={() => shiftSelectedDate(7, setSelectedDate)}
+                      onClick={() =>
+                        shiftSelectedDate(
+                          7,
+                          setSelectedDate,
+                          setVisibleMonth,
+                        )
+                      }
                     />
                   </div>
                 </div>
@@ -614,8 +626,13 @@ function getWeekDaysStarting(selectedDate: Date) {
 function shiftSelectedDate(
   amount: number,
   setSelectedDate: React.Dispatch<React.SetStateAction<Date>>,
+  setVisibleMonth: React.Dispatch<React.SetStateAction<Date>>,
 ) {
-  setSelectedDate((current) => addDays(current, amount))
+  setSelectedDate((current) => {
+    const nextDate = addDays(current, amount)
+    setVisibleMonth(startOfMonth(nextDate))
+    return nextDate
+  })
 }
 
 function formatRangeTitle(weekDays: Date[]) {
