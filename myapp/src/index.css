@@ -35,11 +35,6 @@ input {
   font: inherit;
 }
 
-.booking-shell {
-  display: grid;
-  grid-template-columns: minmax(320px, 390px) minmax(0, 1fr);
-}
-
 .overlay-grid {
   display: grid;
   grid-template-columns: minmax(70px, 0.5fr) repeat(7, minmax(30px, 1fr));
@@ -185,12 +180,6 @@ input {
 
 .booking-modal__textarea::placeholder {
   color: rgba(255, 255, 255, 0.42);
-}
-
-@media (max-width: 1279px) {
-  .booking-shell {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 640px) {

@@ -135,7 +135,7 @@ export default function BookingCalendar({
   return (
     <main className="min-h-screen bg-neutral-950">
       <div className="mx-auto flex min-h-screen max-w-[1800px] flex-col px-4 py-4 sm:px-6 lg:px-8">
-        <section className="booking-shell flex-1 overflow-hidden rounded-[3px] border border-white/8 bg-neutral-950 shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+        <section className="grid flex-1 grid-cols-[minmax(320px,390px)_minmax(0,1fr)] overflow-hidden rounded-[3px] border border-white/8 bg-neutral-950 shadow-[0_24px_80px_rgba(0,0,0,0.45)] max-[1279px]:grid-cols-1">
           <aside className="border-b border-white/8 p-6 lg:border-b-0 lg:border-r lg:p-8">
             <h1 className="mt-4 text-3xl font-semibold tracking-tight text-white lg:text-[2.15rem]">
               Appointments
