@@ -290,10 +290,13 @@ export default function BookingCalendar({
 
                   setDragSelection((current) =>
                     current
-                      ? {
-                          ...current,
-                          endSlot: slotIndex,
-                        }
+                      ? current.dayIndex === dayIndex &&
+                        current.endSlot === slotIndex
+                        ? current
+                        : {
+                            ...current,
+                            endSlot: slotIndex,
+                          }
                       : current,
                   )
                 }}
@@ -510,6 +513,11 @@ function AppointmentTimeGrid({
           const isSelectionStart =
             normalizedSelection?.dayIndex === dayIndex &&
             normalizedSelection.startSlot === slotIndex
+          const selectionSlotCount =
+            normalizedSelection?.dayIndex === dayIndex
+              ? normalizedSelection.endSlot - normalizedSelection.startSlot + 1
+              : 0
+          const selectionDurationMinutes = selectionSlotCount * 15
 
           return (
             <div
@@ -519,7 +527,8 @@ function AppointmentTimeGrid({
                 selectedColumn ? 'bg-white/[0.06]' : '',
                 isSameDate(day, now) ? 'bg-white/[0.035]' : '',
                 busy ? 'cursor-not-allowed' : 'cursor-crosshair',
-                isSelectedSlot ? 'bg-white/[0.08]' : '',
+                isSelectedSlot ? 'z-[2]' : '',
+                isSelectionStart ? 'z-[4]' : '',
               ]
                 .filter(Boolean)
                 .join(' ')}
@@ -545,14 +554,21 @@ function AppointmentTimeGrid({
               }}
             >
               {busy ? (
-                <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.045)_12.5%,transparent_25%,transparent_50%,rgba(255,255,255,0.045)_50%,rgba(255,255,255,0.045)_62.5%,transparent_75%,transparent)] bg-[length:5px_5px]" />
+                <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.045)_12.5%,transparent_25%,transparent_50%,rgba(255,255,255,0.045)_50%,rgba(255,255,255,0.045)_62.5%,transparent_75%,transparent)] bg-[length:5px_5px]" />
               ) : null}
               {isSelectionStart ? (
-                <div className="absolute inset-x-[0.3rem] top-[0.08rem] z-[2] overflow-hidden rounded-[3px] bg-white/95 px-[0.35rem] py-[0.01rem] text-[0.75rem] font-bold leading-[1.15] whitespace-nowrap text-ellipsis text-neutral-950">
-                  {formatMinutesLabel(
-                    slotIndexToMinutes(slotIndex, normalizedStart),
-                    is24Hour,
-                  )}
+                <div
+                  className="pointer-events-none absolute inset-x-[0.2rem] top-[0.08rem] z-[2] overflow-hidden rounded-[3px] bg-white/95 px-[0.4rem] py-[0.12rem] text-[0.75rem] font-bold leading-[1.15] text-neutral-950 shadow-[0_1px_2px_rgba(0,0,0,0.18)]"
+                  style={{
+                    height: `calc(${selectionSlotCount} * 1.05rem + ${Math.max(
+                      selectionSlotCount - 1,
+                      0,
+                    )}px - 0.16rem)`,
+                  }}
+                >
+                  <div className="whitespace-nowrap">
+                    {selectionDurationMinutes}m
+                  </div>
                 </div>
               ) : null}
               {marker &&
