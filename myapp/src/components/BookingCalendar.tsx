@@ -462,7 +462,7 @@ function AppointmentTimeGrid({
         <div
           key={day.toISOString()}
           className={[
-            'flex items-center justify-center gap-[0.55rem] border-r border-b border-white/10 px-3 py-[0.85rem] text-center select-none [border-bottom-color:var(--line-hard)]',
+            'flex items-center justify-center gap-[0.55rem] border-r border-b border-white/10 border-b-white/20 px-3 py-[0.85rem] text-center select-none',
             isSameDate(day, selectedDate) ? 'border-b-2 border-b-white/35' : '',
             isSameDate(day, now) ? 'bg-white/[0.035]' : '',
           ]

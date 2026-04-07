@@ -2,7 +2,6 @@
 
 :root {
   color-scheme: dark;
-  --line-hard: rgba(255, 255, 255, 0.2);
 }
 
 html,
@@ -28,9 +27,4 @@ body {
     BlinkMacSystemFont,
     'Segoe UI',
     sans-serif;
-}
-
-button,
-input {
-  font: inherit;
 }
