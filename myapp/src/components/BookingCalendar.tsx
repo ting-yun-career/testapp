@@ -129,6 +129,31 @@ export default function BookingCalendar({
       ? draftEndMinutes - draftStartMinutes
       : 0
 
+  const handleConfirmAppointment = () => {
+    if (
+      !appointmentDraft ||
+      !draftDay ||
+      draftStartMinutes === null ||
+      draftEndMinutes === null
+    ) {
+      return
+    }
+
+    const appointmentRequest = {
+      additionalInfo: requestDetails.additionalInfo.trim(),
+      date: format(draftDay, 'yyyy-MM-dd'),
+      dayIndex: appointmentDraft.dayIndex,
+      durationMinutes: draftDurationMinutes,
+      email: requestDetails.email.trim(),
+      endTime: formatMinutesLabel(draftEndMinutes, true),
+      meetingLinkOrPhone: requestDetails.meetingLinkOrPhone.trim(),
+      name: requestDetails.name.trim(),
+      startTime: formatMinutesLabel(draftStartMinutes, true),
+    }
+
+    console.info('Appointment request submitted', appointmentRequest)
+  }
+
   return (
     <main className="min-h-screen bg-neutral-950">
       <div className="mx-auto flex min-h-screen max-w-[1800px] flex-col px-4 py-4 sm:px-6 lg:px-8">
@@ -309,7 +334,9 @@ export default function BookingCalendar({
               <Button onClick={() => setAppointmentDraft(null)} variant="ghost">
                 Back
               </Button>
-              <Button variant="solid">Confirm</Button>
+              <Button onClick={handleConfirmAppointment} variant="solid">
+                Confirm
+              </Button>
             </>
           }
           onClose={() => setAppointmentDraft(null)}
