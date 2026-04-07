@@ -445,18 +445,18 @@ function AppointmentTimeGrid({
   return (
     <div className="overlay-grid">
       <div
-        className="overlay-grid__top"
+        className="border-r border-b border-white/10"
         style={{ gridColumn: 1, gridRow: 1 }}
       />
       {weekDays.map((day, dayIndex) => (
         <div
           key={day.toISOString()}
           className={[
-            'overlay-grid__day-label',
+            'flex items-center justify-center gap-[0.55rem] border-r border-b border-white/10 px-3 py-[0.85rem] text-center select-none [border-bottom-color:var(--line-hard)]',
             isSameDate(day, selectedDate)
-              ? 'overlay-grid__day-label--selected'
+              ? 'bg-white/[0.06]'
               : '',
-            isSameDate(day, now) ? 'overlay-grid__day-label--today' : '',
+            isSameDate(day, now) ? 'bg-white/[0.035]' : '',
           ]
             .filter(Boolean)
             .join(' ')}
@@ -479,7 +479,7 @@ function AppointmentTimeGrid({
         .map((slotIndex) => (
           <div
             key={`time-${slotIndex}`}
-            className={['overlay-grid__time'].filter(Boolean).join(' ')}
+            className="flex select-none items-center justify-center border-r border-b border-white/10 pt-0 text-[0.8rem] text-white/46"
             style={{
               gridColumn: 1,
               gridRow: `${slotIndex + 2} / span 4`,
@@ -515,11 +515,11 @@ function AppointmentTimeGrid({
             <div
               key={`${day.toISOString()}-${slotIndex}`}
               className={[
-                'overlay-grid__cell',
-                selectedColumn ? 'overlay-grid__cell--selected' : '',
-                isSameDate(day, now) ? 'overlay-grid__cell--today' : '',
-                busy ? 'overlay-grid__cell--busy' : '',
-                isSelectedSlot ? 'overlay-grid__cell--active-selection' : '',
+                'relative h-[1.05rem] border-r border-b border-white/10 bg-white/[0.01]',
+                selectedColumn ? 'bg-white/[0.06]' : '',
+                isSameDate(day, now) ? 'bg-white/[0.035]' : '',
+                busy ? 'cursor-not-allowed' : 'cursor-crosshair',
+                isSelectedSlot ? 'bg-white/[0.08]' : '',
               ]
                 .filter(Boolean)
                 .join(' ')}
@@ -532,14 +532,23 @@ function AppointmentTimeGrid({
                 onCellMouseDown(dayIndex, slotIndex)
               }}
               onMouseEnter={() => onCellMouseEnter(dayIndex, slotIndex)}
+              onMouseMove={(event) => {
+                if (event.buttons !== 1) {
+                  return
+                }
+
+                onCellMouseEnter(dayIndex, slotIndex)
+              }}
               style={{
                 gridColumn: dayIndex + 2,
                 gridRow: slotIndex + 2,
               }}
             >
-              {busy ? <div className="overlay-grid__busy" /> : null}
+              {busy ? (
+                <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.045)_12.5%,transparent_25%,transparent_50%,rgba(255,255,255,0.045)_50%,rgba(255,255,255,0.045)_62.5%,transparent_75%,transparent)] bg-[length:5px_5px]" />
+              ) : null}
               {isSelectionStart ? (
-                <div className="overlay-grid__selection-chip">
+                <div className="absolute inset-x-[0.3rem] top-[0.08rem] z-[2] overflow-hidden rounded-[3px] bg-white/95 px-[0.35rem] py-[0.01rem] text-[0.75rem] font-bold leading-[1.15] whitespace-nowrap text-ellipsis text-neutral-950">
                   {formatMinutesLabel(
                     slotIndexToMinutes(slotIndex, normalizedStart),
                     is24Hour,
@@ -550,10 +559,12 @@ function AppointmentTimeGrid({
               marker.dayIndex === dayIndex &&
               marker.slotIndex === slotIndex ? (
                 <div
-                  className="overlay-grid__now"
+                  className="absolute inset-x-0 z-[3] flex -translate-y-1/2 items-center gap-2 text-[0.86rem] text-white before:flex-1 before:border-t before:border-white/95"
                   style={{ top: `${marker.topOffsetPercent}%` }}
                 >
-                  <span>{formatDateTimeLabel(now, is24Hour)}</span>
+                  <span className="rounded-full bg-white/8 px-2 py-[0.15rem]">
+                    {formatDateTimeLabel(now, is24Hour)}
+                  </span>
                 </div>
               ) : null}
             </div>
