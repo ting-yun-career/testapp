@@ -264,37 +264,6 @@ input {
   padding: 0.15rem 0.5rem;
 }
 
-.dialog-layer {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.62);
-  padding: 1.25rem;
-}
-
-.dialog-layer__panel {
-  width: min(100%, 70rem);
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 22px;
-  background: #111;
-  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.45);
-}
-
-.dialog-layer__body {
-  padding: 2.5rem 2.5rem 1.5rem;
-}
-
-.dialog-layer__title {
-  margin: 0;
-  font-size: clamp(2rem, 3vw, 3rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-}
-
 .booking-modal__textarea {
   width: 100%;
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -312,14 +281,6 @@ input {
 
 .booking-modal__textarea::placeholder {
   color: rgba(255, 255, 255, 0.42);
-}
-
-.dialog-layer__footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.8rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 1.5rem 2.5rem;
 }
 
 @media (max-width: 1279px) {
@@ -341,10 +302,5 @@ input {
   .slot-pill {
     min-height: 4rem;
     font-size: 1.3rem;
-  }
-
-  .dialog-layer__body,
-  .dialog-layer__footer {
-    padding-inline: 1.25rem;
   }
 }
