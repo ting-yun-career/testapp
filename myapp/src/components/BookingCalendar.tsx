@@ -188,9 +188,9 @@ export default function BookingCalendar({
                   <button
                     key={day.date.toISOString()}
                     className={[
-                      'relative flex aspect-square cursor-pointer items-center justify-center rounded-[3px] border border-transparent text-white/76 transition [transition-property:background-color,color,transform,border-color]',
+                      'relative flex aspect-square cursor-pointer items-center justify-center rounded-[3px] border border-transparent text-white/70 transition [transition-property:background-color,color,transform,border-color]',
                       'text-base max-[1279px]:text-[2rem] max-[640px]:text-[1.45rem]',
-                      day.inMonth ? '' : 'text-white/28',
+                      day.inMonth ? '' : 'text-white/30',
                       day.isAvailable
                         ? 'bg-[var(--tile)] text-white hover:-translate-y-px '
                         : 'cursor-default',
