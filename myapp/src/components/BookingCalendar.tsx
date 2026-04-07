@@ -198,28 +198,29 @@ export default function BookingCalendar({
 
           <section className="flex min-h-0 flex-col">
             <div className="border-b border-white/8 px-5 py-4 sm:px-6 lg:px-8">
-              <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-                <div className="flex items-center gap-4">
+              <div className="flex flex-col gap-4 xl:grid xl:grid-cols-[1fr_auto_1fr] xl:items-center">
+                <div className="flex items-center">
                   <h2 className="text-2xl font-semibold text-white">
                     {formatRangeTitle(weekDays)}
                   </h2>
-                  <div className="flex gap-1">
-                    <MonthArrow
-                      direction="prev"
-                      onClick={() =>
-                        shiftSelectedDate(-7, setSelectedDate, setVisibleMonth)
-                      }
-                    />
-                    <MonthArrow
-                      direction="next"
-                      onClick={() =>
-                        shiftSelectedDate(7, setSelectedDate, setVisibleMonth)
-                      }
-                    />
-                  </div>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-3 text-sm text-white/88">
+                <div className="flex justify-center gap-1">
+                  <MonthArrow
+                    direction="prev"
+                    onClick={() =>
+                      shiftSelectedDate(-7, setSelectedDate, setVisibleMonth)
+                    }
+                  />
+                  <MonthArrow
+                    direction="next"
+                    onClick={() =>
+                      shiftSelectedDate(7, setSelectedDate, setVisibleMonth)
+                    }
+                  />
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 text-sm text-white/88 xl:justify-end">
                   <div className="inline-flex rounded-[3px] border border-white/8 bg-white/4 p-1">
                     <button
                       className={hourToggleClass(!is24Hour)}
