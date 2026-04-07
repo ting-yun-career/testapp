@@ -11,10 +11,10 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const baseClassName =
-    'min-w-[8.5rem] cursor-pointer rounded-[3px] border border-transparent px-[1.4rem] py-[0.9rem] text-base font-semibold transition'
+    'min-w-[8.5rem] cursor-pointer rounded-[3px] border border-transparent px-[1.4rem] py-[0.9rem] text-base font-semibold  hover:scale-[1.02] transition'
   const variantClassName =
     variant === 'solid'
-      ? 'bg-slate-100 text-[#111] hover:bg-slate-200:text-[#222]'
+      ? 'bg-slate-100 text-[#111] hover:bg-slate-300 hover:scale-[1.02]'
       : 'bg-transparent text-white/72 hover:text-white'
 
   return (
