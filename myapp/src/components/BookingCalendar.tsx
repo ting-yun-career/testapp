@@ -15,8 +15,10 @@ import Button from './web/Button'
 import Pill from './web/Pill'
 
 const WEEKDAY_LABELS = Array.from({ length: 7 }, (_, index) =>
-  format(addDays(startOfWeek(new Date(), { weekStartsOn: 0 }), index), 'EEE')
-    .toUpperCase(),
+  format(
+    addDays(startOfWeek(new Date(), { weekStartsOn: 0 }), index),
+    'EEE',
+  ).toUpperCase(),
 )
 
 type CalendarDay = {
@@ -74,9 +76,7 @@ export default function BookingCalendar({
   ],
 }: BookingCalendarProps) {
   const initialDate = new Date()
-  const [visibleMonth, setVisibleMonth] = useState(
-    startOfMonth(initialDate),
-  )
+  const [visibleMonth, setVisibleMonth] = useState(startOfMonth(initialDate))
   const [selectedDate, setSelectedDate] = useState(initialDate)
   const [is24Hour, setIs24Hour] = useState(true)
   const [dragSelection, setDragSelection] = useState<DragSelection | null>(null)
@@ -142,7 +142,9 @@ export default function BookingCalendar({
               <div className="flex items-center justify-between">
                 <h2 className="text-[1.6rem] font-semibold text-white">
                   {format(visibleMonth, 'MMMM')}{' '}
-                  <span className="text-white/58">{format(visibleMonth, 'yyyy')}</span>
+                  <span className="text-white/58">
+                    {format(visibleMonth, 'yyyy')}
+                  </span>
                 </h2>
                 <div className="flex items-center gap-2">
                   <MonthArrow
@@ -205,21 +207,13 @@ export default function BookingCalendar({
                     <MonthArrow
                       direction="prev"
                       onClick={() =>
-                        shiftSelectedDate(
-                          -7,
-                          setSelectedDate,
-                          setVisibleMonth,
-                        )
+                        shiftSelectedDate(-7, setSelectedDate, setVisibleMonth)
                       }
                     />
                     <MonthArrow
                       direction="next"
                       onClick={() =>
-                        shiftSelectedDate(
-                          7,
-                          setSelectedDate,
-                          setVisibleMonth,
-                        )
+                        shiftSelectedDate(7, setSelectedDate, setVisibleMonth)
                       }
                     />
                   </div>
@@ -556,12 +550,12 @@ function AppointmentTimeGrid({
               ) : null}
               {isSelectionStart ? (
                 <div
-                  className="pointer-events-none absolute inset-x-[0.2rem] top-[0.08rem] z-[2] overflow-hidden rounded-[3px] bg-white/95 px-[0.4rem] py-[0.12rem] text-[0.75rem] font-bold leading-[1.15] text-neutral-950 shadow-[0_1px_2px_rgba(0,0,0,0.18)]"
+                  className="pointer-events-none absolute inset-x-0 top-0 z-[2] overflow-hidden rounded-[3px] bg-white/95 px-[0.4rem] py-[0.12rem] text-[0.75rem] font-bold leading-[1.15] text-neutral-950 shadow-[0_1px_2px_rgba(0,0,0,0.18)]"
                   style={{
-                    height: `calc(${selectionSlotCount} * 1.05rem + ${Math.max(
-                      selectionSlotCount - 1,
+                    height: `calc(${selectionSlotCount} * 0.99rem + ${Math.max(
+                      selectionSlotCount - 2,
                       0,
-                    )}px - 0.16rem)`,
+                    )}px)`,
                   }}
                 >
                   <div className="whitespace-nowrap">
