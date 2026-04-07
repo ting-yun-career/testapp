@@ -320,7 +320,7 @@ export default function BookingCalendar({
               {formatMinutesLabel(draftStartMinutes, is24Hour)} -{' '}
               {formatMinutesLabel(draftEndMinutes, is24Hour)}
             </Pill>
-            <Pill icon={<ClockSmallIcon />}>{draftDurationMinutes}m</Pill>
+            <Pill icon={<ClockSmallIcon />}>{draftDurationMinutes} min</Pill>
           </div>
 
           <TextControl
@@ -550,7 +550,7 @@ function AppointmentTimeGrid({
               ) : null}
               {isSelectionStart ? (
                 <div
-                  className="pointer-events-none absolute inset-x-0 top-0 z-[2] overflow-hidden rounded-[3px] bg-white/95 px-[0.4rem] py-[0.12rem] text-[0.75rem] font-bold leading-[1.15] text-neutral-950 shadow-[0_1px_2px_rgba(0,0,0,0.18)]"
+                  className="pointer-events-none absolute inset-x-0 top-0 z-[2] flex items-center justify-center overflow-hidden rounded-[3px] bg-white/95 px-[0.4rem] py-[0.12rem] text-center text-[0.75rem] font-bold leading-[1.15] text-neutral-950 shadow-[0_1px_2px_rgba(0,0,0,0.18)]"
                   style={{
                     height: `calc(${selectionSlotCount} * 0.99rem + ${Math.max(
                       selectionSlotCount - 2,
@@ -558,9 +558,7 @@ function AppointmentTimeGrid({
                     )}px)`,
                   }}
                 >
-                  <div className="whitespace-nowrap">
-                    {selectionDurationMinutes}m
-                  </div>
+                  {selectionDurationMinutes} min
                 </div>
               ) : null}
               {marker &&
