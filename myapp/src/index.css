@@ -3,10 +3,6 @@
 :root {
   color-scheme: dark;
   --app-bg: #0c0c0c;
-  --panel-bg: rgba(23, 23, 23, 0.96);
-  --card-bg: rgba(28, 28, 28, 0.92);
-  --text-primary: rgba(255, 255, 255, 0.96);
-  --text-muted: rgba(255, 255, 255, 0.55);
   --line-soft: rgba(255, 255, 255, 0.08);
   --line-hard: rgba(255, 255, 255, 0.2);
   --tile: #4a4a4a;
@@ -47,60 +43,6 @@ input {
 .booking-shell {
   display: grid;
   grid-template-columns: minmax(320px, 390px) minmax(0, 1fr);
-}
-
-.calendar-day {
-  position: relative;
-  display: flex;
-  aspect-ratio: 1 / 1;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid transparent;
-  border-radius: 3px;
-  color: rgba(255, 255, 255, 0.76);
-  font-size: 1rem;
-  transition:
-    background-color 160ms ease,
-    color 160ms ease,
-    transform 160ms ease,
-    border-color 160ms ease;
-}
-
-.calendar-day--available {
-  background: var(--tile);
-  color: white;
-}
-
-.calendar-day--available:hover {
-  background: var(--tile-hover);
-  transform: translateY(-1px);
-}
-
-.calendar-day--selected {
-  background: var(--tile-selected);
-  color: black;
-}
-
-.calendar-day--outside {
-  color: rgba(255, 255, 255, 0.28);
-}
-
-.calendar-day--today {
-  background: #111;
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: white;
-}
-
-.calendar-day--today.calendar-day--selected {
-  background-color: #222;
-}
-.calendar-day--today:hover {
-  transform: translateY(-1px);
-}
-
-.calendar-day:disabled {
-  cursor: default;
 }
 
 .slot-pill {
@@ -287,18 +229,9 @@ input {
   .booking-shell {
     grid-template-columns: 1fr;
   }
-
-  .calendar-day {
-    font-size: 2rem;
-  }
 }
 
 @media (max-width: 640px) {
-  .calendar-day {
-    border-radius: 3px;
-    font-size: 1.45rem;
-  }
-
   .slot-pill {
     min-height: 4rem;
     font-size: 1.3rem;
