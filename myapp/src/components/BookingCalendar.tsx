@@ -446,7 +446,13 @@ function AppointmentTimeGrid({
     : null
 
   return (
-    <div className="overlay-grid">
+    <div
+      className="grid select-none border-t border-l border-white/10 [grid-auto-rows:1.05rem]"
+      style={{
+        gridTemplateColumns: 'minmax(70px, 0.5fr) repeat(7, minmax(30px, 1fr))',
+        gridTemplateRows: '2.25rem',
+      }}
+    >
       <div
         className="border-r border-b border-white/10"
         style={{ gridColumn: 1, gridRow: 1 }}
