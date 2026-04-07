@@ -2,12 +2,7 @@
 
 :root {
   color-scheme: dark;
-  --app-bg: #0c0c0c;
-  --line-soft: rgba(255, 255, 255, 0.08);
   --line-hard: rgba(255, 255, 255, 0.2);
-  --tile: #4a4a4a;
-  --tile-hover: #595959;
-  --tile-selected: #f3f0ee;
 }
 
 html,
@@ -83,8 +78,8 @@ input {
   grid-template-columns: minmax(70px, 0.5fr) repeat(7, minmax(30px, 1fr));
   grid-template-rows: 2.25rem;
   grid-auto-rows: 1.05rem;
-  border-top: 1px solid var(--line-soft);
-  border-left: 1px solid var(--line-soft);
+  border-top: 1px solid rgb(255 255 255 / 0.1);
+  border-left: 1px solid rgb(255 255 255 / 0.1);
   -webkit-user-select: none;
   user-select: none;
 }
@@ -93,8 +88,8 @@ input {
 .overlay-grid__time,
 .overlay-grid__day-label,
 .overlay-grid__cell {
-  border-right: 1px solid var(--line-soft);
-  border-bottom: 1px solid var(--line-soft);
+  border-right: 1px solid rgb(255 255 255 / 0.1);
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
 }
 
 .overlay-grid__day-label {

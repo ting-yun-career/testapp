@@ -133,9 +133,9 @@ export default function BookingCalendar({
       : 0
 
   return (
-    <main className="min-h-screen bg-[var(--app-bg)]">
+    <main className="min-h-screen bg-neutral-950">
       <div className="mx-auto flex min-h-screen max-w-[1800px] flex-col px-4 py-4 sm:px-6 lg:px-8">
-        <section className="booking-shell flex-1 overflow-hidden rounded-[3px] border border-white/8 bg-[var(--app-bg)] shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+        <section className="booking-shell flex-1 overflow-hidden rounded-[3px] border border-white/8 bg-neutral-950 shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
           <aside className="border-b border-white/8 p-6 lg:border-b-0 lg:border-r lg:p-8">
             <h1 className="mt-4 text-3xl font-semibold tracking-tight text-white lg:text-[2.15rem]">
               Appointments
@@ -192,9 +192,9 @@ export default function BookingCalendar({
                       'text-base max-[1279px]:text-[2rem] max-[640px]:text-[1.45rem]',
                       day.inMonth ? '' : 'text-white/30',
                       day.isAvailable
-                        ? 'bg-[var(--tile)] text-white hover:-translate-y-px '
+                        ? 'bg-neutral-600 text-white hover:-translate-y-px '
                         : 'cursor-default',
-                      day.isSelected ? 'border-white bg-[var(--tile)]' : '',
+                      day.isSelected ? 'border-white bg-neutral-600' : '',
                       day.isToday
                         ? 'border-white text-[1.2rem] text-white'
                         : '',
