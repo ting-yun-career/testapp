@@ -37,7 +37,7 @@ export default function DialogLayer({
     >
       <section
         aria-modal="true"
-        className="w-full max-w-[70rem] overflow-hidden rounded-[22px] border border-white/8 bg-[#111] shadow-[0_28px_90px_rgba(0,0,0,0.45)]"
+        className="w-full max-w-[min(50dvw,70rem)] overflow-hidden rounded-[22px] border border-white/8 bg-[#111] shadow-[0_28px_90px_rgba(0,0,0,0.45)] max-[900px]:max-w-full"
         onClick={(event) => event.stopPropagation()}
         role="dialog"
       >

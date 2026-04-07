@@ -335,41 +335,42 @@ export default function BookingCalendar({
           </div>
 
           <TextControl
-            label="Your name"
+            label="Your Name"
             onChange={(value) =>
               setRequestDetails((current) => ({
                 ...current,
                 name: value,
               }))
             }
-            placeholder="Alex Chen"
+            placeholder="eg. John Smith"
             required
             value={requestDetails.name}
           />
 
           <TextControl
-            label="Email address"
+            label="Email Address"
             onChange={(value) =>
               setRequestDetails((current) => ({
                 ...current,
                 email: value,
               }))
             }
-            placeholder="alex@example.com"
+            placeholder="eg. jsmith@gmail.com"
             required
             type="email"
             value={requestDetails.email}
           />
 
           <TextControl
-            label="Phone or meeting link"
+            label="Phone / Meeting link"
             onChange={(value) =>
               setRequestDetails((current) => ({
                 ...current,
                 meetingLinkOrPhone: value,
               }))
             }
-            placeholder="Phone number or Zoom/Meet link"
+            required
+            placeholder="Paste Meeting link or Phone here "
             value={requestDetails.meetingLinkOrPhone}
           />
 
@@ -382,7 +383,7 @@ export default function BookingCalendar({
                 additionalInfo: value,
               }))
             }
-            placeholder="Share anything that will help prepare for this appointment."
+            placeholder="Additional information"
             value={requestDetails.additionalInfo}
           />
         </DialogLayer>
