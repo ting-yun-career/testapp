@@ -1,26 +1,23 @@
+import {
+  addDays,
+  addMonths,
+  endOfMonth,
+  format,
+  isSameDay,
+  isSameMonth,
+  startOfMonth,
+  startOfWeek,
+} from 'date-fns'
 import { useEffect, useMemo, useState } from 'react'
 import DialogLayer from './DialogLayer'
 import TextControl from './form/TextControl'
 import Button from './web/Button'
 import Pill from './web/Pill'
 
-const MONTH_NAMES = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-]
-
-const WEEKDAY_LABELS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
-const WEEKDAY_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const WEEKDAY_LABELS = Array.from({ length: 7 }, (_, index) =>
+  format(addDays(startOfWeek(new Date(), { weekStartsOn: 0 }), index), 'EEE')
+    .toUpperCase(),
+)
 
 type CalendarDay = {
   date: Date
@@ -78,7 +75,7 @@ export default function BookingCalendar({
 }: BookingCalendarProps) {
   const initialDate = new Date()
   const [visibleMonth, setVisibleMonth] = useState(
-    new Date(initialDate.getFullYear(), initialDate.getMonth(), 1),
+    startOfMonth(initialDate),
   )
   const [selectedDate, setSelectedDate] = useState(initialDate)
   const [is24Hour, setIs24Hour] = useState(true)
@@ -144,34 +141,20 @@ export default function BookingCalendar({
             <div className="mt-12">
               <div className="flex items-center justify-between">
                 <h2 className="text-[1.6rem] font-semibold text-white">
-                  {MONTH_NAMES[visibleMonth.getMonth()]}{' '}
-                  <span className="text-white/58">
-                    {visibleMonth.getFullYear()}
-                  </span>
+                  {format(visibleMonth, 'MMMM')}{' '}
+                  <span className="text-white/58">{format(visibleMonth, 'yyyy')}</span>
                 </h2>
                 <div className="flex items-center gap-2">
                   <MonthArrow
                     direction="prev"
                     onClick={() => {
-                      setVisibleMonth(
-                        new Date(
-                          visibleMonth.getFullYear(),
-                          visibleMonth.getMonth() - 1,
-                          1,
-                        ),
-                      )
+                      setVisibleMonth(startOfMonth(addMonths(visibleMonth, -1)))
                     }}
                   />
                   <MonthArrow
                     direction="next"
                     onClick={() => {
-                      setVisibleMonth(
-                        new Date(
-                          visibleMonth.getFullYear(),
-                          visibleMonth.getMonth() + 1,
-                          1,
-                        ),
-                      )
+                      setVisibleMonth(startOfMonth(addMonths(visibleMonth, 1)))
                     }}
                   />
                 </div>
@@ -327,7 +310,7 @@ export default function BookingCalendar({
         >
           <div className="mt-6 flex flex-wrap gap-[0.85rem]">
             <Pill icon={<CalendarSmallIcon />}>
-              {`${WEEKDAY_SHORT[draftDay.getDay()]}, ${MONTH_NAMES[draftDay.getMonth()]} ${draftDay.getDate()}, ${draftDay.getFullYear()}, `}
+              {`${format(draftDay, 'EEE, MMMM d, yyyy')}, `}
               {formatMinutesLabel(draftStartMinutes, is24Hour)} -{' '}
               {formatMinutesLabel(draftEndMinutes, is24Hour)}
             </Pill>
@@ -434,7 +417,7 @@ function AppointmentTimeGrid({
   const normalizedEnd = Math.max(normalizedStart + 1, endHour)
   const slotCount = (normalizedEnd - normalizedStart) * 4
   const slotIndexes = Array.from({ length: slotCount }, (_, index) => index)
-  const todayVisible = weekDays.some((day) => isSameDate(day, now))
+  const todayVisible = weekDays.some((day) => isSameDay(day, now))
   const marker = getCurrentMarker({
     endHour: normalizedEnd,
     now,
@@ -463,8 +446,8 @@ function AppointmentTimeGrid({
           key={day.toISOString()}
           className={[
             'flex items-center justify-center gap-[0.55rem] border-r border-b border-white/10 border-b-white/20 px-3 py-[0.85rem] text-center select-none',
-            isSameDate(day, selectedDate) ? 'border-b-2 border-b-white/35' : '',
-            isSameDate(day, now) ? 'bg-white/[0.035]' : '',
+            isSameDay(day, selectedDate) ? 'border-b-2 border-b-white/35' : '',
+            isSameDay(day, now) ? 'bg-white/[0.035]' : '',
           ]
             .filter(Boolean)
             .join(' ')}
@@ -474,10 +457,10 @@ function AppointmentTimeGrid({
           }}
         >
           <span className="text-xs uppercase tracking-[0.24em] text-white/46">
-            {WEEKDAY_SHORT[day.getDay()]}
+            {format(day, 'EEE')}
           </span>
           <span className="text-base font-medium text-white/75">
-            {pad(day.getDate())}
+            {format(day, 'dd')}
           </span>
         </div>
       ))}
@@ -528,7 +511,7 @@ function AppointmentTimeGrid({
               key={`${day.toISOString()}-${slotIndex}`}
               className={[
                 'relative h-[1.05rem] border-r border-b border-white/10 bg-white/[0.01]',
-                isSameDate(day, now) ? 'bg-white/[0.035]' : '',
+                isSameDay(day, now) ? 'bg-white/[0.035]' : '',
                 busy ? 'cursor-not-allowed' : 'cursor-crosshair',
                 isSelectedSlot ? 'z-[2]' : '',
                 isSelectionStart ? 'z-[4]' : '',
@@ -600,50 +583,39 @@ function buildCalendarDays(
   availabilities: Availability[],
 ): CalendarDay[] {
   const today = new Date()
-  const firstOfMonth = new Date(month.getFullYear(), month.getMonth(), 1)
-  const lastOfMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0)
+  const firstOfMonth = startOfMonth(month)
+  const lastOfMonth = endOfMonth(month)
   const leading = firstOfMonth.getDay()
   const totalCells = Math.ceil((leading + lastOfMonth.getDate()) / 7) * 7
-  const start = new Date(month.getFullYear(), month.getMonth(), 1 - leading)
+  const start = addDays(firstOfMonth, -leading)
 
   return Array.from({ length: totalCells }, (_, index) => {
-    const date = new Date(start)
-    date.setDate(start.getDate() + index)
-    const inMonth = date.getMonth() === month.getMonth()
+    const date = addDays(start, index)
+    const inMonth = isSameMonth(date, month)
     const isAvailable =
       inMonth && getAvailabilityForDay(availabilities, date.getDay()) !== null
-    const isSelected = isSameDate(date, selectedDate)
+    const isSelected = isSameDay(date, selectedDate)
 
     return {
       date,
       inMonth,
       isAvailable,
       isSelected,
-      isToday: isSameDate(date, today),
+      isToday: isSameDay(date, today),
     }
   })
 }
 
 function getWeekDaysStarting(selectedDate: Date) {
-  const start = new Date(selectedDate)
-  start.setDate(start.getDate() - start.getDay())
-
-  return Array.from({ length: 7 }, (_, index) => {
-    const date = new Date(start)
-    date.setDate(start.getDate() + index)
-    return date
-  })
+  const start = startOfWeek(selectedDate, { weekStartsOn: 0 })
+  return Array.from({ length: 7 }, (_, index) => addDays(start, index))
 }
 
 function shiftSelectedDate(
   amount: number,
   setSelectedDate: React.Dispatch<React.SetStateAction<Date>>,
 ) {
-  setSelectedDate((current) => {
-    const next = new Date(current)
-    next.setDate(next.getDate() + amount)
-    return next
-  })
+  setSelectedDate((current) => addDays(current, amount))
 }
 
 function formatRangeTitle(weekDays: Date[]) {
@@ -655,24 +627,17 @@ function formatRangeTitle(weekDays: Date[]) {
   }
 
   if (start.getMonth() === end.getMonth()) {
-    return `${MONTH_NAMES[start.getMonth()]} ${start.getDate()}-${end.getDate()}, ${start.getFullYear()}`
+    return `${format(start, 'MMMM d')}-${format(end, 'd, yyyy')}`
   }
 
-  return `${MONTH_NAMES[start.getMonth()]} ${start.getDate()}-${MONTH_NAMES[end.getMonth()]} ${end.getDate()}, ${end.getFullYear()}`
+  return `${format(start, 'MMMM d')}-${format(end, 'MMMM d, yyyy')}`
 }
 
 function formatTimeLabel(time: string, is24Hour: boolean) {
   const [hoursText, minutesText] = time.split(':')
   const hours = Number(hoursText)
   const minutes = Number(minutesText)
-
-  if (is24Hour) {
-    return `${pad(hours)}:${pad(minutes)}`
-  }
-
-  const suffix = hours >= 12 ? 'PM' : 'AM'
-  const normalized = hours % 12 || 12
-  return `${normalized}:${pad(minutes)} ${suffix}`
+  return formatClockTime(hours, minutes, is24Hour)
 }
 
 function formatHourLabel(hour: number, is24Hour: boolean) {
@@ -682,7 +647,7 @@ function formatHourLabel(hour: number, is24Hour: boolean) {
 function formatMinutesLabel(totalMinutes: number, is24Hour: boolean) {
   const hours = Math.floor(totalMinutes / 60)
   const minutes = totalMinutes % 60
-  return formatTimeLabel(`${pad(hours)}:${pad(minutes)}`, is24Hour)
+  return formatClockTime(hours, minutes, is24Hour)
 }
 
 function formatDateTimeLabel(date: Date, is24Hour: boolean) {
@@ -696,16 +661,13 @@ function hourToggleClass(active: boolean) {
   ].join(' ')
 }
 
-function isSameDate(left: Date, right: Date) {
-  return (
-    left.getFullYear() === right.getFullYear() &&
-    left.getMonth() === right.getMonth() &&
-    left.getDate() === right.getDate()
-  )
-}
-
 function pad(value: number) {
   return String(value).padStart(2, '0')
+}
+
+function formatClockTime(hours: number, minutes: number, is24Hour: boolean) {
+  const date = new Date(2026, 0, 1, hours, minutes)
+  return format(date, is24Hour ? 'HH:mm' : 'h:mm a')
 }
 
 function normalizeSelection(selection: DragSelection): AppointmentDraft {
@@ -777,7 +739,7 @@ function getCurrentMarker({
     return null
   }
 
-  const dayIndex = weekDays.findIndex((day) => isSameDate(day, now))
+  const dayIndex = weekDays.findIndex((day) => isSameDay(day, now))
   const totalMinutes = now.getHours() * 60 + now.getMinutes()
   const startMinutes = startHour * 60
   const endMinutes = endHour * 60
