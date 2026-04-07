@@ -462,9 +462,7 @@ function AppointmentTimeGrid({
           key={day.toISOString()}
           className={[
             'flex items-center justify-center gap-[0.55rem] border-r border-b border-white/10 px-3 py-[0.85rem] text-center select-none [border-bottom-color:var(--line-hard)]',
-            isSameDate(day, selectedDate)
-              ? 'bg-white/[0.06]'
-              : '',
+            isSameDate(day, selectedDate) ? 'border-b-2 border-b-white/35' : '',
             isSameDate(day, now) ? 'bg-white/[0.035]' : '',
           ]
             .filter(Boolean)
@@ -510,7 +508,6 @@ function AppointmentTimeGrid({
             slotIndex,
             startHour: normalizedStart,
           })
-          const selectedColumn = isSameDate(day, selectedDate)
           const isSelectedSlot = isSlotInSelection(
             normalizedSelection,
             dayIndex,
@@ -530,7 +527,6 @@ function AppointmentTimeGrid({
               key={`${day.toISOString()}-${slotIndex}`}
               className={[
                 'relative h-[1.05rem] border-r border-b border-white/10 bg-white/[0.01]',
-                selectedColumn ? 'bg-white/[0.06]' : '',
                 isSameDate(day, now) ? 'bg-white/[0.035]' : '',
                 busy ? 'cursor-not-allowed' : 'cursor-crosshair',
                 isSelectedSlot ? 'z-[2]' : '',
