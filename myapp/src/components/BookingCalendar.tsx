@@ -38,13 +38,7 @@ type BookingCalendarProps = {
   availabilities?: Availability[]
 }
 
-type DragSelection = {
-  dayIndex: number
-  endSlot: number
-  startSlot: number
-}
-
-type AppointmentDraft = {
+type SelectionRange = {
   dayIndex: number
   endSlot: number
   startSlot: number
@@ -79,9 +73,9 @@ export default function BookingCalendar({
   const [visibleMonth, setVisibleMonth] = useState(startOfMonth(initialDate))
   const [selectedDate, setSelectedDate] = useState(initialDate)
   const [is24Hour, setIs24Hour] = useState(true)
-  const [dragSelection, setDragSelection] = useState<DragSelection | null>(null)
+  const [dragSelection, setDragSelection] = useState<SelectionRange | null>(null)
   const [appointmentDraft, setAppointmentDraft] =
-    useState<AppointmentDraft | null>(null)
+    useState<SelectionRange | null>(null)
   const [requestDetails, setRequestDetails] = useState(DEFAULT_REQUEST_DETAILS)
 
   const calendarDays = useMemo(
@@ -97,6 +91,13 @@ export default function BookingCalendar({
     () => getHourBounds(availabilities),
     [availabilities],
   )
+  const isUnavailableSelectionSlot = (dayIndex: number, slotIndex: number) =>
+    isBusySlot({
+      availabilities,
+      dayIndex,
+      slotIndex,
+      startHour: hourBounds.startHour,
+    })
 
   useEffect(() => {
     if (!dragSelection) {
@@ -152,6 +153,38 @@ export default function BookingCalendar({
     }
 
     console.info('Appointment request submitted', appointmentRequest)
+  }
+
+  const handleSelectionStart = (dayIndex: number, slotIndex: number) => {
+    if (isUnavailableSelectionSlot(dayIndex, slotIndex)) {
+      return
+    }
+
+    setSelectedDate(weekDays[dayIndex] ?? selectedDate)
+    setDragSelection({
+      dayIndex,
+      endSlot: slotIndex,
+      startSlot: slotIndex,
+    })
+  }
+
+  const handleSelectionExtend = (dayIndex: number, slotIndex: number) => {
+    if (
+      !dragSelection ||
+      dragSelection.dayIndex !== dayIndex ||
+      isUnavailableSelectionSlot(dayIndex, slotIndex)
+    ) {
+      return
+    }
+
+    setDragSelection((current) =>
+      current && current.dayIndex === dayIndex && current.endSlot !== slotIndex
+        ? {
+            ...current,
+            endSlot: slotIndex,
+          }
+        : current,
+    )
   }
 
   return (
@@ -268,53 +301,8 @@ export default function BookingCalendar({
               <AppointmentTimeGrid
                 availabilities={availabilities}
                 dragSelection={dragSelection}
-                onCellMouseDown={(dayIndex, slotIndex) => {
-                  if (
-                    isBusySlot({
-                      availabilities,
-                      dayIndex,
-                      endHour: hourBounds.endHour,
-                      slotIndex,
-                      startHour: hourBounds.startHour,
-                    })
-                  ) {
-                    return
-                  }
-
-                  setSelectedDate(weekDays[dayIndex] ?? selectedDate)
-                  setDragSelection({
-                    dayIndex,
-                    endSlot: slotIndex,
-                    startSlot: slotIndex,
-                  })
-                }}
-                onCellMouseEnter={(dayIndex, slotIndex) => {
-                  if (
-                    !dragSelection ||
-                    dragSelection.dayIndex !== dayIndex ||
-                    isBusySlot({
-                      availabilities,
-                      dayIndex,
-                      endHour: hourBounds.endHour,
-                      slotIndex,
-                      startHour: hourBounds.startHour,
-                    })
-                  ) {
-                    return
-                  }
-
-                  setDragSelection((current) =>
-                    current
-                      ? current.dayIndex === dayIndex &&
-                        current.endSlot === slotIndex
-                        ? current
-                        : {
-                            ...current,
-                            endSlot: slotIndex,
-                          }
-                      : current,
-                  )
-                }}
+                onCellMouseDown={handleSelectionStart}
+                onCellMouseEnter={handleSelectionExtend}
                 selectedDate={selectedDate}
                 weekDays={weekDays}
                 is24Hour={is24Hour}
@@ -438,7 +426,7 @@ function AppointmentTimeGrid({
   is24Hour,
 }: {
   availabilities: Availability[]
-  dragSelection: DragSelection | null
+  dragSelection: SelectionRange | null
   onCellMouseDown: (dayIndex: number, slotIndex: number) => void
   onCellMouseEnter: (dayIndex: number, slotIndex: number) => void
   selectedDate: Date
@@ -459,9 +447,9 @@ function AppointmentTimeGrid({
     todayVisible,
     weekDays,
   })
-  const normalizedSelection = dragSelection
-    ? normalizeSelection(dragSelection)
-    : null
+  const normalizedSelection = getSelectionDetails(
+    dragSelection ? normalizeSelection(dragSelection) : null,
+  )
 
   return (
     <div
@@ -522,23 +510,9 @@ function AppointmentTimeGrid({
           const busy = isBusySlot({
             availabilities,
             dayIndex,
-            endHour: normalizedEnd,
             slotIndex,
             startHour: normalizedStart,
           })
-          const isSelectedSlot = isSlotInSelection(
-            normalizedSelection,
-            dayIndex,
-            slotIndex,
-          )
-          const isSelectionStart =
-            normalizedSelection?.dayIndex === dayIndex &&
-            normalizedSelection.startSlot === slotIndex
-          const selectionSlotCount =
-            normalizedSelection?.dayIndex === dayIndex
-              ? normalizedSelection.endSlot - normalizedSelection.startSlot + 1
-              : 0
-          const selectionDurationMinutes = selectionSlotCount * 15
 
           return (
             <div
@@ -547,8 +521,6 @@ function AppointmentTimeGrid({
                 'relative h-[1.05rem] border-r border-b border-white/10 bg-white/[0.01]',
                 isSameDay(day, now) ? 'bg-white/[0.035]' : '',
                 busy ? 'cursor-not-allowed' : 'cursor-crosshair',
-                isSelectedSlot ? 'z-[2]' : '',
-                isSelectionStart ? 'z-[4]' : '',
               ]
                 .filter(Boolean)
                 .join(' ')}
@@ -576,19 +548,6 @@ function AppointmentTimeGrid({
               {busy ? (
                 <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.045)_12.5%,transparent_25%,transparent_50%,rgba(255,255,255,0.045)_50%,rgba(255,255,255,0.045)_62.5%,transparent_75%,transparent)] bg-[length:5px_5px]" />
               ) : null}
-              {isSelectionStart ? (
-                <div
-                  className="pointer-events-none absolute inset-x-0 top-0 z-[2] flex items-center justify-center overflow-hidden rounded-[3px] bg-white/95 px-[0.4rem] py-[0.12rem] text-center text-[0.75rem] font-bold leading-[1.15] text-neutral-950 shadow-[0_1px_2px_rgba(0,0,0,0.18)]"
-                  style={{
-                    height: `calc(${selectionSlotCount} * 0.99rem + ${Math.max(
-                      selectionSlotCount - 2,
-                      0,
-                    )}px)`,
-                  }}
-                >
-                  {selectionDurationMinutes} min
-                </div>
-              ) : null}
               {marker &&
               marker.dayIndex === dayIndex &&
               marker.slotIndex === slotIndex ? (
@@ -605,6 +564,19 @@ function AppointmentTimeGrid({
           )
         }),
       )}
+      {normalizedSelection ? (
+        <div
+          className="pointer-events-none relative z-[4]"
+          style={{
+            gridColumn: normalizedSelection.dayIndex + 2,
+            gridRow: `${normalizedSelection.startSlot + 2} / span ${normalizedSelection.slotCount}`,
+          }}
+        >
+          <div className="absolute inset-0 flex items-center justify-center overflow-hidden rounded-[3px] bg-white/95 px-[0.4rem] py-[0.12rem] text-center text-[0.75rem] font-bold leading-[1.15] text-neutral-950 shadow-[0_1px_2px_rgba(0,0,0,0.18)]">
+            {normalizedSelection.durationMinutes} min
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }
@@ -707,7 +679,7 @@ function formatClockTime(hours: number, minutes: number, is24Hour: boolean) {
   return format(date, is24Hour ? 'HH:mm' : 'h:mm a')
 }
 
-function normalizeSelection(selection: DragSelection): AppointmentDraft {
+function normalizeSelection(selection: SelectionRange): SelectionRange {
   return {
     dayIndex: selection.dayIndex,
     endSlot: Math.max(selection.startSlot, selection.endSlot),
@@ -715,41 +687,40 @@ function normalizeSelection(selection: DragSelection): AppointmentDraft {
   }
 }
 
-function slotIndexToMinutes(slotIndex: number, startHour: number) {
-  return startHour * 60 + slotIndex * 15
-}
-
-function isSlotInSelection(
-  selection: AppointmentDraft | null,
-  dayIndex: number,
-  slotIndex: number,
-) {
-  if (!selection || selection.dayIndex !== dayIndex) {
-    return false
+function getSelectionDetails(selection: SelectionRange | null) {
+  if (!selection) {
+    return null
   }
 
-  return slotIndex >= selection.startSlot && slotIndex <= selection.endSlot
+  const slotCount = selection.endSlot - selection.startSlot + 1
+
+  return {
+    durationMinutes: slotCount * 15,
+    slotCount,
+    ...selection,
+  }
+}
+
+function slotIndexToMinutes(slotIndex: number, startHour: number) {
+  return startHour * 60 + slotIndex * 15
 }
 
 function isBusySlot({
   availabilities,
   dayIndex,
-  endHour,
   slotIndex,
   startHour,
 }: {
   availabilities: Availability[]
   dayIndex: number
-  endHour: number
   slotIndex: number
   startHour: number
 }) {
   const slotStartMinutes = slotIndexToMinutes(slotIndex, startHour)
   const slotEndMinutes = slotStartMinutes + 15
-  const rangeEndMinutes = endHour * 60
   const availability = getAvailabilityForDay(availabilities, dayIndex)
 
-  if (!availability || slotStartMinutes >= rangeEndMinutes) {
+  if (!availability) {
     return true
   }
 
