@@ -1,3 +1,4 @@
+import { clsx } from 'clsx'
 import {
   addDays,
   addMonths,
@@ -230,20 +231,16 @@ export default function BookingCalendar({
                 {calendarDays.map((day) => (
                   <button
                     key={day.date.toISOString()}
-                    className={[
+                    className={clsx(
                       'relative flex aspect-square cursor-pointer items-center justify-center rounded-[3px] border border-transparent text-white/70 transition [transition-property:background-color,color,transform,border-color]',
                       'text-base max-[1279px]:text-[2rem] max-[640px]:text-[1.45rem]',
-                      day.inMonth ? '' : 'text-white/30',
+                      !day.inMonth && 'text-white/30',
                       day.isAvailable
                         ? 'bg-neutral-600 text-white hover:-translate-y-px '
                         : 'cursor-default',
-                      day.isSelected ? 'border-white bg-neutral-600' : '',
-                      day.isToday
-                        ? 'border-white text-[1.2rem] text-white'
-                        : '',
-                    ]
-                      .filter(Boolean)
-                      .join(' ')}
+                      day.isSelected && 'border-white bg-neutral-600',
+                      day.isToday && 'border-white text-[1.2rem] text-white',
+                    )}
                     disabled={!day.isAvailable}
                     onClick={() => setSelectedDate(day.date)}
                   >
@@ -466,13 +463,11 @@ function AppointmentTimeGrid({
       {weekDays.map((day, dayIndex) => (
         <div
           key={day.toISOString()}
-          className={[
+          className={clsx(
             'flex items-center justify-center gap-[0.55rem] border-r border-b border-white/10 border-b-white/20 px-3 py-[0.85rem] text-center select-none',
-            isSameDay(day, selectedDate) ? 'border-b-2 border-b-white/35' : '',
-            isSameDay(day, now) ? 'bg-white/[0.035]' : '',
-          ]
-            .filter(Boolean)
-            .join(' ')}
+            isSameDay(day, selectedDate) && 'border-b-2 border-b-white/35',
+            isSameDay(day, now) && 'bg-white/[0.035]',
+          )}
           style={{
             gridColumn: dayIndex + 2,
             gridRow: 1,
@@ -517,13 +512,11 @@ function AppointmentTimeGrid({
           return (
             <div
               key={`${day.toISOString()}-${slotIndex}`}
-              className={[
+              className={clsx(
                 'relative h-[1.05rem] border-r border-b border-white/10 bg-white/[0.01]',
-                isSameDay(day, now) ? 'bg-white/[0.035]' : '',
+                isSameDay(day, now) && 'bg-white/[0.035]',
                 busy ? 'cursor-not-allowed' : 'cursor-crosshair',
-              ]
-                .filter(Boolean)
-                .join(' ')}
+              )}
               onMouseDown={(event) => {
                 if (event.button !== 0 || busy) {
                   return
@@ -664,10 +657,10 @@ function formatDateTimeLabel(date: Date, is24Hour: boolean) {
 }
 
 function hourToggleClass(active: boolean) {
-  return [
+  return clsx(
     'rounded-[3px] px-3 py-2 text-sm transition',
     active ? 'bg-black text-white' : 'text-white/55 hover:text-white',
-  ].join(' ')
+  )
 }
 
 function pad(value: number) {
