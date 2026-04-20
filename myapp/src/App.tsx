@@ -2,9 +2,9 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect } from 'react'
 import type { ReactNode } from 'react'
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { hasAuth0Config } from './auth-config'
 import BookingCalendar from './components/BookingCalendar'
 import Button from './components/web/Button'
-import { hasAuth0Config } from './auth'
 
 function App() {
   return (

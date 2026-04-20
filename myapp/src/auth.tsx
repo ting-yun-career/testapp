@@ -1,12 +1,12 @@
 import { Auth0Provider, type AppState } from '@auth0/auth0-react'
 import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-
-const domain = import.meta.env.VITE_AUTH0_DOMAIN
-const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID
-export const auth0Connection = import.meta.env.VITE_AUTH0_CONNECTION
-
-export const hasAuth0Config = Boolean(domain && clientId)
+import {
+  auth0ClientId,
+  auth0Connection,
+  auth0Domain,
+  hasAuth0Config,
+} from './auth-config'
 
 type AuthProviderProps = {
   children: ReactNode
@@ -21,13 +21,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return (
     <Auth0Provider
-      domain={domain}
-      clientId={clientId}
+      domain={auth0Domain}
+      clientId={auth0ClientId}
       onRedirectCallback={(appState?: AppState) => {
         navigate(appState?.returnTo ?? '/dashboard', { replace: true })
       }}
       authorizationParams={{
         redirect_uri: `${window.location.origin}/dashboard`,
+        ...(auth0Connection ? { connection: auth0Connection } : {}),
       }}
     >
       {children}
