@@ -19,10 +19,8 @@ import {
   getSelectionDetails,
   getUserTimeZone,
   getWeekDaysStarting,
-  hourToggleClass,
   isBusySlot,
   normalizeSelection,
-  shiftSelectedDate,
   slotIndexToMinutes,
   WEEKDAY_LABELS,
   type Availability,
@@ -71,6 +69,10 @@ export default function BookingCalendar({
   const weekDays = useMemo(
     () => getWeekDaysStarting(selectedDate),
     [selectedDate],
+  )
+  const weekRangeTitle = useMemo(
+    () => formatRangeTitle(weekDays[0], weekDays[weekDays.length - 1]),
+    [weekDays],
   )
   const hourBounds = useMemo(
     () => getHourBounds(availabilities),
@@ -220,6 +222,15 @@ export default function BookingCalendar({
     )
   }
 
+  const handleWeekShift = (amount: number) => {
+    setSelectedDate((current) => {
+      const nextDate = new Date(current)
+      nextDate.setDate(current.getDate() + amount)
+      setVisibleMonth(startOfMonth(nextDate))
+      return nextDate
+    })
+  }
+
   return (
     <main className="flex-1 bg-neutral-950">
       <div className="mx-auto flex min-h-full max-w-[1800px] flex-col px-4 py-4 sm:px-6 lg:px-8">
@@ -288,35 +299,41 @@ export default function BookingCalendar({
               <div className="flex flex-col gap-4 xl:grid xl:grid-cols-[1fr_auto_1fr] xl:items-center">
                 <div className="flex items-center">
                   <h2 className="text-2xl font-semibold text-white">
-                    {formatRangeTitle(weekDays)}
+                    {weekRangeTitle}
                   </h2>
                 </div>
 
                 <div className="flex justify-center gap-1">
                   <MonthArrow
                     direction="prev"
-                    onClick={() =>
-                      shiftSelectedDate(-7, setSelectedDate, setVisibleMonth)
-                    }
+                    onClick={() => handleWeekShift(-7)}
                   />
                   <MonthArrow
                     direction="next"
-                    onClick={() =>
-                      shiftSelectedDate(7, setSelectedDate, setVisibleMonth)
-                    }
+                    onClick={() => handleWeekShift(7)}
                   />
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3 text-sm text-white/88 xl:justify-end">
                   <div className="inline-flex rounded-[3px] border border-white/8 bg-white/4 p-1">
                     <button
-                      className={hourToggleClass(!is24Hour)}
+                      className={clsx(
+                        'rounded-[3px] px-3 py-2 text-sm transition',
+                        !is24Hour
+                          ? 'bg-black text-white'
+                          : 'text-white/55 hover:text-white',
+                      )}
                       onClick={() => setIs24Hour(false)}
                     >
                       12h
                     </button>
                     <button
-                      className={hourToggleClass(is24Hour)}
+                      className={clsx(
+                        'rounded-[3px] px-3 py-2 text-sm transition',
+                        is24Hour
+                          ? 'bg-black text-white'
+                          : 'text-white/55 hover:text-white',
+                      )}
                       onClick={() => setIs24Hour(true)}
                     >
                       24h

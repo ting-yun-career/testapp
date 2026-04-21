@@ -7,8 +7,6 @@ import {
   startOfMonth,
   startOfWeek,
 } from 'date-fns'
-import { clsx } from 'clsx'
-import type { Dispatch, SetStateAction } from 'react'
 
 export const WEEKDAY_LABELS = Array.from({ length: 7 }, (_, index) =>
   format(
@@ -94,22 +92,7 @@ export function getWeekDaysStarting(selectedDate: Date) {
   return Array.from({ length: 7 }, (_, index) => addDays(start, index))
 }
 
-export function shiftSelectedDate(
-  amount: number,
-  setSelectedDate: Dispatch<SetStateAction<Date>>,
-  setVisibleMonth: Dispatch<SetStateAction<Date>>,
-) {
-  setSelectedDate((current) => {
-    const nextDate = addDays(current, amount)
-    setVisibleMonth(startOfMonth(nextDate))
-    return nextDate
-  })
-}
-
-export function formatRangeTitle(weekDays: Date[]) {
-  const start = weekDays[0]
-  const end = weekDays[weekDays.length - 1]
-
+export function formatRangeTitle(start?: Date, end?: Date) {
   if (!start || !end) {
     return ''
   }
@@ -146,13 +129,6 @@ export function formatSavedAppointment(
     start,
     is24Hour,
   )} - ${formatDateTimeLabel(end, is24Hour)}`
-}
-
-export function hourToggleClass(active: boolean) {
-  return clsx(
-    'rounded-[3px] px-3 py-2 text-sm transition',
-    active ? 'bg-black text-white' : 'text-white/55 hover:text-white',
-  )
 }
 
 export function normalizeSelection(selection: SelectionRange): SelectionRange {
