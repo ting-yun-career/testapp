@@ -217,26 +217,18 @@ describe('selection helpers', () => {
 })
 
 describe('getUserTimeZone', () => {
-  it('returns the browser timezone when available and UTC as a fallback', () => {
-    const dateTimeFormatSpy = vi
-      .spyOn(Intl, 'DateTimeFormat')
-      .mockImplementation(
-        () =>
-          ({
-            resolvedOptions: () => ({ timeZone: 'America/Vancouver' }),
-          }) as Intl.DateTimeFormat,
-      )
+  it('returns the timezone from the runtime environment', () => {
+    const originalTimeZone = process.env.TZ
 
-    expect(getUserTimeZone()).toBe('America/Vancouver')
+    try {
+      process.env.TZ = 'America/Vancouver'
+      expect(getUserTimeZone()).toBe('America/Vancouver')
 
-    dateTimeFormatSpy.mockImplementation(
-      () =>
-        ({
-          resolvedOptions: () => ({ timeZone: '' }),
-        }) as Intl.DateTimeFormat,
-    )
-
-    expect(getUserTimeZone()).toBe('UTC')
+      process.env.TZ = 'America/New_York'
+      expect(getUserTimeZone()).toBe('America/New_York')
+    } finally {
+      process.env.TZ = originalTimeZone
+    }
   })
 })
 
