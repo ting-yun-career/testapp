@@ -90,6 +90,7 @@ export default function BookingCalendar({
   ],
 }: BookingCalendarProps) {
   const initialDate = new Date()
+  const userTimeZone = getUserTimeZone()
   const [visibleMonth, setVisibleMonth] = useState(startOfMonth(initialDate))
   const [selectedDate, setSelectedDate] = useState(initialDate)
   const [is24Hour, setIs24Hour] = useState(true)
@@ -168,16 +169,19 @@ export default function BookingCalendar({
       return
     }
 
-    const startAt = buildAppointmentDate(draftDay, draftStartMinutes)
-    const endAt = buildAppointmentDate(draftDay, draftEndMinutes)
+    const { endAtUtc, startAtUtc } = buildUtcAppointmentRangeFromLocalSelection(
+      draftDay,
+      draftEndMinutes,
+      draftStartMinutes,
+    )
     const appointmentRequest = {
       additionalInfo: requestDetails.additionalInfo.trim(),
       email: requestDetails.email.trim(),
-      endAt: endAt.toISOString(),
+      endAt: endAtUtc,
       meetingLinkOrPhone: requestDetails.meetingLinkOrPhone.trim(),
       name: requestDetails.name.trim(),
-      startAt: startAt.toISOString(),
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      startAt: startAtUtc,
+      timezone: userTimeZone,
     }
 
     if (
@@ -856,9 +860,33 @@ function slotIndexToMinutes(slotIndex: number, startHour: number) {
 }
 
 function buildAppointmentDate(day: Date, totalMinutes: number) {
-  const date = new Date(day)
-  date.setHours(Math.floor(totalMinutes / 60), totalMinutes % 60, 0, 0)
-  return date
+  return new Date(
+    day.getFullYear(),
+    day.getMonth(),
+    day.getDate(),
+    Math.floor(totalMinutes / 60),
+    totalMinutes % 60,
+    0,
+    0,
+  )
+}
+
+function buildUtcAppointmentRangeFromLocalSelection(
+  day: Date,
+  endMinutes: number,
+  startMinutes: number,
+) {
+  const localStart = buildAppointmentDate(day, startMinutes)
+  const localEnd = buildAppointmentDate(day, endMinutes)
+
+  return {
+    endAtUtc: localEnd.toISOString(),
+    startAtUtc: localStart.toISOString(),
+  }
+}
+
+function getUserTimeZone() {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'
 }
 
 function isBusySlot({
