@@ -1,5 +1,10 @@
+type WorkerEnv = Env & {
+  DB?: D1Database
+}
+
 export default {
-  fetch(request, env) {
+  async fetch(request, env) {
+    const runtimeEnv = env as WorkerEnv
     const url = new URL(request.url)
 
     if (url.pathname === '/api/config') {
@@ -11,12 +16,122 @@ export default {
       })
     }
 
+    if (url.pathname === '/api/appointments' && request.method === 'POST') {
+      return createAppointment(request, runtimeEnv)
+    }
+
     if (url.pathname.startsWith('/api/')) {
-      return Response.json({
-        name: 'Cloudflare',
-      })
+      return Response.json({ error: 'Not found.' }, { status: 404 })
     }
 
     return env.ASSETS.fetch(request)
   },
 } satisfies ExportedHandler<Env>
+
+async function createAppointment(request: Request, env: WorkerEnv) {
+  if (!env.DB) {
+    return Response.json(
+      { error: 'Database binding is missing.' },
+      { status: 500 },
+    )
+  }
+
+  let payload: {
+    additionalInfo?: string
+    email?: string
+    endAt?: string
+    meetingLinkOrPhone?: string
+    name?: string
+    startAt?: string
+    timezone?: string
+  }
+
+  try {
+    payload = (await request.json()) as typeof payload
+  } catch {
+    return Response.json({ error: 'Invalid JSON body.' }, { status: 400 })
+  }
+
+  const appointment = {
+    createdAt: new Date().toISOString(),
+    email: payload.email?.trim() ?? '',
+    endAt: payload.endAt ?? '',
+    id: crypto.randomUUID(),
+    meetingContact: payload.meetingLinkOrPhone?.trim() ?? '',
+    name: payload.name?.trim() ?? '',
+    notes: payload.additionalInfo?.trim() ?? '',
+    startAt: payload.startAt ?? '',
+    status: 'confirmed',
+    timezone: payload.timezone?.trim() ?? 'America/Vancouver',
+  }
+
+  if (
+    !appointment.name ||
+    !appointment.email ||
+    !appointment.meetingContact ||
+    !appointment.startAt ||
+    !appointment.endAt
+  ) {
+    return Response.json(
+      { error: 'Missing required appointment fields.' },
+      { status: 400 },
+    )
+  }
+
+  const startAt = new Date(appointment.startAt)
+  const endAt = new Date(appointment.endAt)
+
+  if (
+    Number.isNaN(startAt.getTime()) ||
+    Number.isNaN(endAt.getTime()) ||
+    endAt <= startAt
+  ) {
+    return Response.json(
+      { error: 'Appointment time range is invalid.' },
+      { status: 400 },
+    )
+  }
+
+  await env.DB.prepare(
+    `INSERT INTO appointments (
+      id,
+      status,
+      start_at_utc,
+      end_at_utc,
+      timezone,
+      name,
+      email,
+      meeting_contact,
+      notes,
+      created_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+  )
+    .bind(
+      appointment.id,
+      appointment.status,
+      startAt.toISOString(),
+      endAt.toISOString(),
+      appointment.timezone,
+      appointment.name,
+      appointment.email,
+      appointment.meetingContact,
+      appointment.notes,
+      appointment.createdAt,
+    )
+    .run()
+
+  return Response.json({
+    appointment: {
+      createdAt: appointment.createdAt,
+      email: appointment.email,
+      endAt: endAt.toISOString(),
+      id: appointment.id,
+      meetingLinkOrPhone: appointment.meetingContact,
+      name: appointment.name,
+      notes: appointment.notes,
+      startAt: startAt.toISOString(),
+      status: appointment.status,
+      timezone: appointment.timezone,
+    },
+  })
+}

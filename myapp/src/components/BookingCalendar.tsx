@@ -58,6 +58,19 @@ type RequestDetails = {
   name: string
 }
 
+type SavedAppointment = {
+  createdAt: string
+  email: string
+  endAt: string
+  id: string
+  meetingLinkOrPhone: string
+  name: string
+  notes: string
+  startAt: string
+  status: string
+  timezone: string
+}
+
 const DEFAULT_REQUEST_DETAILS: RequestDetails = {
   additionalInfo: '',
   email: '',
@@ -84,6 +97,10 @@ export default function BookingCalendar({
   const [appointmentDraft, setAppointmentDraft] =
     useState<SelectionRange | null>(null)
   const [requestDetails, setRequestDetails] = useState(DEFAULT_REQUEST_DETAILS)
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveError, setSaveError] = useState('')
+  const [savedAppointment, setSavedAppointment] =
+    useState<SavedAppointment | null>(null)
 
   const calendarDays = useMemo(
     () => buildCalendarDays(visibleMonth, selectedDate, availabilities),
@@ -137,7 +154,7 @@ export default function BookingCalendar({
       ? draftEndMinutes - draftStartMinutes
       : 0
 
-  const handleConfirmAppointment = () => {
+  const handleConfirmAppointment = async () => {
     if (
       !appointmentDraft ||
       !draftDay ||
@@ -147,19 +164,59 @@ export default function BookingCalendar({
       return
     }
 
+    const startAt = buildAppointmentDate(draftDay, draftStartMinutes)
+    const endAt = buildAppointmentDate(draftDay, draftEndMinutes)
     const appointmentRequest = {
       additionalInfo: requestDetails.additionalInfo.trim(),
-      date: format(draftDay, 'yyyy-MM-dd'),
-      dayIndex: appointmentDraft.dayIndex,
-      durationMinutes: draftDurationMinutes,
       email: requestDetails.email.trim(),
-      endTime: formatMinutesLabel(draftEndMinutes, true),
+      endAt: endAt.toISOString(),
       meetingLinkOrPhone: requestDetails.meetingLinkOrPhone.trim(),
       name: requestDetails.name.trim(),
-      startTime: formatMinutesLabel(draftStartMinutes, true),
+      startAt: startAt.toISOString(),
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     }
 
-    console.info('Appointment request submitted', appointmentRequest)
+    if (
+      !appointmentRequest.name ||
+      !appointmentRequest.email ||
+      !appointmentRequest.meetingLinkOrPhone
+    ) {
+      setSaveError('Name, email, and phone or meeting link are required.')
+      return
+    }
+
+    setIsSaving(true)
+    setSaveError('')
+
+    try {
+      const response = await fetch('/api/appointments', {
+        body: JSON.stringify(appointmentRequest),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+      })
+
+      const result = (await response.json()) as
+        | { appointment: SavedAppointment }
+        | { error?: string }
+
+      if (!response.ok || !('appointment' in result)) {
+        const errorMessage =
+          'error' in result ? result.error : 'Failed to save appointment.'
+        throw new Error(errorMessage || 'Failed to save appointment.')
+      }
+
+      setSavedAppointment(result.appointment)
+      setAppointmentDraft(null)
+      setRequestDetails(DEFAULT_REQUEST_DETAILS)
+    } catch (error) {
+      setSaveError(
+        error instanceof Error ? error.message : 'Failed to save appointment.',
+      )
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   const handleSelectionStart = (dayIndex: number, slotIndex: number) => {
@@ -325,12 +382,21 @@ export default function BookingCalendar({
               <Button onClick={() => setAppointmentDraft(null)} variant="ghost">
                 Back
               </Button>
-              <Button onClick={handleConfirmAppointment} variant="solid">
-                Confirm
+              <Button
+                disabled={isSaving}
+                onClick={() => void handleConfirmAppointment()}
+                variant="solid"
+              >
+                {isSaving ? 'Saving...' : 'Confirm'}
               </Button>
             </>
           }
-          onClose={() => setAppointmentDraft(null)}
+          onClose={() => {
+            if (!isSaving) {
+              setAppointmentDraft(null)
+              setSaveError('')
+            }
+          }}
           title="Confirm your details"
         >
           <div className="mt-6 flex flex-wrap gap-[0.85rem]">
@@ -341,6 +407,10 @@ export default function BookingCalendar({
             </Pill>
             <Pill icon={<ClockSmallIcon />}>{draftDurationMinutes} min</Pill>
           </div>
+
+          {saveError ? (
+            <p className="mt-6 text-sm text-rose-300">{saveError}</p>
+          ) : null}
 
           <TextControl
             label="Your Name"
@@ -394,6 +464,30 @@ export default function BookingCalendar({
             placeholder="Additional information"
             value={requestDetails.additionalInfo}
           />
+        </DialogLayer>
+      ) : null}
+
+      {savedAppointment ? (
+        <DialogLayer
+          footer={
+            <Button onClick={() => setSavedAppointment(null)} variant="solid">
+              Close
+            </Button>
+          }
+          onClose={() => setSavedAppointment(null)}
+          title="Appointment saved"
+        >
+          <div className="mt-6 flex flex-wrap gap-[0.85rem]">
+            <Pill icon={<CalendarSmallIcon />}>
+              {formatSavedAppointment(savedAppointment, is24Hour)}
+            </Pill>
+          </div>
+          <p className="mt-6 text-white/72">
+            Saved for {savedAppointment.name}. Appointment ID:{' '}
+            <span className="font-semibold text-white">
+              {savedAppointment.id}
+            </span>
+          </p>
         </DialogLayer>
       ) : null}
     </main>
@@ -662,6 +756,19 @@ function formatDateTimeLabel(date: Date, is24Hour: boolean) {
   return formatMinutesLabel(date.getHours() * 60 + date.getMinutes(), is24Hour)
 }
 
+function formatSavedAppointment(
+  appointment: SavedAppointment,
+  is24Hour: boolean,
+) {
+  const start = new Date(appointment.startAt)
+  const end = new Date(appointment.endAt)
+
+  return `${format(start, 'EEE, MMMM d, yyyy')}, ${formatDateTimeLabel(
+    start,
+    is24Hour,
+  )} - ${formatDateTimeLabel(end, is24Hour)}`
+}
+
 function hourToggleClass(active: boolean) {
   return clsx(
     'rounded-[3px] px-3 py-2 text-sm transition',
@@ -702,6 +809,12 @@ function getSelectionDetails(selection: SelectionRange | null) {
 
 function slotIndexToMinutes(slotIndex: number, startHour: number) {
   return startHour * 60 + slotIndex * 15
+}
+
+function buildAppointmentDate(day: Date, totalMinutes: number) {
+  const date = new Date(day)
+  date.setHours(Math.floor(totalMinutes / 60), totalMinutes % 60, 0, 0)
+  return date
 }
 
 function isBusySlot({
