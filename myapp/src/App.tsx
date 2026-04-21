@@ -9,7 +9,7 @@ import {
   useNavigate,
 } from 'react-router-dom'
 import { hasAuth0Config } from './auth-config'
-import BookingCalendar from './components/BookingCalendar'
+import BookingCalendar from './components/web/BookingCalendar'
 import Button from './components/web/Button'
 import { MenuIcon } from './icons'
 

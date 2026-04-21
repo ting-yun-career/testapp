@@ -1,75 +1,36 @@
 import { clsx } from 'clsx'
-import {
-  addDays,
-  addMonths,
-  endOfMonth,
-  format,
-  isSameDay,
-  isSameMonth,
-  startOfMonth,
-  startOfWeek,
-} from 'date-fns'
+import { addMonths, format, isSameDay, startOfMonth } from 'date-fns'
 import { useEffect, useMemo, useState } from 'react'
-import DialogLayer from './DialogLayer'
-import TextControl from './form/TextControl'
+import { CalendarSmallIcon, ChevronLeftIcon, ChevronRightIcon, ClockSmallIcon } from '../../../icons'
+import DialogLayer from '../../DialogLayer'
+import TextControl from '../../form/TextControl'
+import Button from '../Button'
+import Pill from '../Pill'
 import {
-  CalendarSmallIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ClockSmallIcon,
-} from '../icons'
-import Button from './web/Button'
-import Pill from './web/Pill'
-
-const WEEKDAY_LABELS = Array.from({ length: 7 }, (_, index) =>
-  format(
-    addDays(startOfWeek(new Date(), { weekStartsOn: 0 }), index),
-    'EEE',
-  ).toUpperCase(),
-)
-
-type CalendarDay = {
-  date: Date
-  inMonth: boolean
-  isAvailable: boolean
-  isSelected: boolean
-  isToday: boolean
-}
-
-type Availability = {
-  endHour?: number
-  startHour?: number
-}
-
-type BookingCalendarProps = {
-  availabilities?: Availability[]
-}
-
-type SelectionRange = {
-  dayIndex: number
-  endSlot: number
-  startSlot: number
-}
-
-type RequestDetails = {
-  additionalInfo: string
-  email: string
-  meetingLinkOrPhone: string
-  name: string
-}
-
-type SavedAppointment = {
-  createdAt: string
-  email: string
-  endAt: string
-  id: string
-  meetingLinkOrPhone: string
-  name: string
-  notes: string
-  startAt: string
-  status: string
-  timezone: string
-}
+  buildCalendarDays,
+  buildUtcAppointmentRangeFromLocalSelection,
+  formatDateTimeLabel,
+  formatHourLabel,
+  formatMinutesLabel,
+  formatRangeTitle,
+  formatSavedAppointment,
+  getCurrentMarker,
+  getHourBounds,
+  getSelectionDetails,
+  getUserTimeZone,
+  getWeekDaysStarting,
+  hourToggleClass,
+  isBusySlot,
+  normalizeSelection,
+  shiftSelectedDate,
+  slotIndexToMinutes,
+  WEEKDAY_LABELS,
+  type Availability,
+  type BookingCalendarProps,
+  type RequestDetails,
+  type SavedAppointment,
+  type SelectionRange,
+} from './utils'
 
 const DEFAULT_REQUEST_DETAILS: RequestDetails = {
   additionalInfo: '',
@@ -107,7 +68,6 @@ export default function BookingCalendar({
     () => buildCalendarDays(visibleMonth, selectedDate, availabilities),
     [availabilities, selectedDate, visibleMonth],
   )
-
   const weekDays = useMemo(
     () => getWeekDaysStarting(selectedDate),
     [selectedDate],
@@ -116,6 +76,7 @@ export default function BookingCalendar({
     () => getHourBounds(availabilities),
     [availabilities],
   )
+
   const isUnavailableSelectionSlot = (dayIndex: number, slotIndex: number) =>
     isBusySlot({
       availabilities,
@@ -369,11 +330,11 @@ export default function BookingCalendar({
               <AppointmentTimeGrid
                 availabilities={availabilities}
                 dragSelection={dragSelection}
+                is24Hour={is24Hour}
                 onCellMouseDown={handleSelectionStart}
                 onCellMouseEnter={handleSelectionExtend}
                 selectedDate={selectedDate}
                 weekDays={weekDays}
-                is24Hour={is24Hour}
               />
             </div>
           </section>
@@ -455,8 +416,8 @@ export default function BookingCalendar({
                 meetingLinkOrPhone: value,
               }))
             }
-            required
             placeholder="Paste Meeting link or Phone here "
+            required
             value={requestDetails.meetingLinkOrPhone}
           />
 
@@ -555,6 +516,7 @@ function AppointmentTimeGrid({
   const normalizedSelection = getSelectionDetails(
     dragSelection ? normalizeSelection(dragSelection) : null,
   )
+
   const handlePointerSlotMove = (clientX: number, clientY: number) => {
     const element = document.elementFromPoint(clientX, clientY)
 
@@ -642,23 +604,15 @@ function AppointmentTimeGrid({
           return (
             <div
               key={`${day.toISOString()}-${slotIndex}`}
-              data-day-index={dayIndex}
-              data-slot-index={slotIndex}
               className={clsx(
                 'relative h-[1.05rem] border-r border-b border-white/10 bg-white/[0.01]',
                 isSameDay(day, now) && 'bg-white/[0.035]',
                 busy ? 'cursor-not-allowed' : 'cursor-crosshair',
               )}
+              data-day-index={dayIndex}
+              data-slot-index={slotIndex}
               onMouseDown={(event) => {
                 if (event.button !== 0 || busy) {
-                  return
-                }
-
-                event.preventDefault()
-                onCellMouseDown(dayIndex, slotIndex)
-              }}
-              onPointerDown={(event) => {
-                if (!event.isPrimary || busy) {
                   return
                 }
 
@@ -672,6 +626,14 @@ function AppointmentTimeGrid({
                 }
 
                 onCellMouseEnter(dayIndex, slotIndex)
+              }}
+              onPointerDown={(event) => {
+                if (!event.isPrimary || busy) {
+                  return
+                }
+
+                event.preventDefault()
+                onCellMouseDown(dayIndex, slotIndex)
               }}
               onPointerMove={(event) => {
                 if (!event.isPrimary || !dragSelection) {
@@ -720,290 +682,4 @@ function AppointmentTimeGrid({
       ) : null}
     </div>
   )
-}
-
-function buildCalendarDays(
-  month: Date,
-  selectedDate: Date,
-  availabilities: Availability[],
-): CalendarDay[] {
-  const today = new Date()
-  const firstOfMonth = startOfMonth(month)
-  const lastOfMonth = endOfMonth(month)
-  const leading = firstOfMonth.getDay()
-  const totalCells = Math.ceil((leading + lastOfMonth.getDate()) / 7) * 7
-  const start = addDays(firstOfMonth, -leading)
-
-  return Array.from({ length: totalCells }, (_, index) => {
-    const date = addDays(start, index)
-    const inMonth = isSameMonth(date, month)
-    const isAvailable =
-      inMonth && getAvailabilityForDay(availabilities, date.getDay()) !== null
-    const isSelected = isSameDay(date, selectedDate)
-
-    return {
-      date,
-      inMonth,
-      isAvailable,
-      isSelected,
-      isToday: isSameDay(date, today),
-    }
-  })
-}
-
-function getWeekDaysStarting(selectedDate: Date) {
-  const start = startOfWeek(selectedDate, { weekStartsOn: 0 })
-  return Array.from({ length: 7 }, (_, index) => addDays(start, index))
-}
-
-function shiftSelectedDate(
-  amount: number,
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>,
-  setVisibleMonth: React.Dispatch<React.SetStateAction<Date>>,
-) {
-  setSelectedDate((current) => {
-    const nextDate = addDays(current, amount)
-    setVisibleMonth(startOfMonth(nextDate))
-    return nextDate
-  })
-}
-
-function formatRangeTitle(weekDays: Date[]) {
-  const start = weekDays[0]
-  const end = weekDays[weekDays.length - 1]
-
-  if (!start || !end) {
-    return ''
-  }
-
-  if (start.getMonth() === end.getMonth()) {
-    return `${format(start, 'MMMM d')}-${format(end, 'd, yyyy')}`
-  }
-
-  return `${format(start, 'MMMM d')}-${format(end, 'MMMM d, yyyy')}`
-}
-
-function formatTimeLabel(time: string, is24Hour: boolean) {
-  const [hoursText, minutesText] = time.split(':')
-  const hours = Number(hoursText)
-  const minutes = Number(minutesText)
-  return formatClockTime(hours, minutes, is24Hour)
-}
-
-function formatHourLabel(hour: number, is24Hour: boolean) {
-  return formatTimeLabel(`${pad(hour)}:00`, is24Hour)
-}
-
-function formatMinutesLabel(totalMinutes: number, is24Hour: boolean) {
-  const hours = Math.floor(totalMinutes / 60)
-  const minutes = totalMinutes % 60
-  return formatClockTime(hours, minutes, is24Hour)
-}
-
-function formatDateTimeLabel(date: Date, is24Hour: boolean) {
-  return formatMinutesLabel(date.getHours() * 60 + date.getMinutes(), is24Hour)
-}
-
-function formatSavedAppointment(
-  appointment: SavedAppointment,
-  is24Hour: boolean,
-) {
-  const start = new Date(appointment.startAt)
-  const end = new Date(appointment.endAt)
-
-  return `${format(start, 'EEE, MMMM d, yyyy')}, ${formatDateTimeLabel(
-    start,
-    is24Hour,
-  )} - ${formatDateTimeLabel(end, is24Hour)}`
-}
-
-function hourToggleClass(active: boolean) {
-  return clsx(
-    'rounded-[3px] px-3 py-2 text-sm transition',
-    active ? 'bg-black text-white' : 'text-white/55 hover:text-white',
-  )
-}
-
-function pad(value: number) {
-  return String(value).padStart(2, '0')
-}
-
-function formatClockTime(hours: number, minutes: number, is24Hour: boolean) {
-  const date = new Date(2026, 0, 1, hours, minutes)
-  return format(date, is24Hour ? 'HH:mm' : 'h:mm a')
-}
-
-function normalizeSelection(selection: SelectionRange): SelectionRange {
-  return {
-    dayIndex: selection.dayIndex,
-    endSlot: Math.max(selection.startSlot, selection.endSlot),
-    startSlot: Math.min(selection.startSlot, selection.endSlot),
-  }
-}
-
-function getSelectionDetails(selection: SelectionRange | null) {
-  if (!selection) {
-    return null
-  }
-
-  const slotCount = selection.endSlot - selection.startSlot + 1
-
-  return {
-    durationMinutes: slotCount * 15,
-    slotCount,
-    ...selection,
-  }
-}
-
-function slotIndexToMinutes(slotIndex: number, startHour: number) {
-  return startHour * 60 + slotIndex * 15
-}
-
-function buildAppointmentDate(day: Date, totalMinutes: number) {
-  return new Date(
-    day.getFullYear(),
-    day.getMonth(),
-    day.getDate(),
-    Math.floor(totalMinutes / 60),
-    totalMinutes % 60,
-    0,
-    0,
-  )
-}
-
-function buildUtcAppointmentRangeFromLocalSelection(
-  day: Date,
-  endMinutes: number,
-  startMinutes: number,
-) {
-  const localStart = buildAppointmentDate(day, startMinutes)
-  const localEnd = buildAppointmentDate(day, endMinutes)
-
-  return {
-    endAtUtc: localEnd.toISOString(),
-    startAtUtc: localStart.toISOString(),
-  }
-}
-
-function getUserTimeZone() {
-  return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'
-}
-
-function isBusySlot({
-  availabilities,
-  dayIndex,
-  slotIndex,
-  startHour,
-}: {
-  availabilities: Availability[]
-  dayIndex: number
-  slotIndex: number
-  startHour: number
-}) {
-  const slotStartMinutes = slotIndexToMinutes(slotIndex, startHour)
-  const slotEndMinutes = slotStartMinutes + 15
-  const availability = getAvailabilityForDay(availabilities, dayIndex)
-
-  if (!availability) {
-    return true
-  }
-
-  return !(
-    slotStartMinutes < availability.endHour * 60 &&
-    slotEndMinutes > availability.startHour * 60
-  )
-}
-
-function getCurrentMarker({
-  endHour,
-  now,
-  startHour,
-  todayVisible,
-  weekDays,
-}: {
-  endHour: number
-  now: Date
-  startHour: number
-  todayVisible: boolean
-  weekDays: Date[]
-}) {
-  if (!todayVisible) {
-    return null
-  }
-
-  const dayIndex = weekDays.findIndex((day) => isSameDay(day, now))
-  const totalMinutes = now.getHours() * 60 + now.getMinutes()
-  const startMinutes = startHour * 60
-  const endMinutes = endHour * 60
-
-  if (
-    dayIndex === -1 ||
-    totalMinutes < startMinutes ||
-    totalMinutes >= endMinutes
-  ) {
-    return null
-  }
-
-  const minutesFromStart = totalMinutes - startMinutes
-  return {
-    dayIndex,
-    slotIndex: Math.floor(minutesFromStart / 15),
-    topOffsetPercent: ((minutesFromStart % 15) / 15) * 100,
-  }
-}
-
-function getHourBounds(availabilities: Availability[]) {
-  const validAvailabilities = availabilities
-    .map(normalizeAvailability)
-    .filter(
-      (availability): availability is { startHour: number; endHour: number } =>
-        availability !== null,
-    )
-
-  if (validAvailabilities.length === 0) {
-    return { endHour: 18, startHour: 8 }
-  }
-
-  const minStartHour = Math.min(
-    ...validAvailabilities.map((availability) => availability.startHour),
-  )
-  const maxEndHour = Math.max(
-    ...validAvailabilities.map((availability) => availability.endHour),
-  )
-
-  return {
-    endHour: Math.min(24, maxEndHour + 1),
-    startHour: Math.max(0, minStartHour - 1),
-  }
-}
-
-function getAvailabilityForDay(
-  availabilities: Availability[],
-  dayIndex: number,
-) {
-  return normalizeAvailability(availabilities[dayIndex])
-}
-
-function normalizeAvailability(availability?: Availability | null) {
-  if (!availability) {
-    return null
-  }
-
-  const { endHour, startHour } = availability
-
-  if (
-    typeof startHour !== 'number' ||
-    typeof endHour !== 'number' ||
-    !Number.isFinite(startHour) ||
-    !Number.isFinite(endHour) ||
-    startHour < 0 ||
-    endHour < 0 ||
-    endHour > 24 ||
-    startHour > 24 ||
-    endHour <= startHour
-  ) {
-    return null
-  }
-
-  return { endHour, startHour }
 }
