@@ -61,7 +61,7 @@ function LandingPage() {
             Appointment Platform
           </p>
           <h1 className="mt-4 max-w-2xl text-5xl font-semibold tracking-tight text-white">
-            YYYBook and manage appointments from one dashboard.
+            Book and manage appointments from one dashboard.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-white/68">
             Sign in to access the booking dashboard and continue with the
