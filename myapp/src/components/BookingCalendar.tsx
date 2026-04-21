@@ -128,15 +128,19 @@ export default function BookingCalendar({
       return
     }
 
-    const handleMouseUp = () => {
+    const handleSelectionEnd = () => {
       setAppointmentDraft(normalizeSelection(dragSelection))
       setDragSelection(null)
     }
 
-    window.addEventListener('mouseup', handleMouseUp)
+    window.addEventListener('mouseup', handleSelectionEnd)
+    window.addEventListener('pointerup', handleSelectionEnd)
+    window.addEventListener('touchend', handleSelectionEnd)
 
     return () => {
-      window.removeEventListener('mouseup', handleMouseUp)
+      window.removeEventListener('mouseup', handleSelectionEnd)
+      window.removeEventListener('pointerup', handleSelectionEnd)
+      window.removeEventListener('touchend', handleSelectionEnd)
     }
   }, [dragSelection])
 
@@ -547,10 +551,32 @@ function AppointmentTimeGrid({
   const normalizedSelection = getSelectionDetails(
     dragSelection ? normalizeSelection(dragSelection) : null,
   )
+  const handlePointerSlotMove = (clientX: number, clientY: number) => {
+    const element = document.elementFromPoint(clientX, clientY)
+
+    if (!(element instanceof HTMLElement)) {
+      return
+    }
+
+    const cell = element.closest<HTMLElement>('[data-slot-index][data-day-index]')
+
+    if (!cell) {
+      return
+    }
+
+    const dayIndex = Number(cell.dataset.dayIndex)
+    const slotIndex = Number(cell.dataset.slotIndex)
+
+    if (!Number.isFinite(dayIndex) || !Number.isFinite(slotIndex)) {
+      return
+    }
+
+    onCellMouseEnter(dayIndex, slotIndex)
+  }
 
   return (
     <div
-      className="grid select-none border-t border-l border-white/10 [grid-auto-rows:1.05rem]"
+      className="grid touch-none select-none border-t border-l border-white/10 [grid-auto-rows:1.05rem]"
       style={{
         gridTemplateColumns: 'minmax(70px, 0.5fr) repeat(7, minmax(30px, 1fr))',
         gridTemplateRows: '2.25rem',
@@ -612,6 +638,8 @@ function AppointmentTimeGrid({
           return (
             <div
               key={`${day.toISOString()}-${slotIndex}`}
+              data-day-index={dayIndex}
+              data-slot-index={slotIndex}
               className={clsx(
                 'relative h-[1.05rem] border-r border-b border-white/10 bg-white/[0.01]',
                 isSameDay(day, now) && 'bg-white/[0.035]',
@@ -625,6 +653,14 @@ function AppointmentTimeGrid({
                 event.preventDefault()
                 onCellMouseDown(dayIndex, slotIndex)
               }}
+              onPointerDown={(event) => {
+                if (!event.isPrimary || busy) {
+                  return
+                }
+
+                event.preventDefault()
+                onCellMouseDown(dayIndex, slotIndex)
+              }}
               onMouseEnter={() => onCellMouseEnter(dayIndex, slotIndex)}
               onMouseMove={(event) => {
                 if (event.buttons !== 1) {
@@ -632,6 +668,14 @@ function AppointmentTimeGrid({
                 }
 
                 onCellMouseEnter(dayIndex, slotIndex)
+              }}
+              onPointerMove={(event) => {
+                if (!event.isPrimary || !dragSelection) {
+                  return
+                }
+
+                event.preventDefault()
+                handlePointerSlotMove(event.clientX, event.clientY)
               }}
               style={{
                 gridColumn: dayIndex + 2,

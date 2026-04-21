@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from 'react'
+import { useEffect, useRef, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 
 type DialogLayerProps = {
@@ -14,7 +14,11 @@ export default function DialogLayer({
   onClose,
   title,
 }: DialogLayerProps) {
+  const openedAtRef = useRef(0)
+
   useEffect(() => {
+    openedAtRef.current = Date.now()
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         onClose()
@@ -32,7 +36,13 @@ export default function DialogLayer({
   return createPortal(
     <div
       className="fixed inset-0 z-40 flex items-center justify-center bg-black/62 p-5"
-      onClick={onClose}
+      onClick={() => {
+        if (Date.now() - openedAtRef.current < 250) {
+          return
+        }
+
+        onClose()
+      }}
       role="presentation"
     >
       <section
