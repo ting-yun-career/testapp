@@ -184,16 +184,35 @@ describe('selection helpers', () => {
     expect(getSelectionDetails(null)).toBeNull()
   })
 
-  it('converts slot indices to minutes and builds UTC timestamps from local selections', () => {
+  it('converts local appointment selections to UTC in both east-coast and west-coast timezones', () => {
     expect(slotIndexToMinutes(3, 8)).toBe(525)
 
-    const day = new Date(2026, 2, 15)
-    expect(
-      buildUtcAppointmentRangeFromLocalSelection(day, 10 * 60 + 15, 9 * 60 + 30),
-    ).toEqual({
-      startAtUtc: new Date(2026, 2, 15, 9, 30).toISOString(),
-      endAtUtc: new Date(2026, 2, 15, 10, 15).toISOString(),
-    })
+    const originalTimeZone = process.env.TZ
+
+    const buildRangeInTimeZone = (timeZone: string) => {
+      process.env.TZ = timeZone
+      const day = new Date(2026, 0, 15)
+
+      return buildUtcAppointmentRangeFromLocalSelection(
+        day,
+        10 * 60 + 15,
+        9 * 60 + 30,
+      )
+    }
+
+    try {
+      expect(buildRangeInTimeZone('America/New_York')).toEqual({
+        startAtUtc: '2026-01-15T14:30:00.000Z',
+        endAtUtc: '2026-01-15T15:15:00.000Z',
+      })
+
+      expect(buildRangeInTimeZone('America/Los_Angeles')).toEqual({
+        startAtUtc: '2026-01-15T17:30:00.000Z',
+        endAtUtc: '2026-01-15T18:15:00.000Z',
+      })
+    } finally {
+      process.env.TZ = originalTimeZone
+    }
   })
 })
 
