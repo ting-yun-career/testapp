@@ -48,7 +48,12 @@ async function createAppointment(request: Request, env: WorkerEnv) {
 
   try {
     payload = (await request.json()) as typeof payload
-  } catch {
+  } catch (error) {
+    console.error('appointments.invalid_json_body', {
+      error: error instanceof Error ? error.message : String(error),
+      method: request.method,
+      path: new URL(request.url).pathname,
+    })
     return Response.json({ error: 'Invalid JSON body.' }, { status: 400 })
   }
 
@@ -134,6 +139,17 @@ async function createAppointment(request: Request, env: WorkerEnv) {
 
     const errorMessage =
       error instanceof Error ? error.message : 'Failed to insert appointment.'
+
+    console.error('appointments.insert_failed', {
+      causeMessage,
+      endAt: appointment.endAt,
+      errorMessage,
+      hasNotes: Boolean(appointment.notes),
+      id: appointment.id,
+      meetingContactLength: appointment.meetingContact.length,
+      startAt: appointment.startAt,
+      timezone: appointment.timezone,
+    })
 
     return Response.json(
       {
