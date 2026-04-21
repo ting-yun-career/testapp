@@ -92,33 +92,56 @@ async function createAppointment(request: Request, env: WorkerEnv) {
     )
   }
 
-  await env.DB.prepare(
-    `INSERT INTO appointments (
-      id,
-      status,
-      start_at_utc,
-      end_at_utc,
-      timezone,
-      name,
-      email,
-      meeting_contact,
-      notes,
-      created_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-  )
-    .bind(
-      appointment.id,
-      appointment.status,
-      startAt.toISOString(),
-      endAt.toISOString(),
-      appointment.timezone,
-      appointment.name,
-      appointment.email,
-      appointment.meetingContact,
-      appointment.notes,
-      appointment.createdAt,
+  try {
+    await env.DB.prepare(
+      `INSERT INTO appointments (
+        id,
+        status,
+        start_at_utc,
+        end_at_utc,
+        timezone,
+        name,
+        email,
+        meeting_contact,
+        notes,
+        created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
-    .run()
+      .bind(
+        appointment.id,
+        appointment.status,
+        startAt.toISOString(),
+        endAt.toISOString(),
+        appointment.timezone,
+        appointment.name,
+        appointment.email,
+        appointment.meetingContact,
+        appointment.notes,
+        appointment.createdAt,
+      )
+      .run()
+  } catch (error) {
+    const causeMessage =
+      error &&
+      typeof error === 'object' &&
+      'cause' in error &&
+      error.cause &&
+      typeof error.cause === 'object' &&
+      'message' in error.cause &&
+      typeof error.cause.message === 'string'
+        ? error.cause.message
+        : ''
+
+    const errorMessage =
+      error instanceof Error ? error.message : 'Failed to insert appointment.'
+
+    return Response.json(
+      {
+        error: causeMessage ? `${errorMessage}: ${causeMessage}` : errorMessage,
+      },
+      { status: 500 },
+    )
+  }
 
   return Response.json({
     appointment: {
