@@ -12,6 +12,12 @@ import {
 import { useEffect, useMemo, useState } from 'react'
 import DialogLayer from './DialogLayer'
 import TextControl from './form/TextControl'
+import {
+  CalendarSmallIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ClockSmallIcon,
+} from '../icons'
 import Button from './web/Button'
 import Pill from './web/Pill'
 
@@ -189,8 +195,8 @@ export default function BookingCalendar({
   }
 
   return (
-    <main className="min-h-screen bg-neutral-950">
-      <div className="mx-auto flex min-h-screen max-w-[1800px] flex-col px-4 py-4 sm:px-6 lg:px-8">
+    <main className="flex-1 bg-neutral-950">
+      <div className="mx-auto flex min-h-full max-w-[1800px] flex-col px-4 py-4 sm:px-6 lg:px-8">
         <section className="grid flex-1 grid-cols-[minmax(320px,390px)_minmax(0,1fr)] overflow-hidden rounded-[3px] border border-white/8 bg-neutral-950 shadow-[0_24px_80px_rgba(0,0,0,0.45)] max-[1279px]:grid-cols-1">
           <aside className="border-b border-white/8 p-6 lg:border-b-0 lg:border-r lg:p-8">
             <h1 className="mt-4 text-3xl font-semibold tracking-tight text-white lg:text-[2.15rem]">
@@ -815,61 +821,4 @@ function normalizeAvailability(availability?: Availability | null) {
   }
 
   return { endHour, startHour }
-}
-
-function CalendarSmallIcon() {
-  return (
-    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24">
-      <rect
-        height="15"
-        rx="3"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        width="18"
-        x="3"
-        y="5"
-      />
-      <path d="M8 3v4M16 3v4M3 10h18" stroke="currentColor" strokeWidth="1.8" />
-    </svg>
-  )
-}
-
-function ClockSmallIcon() {
-  return (
-    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
-      <path
-        d="M12 7v5l3 2"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.8"
-      />
-    </svg>
-  )
-}
-
-function ChevronLeftIcon() {
-  return (
-    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24">
-      <path
-        d="m15 18-6-6 6-6"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.8"
-      />
-    </svg>
-  )
-}
-
-function ChevronRightIcon() {
-  return (
-    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24">
-      <path
-        d="m9 18 6-6-6-6"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.8"
-      />
-    </svg>
-  )
 }
