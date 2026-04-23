@@ -19,7 +19,11 @@ export async function createAppointment(request: Request, env: WorkerEnv) {
     startAt?: string
     timezone?: string
   }
-
+  console.log('appointments.testlog', {
+    error: String('test log'),
+    method: request.method,
+    path: new URL(request.url).pathname,
+  })
   try {
     payload = (await request.json()) as typeof payload
   } catch (error) {
