@@ -296,25 +296,14 @@ export default function BookingCalendar({
 
           <section className="flex min-h-0 flex-col">
             <div className="border-b border-white/8 px-5 py-4 sm:px-6 lg:px-8">
-              <div className="flex flex-col gap-4 xl:grid xl:grid-cols-[1fr_auto_1fr] xl:items-center">
+              <div className="grid grid-cols-[1fr_auto] items-center gap-x-3 gap-y-3 xl:grid-cols-[1fr_auto_1fr]">
                 <div className="flex items-center">
                   <h2 className="text-2xl font-semibold text-white">
                     {weekRangeTitle}
                   </h2>
                 </div>
 
-                <div className="flex justify-center gap-1">
-                  <MonthArrow
-                    direction="prev"
-                    onClick={() => handleWeekShift(-7)}
-                  />
-                  <MonthArrow
-                    direction="next"
-                    onClick={() => handleWeekShift(7)}
-                  />
-                </div>
-
-                <div className="flex flex-wrap items-center gap-3 text-sm text-white/88 xl:justify-end">
+                <div className="flex justify-end text-sm text-white/88 xl:justify-end">
                   <div className="inline-flex rounded-[3px] border border-white/8 bg-white/4 p-1">
                     <button
                       className={clsx(
@@ -340,6 +329,18 @@ export default function BookingCalendar({
                     </button>
                   </div>
                 </div>
+
+                <div className="col-span-2 flex justify-center gap-1 xl:col-span-1 xl:col-start-2 xl:row-start-1">
+                  <MonthArrow
+                    direction="prev"
+                    onClick={() => handleWeekShift(-7)}
+                  />
+                  <MonthArrow
+                    direction="next"
+                    onClick={() => handleWeekShift(7)}
+                  />
+                </div>
+
               </div>
             </div>
 
@@ -573,7 +574,7 @@ function AppointmentTimeGrid({
         <div
           key={day.toISOString()}
           className={clsx(
-            'flex items-center justify-center gap-[0.55rem] border-r border-b border-white/10 border-b-white/20 px-3 py-[0.85rem] text-center select-none',
+            'flex items-center justify-center gap-[0.55rem] border-r border-b border-white/10 border-b-white/20 px-3 py-[0.85rem] text-center select-none max-[750px]:flex-col max-[750px]:gap-0.5 max-[750px]:px-1',
             isSameDay(day, selectedDate) && 'border-b-2 border-b-white/35',
             isSameDay(day, now) && 'bg-white/[0.035]',
           )}
@@ -582,10 +583,10 @@ function AppointmentTimeGrid({
             gridRow: 1,
           }}
         >
-          <span className="text-xs uppercase tracking-[0.24em] text-white/46">
+          <span className="text-xs uppercase tracking-[0.24em] text-white/46 max-[750px]:order-2 max-[750px]:tracking-[0.16em]">
             {format(day, 'EEE')}
           </span>
-          <span className="text-base font-medium text-white/75">
+          <span className="text-base font-medium text-white/75 max-[750px]:order-1 max-[750px]:text-sm">
             {format(day, 'dd')}
           </span>
         </div>
