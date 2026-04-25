@@ -1,11 +1,27 @@
+import { hashPrivateValue } from './encryption'
+
 type WorkerEnv = Env & {
   DB?: D1Database
+  PRIVACY_SALT_PHRASE?: string
 }
 
 export async function createAppointment(request: Request, env: WorkerEnv) {
   if (!env.DB) {
     return Response.json(
       { error: 'Database binding is missing.' },
+      { status: 500 },
+    )
+  }
+
+  const privacySaltPhrase = env.PRIVACY_SALT_PHRASE?.trim()
+
+  if (!privacySaltPhrase) {
+    console.error('appointments.privacy_salt_missing', {
+      method: request.method,
+      path: new URL(request.url).pathname,
+    })
+    return Response.json(
+      { error: 'Privacy salt phrase is missing.' },
       { status: 500 },
     )
   }
@@ -135,15 +151,15 @@ export async function createAppointment(request: Request, env: WorkerEnv) {
   console.log('appointments.saved', {
     appointment: {
       createdAt: appointment.createdAt,
-      email: appointment.email,
       endAt: endAt.toISOString(),
       id: appointment.id,
-      meetingLinkOrPhone: appointment.meetingContact,
-      name: appointment.name,
-      notes: appointment.notes,
       startAt: startAt.toISOString(),
       status: appointment.status,
       timezone: appointment.timezone,
+      protectedDetails: {
+        nameHash: await hashPrivateValue(appointment.name, privacySaltPhrase),
+        emailHash: await hashPrivateValue(appointment.email, privacySaltPhrase),
+      },
     },
     request: {
       method: request.method,

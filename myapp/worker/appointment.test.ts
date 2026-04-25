@@ -4,6 +4,7 @@ import { createAppointment } from './appointment'
 
 describe('createAppointment', () => {
   it('stores a realistic appointment request and returns the saved record', async () => {
+    const consoleLog = vi.spyOn(console, 'log').mockImplementation(() => {})
     const run = vi.fn().mockResolvedValue(undefined)
     const bind = vi.fn().mockReturnValue({ run })
     const prepare = vi.fn().mockReturnValue({ bind })
@@ -24,7 +25,8 @@ describe('createAppointment', () => {
 
     const response = await createAppointment(request, {
       DB: { prepare } as unknown as D1Database,
-    } as Env & { DB?: D1Database })
+      PRIVACY_SALT_PHRASE: 'replace-with-your-secret-salt-phrase',
+    } as unknown as Env & { DB?: D1Database; PRIVACY_SALT_PHRASE?: string })
 
     expect(response.status).toBe(200)
     expect(prepare).toHaveBeenCalledOnce()
@@ -45,6 +47,27 @@ describe('createAppointment', () => {
     expect(typeof bindArgs[0]).toBe('string')
     expect(typeof bindArgs[9]).toBe('string')
 
+    expect(consoleLog).toHaveBeenCalledWith(
+      'appointments.saved',
+      expect.objectContaining({
+        appointment: expect.objectContaining({
+          id: bindArgs[0],
+          protectedDetails: {
+            emailHash: expect.any(String),
+            nameHash: expect.any(String),
+          },
+        }),
+      }),
+    )
+
+    expect(JSON.stringify(consoleLog.mock.calls)).not.toContain(
+      'alex@example.com',
+    )
+    expect(JSON.stringify(consoleLog.mock.calls)).not.toContain('Alex Chen')
+    expect(JSON.stringify(consoleLog.mock.calls)).not.toContain(
+      'https://meet.example.com/alex-intake',
+    )
+
     await expect(response.json()).resolves.toEqual({
       appointment: {
         createdAt: bindArgs[9],
@@ -59,5 +82,7 @@ describe('createAppointment', () => {
         timezone: 'America/Vancouver',
       },
     })
+
+    consoleLog.mockRestore()
   })
 })
