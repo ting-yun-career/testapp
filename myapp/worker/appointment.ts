@@ -19,11 +19,6 @@ export async function createAppointment(request: Request, env: WorkerEnv) {
     startAt?: string
     timezone?: string
   }
-  console.log('appointments.testlog2', {
-    error: String('test log'),
-    method: request.method,
-    path: new URL(request.url).pathname,
-  })
   try {
     payload = (await request.json()) as typeof payload
   } catch (error) {
@@ -136,6 +131,25 @@ export async function createAppointment(request: Request, env: WorkerEnv) {
       { status: 500 },
     )
   }
+
+  console.log('appointments.saved', {
+    appointment: {
+      createdAt: appointment.createdAt,
+      email: appointment.email,
+      endAt: endAt.toISOString(),
+      id: appointment.id,
+      meetingLinkOrPhone: appointment.meetingContact,
+      name: appointment.name,
+      notes: appointment.notes,
+      startAt: startAt.toISOString(),
+      status: appointment.status,
+      timezone: appointment.timezone,
+    },
+    request: {
+      method: request.method,
+      path: new URL(request.url).pathname,
+    },
+  })
 
   return Response.json({
     appointment: {
