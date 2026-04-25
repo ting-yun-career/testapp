@@ -19,7 +19,7 @@ export async function createAppointment(request: Request, env: WorkerEnv) {
     startAt?: string
     timezone?: string
   }
-  console.log('appointments.testlog', {
+  console.log('appointments.testlog2', {
     error: String('test log'),
     method: request.method,
     path: new URL(request.url).pathname,
