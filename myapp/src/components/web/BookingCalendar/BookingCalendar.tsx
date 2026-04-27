@@ -2,6 +2,7 @@ import { clsx } from 'clsx'
 import { addMonths, format, isSameDay, startOfMonth } from 'date-fns'
 import { useEffect, useMemo, useState } from 'react'
 import { CalendarSmallIcon, ChevronLeftIcon, ChevronRightIcon, ClockSmallIcon } from '../../../icons'
+import { useApi } from '../../../hooks/useApi'
 import DialogLayer from '../../DialogLayer'
 import TextControl from '../../form/TextControl'
 import Button from '../Button'
@@ -61,6 +62,7 @@ export default function BookingCalendar({
   const [saveError, setSaveError] = useState('')
   const [savedAppointment, setSavedAppointment] =
     useState<SavedAppointment | null>(null)
+  const { saveAppointment } = useApi()
 
   const calendarDays = useMemo(
     () => buildCalendarDays(visibleMonth, selectedDate, availabilities),
@@ -160,25 +162,9 @@ export default function BookingCalendar({
     setSaveError('')
 
     try {
-      const response = await fetch('/api/appointments', {
-        body: JSON.stringify(appointmentRequest),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-      })
+      const appointment = await saveAppointment(appointmentRequest)
 
-      const result = (await response.json()) as
-        | { appointment: SavedAppointment }
-        | { error?: string }
-
-      if (!response.ok || !('appointment' in result)) {
-        const errorMessage =
-          'error' in result ? result.error : 'Failed to save appointment.'
-        throw new Error(errorMessage || 'Failed to save appointment.')
-      }
-
-      setSavedAppointment(result.appointment)
+      setSavedAppointment(appointment)
       setAppointmentDraft(null)
       setRequestDetails(DEFAULT_REQUEST_DETAILS)
     } catch (error) {

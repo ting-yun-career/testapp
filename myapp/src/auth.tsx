@@ -5,6 +5,8 @@ import {
   auth0ClientId,
   auth0Connection,
   auth0Domain,
+  auth0Audience,
+  auth0Scope,
   hasAuth0Config,
 } from './auth-config'
 
@@ -28,6 +30,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }}
       authorizationParams={{
         redirect_uri: window.location.origin,
+        ...(auth0Audience ? { audience: auth0Audience } : {}),
+        ...(auth0Scope ? { scope: auth0Scope } : {}),
         ...(auth0Connection ? { connection: auth0Connection } : {}),
       }}
     >
