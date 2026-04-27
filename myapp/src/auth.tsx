@@ -27,7 +27,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         navigate(appState?.returnTo ?? '/dashboard', { replace: true })
       }}
       authorizationParams={{
-        redirect_uri: `${window.location.origin}/dashboard`,
+        redirect_uri: window.location.origin,
         ...(auth0Connection ? { connection: auth0Connection } : {}),
       }}
     >
