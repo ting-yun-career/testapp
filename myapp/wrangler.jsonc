@@ -19,17 +19,19 @@
       "enabled": true,
       "head_sampling_rate": 1,
       "persist": true,
-      "invocation_logs": true
+      "invocation_logs": true,
     },
     "traces": {
       "enabled": true,
       "persist": true,
-      "head_sampling_rate": 1
-    }
+      "head_sampling_rate": 1,
+    },
   },
   "upload_source_maps": true,
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
+    "AUTH0_AUDIENCE": "https://myapp.ting-yun-career.workers.dev",
+    "AUTH0_DOMAIN": "dev-mgg7icl8dtwjxrce.us.auth0.com",
     "CONTACT_EMAIL": "ting.yun.support@gmail.com",
   },
   "workers_dev": true,
