@@ -1,4 +1,4 @@
-import { createAppointment } from './appointment'
+import { createAppointment, getAppointments } from './appointment'
 import { requireAuth0Jwt } from './auth'
 
 type WorkerEnv = Env & {
@@ -19,6 +19,18 @@ export default {
         featureSignup: env.FEATURE_SIGNUP,
         hasApiSecret: Boolean(env.API_SECRET),
       })
+    }
+
+    if (url.pathname === '/api/appointments' && request.method === 'GET') {
+      const auth = await requireAuth0Jwt(request, runtimeEnv, [
+        'read:appointment',
+      ])
+
+      if (!auth.ok) {
+        return auth.response
+      }
+
+      return getAppointments(request, runtimeEnv)
     }
 
     if (url.pathname === '/api/appointments' && request.method === 'POST') {

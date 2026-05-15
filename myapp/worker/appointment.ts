@@ -5,6 +5,93 @@ type WorkerEnv = Env & {
   PRIVACY_SALT_PHRASE?: string
 }
 
+export async function getAppointments(request: Request, env: WorkerEnv) {
+  if (!env.DB) {
+    return Response.json(
+      { error: 'Database binding is missing.' },
+      { status: 500 },
+    )
+  }
+
+  const url = new URL(request.url)
+  const from = url.searchParams.get('from')
+  const to = url.searchParams.get('to')
+
+  if (from && Number.isNaN(new Date(from).getTime())) {
+    return Response.json(
+      { error: 'Invalid "from" date parameter.' },
+      { status: 400 },
+    )
+  }
+
+  if (to && Number.isNaN(new Date(to).getTime())) {
+    return Response.json(
+      { error: 'Invalid "to" date parameter.' },
+      { status: 400 },
+    )
+  }
+
+  try {
+    let query: string
+    let bindings: string[]
+
+    if (from && to) {
+      query = `SELECT * FROM appointments WHERE start_at_utc >= ? AND end_at_utc <= ? ORDER BY start_at_utc ASC`
+      bindings = [new Date(from).toISOString(), new Date(to).toISOString()]
+    } else if (from) {
+      query = `SELECT * FROM appointments WHERE start_at_utc >= ? ORDER BY start_at_utc ASC`
+      bindings = [new Date(from).toISOString()]
+    } else if (to) {
+      query = `SELECT * FROM appointments WHERE end_at_utc <= ? ORDER BY start_at_utc ASC`
+      bindings = [new Date(to).toISOString()]
+    } else {
+      query = `SELECT * FROM appointments ORDER BY start_at_utc ASC`
+      bindings = []
+    }
+
+    const { results } = await env.DB.prepare(query)
+      .bind(...bindings)
+      .all<{
+        id: string
+        status: string
+        start_at_utc: string
+        end_at_utc: string
+        timezone: string
+        name: string
+        email: string
+        meeting_contact: string
+        notes: string
+        created_at: string
+      }>()
+
+    const appointments = results.map(row => ({
+      createdAt: row.created_at,
+      email: row.email,
+      endAt: row.end_at_utc,
+      id: row.id,
+      meetingLinkOrPhone: row.meeting_contact,
+      name: row.name,
+      notes: row.notes,
+      startAt: row.start_at_utc,
+      status: row.status,
+      timezone: row.timezone,
+    }))
+
+    return Response.json({ appointments })
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'Failed to fetch appointments.'
+
+    console.error('appointments.fetch_failed', {
+      errorMessage,
+      from,
+      to,
+    })
+
+    return Response.json({ error: errorMessage }, { status: 500 })
+  }
+}
+
 export async function createAppointment(request: Request, env: WorkerEnv) {
   if (!env.DB) {
     return Response.json(
