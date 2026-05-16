@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import BookingCalendar from './components/BookingCalendar'
 import Button from './components/web/Button'
-import { hasAuth0Config } from './auth'
+import { hasAuth0Config } from './auth.config'
 
 function App() {
   return (
