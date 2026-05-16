@@ -1,0 +1,7 @@
+node_modules/
+dist/
+build/
+.idea/
+.DS_Store
+package-lock.json
+.cursor/rules/silver4-custom-cursor-rules.mdc
