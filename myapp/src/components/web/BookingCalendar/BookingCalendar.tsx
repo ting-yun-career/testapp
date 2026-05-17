@@ -1,7 +1,13 @@
 import { clsx } from 'clsx'
+import Icon from '../../../icons/Icon'
 import { addMonths, format, isSameDay, startOfMonth } from 'date-fns'
 import { useEffect, useMemo, useState } from 'react'
-import { CalendarSmallIcon, ChevronLeftIcon, ChevronRightIcon, ClockSmallIcon } from '../../../icons'
+import {
+  CalendarSmallIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ClockSmallIcon,
+} from '../../../icons'
 import { useApi } from '../../../hooks/useApi'
 import DialogLayer from '../../DialogLayer'
 import TextControl from '../../form/TextControl'
@@ -56,7 +62,9 @@ export default function BookingCalendar({
   const [visibleMonth, setVisibleMonth] = useState(startOfMonth(initialDate))
   const [selectedDate, setSelectedDate] = useState(initialDate)
   const [is24Hour, setIs24Hour] = useState(true)
-  const [dragSelection, setDragSelection] = useState<SelectionRange | null>(null)
+  const [dragSelection, setDragSelection] = useState<SelectionRange | null>(
+    null,
+  )
   const [appointmentDraft, setAppointmentDraft] =
     useState<SelectionRange | null>(null)
   const [requestDetails, setRequestDetails] = useState(DEFAULT_REQUEST_DETAILS)
@@ -90,7 +98,14 @@ export default function BookingCalendar({
       dayIndex,
       slotIndex,
       startHour: hourBounds.startHour,
-    }) || isBookedSlot(appointments, weekDays, dayIndex, slotIndex, hourBounds.startHour)
+    }) ||
+    isBookedSlot(
+      appointments,
+      weekDays,
+      dayIndex,
+      slotIndex,
+      hourBounds.startHour,
+    )
 
   useEffect(() => {
     if (!dragSelection) {
@@ -128,7 +143,7 @@ export default function BookingCalendar({
       .catch((error: unknown) => {
         console.error('appointments.fetch_failed', error)
       })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [weekStart])
 
   const draftDay = appointmentDraft
@@ -348,7 +363,6 @@ export default function BookingCalendar({
                     onClick={() => handleWeekShift(7)}
                   />
                 </div>
-
               </div>
             </div>
 
@@ -396,12 +410,12 @@ export default function BookingCalendar({
           title="Confirm your details"
         >
           <div className="mt-6 flex flex-wrap gap-[0.85rem]">
-            <Pill icon={<CalendarSmallIcon />}>
+            <Pill icon={<Icon type="calendar-small" />}>
               {`${format(draftDay, 'EEE, MMMM d, yyyy')}, `}
               {formatMinutesLabel(draftStartMinutes, is24Hour)} -{' '}
               {formatMinutesLabel(draftEndMinutes, is24Hour)}
             </Pill>
-            <Pill icon={<ClockSmallIcon />}>{draftDurationMinutes} min</Pill>
+            <Pill icon={<Icon type="clock" />}>{draftDurationMinutes} min</Pill>
           </div>
 
           {saveError ? (
@@ -504,7 +518,11 @@ function MonthArrow({
       onClick={onClick}
       type="button"
     >
-      {direction === 'prev' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+      {direction === 'prev' ? (
+        <Icon type="chevron-left" />
+      ) : (
+        <Icon type="chevron-right" />
+      )}
     </button>
   )
 }
@@ -553,7 +571,9 @@ function AppointmentTimeGrid({
       return
     }
 
-    const cell = element.closest<HTMLElement>('[data-slot-index][data-day-index]')
+    const cell = element.closest<HTMLElement>(
+      '[data-slot-index][data-day-index]',
+    )
 
     if (!cell) {
       return
@@ -713,7 +733,9 @@ function AppointmentTimeGrid({
             <div className="absolute inset-0 flex flex-col justify-start overflow-hidden rounded-[3px] bg-sky-600/80 px-[0.4rem] py-[0.15rem] text-[0.7rem] leading-[1.2] text-white shadow-[0_1px_2px_rgba(0,0,0,0.25)]">
               <span className="font-semibold truncate">{apt.name}</span>
               {durationMin >= 30 ? (
-                <span className="truncate text-white/75">{durationMin} min</span>
+                <span className="truncate text-white/75">
+                  {durationMin} min
+                </span>
               ) : null}
             </div>
           </div>
