@@ -1,12 +1,12 @@
 import { clsx } from 'clsx'
-import Icon from '../../../icons/Icon'
+import Icon from '../Icon'
 import { addMonths, format, isSameDay, startOfMonth } from 'date-fns'
 import { useEffect, useMemo, useState } from 'react'
 import {
   CalendarSmallIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ClockSmallIcon,
+  // ChevronLeftIcon,
+  // ChevronRightIcon,
+  // ClockSmallIcon,
 } from '../../../icons'
 import { useApi } from '../../../hooks/useApi'
 import DialogLayer from '../../DialogLayer'
