@@ -1,4 +1,5 @@
 import { clsx } from 'clsx'
+import Icon from './web/Icon'
 import {
   addDays,
   addMonths,
@@ -328,12 +329,12 @@ export default function BookingCalendar({
           title="Confirm your details"
         >
           <div className="mt-6 flex flex-wrap gap-[0.85rem]">
-            <Pill icon={<CalendarSmallIcon />}>
+            <Pill icon={<Icon type="calendar-small" />}>
               {`${format(draftDay, 'EEE, MMMM d, yyyy')}, `}
               {formatMinutesLabel(draftStartMinutes, is24Hour)} -{' '}
               {formatMinutesLabel(draftEndMinutes, is24Hour)}
             </Pill>
-            <Pill icon={<ClockSmallIcon />}>{draftDurationMinutes} min</Pill>
+            <Pill icon={<Icon type="clock" />}>{draftDurationMinutes} min</Pill>
           </div>
 
           <TextControl
@@ -408,7 +409,7 @@ function MonthArrow({
       onClick={onClick}
       type="button"
     >
-      {direction === 'prev' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+      {direction === 'prev' ? <Icon type="chevron-left" /> : <Icon type="chevron-right" />}
     </button>
   )
 }
@@ -815,61 +816,4 @@ function normalizeAvailability(availability?: Availability | null) {
   }
 
   return { endHour, startHour }
-}
-
-function CalendarSmallIcon() {
-  return (
-    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24">
-      <rect
-        height="15"
-        rx="3"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        width="18"
-        x="3"
-        y="5"
-      />
-      <path d="M8 3v4M16 3v4M3 10h18" stroke="currentColor" strokeWidth="1.8" />
-    </svg>
-  )
-}
-
-function ClockSmallIcon() {
-  return (
-    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
-      <path
-        d="M12 7v5l3 2"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.8"
-      />
-    </svg>
-  )
-}
-
-function ChevronLeftIcon() {
-  return (
-    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24">
-      <path
-        d="m15 18-6-6 6-6"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.8"
-      />
-    </svg>
-  )
-}
-
-function ChevronRightIcon() {
-  return (
-    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24">
-      <path
-        d="m9 18 6-6-6-6"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.8"
-      />
-    </svg>
-  )
 }

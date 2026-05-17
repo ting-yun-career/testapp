@@ -1,8 +1,10 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import BookingCalendar from './components/BookingCalendar'
+import BottomNav, { type NavView } from './components/BottomNav'
+import MenuDropdown from './components/MenuDropdown'
 import Button from './components/web/Button'
 import { hasAuth0Config } from './auth.config'
 
@@ -73,28 +75,27 @@ function LandingPage() {
 
 function DashboardPage() {
   const { logout } = useAuth0()
+  const [activeView, setActiveView] = useState<NavView>('calendar')
+
+  const menuItems = [
+    {
+      label: 'Log out',
+      onClick: () => {
+        if (!hasAuth0Config) return
+        logout({ logoutParams: { returnTo: window.location.origin } })
+      },
+    },
+  ]
 
   return (
-    <div className="relative">
-      <div className="absolute right-4 top-4 z-20 sm:right-6 sm:top-6">
-        <Button
-          onClick={() => {
-            if (!hasAuth0Config) {
-              return
-            }
-
-            logout({
-              logoutParams: {
-                returnTo: window.location.origin,
-              },
-            })
-          }}
-          variant="ghost"
-        >
-          Logout
-        </Button>
+    <div className="relative min-h-screen">
+      <div className="fixed left-4 top-4 z-20 sm:left-6 sm:top-6">
+        <MenuDropdown items={menuItems} />
       </div>
-      <BookingCalendar />
+
+      {activeView === 'calendar' && <BookingCalendar />}
+
+      <BottomNav active={activeView} onChange={setActiveView} />
     </div>
   )
 }
