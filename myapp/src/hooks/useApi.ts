@@ -17,6 +17,10 @@ type AppointmentResponse =
   | { appointment: SavedAppointment }
   | { error?: string }
 
+type AppointmentsListResponse =
+  | { appointments: SavedAppointment[] }
+  | { error?: string }
+
 const normalizedApiBaseUrl = apiBaseUrl.replace(/\/+$/, '')
 const authorizationParams = {
   ...(auth0Audience ? { audience: auth0Audience } : {}),
@@ -105,5 +109,44 @@ export function useApi() {
     return result.appointment
   }
 
-  return { saveAppointment }
+  async function getAppointments(from: string, to: string) {
+    let token: string
+
+    try {
+      token = await getAccessTokenSilently({ authorizationParams })
+    } catch (error) {
+      if (requiresInteractiveAuth(error)) {
+        const popupToken = await getAccessTokenWithPopup({ authorizationParams })
+
+        if (!popupToken) {
+          throw new Error('Auth0 did not return an API access token.')
+        }
+
+        token = popupToken
+      } else {
+        console.error('appointments.auth0_token_failed', error)
+        throw new Error(
+          `${getAuth0ErrorMessage(error)} Check the API audience, application API access policy, and requested scopes.`,
+        )
+      }
+    }
+
+    const params = new URLSearchParams({ from, to })
+    const response = await fetch(
+      `${normalizedApiBaseUrl}/api/appointments?${params}`,
+      { headers: { Authorization: `Bearer ${token}` } },
+    )
+
+    const result = (await response.json()) as AppointmentsListResponse
+
+    if (!response.ok || !('appointments' in result)) {
+      const errorMessage =
+        'error' in result ? result.error : 'Failed to fetch appointments.'
+      throw new Error(errorMessage || 'Failed to fetch appointments.')
+    }
+
+    return result.appointments
+  }
+
+  return { getAppointments, saveAppointment }
 }

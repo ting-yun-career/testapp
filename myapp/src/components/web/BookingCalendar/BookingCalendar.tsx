@@ -8,6 +8,7 @@ import TextControl from '../../form/TextControl'
 import Button from '../Button'
 import Pill from '../Pill'
 import {
+  appointmentToGridPosition,
   buildCalendarDays,
   buildUtcAppointmentRangeFromLocalSelection,
   formatDateTimeLabel,
@@ -20,6 +21,7 @@ import {
   getSelectionDetails,
   getUserTimeZone,
   getWeekDaysStarting,
+  isBookedSlot,
   isBusySlot,
   normalizeSelection,
   slotIndexToMinutes,
@@ -62,7 +64,8 @@ export default function BookingCalendar({
   const [saveError, setSaveError] = useState('')
   const [savedAppointment, setSavedAppointment] =
     useState<SavedAppointment | null>(null)
-  const { saveAppointment } = useApi()
+  const [appointments, setAppointments] = useState<SavedAppointment[]>([])
+  const { getAppointments, saveAppointment } = useApi()
 
   const calendarDays = useMemo(
     () => buildCalendarDays(visibleMonth, selectedDate, availabilities),
@@ -87,7 +90,7 @@ export default function BookingCalendar({
       dayIndex,
       slotIndex,
       startHour: hourBounds.startHour,
-    })
+    }) || isBookedSlot(appointments, weekDays, dayIndex, slotIndex, hourBounds.startHour)
 
   useEffect(() => {
     if (!dragSelection) {
@@ -109,6 +112,24 @@ export default function BookingCalendar({
       window.removeEventListener('touchend', handleSelectionEnd)
     }
   }, [dragSelection])
+
+  const weekStart = weekDays[0]?.toISOString() ?? ''
+
+  useEffect(() => {
+    if (!weekDays[0] || !weekDays[6]) return
+
+    const from = weekDays[0].toISOString()
+    const weekEnd = new Date(weekDays[6])
+    weekEnd.setHours(23, 59, 59, 999)
+    const to = weekEnd.toISOString()
+
+    getAppointments(from, to)
+      .then(setAppointments)
+      .catch((error: unknown) => {
+        console.error('appointments.fetch_failed', error)
+      })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [weekStart])
 
   const draftDay = appointmentDraft
     ? (weekDays[appointmentDraft.dayIndex] ?? selectedDate)
@@ -165,6 +186,7 @@ export default function BookingCalendar({
       const appointment = await saveAppointment(appointmentRequest)
 
       setSavedAppointment(appointment)
+      setAppointments((current) => [...current, appointment])
       setAppointmentDraft(null)
       setRequestDetails(DEFAULT_REQUEST_DETAILS)
     } catch (error) {
@@ -332,6 +354,7 @@ export default function BookingCalendar({
 
             <div className="min-h-0 flex-1 overflow-auto px-5 py-5 sm:px-6 lg:px-8">
               <AppointmentTimeGrid
+                appointments={appointments}
                 availabilities={availabilities}
                 dragSelection={dragSelection}
                 is24Hour={is24Hour}
@@ -487,6 +510,7 @@ function MonthArrow({
 }
 
 function AppointmentTimeGrid({
+  appointments,
   availabilities,
   dragSelection,
   onCellMouseDown,
@@ -495,6 +519,7 @@ function AppointmentTimeGrid({
   weekDays,
   is24Hour,
 }: {
+  appointments: SavedAppointment[]
   availabilities: Availability[]
   dragSelection: SelectionRange | null
   onCellMouseDown: (dayIndex: number, slotIndex: number) => void
@@ -671,6 +696,30 @@ function AppointmentTimeGrid({
           )
         }),
       )}
+      {appointments.map((apt) => {
+        const pos = appointmentToGridPosition(apt, weekDays, normalizedStart)
+        if (!pos) return null
+        const slotCount = pos.endSlot - pos.startSlot + 1
+        const durationMin = slotCount * 15
+        return (
+          <div
+            key={apt.id}
+            className="pointer-events-none relative z-3"
+            style={{
+              gridColumn: pos.dayIndex + 2,
+              gridRow: `${pos.startSlot + 2} / span ${slotCount}`,
+            }}
+          >
+            <div className="absolute inset-0 flex flex-col justify-start overflow-hidden rounded-[3px] bg-sky-600/80 px-[0.4rem] py-[0.15rem] text-[0.7rem] leading-[1.2] text-white shadow-[0_1px_2px_rgba(0,0,0,0.25)]">
+              <span className="font-semibold truncate">{apt.name}</span>
+              {durationMin >= 30 ? (
+                <span className="truncate text-white/75">{durationMin} min</span>
+              ) : null}
+            </div>
+          </div>
+        )
+      })}
+
       {normalizedSelection ? (
         <div
           className="pointer-events-none relative z-[4]"

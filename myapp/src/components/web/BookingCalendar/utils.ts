@@ -175,6 +175,50 @@ export function getUserTimeZone() {
   return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'
 }
 
+export function appointmentToGridPosition(
+  appointment: SavedAppointment,
+  weekDays: Date[],
+  startHour: number,
+): { dayIndex: number; endSlot: number; startSlot: number } | null {
+  const startDate = new Date(appointment.startAt)
+  const endDate = new Date(appointment.endAt)
+  const dayIndex = weekDays.findIndex((day) => isSameDay(day, startDate))
+
+  if (dayIndex === -1) return null
+
+  const startMinutes = startDate.getHours() * 60 + startDate.getMinutes()
+  const endMinutes = endDate.getHours() * 60 + endDate.getMinutes()
+  const startSlot = Math.round((startMinutes - startHour * 60) / 15)
+  const endSlot = Math.round((endMinutes - startHour * 60) / 15) - 1
+
+  if (endSlot < startSlot) return null
+
+  return { dayIndex, endSlot: Math.max(startSlot, endSlot), startSlot: Math.max(0, startSlot) }
+}
+
+export function isBookedSlot(
+  appointments: SavedAppointment[],
+  weekDays: Date[],
+  dayIndex: number,
+  slotIndex: number,
+  startHour: number,
+): boolean {
+  const day = weekDays[dayIndex]
+  if (!day) return false
+
+  const slotStartMin = slotIndexToMinutes(slotIndex, startHour)
+  const slotEndMin = slotStartMin + 15
+
+  return appointments.some((apt) => {
+    const aptStart = new Date(apt.startAt)
+    const aptEnd = new Date(apt.endAt)
+    if (!isSameDay(aptStart, day)) return false
+    const aptStartMin = aptStart.getHours() * 60 + aptStart.getMinutes()
+    const aptEndMin = aptEnd.getHours() * 60 + aptEnd.getMinutes()
+    return slotStartMin < aptEndMin && slotEndMin > aptStartMin
+  })
+}
+
 export function isBusySlot({
   availabilities,
   dayIndex,
