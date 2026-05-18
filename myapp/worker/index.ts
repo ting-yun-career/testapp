@@ -12,18 +12,9 @@ export default {
     const runtimeEnv = env as WorkerEnv
     const url = new URL(request.url)
 
-    if (url.pathname === '/api/config') {
-      return Response.json({
-        appEnv: env.APP_ENV,
-        apiBaseUrl: env.API_BASE_URL,
-        featureSignup: env.FEATURE_SIGNUP,
-        hasApiSecret: Boolean(env.API_SECRET),
-      })
-    }
-
     if (url.pathname === '/api/appointments' && request.method === 'GET') {
       const auth = await requireAuth0Jwt(request, runtimeEnv, [
-        'read:appointment',
+        'get:appointment',
       ])
 
       if (!auth.ok) {
