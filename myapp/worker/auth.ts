@@ -43,12 +43,6 @@ export async function requireAuth0Jwt(
 
   const token = getBearerToken(request)
 
-  console.log('auth.token_preview', {
-    empty: !token,
-    prefix: token.substring(0, 60),
-    parts: token.split('.').length,
-  })
-
   if (!token) {
     return unauthorized('Missing bearer token.')
   }
