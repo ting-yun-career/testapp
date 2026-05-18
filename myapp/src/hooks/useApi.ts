@@ -22,6 +22,7 @@ type AppointmentsListResponse =
   | { error?: string }
 
 const normalizedApiBaseUrl = apiBaseUrl.replace(/\/+$/, '')
+console.log('useApi.audience', auth0Audience)
 const authorizationParams = {
   ...(auth0Audience ? { audience: auth0Audience } : {}),
   ...(auth0Scope ? { scope: auth0Scope } : {}),
