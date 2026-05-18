@@ -45,8 +45,8 @@ export async function requireAuth0Jwt(
 
   console.log('auth.token_preview', {
     empty: !token,
-    prefix: token.substring(0, 20),
-    looksLikeJwt: token.split('.').length === 3,
+    prefix: token.substring(0, 60),
+    parts: token.split('.').length,
   })
 
   if (!token) {
