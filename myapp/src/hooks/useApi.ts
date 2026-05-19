@@ -63,31 +63,29 @@ function requiresInteractiveAuth(error: unknown) {
 export function useApi() {
   const { getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0()
 
-  async function saveAppointment(data: AppointmentRequest) {
-    let token: string
-
+  async function getToken() {
     try {
-      token = await getAccessTokenSilently({
-        authorizationParams,
-      })
+      return await getAccessTokenSilently({ authorizationParams })
     } catch (error) {
       if (requiresInteractiveAuth(error)) {
-        const popupToken = await getAccessTokenWithPopup({
-          authorizationParams,
-        })
+        const popupToken = await getAccessTokenWithPopup({ authorizationParams })
 
         if (!popupToken) {
           throw new Error('Auth0 did not return an API access token.')
         }
 
-        token = popupToken
-      } else {
-        console.error('appointments.auth0_token_failed', error)
-        throw new Error(
-          `${getAuth0ErrorMessage(error)} Check the API audience, application API access policy, and requested scopes.`,
-        )
+        return popupToken
       }
+
+      console.error('appointments.auth0_token_failed', error)
+      throw new Error(
+        `${getAuth0ErrorMessage(error)} Check the API audience, application API access policy, and requested scopes.`,
+      )
     }
+  }
+
+  async function saveAppointment(data: AppointmentRequest) {
+    const token = await getToken()
 
     const response = await fetch(`${normalizedApiBaseUrl}/api/appointments`, {
       body: JSON.stringify(data),
@@ -110,26 +108,7 @@ export function useApi() {
   }
 
   async function getAppointments(from: string, to: string) {
-    let token: string
-
-    try {
-      token = await getAccessTokenSilently({ authorizationParams })
-    } catch (error) {
-      if (requiresInteractiveAuth(error)) {
-        const popupToken = await getAccessTokenWithPopup({ authorizationParams })
-
-        if (!popupToken) {
-          throw new Error('Auth0 did not return an API access token.')
-        }
-
-        token = popupToken
-      } else {
-        console.error('appointments.auth0_token_failed', error)
-        throw new Error(
-          `${getAuth0ErrorMessage(error)} Check the API audience, application API access policy, and requested scopes.`,
-        )
-      }
-    }
+    const token = await getToken()
 
     const params = new URLSearchParams({ from, to })
     const response = await fetch(
@@ -148,5 +127,22 @@ export function useApi() {
     return result.appointments
   }
 
-  return { getAppointments, saveAppointment }
+  async function deleteAppointment(id: string) {
+    const token = await getToken()
+
+    const response = await fetch(
+      `${normalizedApiBaseUrl}/api/appointments/${encodeURIComponent(id)}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        method: 'DELETE',
+      },
+    )
+
+    if (!response.ok) {
+      const result = (await response.json()) as { error?: string }
+      throw new Error(result.error || 'Failed to delete appointment.')
+    }
+  }
+
+  return { deleteAppointment, getAppointments, saveAppointment }
 }

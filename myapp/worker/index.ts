@@ -1,4 +1,4 @@
-import { createAppointment, getAppointments } from './appointment'
+import { createAppointment, deleteAppointment, getAppointments } from './appointment'
 import { requireAuth0Jwt } from './auth'
 
 type WorkerEnv = Env & {
@@ -34,6 +34,19 @@ export default {
       }
 
       return createAppointment(request, runtimeEnv)
+    }
+
+    const deleteMatch = url.pathname.match(/^\/api\/appointments\/([^/]+)$/)
+    if (deleteMatch && request.method === 'DELETE') {
+      const auth = await requireAuth0Jwt(request, runtimeEnv, [
+        'delete:appointment',
+      ])
+
+      if (!auth.ok) {
+        return auth.response
+      }
+
+      return deleteAppointment(deleteMatch[1], runtimeEnv)
     }
 
     if (url.pathname.startsWith('/api/')) {

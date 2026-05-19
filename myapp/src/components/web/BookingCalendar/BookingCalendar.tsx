@@ -73,7 +73,7 @@ export default function BookingCalendar({
   const [savedAppointment, setSavedAppointment] =
     useState<SavedAppointment | null>(null)
   const [appointments, setAppointments] = useState<SavedAppointment[]>([])
-  const { getAppointments, saveAppointment } = useApi()
+  const { deleteAppointment, getAppointments, saveAppointment } = useApi()
 
   const calendarDays = useMemo(
     () => buildCalendarDays(visibleMonth, selectedDate, availabilities),
@@ -245,6 +245,15 @@ export default function BookingCalendar({
     )
   }
 
+  const handleDeleteAppointment = async (id: string) => {
+    try {
+      await deleteAppointment(id)
+      setAppointments((prev) => prev.filter((a) => a.id !== id))
+    } catch (error: unknown) {
+      console.error('appointments.delete_failed', error)
+    }
+  }
+
   const handleWeekShift = (amount: number) => {
     setSelectedDate((current) => {
       const nextDate = new Date(current)
@@ -374,6 +383,7 @@ export default function BookingCalendar({
                 is24Hour={is24Hour}
                 onCellMouseDown={handleSelectionStart}
                 onCellMouseEnter={handleSelectionExtend}
+                onDeleteAppointment={handleDeleteAppointment}
                 selectedDate={selectedDate}
                 weekDays={weekDays}
               />
@@ -533,6 +543,7 @@ function AppointmentTimeGrid({
   dragSelection,
   onCellMouseDown,
   onCellMouseEnter,
+  onDeleteAppointment,
   selectedDate,
   weekDays,
   is24Hour,
@@ -542,6 +553,7 @@ function AppointmentTimeGrid({
   dragSelection: SelectionRange | null
   onCellMouseDown: (dayIndex: number, slotIndex: number) => void
   onCellMouseEnter: (dayIndex: number, slotIndex: number) => void
+  onDeleteAppointment: (id: string) => void
   selectedDate: Date
   weekDays: Date[]
   is24Hour: boolean
@@ -724,20 +736,28 @@ function AppointmentTimeGrid({
         return (
           <div
             key={apt.id}
-            className="pointer-events-none relative z-3"
+            className="group relative z-3"
             style={{
               gridColumn: pos.dayIndex + 2,
               gridRow: `${pos.startSlot + 2} / span ${slotCount}`,
             }}
           >
             <div className="absolute inset-0 flex flex-col justify-start overflow-hidden rounded-[3px] bg-sky-600/80 px-[0.4rem] py-[0.15rem] text-[0.7rem] leading-[1.2] text-white shadow-[0_1px_2px_rgba(0,0,0,0.25)]">
-              <span className="font-semibold truncate">{apt.name}</span>
+              <span className="font-semibold truncate pr-3">{apt.name}</span>
               {durationMin >= 30 ? (
                 <span className="truncate text-white/75">
                   {durationMin} min
                 </span>
               ) : null}
             </div>
+            <button
+              className="absolute top-[2px] right-[2px] hidden group-hover:flex h-4 w-4 items-center justify-center rounded-sm bg-white/20 text-white hover:bg-white/40 text-[0.65rem] leading-none"
+              onClick={() => onDeleteAppointment(apt.id)}
+              title="Remove appointment"
+              type="button"
+            >
+              ×
+            </button>
           </div>
         )
       })}

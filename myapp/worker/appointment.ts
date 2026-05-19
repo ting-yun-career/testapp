@@ -92,6 +92,45 @@ export async function getAppointments(request: Request, env: WorkerEnv) {
   }
 }
 
+export async function deleteAppointment(
+  id: string,
+  env: WorkerEnv,
+) {
+  if (!env.DB) {
+    return Response.json(
+      { error: 'Database binding is missing.' },
+      { status: 500 },
+    )
+  }
+
+  if (!id) {
+    return Response.json({ error: 'Missing appointment id.' }, { status: 400 })
+  }
+
+  try {
+    const result = await env.DB.prepare(
+      `DELETE FROM appointments WHERE id = ?`,
+    )
+      .bind(id)
+      .run()
+
+    if (!result.meta.changes) {
+      return Response.json({ error: 'Appointment not found.' }, { status: 404 })
+    }
+
+    console.log('appointments.deleted', { id })
+
+    return Response.json({ deleted: true })
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'Failed to delete appointment.'
+
+    console.error('appointments.delete_failed', { errorMessage, id })
+
+    return Response.json({ error: errorMessage }, { status: 500 })
+  }
+}
+
 export async function createAppointment(request: Request, env: WorkerEnv) {
   if (!env.DB) {
     return Response.json(
