@@ -1,3 +1,6 @@
+import '../scss/normalize.css'
+import '../scss/index.scss'
+
 $(document).ready(function () {
   $("#carousel").unitegallery({
     gallery_width: "100%",

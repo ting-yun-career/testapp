@@ -1,5 +1,7 @@
 node_modules/
+dist/
 .idea/
 .DS_Store
 package-lock.json
+yarn.lock
 .cursor/rules/silver4-custom-cursor-rules.mdc

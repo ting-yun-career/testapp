@@ -1,33 +1,22 @@
 {
-  "name": "salon",
+  "name": "silver4",
   "version": "1.0.0",
   "description": "",
-  "main": "js/main.js",
   "scripts": {
-    "scss": "sass scss/index.scss build/css/index.css --source-map --style compressed",
-    "copy-index": "cp index.html ./build",
-    "copy-css": "cp scss/normalize.css ./build/css/",
-    "copy-js": "cp -R js/ ./build/js",
-    "copy-asset": "cp -R asset/ ./build/asset",
-    "copy-unite-gallery": "cp -R vendor/unitegallery/dist ./build/vendor/unitegallery",
-    "copy-vendor": "npm run copy-unite-gallery",
-    "copy-all": "npm run copy-index && npm run copy-css && npm run copy-js && npm run copy-asset && npm run copy-vendor",
-    "clean": "rm -rf build",
-    "postinstall": "yarn clean && mkdir -p build/css && mkdir -p build/vendor/unitegallery/dist",
-    "rebuild": "yarn postinstall && npm run copy-all && npm run scss",
-    "rebuild:watch": "onchange 'scss/**/*.scss' 'js/**/*.js' 'asset/**/*' 'vendor/**/*' 'index.html' -- yarn rebuild",
-    "reload": "reload -b -v -d build -w build -n 127.0.0.1",
-    "start": "yarn rebuild:watch & yarn reload"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "sass": "^1.70.0",
-    "onchange": "^7.1.0",
     "prettier": "^3.5.3",
-    "reload": "^3.2.1"
+    "sass": "^1.70.0",
+    "vite": "^6.0.0"
   },
-  "dependencies": {},
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "pnpm@10.15.0",
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
+  }
 }

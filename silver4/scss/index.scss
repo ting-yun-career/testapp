@@ -98,7 +98,7 @@ header {
   font-size: 24px;
   font-family: $font1;
   color: $text;
-  background-image: url("../asset/pattern/dark/diagmonds.png");
+  background-image: url("/asset/pattern/dark/diagmonds.png");
   width: 100%;
 
   .title {
@@ -162,7 +162,7 @@ header {
 .service {
   @include mixin.center();
   flex-wrap: wrap;
-  background-image: url("../asset/pattern/white/cross_scratches_@2X.png");
+  background-image: url("/asset/pattern/white/cross_scratches_@2X.png");
   padding: 40px 0 80px 0;
 
   .title {
@@ -233,7 +233,7 @@ header {
   @include mixin.center();
   flex-wrap: wrap;
   padding: 40px 0;
-  background-image: url("../asset/pattern/dark/diagmonds.png");
+  background-image: url("/asset/pattern/dark/diagmonds.png");
 
   .title,
   .content {
@@ -271,7 +271,7 @@ header {
   @include mixin.center();
   flex-wrap: wrap;
   padding: 40px 0;
-  background-image: url("../asset/pattern/white/cross_scratches_@2X.png");
+  background-image: url("/asset/pattern/white/cross_scratches_@2X.png");
 
   .title,
   .content {
@@ -296,7 +296,7 @@ header {
   @include mixin.center();
   flex-wrap: wrap;
   padding: 40px 0;
-  background-image: url("../asset/pattern/dark/diagmonds.png");
+  background-image: url("/asset/pattern/dark/diagmonds.png");
 
   .title,
   .content {
@@ -399,7 +399,7 @@ header {
   flex-wrap: wrap;
   padding: 40px 0 80px 0;
   position: relative;
-  background-image: url("../asset/pattern/white/cross_scratches_@2X.png");
+  background-image: url("/asset/pattern/white/cross_scratches_@2X.png");
 
   .title,
   .content {
@@ -419,7 +419,7 @@ header {
 footer {
   padding: 20px 50px;
   font-size: 12px;
-  background-image: url("../asset/pattern/dark/diagmonds.png");
+  background-image: url("/asset/pattern/dark/diagmonds.png");
   color: $color1;
   font-family: $font1;
 
