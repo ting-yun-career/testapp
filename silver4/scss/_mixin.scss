@@ -1,0 +1,99 @@
+// Font variables from index.scss
+$font1: "Open Sans", sans-serif;
+
+@mixin transition($duration: 1s, $timingFunction: ease-in-out) {
+  -webkit-transition: -webkit-transform $duration $timingFunction;
+  -moz-transition: -moz-transform $duration $timingFunction;
+  -o-transition: -o-transform $duration $timingFunction;
+  -ms-transition: -ms-transform $duration $timingFunction;
+  transition: transform $duration $timingFunction;
+}
+
+@mixin scale($factor) {
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  transform: scale(1.2);
+}
+
+@mixin center() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+$cell: "only screen and (max-width: 449px)";
+$tablet: "only screen and (min-width: 450px) and (max-width: 799px)";
+$desktop: "only screen and (min-width: 800px) and (max-width: 1299px)";
+$uhd: "only screen and (min-width: 1300px)";
+
+@mixin cell {
+  @media #{$cell} {
+    @content;
+  }
+}
+@mixin tablet {
+  @media #{$tablet} {
+    @content;
+  }
+}
+@mixin desktop {
+  @media #{$desktop} {
+    @content;
+  }
+}
+@mixin uhd {
+  @media #{$uhd} {
+    @content;
+  }
+}
+
+@mixin itemList {
+  font-family: $font1;
+  font-weight: 300;
+  border: 2px solid white;
+  border-radius: 3px;
+  background-color: rgba(50, 50, 60, 0.1);
+  padding: 40px;
+
+  span,
+  em {
+    float: right;
+  }
+
+  em {
+    float: right;
+    text-decoration: none;
+    font-style: normal;
+    position: relative;
+
+    &:after {
+      position: absolute;
+      left: 100%;
+    }
+  }
+}
+
+@mixin item {
+  padding-top: 20px;
+
+  &:first-child {
+    padding-top: 0;
+  }
+}
+
+@mixin subItem {
+  padding: 10px 0 5px 20px;
+
+  &.first {
+    padding-top: 20px;
+  }
+}
+
+@mixin clearfix {
+  display: flow-root; // clearfix
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
