@@ -16,6 +16,8 @@
 	},
 	"dependencies": {
 		"@auth0/auth0-react": "^2.16.1",
+		"@stripe/react-stripe-js": "^6.4.0",
+		"@stripe/stripe-js": "^9.6.0",
 		"clsx": "^2.1.1",
 		"date-fns": "^4.1.0",
 		"jose": "^6.2.3",
@@ -37,6 +39,7 @@
 		"eslint-plugin-react-refresh": "^0.4.24",
 		"globals": "^16.5.0",
 		"prettier": "^3.8.1",
+		"stripe": "^22.1.1",
 		"tailwindcss": "^4.2.2",
 		"typescript": "~5.9.3",
 		"typescript-eslint": "^8.48.0",

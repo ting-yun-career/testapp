@@ -8,7 +8,7 @@ import {
   // ChevronRightIcon,
   // ClockSmallIcon,
 } from '../../../icons'
-import { useApi } from '../../../hooks/useApi'
+import { useAppointmentApi } from '../../../hooks/useAppointmentApi'
 import DialogLayer from '../../DialogLayer'
 import TextControl from '../../form/TextControl'
 import Button from '../Button'
@@ -73,7 +73,7 @@ export default function BookingCalendar({
   const [savedAppointment, setSavedAppointment] =
     useState<SavedAppointment | null>(null)
   const [appointments, setAppointments] = useState<SavedAppointment[]>([])
-  const { deleteAppointment, getAppointments, saveAppointment } = useApi()
+  const { deleteAppointment, getAppointments, saveAppointment } = useAppointmentApi()
 
   const calendarDays = useMemo(
     () => buildCalendarDays(visibleMonth, selectedDate, availabilities),

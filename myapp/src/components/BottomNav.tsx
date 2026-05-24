@@ -1,6 +1,6 @@
 import Icon from './web/Icon'
 
-export type NavView = 'calendar'
+export type NavView = 'calendar' | 'shop'
 
 type NavItem = {
   id: NavView
@@ -12,7 +12,10 @@ type BottomNavProps = {
   onChange: (view: NavView) => void
 }
 
-const NAV_ITEMS: NavItem[] = [{ id: 'calendar', label: 'Calendar' }]
+const NAV_ITEMS: NavItem[] = [
+  { id: 'calendar', label: 'Calendar' },
+  { id: 'shop', label: 'Shop' },
+]
 
 export default function BottomNav({ active, onChange }: BottomNavProps) {
   return (
