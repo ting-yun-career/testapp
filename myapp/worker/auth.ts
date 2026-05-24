@@ -47,6 +47,8 @@ export async function requireAuth0Jwt(
     return unauthorized('Missing bearer token.')
   }
 
+  console.log('auth.verifying', { audience, issuer, tokenPrefix: token.slice(0, 20) })
+
   try {
     const payload = await verifyJwt(token, {
       audience,
@@ -66,6 +68,9 @@ export async function requireAuth0Jwt(
 
     console.warn('auth.token_rejected', {
       error: error instanceof Error ? error.message : String(error),
+      errorCode: (error as { code?: string }).code,
+      audience,
+      issuer,
       path: new URL(request.url).pathname,
     })
 
