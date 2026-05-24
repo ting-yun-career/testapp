@@ -14,6 +14,8 @@ export default {
     const runtimeEnv = env as WorkerEnv
     const url = new URL(request.url)
 
+    console.log('worker.fetch', { method: request.method, pathname: url.pathname })
+
     if (url.pathname === '/api/appointments' && request.method === 'GET') {
       const auth = await requireAuth0Jwt(request, runtimeEnv, [
         'get:appointment',
