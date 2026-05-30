@@ -28,7 +28,24 @@ export type Availability = {
   startHour?: number
 }
 
+export type AppointmentRequest = {
+  additionalInfo: string
+  email: string
+  endAt: string
+  meetingLinkOrPhone: string
+  name: string
+  startAt: string
+  timezone: string
+}
+
+export type BookingCalendarApi = {
+  deleteAppointment?: (id: string) => Promise<void>
+  getAppointments: (from: string, to: string) => Promise<SavedAppointment[]>
+  saveAppointment: (data: AppointmentRequest) => Promise<SavedAppointment>
+}
+
 export type BookingCalendarProps = {
+  api: BookingCalendarApi
   availabilities?: Availability[]
 }
 

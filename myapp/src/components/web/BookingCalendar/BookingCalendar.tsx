@@ -8,7 +8,6 @@ import {
   // ChevronRightIcon,
   // ClockSmallIcon,
 } from '../../../icons'
-import { useAppointmentApi } from '../../../hooks/useAppointmentApi'
 import DialogLayer from '../../DialogLayer'
 import TextControl from '../../form/TextControl'
 import Button from '../Button'
@@ -47,6 +46,7 @@ const DEFAULT_REQUEST_DETAILS: RequestDetails = {
 }
 
 export default function BookingCalendar({
+  api,
   availabilities = [
     {},
     { startHour: 9, endHour: 17 },
@@ -73,7 +73,7 @@ export default function BookingCalendar({
   const [savedAppointment, setSavedAppointment] =
     useState<SavedAppointment | null>(null)
   const [appointments, setAppointments] = useState<SavedAppointment[]>([])
-  const { deleteAppointment, getAppointments, saveAppointment } = useAppointmentApi()
+  const { getAppointments, saveAppointment, deleteAppointment } = api
 
   const calendarDays = useMemo(
     () => buildCalendarDays(visibleMonth, selectedDate, availabilities),
@@ -246,6 +246,7 @@ export default function BookingCalendar({
   }
 
   const handleDeleteAppointment = async (id: string) => {
+    if (!deleteAppointment) return
     try {
       await deleteAppointment(id)
       setAppointments((prev) => prev.filter((a) => a.id !== id))
@@ -379,6 +380,7 @@ export default function BookingCalendar({
               <AppointmentTimeGrid
                 appointments={appointments}
                 availabilities={availabilities}
+                canDelete={Boolean(deleteAppointment)}
                 dragSelection={dragSelection}
                 is24Hour={is24Hour}
                 onCellMouseDown={handleSelectionStart}
@@ -540,6 +542,7 @@ function MonthArrow({
 function AppointmentTimeGrid({
   appointments,
   availabilities,
+  canDelete,
   dragSelection,
   onCellMouseDown,
   onCellMouseEnter,
@@ -550,6 +553,7 @@ function AppointmentTimeGrid({
 }: {
   appointments: SavedAppointment[]
   availabilities: Availability[]
+  canDelete: boolean
   dragSelection: SelectionRange | null
   onCellMouseDown: (dayIndex: number, slotIndex: number) => void
   onCellMouseEnter: (dayIndex: number, slotIndex: number) => void
@@ -750,14 +754,16 @@ function AppointmentTimeGrid({
                 </span>
               ) : null}
             </div>
-            <button
-              className="absolute top-[2px] right-[2px] hidden group-hover:flex h-4 w-4 items-center justify-center rounded-sm bg-white/20 text-white hover:bg-white/40 text-[0.65rem] leading-none"
-              onClick={() => onDeleteAppointment(apt.id)}
-              title="Remove appointment"
-              type="button"
-            >
-              ×
-            </button>
+            {canDelete ? (
+              <button
+                className="absolute top-[2px] right-[2px] hidden group-hover:flex h-4 w-4 items-center justify-center rounded-sm bg-white/20 text-white hover:bg-white/40 text-[0.65rem] leading-none"
+                onClick={() => onDeleteAppointment(apt.id)}
+                title="Remove appointment"
+                type="button"
+              >
+                ×
+              </button>
+            ) : null}
           </div>
         )
       })}

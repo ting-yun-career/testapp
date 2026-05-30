@@ -15,13 +15,12 @@ type AppointmentRequest = {
 type AppointmentResponse = { appointment: SavedAppointment } | { error?: string }
 type AppointmentsListResponse = { appointments: SavedAppointment[] } | { error?: string }
 
-const normalizedApiBaseUrl = apiBaseUrl.replace(/\/+$/, '')
 
 export function useAppointmentApi() {
   const { doDelete, doGet, doPost } = useCloudflareApi()
 
   async function saveAppointment(data: AppointmentRequest) {
-    const response = await doPost(`${normalizedApiBaseUrl}/api/appointments`, data)
+    const response = await doPost(`${apiBaseUrl}/appointments`, data)
     const result = await response.json() as AppointmentResponse
     if (!response.ok || !('appointment' in result)) {
       throw new Error(('error' in result ? result.error : null) ?? 'Failed to save appointment.')
@@ -31,7 +30,7 @@ export function useAppointmentApi() {
 
   async function getAppointments(from: string, to: string) {
     const params = new URLSearchParams({ from, to })
-    const response = await doGet(`${normalizedApiBaseUrl}/api/appointments?${params}`)
+    const response = await doGet(`${apiBaseUrl}/appointments?${params}`)
     const result = await response.json() as AppointmentsListResponse
     if (!response.ok || !('appointments' in result)) {
       throw new Error(('error' in result ? result.error : null) ?? 'Failed to fetch appointments.')
@@ -40,7 +39,7 @@ export function useAppointmentApi() {
   }
 
   async function deleteAppointment(id: string) {
-    const response = await doDelete(`${normalizedApiBaseUrl}/api/appointments/${encodeURIComponent(id)}`)
+    const response = await doDelete(`${apiBaseUrl}/appointments/${encodeURIComponent(id)}`)
     if (!response.ok) {
       const result = await response.json() as { error?: string }
       throw new Error(result.error ?? 'Failed to delete appointment.')

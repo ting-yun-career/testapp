@@ -1,4 +1,8 @@
-import { createAppointment, deleteAppointment, getAppointments } from './appointment'
+import {
+  createAppointment,
+  deleteAppointment,
+  getAppointments,
+} from './appointment'
 import { requireAuth0Jwt } from './auth'
 import { createPaymentIntent } from './stripe'
 
@@ -14,7 +18,15 @@ export default {
     const runtimeEnv = env as WorkerEnv
     const url = new URL(request.url)
 
-    console.log('worker.fetch', { method: request.method, pathname: url.pathname })
+    console.log('worker.fetch', {
+      method: request.method,
+      pathname: url.pathname,
+    })
+
+    if (url.pathname === '/api/public/appointments') {
+      if (request.method === 'GET') return getAppointments(request, runtimeEnv)
+      if (request.method === 'POST') return createAppointment(request, runtimeEnv)
+    }
 
     if (url.pathname === '/api/appointments' && request.method === 'GET') {
       const auth = await requireAuth0Jwt(request, runtimeEnv, [
@@ -53,10 +65,16 @@ export default {
       return deleteAppointment(deleteMatch[1], runtimeEnv)
     }
 
-    if (url.pathname === '/api/payments/create-intent' && request.method === 'POST') {
+    if (
+      url.pathname === '/api/payments/create-intent' &&
+      request.method === 'POST'
+    ) {
       const auth = await requireAuth0Jwt(request, runtimeEnv, [])
       if (!auth.ok) return auth.response
-      return createPaymentIntent(request, runtimeEnv as WorkerEnv & { STRIPE_SECRET_KEY: string })
+      return createPaymentIntent(
+        request,
+        runtimeEnv as WorkerEnv & { STRIPE_SECRET_KEY: string },
+      )
     }
 
     if (url.pathname.startsWith('/api/')) {

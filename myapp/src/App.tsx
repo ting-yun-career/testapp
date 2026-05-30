@@ -8,7 +8,7 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom'
-import BookingCalendar from './components/web/BookingCalendar'
+import AuthenticatedBookingCalendar from './components/web/BookingCalendar/AuthenticatedBookingCalendar'
 import BottomNav, { type NavView } from './components/BottomNav'
 import MenuDropdown from './components/MenuDropdown'
 import Button from './components/web/Button'
@@ -16,6 +16,7 @@ import { hasAuth0Config } from './auth-config'
 import { usePaymentApi } from './hooks/usePaymentApi'
 import CheckoutPage from './pages/Checkout'
 import PaymentSuccessPage from './pages/PaymentSuccess'
+import BookingPage from './pages/BookingPage'
 
 const APPOINTMENT_PRICE_ID = 'price_1TaL08K3O3rcWSY2XwJYNITC'
 
@@ -31,6 +32,7 @@ function App() {
         }
         path="/dashboard"
       />
+      <Route element={<BookingPage />} path="/book" />
       <Route element={<CheckoutPage />} path="/checkout" />
       <Route element={<PaymentSuccessPage />} path="/payment/success" />
       <Route element={<Navigate replace to="/" />} path="*" />
@@ -122,7 +124,7 @@ function DashboardPage() {
         <MenuDropdown items={menuItems} />
       </div>
 
-      {activeView === 'calendar' && <BookingCalendar />}
+      {activeView === 'calendar' && <AuthenticatedBookingCalendar />}
       {activeView === 'shop' && (
         <ShopView
           error={buyError}
