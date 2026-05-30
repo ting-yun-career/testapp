@@ -287,12 +287,14 @@ export default function BookingCalendar({
                     onClick={() => {
                       setVisibleMonth(startOfMonth(addMonths(visibleMonth, -1)))
                     }}
+                    testId="mini-cal-prev"
                   />
                   <MonthArrow
                     direction="next"
                     onClick={() => {
                       setVisibleMonth(startOfMonth(addMonths(visibleMonth, 1)))
                     }}
+                    testId="mini-cal-next"
                   />
                 </div>
               </div>
@@ -307,6 +309,7 @@ export default function BookingCalendar({
                 {calendarDays.map((day) => (
                   <button
                     key={day.date.toISOString()}
+                    data-testid={`mini-cal-day-${format(day.date, 'yyyy-MM-dd')}`}
                     className={clsx(
                       'relative flex aspect-square cursor-pointer items-center justify-center rounded-[3px] border border-transparent text-white/70 transition [transition-property:background-color,color,transform,border-color]',
                       'text-base max-[1279px]:text-[2rem] max-[640px]:text-[1.45rem]',
@@ -345,6 +348,7 @@ export default function BookingCalendar({
                           ? 'bg-black text-white'
                           : 'text-white/55 hover:text-white',
                       )}
+                      data-testid="time-format-12h"
                       onClick={() => setIs24Hour(false)}
                     >
                       12h
@@ -356,6 +360,7 @@ export default function BookingCalendar({
                           ? 'bg-black text-white'
                           : 'text-white/55 hover:text-white',
                       )}
+                      data-testid="time-format-24h"
                       onClick={() => setIs24Hour(true)}
                     >
                       24h
@@ -367,10 +372,12 @@ export default function BookingCalendar({
                   <MonthArrow
                     direction="prev"
                     onClick={() => handleWeekShift(-7)}
+                    testId="week-view-prev"
                   />
                   <MonthArrow
                     direction="next"
                     onClick={() => handleWeekShift(7)}
+                    testId="week-view-next"
                   />
                 </div>
               </div>
@@ -519,14 +526,17 @@ export default function BookingCalendar({
 function MonthArrow({
   direction,
   onClick,
+  testId,
 }: {
   direction: 'prev' | 'next'
   onClick: () => void
+  testId?: string
 }) {
   return (
     <button
       aria-label={direction === 'prev' ? 'Previous' : 'Next'}
       className="inline-flex h-10 w-10 items-center justify-center rounded-full text-white/35 transition hover:bg-white/6 hover:text-white"
+      data-testid={testId}
       onClick={onClick}
       type="button"
     >
@@ -740,6 +750,7 @@ function AppointmentTimeGrid({
         return (
           <div
             key={apt.id}
+            data-testid={`appt-block-${apt.id}`}
             className="group relative z-3"
             style={{
               gridColumn: pos.dayIndex + 2,
