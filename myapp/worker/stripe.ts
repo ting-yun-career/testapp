@@ -4,25 +4,41 @@ type StripeEnv = {
   STRIPE_SECRET_KEY: string
 }
 
-export async function createPaymentIntent(request: Request, env: StripeEnv): Promise<Response> {
-  const body = await request.json() as { priceId?: string }
-
-  if (!body.priceId) {
-    return Response.json({ error: 'priceId is required.' }, { status: 400 })
-  }
-
+export async function createPublicDepositIntent(env: StripeEnv): Promise<Response> {
   const stripe = new Stripe(env.STRIPE_SECRET_KEY)
-  const price = await stripe.prices.retrieve(body.priceId)
-
-  if (!price.unit_amount) {
-    return Response.json({ error: 'Invalid price.' }, { status: 400 })
-  }
 
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: price.unit_amount,
-    currency: price.currency,
-    metadata: { priceId: body.priceId },
+    amount: 100,
+    currency: 'cad',
+    metadata: { type: 'appointment_deposit' },
   })
 
-  return Response.json({ clientSecret: paymentIntent.client_secret })
+  return Response.json({
+    clientSecret: paymentIntent.client_secret,
+    paymentIntentId: paymentIntent.id,
+  })
+}
+
+export async function verifyDepositPayment(
+  paymentIntentId: string,
+  env: StripeEnv,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const stripe = new Stripe(env.STRIPE_SECRET_KEY)
+
+  let paymentIntent: Stripe.PaymentIntent
+  try {
+    paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId)
+  } catch {
+    return { ok: false, error: 'Invalid payment intent.' }
+  }
+
+  if (paymentIntent.status !== 'succeeded') {
+    return { ok: false, error: 'Payment has not been completed.' }
+  }
+
+  if (paymentIntent.amount !== 100 || paymentIntent.currency !== 'cad') {
+    return { ok: false, error: 'Payment amount is invalid.' }
+  }
+
+  return { ok: true }
 }

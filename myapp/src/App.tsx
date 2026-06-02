@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import type { ReactNode } from 'react'
 import {
   Navigate,
@@ -9,16 +9,12 @@ import {
   useNavigate,
 } from 'react-router-dom'
 import AuthenticatedBookingCalendar from './components/web/BookingCalendar/AuthenticatedBookingCalendar'
-import BottomNav, { type NavView } from './components/BottomNav'
 import MenuDropdown from './components/MenuDropdown'
 import Button from './components/web/Button'
 import { hasAuth0Config } from './auth-config'
-import { usePaymentApi } from './hooks/usePaymentApi'
 import CheckoutPage from './pages/Checkout'
 import PaymentSuccessPage from './pages/PaymentSuccess'
 import BookingPage from './pages/BookingPage'
-
-const APPOINTMENT_PRICE_ID = 'price_1TaL08K3O3rcWSY2XwJYNITC'
 
 function App() {
   return (
@@ -90,23 +86,6 @@ function LandingPage() {
 
 function DashboardPage() {
   const { logout } = useAuth0()
-  const navigate = useNavigate()
-  const { createPaymentIntent } = usePaymentApi()
-  const [activeView, setActiveView] = useState<NavView>('calendar')
-  const [buyLoading, setBuyLoading] = useState(false)
-  const [buyError, setBuyError] = useState<string | null>(null)
-
-  async function handleBuy(priceId: string) {
-    setBuyLoading(true)
-    setBuyError(null)
-    try {
-      const clientSecret = await createPaymentIntent(priceId)
-      navigate('/checkout', { state: { clientSecret } })
-    } catch (err) {
-      setBuyError(err instanceof Error ? err.message : 'Something went wrong.')
-      setBuyLoading(false)
-    }
-  }
 
   const menuItems = [
     {
@@ -123,48 +102,7 @@ function DashboardPage() {
       <div className="fixed left-4 top-4 z-20 sm:left-6 sm:top-6">
         <MenuDropdown items={menuItems} />
       </div>
-
-      {activeView === 'calendar' && <AuthenticatedBookingCalendar />}
-      {activeView === 'shop' && (
-        <ShopView
-          error={buyError}
-          loading={buyLoading}
-          onBuy={priceId => void handleBuy(priceId)}
-        />
-      )}
-
-      <BottomNav active={activeView} onChange={setActiveView} />
-    </div>
-  )
-}
-
-function ShopView({
-  error,
-  loading,
-  onBuy,
-}: {
-  error: string | null
-  loading: boolean
-  onBuy: (priceId: string) => void
-}) {
-  return (
-    <div className="flex min-h-screen items-center justify-center px-6 pb-24 pt-16">
-      <div className="w-full max-w-sm rounded-[3px] border border-white/8 bg-white/[0.03] px-8 py-10 shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
-        <p className="text-xs uppercase tracking-[0.28em] text-white/40">Appointment</p>
-        <h2 className="mt-3 text-xl font-semibold tracking-tight text-white">Consultation</h2>
-        <p className="mt-2 text-sm text-white/50">Book a one-on-one consultation session.</p>
-        <p className="mt-4 text-3xl font-semibold text-white">$50</p>
-        {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
-        <div className="mt-6">
-          <Button
-            disabled={loading}
-            onClick={() => onBuy(APPOINTMENT_PRICE_ID)}
-            variant="solid"
-          >
-            {loading ? 'Preparing...' : 'Buy now'}
-          </Button>
-        </div>
-      </div>
+      <AuthenticatedBookingCalendar />
     </div>
   )
 }

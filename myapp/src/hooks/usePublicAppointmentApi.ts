@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { apiBaseUrl } from '../auth-config'
 import type {
   AppointmentRequest,
@@ -5,22 +6,37 @@ import type {
 } from '../components/web/BookingCalendar/utils'
 
 export function usePublicAppointmentApi() {
+  const navigate = useNavigate()
+
   async function saveAppointment(
     data: AppointmentRequest,
   ): Promise<SavedAppointment> {
-    const response = await fetch(`${apiBaseUrl}/public/appointments`, {
-      body: JSON.stringify(data),
-      headers: { 'Content-Type': 'application/json' },
-      method: 'POST',
-    })
-    const result = (await response.json()) as {
-      appointment?: SavedAppointment
+    const intentResponse = await fetch(
+      `${apiBaseUrl}/public/payments/create-deposit-intent`,
+      { method: 'POST' },
+    )
+    const intentResult = (await intentResponse.json()) as {
+      clientSecret?: string
+      paymentIntentId?: string
       error?: string
     }
-    if (!response.ok || !result.appointment) {
-      throw new Error(result.error ?? 'Failed to save appointment.')
+    if (
+      !intentResponse.ok ||
+      !intentResult.clientSecret ||
+      !intentResult.paymentIntentId
+    ) {
+      throw new Error(intentResult.error ?? 'Failed to initiate payment.')
     }
-    return result.appointment
+
+    sessionStorage.setItem(
+      'pending_appointment',
+      JSON.stringify({ data, paymentIntentId: intentResult.paymentIntentId }),
+    )
+
+    navigate('/checkout', { state: { clientSecret: intentResult.clientSecret } })
+
+    // Never resolves — page navigates away during payment
+    return new Promise<SavedAppointment>(() => {})
   }
 
   async function getAppointments(

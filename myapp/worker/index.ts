@@ -4,7 +4,7 @@ import {
   getAppointments,
 } from './appointment'
 import { requireAuth0Jwt } from './auth'
-import { createPaymentIntent } from './stripe'
+import { createPublicDepositIntent, verifyDepositPayment } from './stripe'
 
 type WorkerEnv = Env & {
   AUTH0_AUDIENCE?: string
@@ -25,7 +25,50 @@ export default {
 
     if (url.pathname === '/api/public/appointments') {
       if (request.method === 'GET') return getAppointments(request, runtimeEnv)
-      if (request.method === 'POST') return createAppointment(request, runtimeEnv)
+      if (request.method === 'POST') {
+        if (!runtimeEnv.STRIPE_SECRET_KEY) {
+          return Response.json({ error: 'Payment is not configured.' }, { status: 500 })
+        }
+        let body: Record<string, unknown>
+        try {
+          body = (await request.json()) as Record<string, unknown>
+        } catch {
+          return Response.json({ error: 'Invalid JSON body.' }, { status: 400 })
+        }
+        const paymentIntentId =
+          typeof body.paymentIntentId === 'string' ? body.paymentIntentId : ''
+        if (!paymentIntentId) {
+          return Response.json(
+            { error: 'A $1 deposit payment is required to book an appointment.' },
+            { status: 402 },
+          )
+        }
+        const verification = await verifyDepositPayment(
+          paymentIntentId,
+          runtimeEnv as WorkerEnv & { STRIPE_SECRET_KEY: string },
+        )
+        if (!verification.ok) {
+          return Response.json({ error: verification.error }, { status: 402 })
+        }
+        const verifiedRequest = new Request(request.url, {
+          method: 'POST',
+          headers: new Headers({ 'Content-Type': 'application/json' }),
+          body: JSON.stringify(body),
+        })
+        return createAppointment(verifiedRequest, runtimeEnv)
+      }
+    }
+
+    if (
+      url.pathname === '/api/public/payments/create-deposit-intent' &&
+      request.method === 'POST'
+    ) {
+      if (!runtimeEnv.STRIPE_SECRET_KEY) {
+        return Response.json({ error: 'Payment is not configured.' }, { status: 500 })
+      }
+      return createPublicDepositIntent(
+        runtimeEnv as WorkerEnv & { STRIPE_SECRET_KEY: string },
+      )
     }
 
     if (url.pathname === '/api/appointments' && request.method === 'GET') {
@@ -63,18 +106,6 @@ export default {
       }
 
       return deleteAppointment(deleteMatch[1], runtimeEnv)
-    }
-
-    if (
-      url.pathname === '/api/payments/create-intent' &&
-      request.method === 'POST'
-    ) {
-      const auth = await requireAuth0Jwt(request, runtimeEnv, [])
-      if (!auth.ok) return auth.response
-      return createPaymentIntent(
-        request,
-        runtimeEnv as WorkerEnv & { STRIPE_SECRET_KEY: string },
-      )
     }
 
     if (url.pathname.startsWith('/api/')) {
