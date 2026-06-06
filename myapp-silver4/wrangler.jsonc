@@ -29,11 +29,6 @@
   },
   "upload_source_maps": true,
   "compatibility_flags": ["nodejs_compat"],
-  "vars": {
-    "AUTH0_AUDIENCE": "https://myapp.ting-yun-career.workers.dev",
-    "AUTH0_DOMAIN": "dev-mgg7icl8dtwjxrce.us.auth0.com",
-    "CONTACT_EMAIL": "ting.yun.support@gmail.com",
-  },
   "workers_dev": true,
   "preview_urls": true,
   /**
