@@ -50,8 +50,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "appointments",
-      "database_id": "02f49194-6982-4c96-88d6-4e299e8deeaf",
+      "database_name": "myapp",
+      "database_id": "efc40231-e017-4f08-8ebe-1589bddd30c0",
       "remote": true,
     },
   ],
