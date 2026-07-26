@@ -21,6 +21,7 @@ import {
   formatMinutesLabel,
   formatRangeTitle,
   formatSavedAppointment,
+  getAvailabilityTzShiftHours,
   getCurrentMarker,
   getHourBounds,
   getSelectionDetails,
@@ -37,6 +38,8 @@ import {
   type SavedAppointment,
   type SelectionRange,
 } from './utils'
+
+const BUSINESS_TIMEZONE = import.meta.env.VITE_BUSINESS_TIMEZONE ?? 'America/Vancouver'
 
 const DEFAULT_REQUEST_DETAILS: RequestDetails = {
   additionalInfo: '',
@@ -75,26 +78,35 @@ export default function BookingCalendar({
   const [appointments, setAppointments] = useState<SavedAppointment[]>([])
   const { getAppointments, saveAppointment, deleteAppointment } = api
 
-  const calendarDays = useMemo(
-    () => buildCalendarDays(visibleMonth, selectedDate, availabilities),
-    [availabilities, selectedDate, visibleMonth],
-  )
   const weekDays = useMemo(
     () => getWeekDaysStarting(selectedDate),
     [selectedDate],
+  )
+  const localAvailabilities = useMemo(() => {
+    const shiftHours = getAvailabilityTzShiftHours(weekDays[0] ?? new Date(), BUSINESS_TIMEZONE)
+    if (shiftHours === 0) return availabilities
+    return availabilities.map((avail) =>
+      typeof avail.startHour === 'number' && typeof avail.endHour === 'number'
+        ? { startHour: avail.startHour + shiftHours, endHour: avail.endHour + shiftHours }
+        : avail,
+    )
+  }, [availabilities, weekDays])
+  const calendarDays = useMemo(
+    () => buildCalendarDays(visibleMonth, selectedDate, availabilities),
+    [availabilities, selectedDate, visibleMonth],
   )
   const weekRangeTitle = useMemo(
     () => formatRangeTitle(weekDays[0], weekDays[weekDays.length - 1]),
     [weekDays],
   )
   const hourBounds = useMemo(
-    () => getHourBounds(availabilities),
-    [availabilities],
+    () => getHourBounds(localAvailabilities),
+    [localAvailabilities],
   )
 
   const isUnavailableSelectionSlot = (dayIndex: number, slotIndex: number) =>
     isBusySlot({
-      availabilities,
+      availabilities: localAvailabilities,
       dayIndex,
       slotIndex,
       startHour: hourBounds.startHour,
@@ -386,7 +398,7 @@ export default function BookingCalendar({
             <div className="min-h-0 flex-1 overflow-auto px-5 py-5 sm:px-6 lg:px-8">
               <AppointmentTimeGrid
                 appointments={appointments}
-                availabilities={availabilities}
+                availabilities={localAvailabilities}
                 canDelete={Boolean(deleteAppointment)}
                 dragSelection={dragSelection}
                 is24Hour={is24Hour}

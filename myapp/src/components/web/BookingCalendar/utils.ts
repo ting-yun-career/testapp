@@ -192,6 +192,14 @@ export function getUserTimeZone() {
   return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'
 }
 
+export function getAvailabilityTzShiftHours(date: Date, businessTimezone: string): number {
+  const localOffsetMinutes = -date.getTimezoneOffset()
+  const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }))
+  const tzDate = new Date(date.toLocaleString('en-US', { timeZone: businessTimezone }))
+  const businessOffsetMinutes = (tzDate.getTime() - utcDate.getTime()) / 60000
+  return (localOffsetMinutes - businessOffsetMinutes) / 60
+}
+
 export function appointmentToGridPosition(
   appointment: SavedAppointment,
   weekDays: Date[],
