@@ -96,3 +96,44 @@ Public booking requires a $1 CAD Stripe deposit:
 ### Testing
 
 Tests use Vitest in Node environment. Worker functions are unit-tested by mocking the D1 `prepare/bind/run` chain and `fetch` (for JWKS). No integration tests against a live D1 or Stripe.
+
+## Cloudflare setup notes
+
+### Recommended stack
+
+- Cloudflare Workers for the API layer (already in place).
+- Cloudflare D1 for appointments, business hours, and blackout periods (already bound as `DB`).
+- Cloudflare Turnstile to protect the public booking form from spam (not yet implemented).
+
+Optional later additions: Cloudflare Queues (async email/reminders), Cron Triggers (scheduled reminders), Durable Objects (strict slot locking against double-booking).
+
+### API endpoints
+
+- `GET /api/public/appointments` — public read
+- `POST /api/public/appointments` — public booking (requires verified Stripe deposit)
+- `POST /api/public/payments/create-deposit-intent` — creates $1 CAD Stripe PaymentIntent
+- `GET /api/appointments` — authenticated read (scope: `get:appointment`)
+- `POST /api/appointments` — authenticated create (scope: `post:appointment`)
+- `DELETE /api/appointments/:id` — authenticated delete (scope: `delete:appointment`)
+
+### Booking payload
+
+Times are stored in UTC; original user timezone is stored separately.
+
+Required fields: `startAt`, `endAt`, `timezone`, `name`, `email`, `meetingLinkOrPhone`.
+Optional: `additionalInfo`, `paymentIntentId` (required on the public route).
+
+### D1 schema
+
+```
+appointments(id, status, start_at_utc, end_at_utc, timezone, name, email, meeting_contact, notes, created_at)
+```
+
+Planned tables (not yet created): `availability_rules(id, weekday, start_minute, end_minute, timezone)`, `blackout_ranges(id, start_at_utc, end_at_utc, reason)`.
+
+### Rollout order for remaining work
+
+1. Implement `/api/availability` in the Worker and replace the hardcoded weekly availability in the frontend.
+2. Add Turnstile before exposing the public booking form broadly.
+3. Add email or calendar sync after persistence is stable.
+4. Add Durable Objects only if stricter concurrency control is needed.
