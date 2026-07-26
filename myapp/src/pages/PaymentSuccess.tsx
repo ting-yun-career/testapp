@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { apiBaseUrl } from '../auth-config'
-import Button from '../components/web/Button'
+import Button from '@repo/ui/Button'
 import type {
   AppointmentRequest,
   SavedAppointment,

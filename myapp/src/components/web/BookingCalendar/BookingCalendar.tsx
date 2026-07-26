@@ -10,7 +10,7 @@ import {
 } from '../../../icons'
 import DialogLayer from '../../DialogLayer'
 import TextControl from '../../form/TextControl'
-import Button from '../Button'
+import Button from '@repo/ui/Button'
 import Pill from '../Pill'
 import {
   appointmentToGridPosition,

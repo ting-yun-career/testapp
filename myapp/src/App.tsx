@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom'
 import AuthenticatedBookingCalendar from './components/web/BookingCalendar/AuthenticatedBookingCalendar'
 import MenuDropdown from './components/MenuDropdown'
-import Button from './components/web/Button'
+import Button from '@repo/ui/Button'
 import { hasAuth0Config } from './auth-config'
 import CheckoutPage from './pages/Checkout'
 import PaymentSuccessPage from './pages/PaymentSuccess'

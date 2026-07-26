@@ -3,7 +3,7 @@ import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { stripePublishableKey } from '../auth-config'
-import Button from '../components/web/Button'
+import Button from '@repo/ui/Button'
 
 const stripePromise = loadStripe(stripePublishableKey)
 
