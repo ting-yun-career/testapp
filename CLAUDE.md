@@ -8,6 +8,15 @@ The active project lives in `myapp/`. The `silver4/` directory is a separate sta
 
 All commands below should be run from inside `myapp/`.
 
+## Adding a new project to this monorepo
+
+When a new project directory is added at the repo root, two steps are required — skipping either one will break CI:
+
+1. Add the directory name to the `packages` list in `pnpm-workspace.yaml` (repo root).
+2. Run `pnpm install` from the repo root to update `pnpm-lock.yaml` with the new project's dependencies.
+
+Commit both `pnpm-workspace.yaml` and the updated `pnpm-lock.yaml` together. If the new project has a `pnpm.onlyBuiltDependencies` field in its `package.json`, move it to the `onlyBuiltDependencies` key in the root `pnpm-workspace.yaml` instead — pnpm 10 ignores that field in individual package manifests.
+
 ## Commands
 
 ```bash
