@@ -1,3 +1,4 @@
 packages:
-  - 'myapp'
-  - 'packages/*'
+  - "myapp"
+  - "packages/*"
+  - "silver4"
