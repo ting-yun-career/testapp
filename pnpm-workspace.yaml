@@ -2,3 +2,6 @@ packages:
   - "myapp"
   - "packages/*"
   - "silver4"
+
+onlyBuiltDependencies:
+  - esbuild

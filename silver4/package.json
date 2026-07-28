@@ -15,8 +15,5 @@
     "sass": "^1.70.0",
     "vite": "^6.0.0"
   },
-  "packageManager": "pnpm@10.15.0",
-  "pnpm": {
-    "onlyBuiltDependencies": ["esbuild"]
-  }
+  "packageManager": "pnpm@10.15.0"
 }
