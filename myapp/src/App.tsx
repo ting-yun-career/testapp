@@ -9,12 +9,21 @@ import {
   useNavigate,
 } from 'react-router-dom'
 import AuthenticatedBookingCalendar from './components/web/BookingCalendar/AuthenticatedBookingCalendar'
+import Icon from './components/web/Icon'
 import MenuDropdown from './components/MenuDropdown'
 import Button from '@repo/ui/Button'
+import BottomNav from '@repo/ui/BottomNav'
+import type { BottomNavItem } from '@repo/ui/BottomNav'
 import { hasAuth0Config } from './auth-config'
 import CheckoutPage from './pages/Checkout'
 import PaymentSuccessPage from './pages/PaymentSuccess'
 import BookingPage from './pages/BookingPage'
+import AppointmentsPage from './pages/AppointmentsPage'
+
+const NAV_ITEMS: BottomNavItem[] = [
+  { id: '/dashboard', icon: <Icon size={14} type="calendar" />, label: 'Calendar' },
+  { id: '/appointments', icon: <Icon size={14} type="appointments" />, label: 'Appointments' },
+]
 
 function App() {
   return (
@@ -23,16 +32,43 @@ function App() {
       <Route
         element={
           <RequireAuth>
-            <DashboardPage />
+            <AuthenticatedShell>
+              <DashboardPage />
+            </AuthenticatedShell>
           </RequireAuth>
         }
         path="/dashboard"
+      />
+      <Route
+        element={
+          <RequireAuth>
+            <AuthenticatedShell>
+              <AppointmentsPage />
+            </AuthenticatedShell>
+          </RequireAuth>
+        }
+        path="/appointments"
       />
       <Route element={<BookingPage />} path="/book" />
       <Route element={<CheckoutPage />} path="/checkout" />
       <Route element={<PaymentSuccessPage />} path="/payment/success" />
       <Route element={<Navigate replace to="/" />} path="*" />
     </Routes>
+  )
+}
+
+function AuthenticatedShell({ children }: { children: ReactNode }) {
+  const navigate = useNavigate()
+  const location = useLocation()
+  return (
+    <>
+      {children}
+      <BottomNav
+        activeId={location.pathname}
+        items={NAV_ITEMS}
+        onItemClick={(item) => navigate(item.id)}
+      />
+    </>
   )
 }
 

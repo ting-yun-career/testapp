@@ -98,9 +98,22 @@ Public booking requires a $1 CAD Stripe deposit:
 |------|-----------|------|
 | `/` | `LandingPage` | Public |
 | `/dashboard` | `DashboardPage` + `AuthenticatedBookingCalendar` | Requires Auth0 |
+| `/appointments` | `AppointmentsPage` — tabular list of all appointments | Requires Auth0 |
 | `/book` | `BookingPage` + `PublicBookingCalendar` | Public |
 | `/checkout` | `CheckoutPage` | Public |
 | `/payment/success` | `PaymentSuccessPage` | Public |
+
+### Navigation
+
+Authenticated pages (`/dashboard`, `/appointments`) are wrapped in `AuthenticatedShell` (defined in `App.tsx`), which renders a fixed bottom navigation bar via `BottomNav` from `@repo/ui`. `AuthenticatedShell` is route-aware: it reads `location.pathname` to set the active nav item and uses `useNavigate` to switch between pages. Adding a new authenticated page only requires: registering a route wrapped in `<RequireAuth><AuthenticatedShell>`, and adding an entry to `NAV_ITEMS` in `App.tsx`.
+
+### Icon system
+
+`src/components/web/Icon.tsx` exports a typed `<Icon type="..." size={n} />` component used throughout the app (calendar, appointments, clock, chevrons, shop). Extend it when adding new nav entries.
+
+### `@repo/ui` package
+
+Shared UI components live in `packages/ui/src/`. Currently exports: `Button`, `TextControl`, `BottomNav` (+ `BottomNavItem` type). `BottomNav` is router-agnostic — it accepts `items: BottomNavItem[]`, `activeId: string`, and `onItemClick` callback; callers handle navigation.
 
 ### Testing
 

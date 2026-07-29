@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./BottomNav": "./src/BottomNav.tsx",
     "./Button": "./src/Button.tsx",
     "./TextControl": "./src/TextControl.tsx"
   },
