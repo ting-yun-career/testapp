@@ -2,6 +2,7 @@ packages:
   - "myapp"
   - "packages/*"
   - "silver4"
+  - "tutor"
 
 onlyBuiltDependencies:
   - esbuild

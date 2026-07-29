@@ -122,6 +122,12 @@ importers:
         specifier: ^6.0.0
         version: 6.4.3(@types/node@24.13.3)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.102.0)
 
+  tutor:
+    devDependencies:
+      vite:
+        specifier: ^6.0.0
+        version: 6.4.3(@types/node@24.13.3)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.102.0)
+
 packages:
 
   '@auth0/auth0-auth-js@1.12.0':
