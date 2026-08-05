@@ -5,6 +5,7 @@ import {
 } from './appointment'
 import { requireAuth0Jwt } from './auth'
 import { createPublicDepositIntent, verifyDepositPayment } from './stripe'
+import { handleTest } from './test'
 
 type WorkerEnv = Env & {
   AUTH0_AUDIENCE?: string
@@ -106,6 +107,10 @@ export default {
       }
 
       return deleteAppointment(deleteMatch[1], runtimeEnv)
+    }
+
+    if (url.pathname === '/api/test' && request.method === 'GET') {
+      return handleTest(request, runtimeEnv as Parameters<typeof handleTest>[1])
     }
 
     if (url.pathname.startsWith('/api/')) {
