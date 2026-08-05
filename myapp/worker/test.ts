@@ -9,12 +9,7 @@ let activeRequests = 0
 const CACHE_KEY = 'cache:/api/test'
 const CACHE_TTL = 60  // seconds
 
-type TestEnv = {
-  UPSTASH_REDIS_REST_URL: string
-  UPSTASH_REDIS_REST_TOKEN: string
-}
-
-export async function handleTest(_request: Request, env: TestEnv): Promise<Response> {
+export async function handleTest(_request: Request, env: Env): Promise<Response> {
   if (activeRequests >= MAX_QUEUE) {
     return Response.json(
       { error: 'Queue full', activeRequests, maxQueue: MAX_QUEUE },

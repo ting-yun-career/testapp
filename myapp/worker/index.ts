@@ -110,7 +110,7 @@ export default {
     }
 
     if (url.pathname === '/api/test' && request.method === 'GET') {
-      return handleTest(request, runtimeEnv as Parameters<typeof handleTest>[1])
+      return handleTest(request, env)
     }
 
     if (url.pathname.startsWith('/api/')) {
