@@ -173,11 +173,12 @@ EOF
   cat > vite.config.ts <<'EOF'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 import { cloudflare } from '@cloudflare/vite-plugin'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), cloudflare()],
+  plugins: [react(), tailwindcss(), cloudflare()],
 })
 EOF
 
@@ -239,7 +240,28 @@ Object.assign(pkg.scripts, {
 })
 fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n')
 NODE
+
+  log "Wiring Tailwind into vite.config.ts"
+  cat > vite.config.ts <<'EOF'
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+})
+EOF
 fi
+
+# ---------------------------------------------------------------------------
+# 3.5. Tailwind CSS (this repo's projects always use it)
+# ---------------------------------------------------------------------------
+log "Adding Tailwind CSS"
+pnpm add -D tailwindcss @tailwindcss/vite
+
+log "Adding Tailwind import to src/index.css"
+printf "@import 'tailwindcss';\n\n%s" "$(cat src/index.css)" > src/index.css
 
 # ---------------------------------------------------------------------------
 # 4. Reconcile the root lockfile (required whenever a project is added —
