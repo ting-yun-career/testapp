@@ -124,10 +124,18 @@ cd "$ROOT/$NAME"
 
 if [[ "$TYPE" == "worker" ]]; then
   log "Adding Cloudflare Worker dependencies"
-  pnpm add -D wrangler @cloudflare/vite-plugin
+  # @latest, not a bare range: plain `pnpm add` can reuse a version already
+  # resolved elsewhere in the monorepo lockfile instead of fetching the
+  # actual newest release. That matters here specifically — wrangler and
+  # @cloudflare/vite-plugin each pin an exact workerd/miniflare build, and
+  # workerd only accepts compatibility_date up to ~7 days past its own
+  # build date. A stale pin makes the compatibility_date this script writes
+  # below (today) exceed what the installed runtime supports, and `pnpm
+  # dev` refuses to start.
+  pnpm add -D wrangler@latest @cloudflare/vite-plugin@latest
 else
   log "Adding wrangler (for Cloudflare Pages deploys)"
-  pnpm add -D wrangler
+  pnpm add -D wrangler@latest
 fi
 
 # ---------------------------------------------------------------------------
@@ -258,7 +266,7 @@ fi
 # 3.5. Tailwind CSS (this repo's projects always use it)
 # ---------------------------------------------------------------------------
 log "Adding Tailwind CSS"
-pnpm add -D tailwindcss @tailwindcss/vite
+pnpm add -D tailwindcss@latest @tailwindcss/vite@latest
 
 log "Adding Tailwind import to src/index.css"
 printf "@import 'tailwindcss';\n\n%s" "$(cat src/index.css)" > src/index.css
