@@ -14,3 +14,13 @@ body {
   background: #f5f0e6;
   font-family: var(--font-sans);
 }
+
+/* Arcs use pathLength="360", so one keyframe drives every radius. */
+@keyframes orbit-draw {
+  from {
+    stroke-dashoffset: 360;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}

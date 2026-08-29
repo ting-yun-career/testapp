@@ -1,6 +1,10 @@
+import OrbitRing from './components/OrbitRing'
+
 function App() {
   return (
     <div className="min-h-dvh">
+      <OrbitRing />
+
       <header className="fixed inset-x-0 top-0 px-6 py-4 text-right sm:px-10">
         <div className="inline-block">
           <nav>
