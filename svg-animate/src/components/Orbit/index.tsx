@@ -11,10 +11,10 @@ const CIRCLE_RADIUS = 40;
 function Orbit() {
   const { width, height } = useViewportSize();
   const [speed, setSpeed] = useState(5);
-  const [slotCount, setSlotCount] = useState(200);
+  const [slotCount, setSlotCount] = useState(90);
   const [startAngle, setStartAngle] = useState(180);
   const [stepsPerLap, setStepsPerLap] = useState(40);
-  const [strokeWidth, setStrokeWidth] = useState(3);
+  const [strokeWidth, setStrokeWidth] = useState(2);
   const [restartToken, setRestartToken] = useState(0);
 
   const restart = () => setRestartToken((t) => t + 1);

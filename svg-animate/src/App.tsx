@@ -14,6 +14,7 @@ function App() {
 
   return (
     <div className="min-h-dvh">
+      {/* public/paper.jpg: Photo by Ernest Karchmit (https://unsplash.com/@ekarchmit) on Unsplash (https://unsplash.com/photos/a-black-and-white-photo-of-a-white-wall-KUGjpg-iXIQ) */}
       <div
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 bg-cover bg-center"
