@@ -3,6 +3,7 @@ import Orbit from "./components/Orbit";
 
 const Widget = {
   orbit: "orbit",
+  about: "about",
 } as const;
 
 type Widget = (typeof Widget)[keyof typeof Widget];
@@ -24,15 +25,16 @@ function App() {
             >
               Orbit
             </button>
-            <a
-              href="#about"
-              className="rounded pl-2.5 pr-1 pt-2.5 text-base leading-none text-neutral-800 no-underline transition-colors hover:text-black"
+            <button
+              type="button"
+              onClick={() => setActiveWidget(Widget.about)}
+              className="cursor-pointer rounded pl-2.5 pr-1 pt-2.5 text-base leading-none text-neutral-800 transition-colors hover:text-black"
             >
               About
-            </a>
+            </button>
           </nav>
           <svg
-            className="mt-[-6px] h-px w-full text-black/20"
+            className="mt-[-7px] h-px w-full text-black/20"
             viewBox="0 0 150 1"
             preserveAspectRatio="none"
             aria-hidden="true"

@@ -15,7 +15,6 @@ function Orbit() {
   const [startAngle, setStartAngle] = useState(180);
   const [stepsPerLap, setStepsPerLap] = useState(40);
   const [strokeWidth, setStrokeWidth] = useState(3);
-  const [panelOpen, setPanelOpen] = useState(false);
   const [restartToken, setRestartToken] = useState(0);
 
   const restart = () => setRestartToken((t) => t + 1);
@@ -75,11 +74,7 @@ function Orbit() {
         </g>
       </svg>
 
-      <ConfigPanel
-        title="Ring animation"
-        open={panelOpen}
-        onOpenChange={setPanelOpen}
-      >
+      <ConfigPanel>
         <SliderControl
           label="Speed"
           value={speed}
