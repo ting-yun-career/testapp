@@ -14,6 +14,15 @@ function App() {
 
   return (
     <div className="min-h-dvh">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: "url('/paper.jpg')",
+          opacity: "var(--paper-opacity)",
+        }}
+      />
+
       {activeWidget === Widget.orbit && <Orbit />}
 
       <header className="fixed inset-x-0 top-0 px-6 py-4 text-right sm:px-10">

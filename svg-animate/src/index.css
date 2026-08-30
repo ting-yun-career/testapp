@@ -10,6 +10,7 @@
 
 :root {
   color-scheme: light;
+  --paper-opacity: 0.25;
 }
 
 body {
