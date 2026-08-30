@@ -18,10 +18,7 @@ function OrbitRing() {
   const [panelOpen, setPanelOpen] = useState(false);
   const [restartToken, setRestartToken] = useState(0);
 
-  const restart = () => {
-    console.log("Restarting animation");
-    setRestartToken((t) => t + 1);
-  };
+  const restart = () => setRestartToken((t) => t + 1);
 
   const cx = width / 2;
   const cy = height / 2;
@@ -57,6 +54,7 @@ function OrbitRing() {
               strokeWidth={strokeWidth}
               pathLength={360}
               strokeDasharray={360}
+              onAnimationEnd={i === slotCount - 1 ? restart : undefined}
               style={{
                 transformOrigin: `${cx}px ${cy}px`,
                 transform: `rotate(${startAngle}deg)`,
