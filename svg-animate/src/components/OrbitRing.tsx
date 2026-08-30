@@ -1,8 +1,6 @@
 import { useViewportSize } from "../hooks/useViewportSize";
 
-const STROKE_WIDTH = 4;
 const SLOT_GAP = 1;
-const SLOT_PITCH = STROKE_WIDTH + SLOT_GAP;
 
 const CIRCLE_RADIUS = 40;
 
@@ -11,18 +9,21 @@ type OrbitRingProps = {
   slotCount?: number;
   startAngle?: number;
   stepsPerLap?: number;
+  strokeWidth?: number;
 };
 
 function OrbitRing({
-  speed = 2,
-  slotCount = 100,
+  speed = 5,
+  slotCount = 200,
   startAngle = 180,
   stepsPerLap = 40,
+  strokeWidth = 3,
 }: OrbitRingProps) {
   const { width, height } = useViewportSize();
 
   const cx = width / 2;
   const cy = height / 2;
+  const slotPitch = strokeWidth + SLOT_GAP;
 
   return (
     <svg
@@ -43,10 +44,10 @@ function OrbitRing({
           key={i}
           cx={cx}
           cy={cy}
-          r={CIRCLE_RADIUS + SLOT_GAP + (i + 0.5) * SLOT_PITCH}
+          r={CIRCLE_RADIUS + SLOT_GAP + (i + 0.5) * slotPitch}
           fill="none"
           className="stroke-neutral-800/40"
-          strokeWidth={STROKE_WIDTH}
+          strokeWidth={strokeWidth}
           pathLength={360}
           strokeDasharray={360}
           style={{
