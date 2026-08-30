@@ -21,14 +21,18 @@ function App() {
             <button
               type="button"
               onClick={() => setActiveWidget(Widget.orbit)}
-              className="mr-1 cursor-pointer rounded px-3 pt-2.5 text-base leading-none text-neutral-800 transition-colors hover:text-black sm:mr-2"
+              className={`mr-1 cursor-pointer rounded px-3 pt-2.5 text-base leading-none text-neutral-800 transition-colors hover:text-black sm:mr-2 ${
+                activeWidget === Widget.orbit ? "font-bold" : ""
+              }`}
             >
               Orbit
             </button>
             <button
               type="button"
               onClick={() => setActiveWidget(Widget.about)}
-              className="cursor-pointer rounded pl-2.5 pr-1 pt-2.5 text-base leading-none text-neutral-800 transition-colors hover:text-black"
+              className={`cursor-pointer rounded pl-2.5 pr-1 pt-2.5 text-base leading-none text-neutral-800 transition-colors hover:text-black ${
+                activeWidget === Widget.about ? "font-bold" : ""
+              }`}
             >
               About
             </button>
