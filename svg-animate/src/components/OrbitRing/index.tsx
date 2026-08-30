@@ -16,6 +16,12 @@ function OrbitRing() {
   const [stepsPerLap, setStepsPerLap] = useState(40);
   const [strokeWidth, setStrokeWidth] = useState(3);
   const [panelOpen, setPanelOpen] = useState(false);
+  const [restartToken, setRestartToken] = useState(0);
+
+  const restart = () => {
+    console.log("Restarting animation");
+    setRestartToken((t) => t + 1);
+  };
 
   const cx = width / 2;
   const cy = height / 2;
@@ -24,37 +30,41 @@ function OrbitRing() {
   return (
     <>
       <svg
-        key={`${speed}-${slotCount}-${startAngle}-${stepsPerLap}-${strokeWidth}`}
-        className="pointer-events-none fixed inset-0 -z-10"
+        key={`${speed}-${slotCount}-${startAngle}-${stepsPerLap}-${strokeWidth}-${restartToken}`}
+        className="pointer-events-none fixed inset-0"
         width={width}
         height={height}
         viewBox={`0 0 ${width} ${height}`}
-        aria-hidden="true"
       >
         <circle
           cx={cx}
           cy={cy}
           r={CIRCLE_RADIUS}
-          className="fill-neutral-800/10"
+          role="button"
+          aria-label="Restart animation"
+          onClick={restart}
+          className="pointer-events-auto cursor-pointer fill-neutral-800/10 outline-none transition-colors hover:fill-neutral-800/20 active:fill-neutral-800/30"
         />
-        {Array.from({ length: slotCount }, (_, i) => (
-          <circle
-            key={i}
-            cx={cx}
-            cy={cy}
-            r={CIRCLE_RADIUS + SLOT_GAP + (i + 0.5) * slotPitch}
-            fill="none"
-            className="stroke-neutral-800/40"
-            strokeWidth={strokeWidth}
-            pathLength={360}
-            strokeDasharray={360}
-            style={{
-              transformOrigin: `${cx}px ${cy}px`,
-              transform: `rotate(${startAngle}deg)`,
-              animation: `orbit-draw ${stepsPerLap / speed}s linear ${i / speed}s both`,
-            }}
-          />
-        ))}
+        <g aria-hidden="true">
+          {Array.from({ length: slotCount }, (_, i) => (
+            <circle
+              key={i}
+              cx={cx}
+              cy={cy}
+              r={CIRCLE_RADIUS + SLOT_GAP + (i + 0.5) * slotPitch}
+              fill="none"
+              className="stroke-neutral-800/40"
+              strokeWidth={strokeWidth}
+              pathLength={360}
+              strokeDasharray={360}
+              style={{
+                transformOrigin: `${cx}px ${cy}px`,
+                transform: `rotate(${startAngle}deg)`,
+                animation: `orbit-draw ${stepsPerLap / speed}s linear ${i / speed}s both`,
+              }}
+            />
+          ))}
+        </g>
       </svg>
 
       <ConfigPanel
