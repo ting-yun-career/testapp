@@ -42,6 +42,16 @@ function OrbitRing() {
           onClick={restart}
           className="pointer-events-auto cursor-pointer fill-neutral-800/10 outline-none transition-colors hover:fill-neutral-800/20 active:fill-neutral-800/30"
         />
+        <text
+          x={cx}
+          y={cy}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          aria-hidden="true"
+          className="pointer-events-none font-geo text-[10px] fill-neutral-800/70 select-none"
+        >
+          RESET
+        </text>
         <g aria-hidden="true">
           {Array.from({ length: slotCount }, (_, i) => (
             <circle
@@ -98,7 +108,7 @@ function OrbitRing() {
         <SliderControl
           label="Steps per lap"
           value={stepsPerLap}
-          min={5}
+          min={0}
           max={120}
           step={1}
           onChange={setStepsPerLap}

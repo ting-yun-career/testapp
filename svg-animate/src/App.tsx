@@ -10,17 +10,17 @@ function App() {
 
       <header className="fixed inset-x-0 top-0 px-6 py-4 text-right sm:px-10">
         <div className="inline-block">
-          <nav>
+          <nav className="font-syne-mono font-normal">
             <button
               type="button"
               onClick={() => setActiveWidget("orbit-rings")}
-              className="mr-1 cursor-pointer rounded px-3 pt-2.5 text-base leading-none font-medium text-neutral-800 transition-colors hover:text-black sm:mr-2"
+              className="mr-1 cursor-pointer rounded px-3 pt-2.5 text-base leading-none text-neutral-800 transition-colors hover:text-black sm:mr-2"
             >
               Orbit
             </button>
             <a
               href="#about"
-              className="rounded pl-2.5 pr-1 pt-2.5 text-base leading-none font-medium text-neutral-800 no-underline transition-colors hover:text-black"
+              className="rounded pl-2.5 pr-1 pt-2.5 text-base leading-none text-neutral-800 no-underline transition-colors hover:text-black"
             >
               About
             </a>
@@ -47,7 +47,9 @@ function App() {
       <main className="min-h-dvh" />
 
       <footer className="fixed inset-x-0 bottom-0 px-6 py-4 text-right sm:px-10">
-        <p className="text-xs text-neutral-500">© Ting 2026</p>
+        <p className="font-geo text-[10px] text-neutral-500 uppercase">
+          CopyRight Ting Y 2026
+        </p>
       </footer>
     </div>
   );

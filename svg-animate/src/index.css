@@ -2,6 +2,10 @@
 
 @theme {
   --font-sans: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --font-bytesized: 'Bytesized', ui-sans-serif, system-ui, sans-serif;
+  --font-chokokutai: 'Chokokutai', ui-sans-serif, system-ui, sans-serif;
+  --font-geo: 'Geo', ui-sans-serif, system-ui, sans-serif;
+  --font-syne-mono: 'Syne Mono', ui-monospace, monospace;
 }
 
 :root {
