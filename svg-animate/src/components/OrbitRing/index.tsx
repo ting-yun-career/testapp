@@ -1,4 +1,5 @@
-import { useViewportSize } from "../hooks/useViewportSize";
+import { useViewportSize } from "../../hooks/useViewportSize";
+import "./style.css";
 
 const SLOT_GAP = 1;
 

@@ -14,12 +14,3 @@ body {
   background: #f5f0e6;
   font-family: var(--font-sans);
 }
-
-@keyframes orbit-draw {
-  from {
-    stroke-dashoffset: 360;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
