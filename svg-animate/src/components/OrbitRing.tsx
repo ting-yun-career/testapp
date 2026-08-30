@@ -1,29 +1,24 @@
-import { useViewportSize } from '../hooks/useViewportSize'
+import { useViewportSize } from "../hooks/useViewportSize";
 
-const STROKE_WIDTH = 5;
+const STROKE_WIDTH = 4;
 const SLOT_GAP = 1;
 const SLOT_PITCH = STROKE_WIDTH + SLOT_GAP;
 
 const CIRCLE_RADIUS = 40;
-const STEP_DEGREES = 30; // arc length gained per stepSeconds
-const STEPS_PER_LAP = 360 / STEP_DEGREES;
-const START_ANGLE = 180; // tail anchored left of the circle, on the horizontal axis
 
 type OrbitRingProps = {
-  /** Seconds between spawns. Each arc also grows STEP_DEGREES per stepSeconds. */
-  stepSeconds?: number;
-  /** Number of radius slots to render, filled inside → out. */
+  speed?: number;
   slotCount?: number;
+  startAngle?: number;
+  stepsPerLap?: number;
 };
 
-/**
- * A fixed circle ringed by arcs. Every `stepSeconds` a new arc starts in the
- * next slot outward; each arc keeps its tail anchored at START_ANGLE and
- * grows its leading edge clockwise by STEP_DEGREES per `stepSeconds`, closing
- * into a full ring after STEPS_PER_LAP * stepSeconds and staying closed. So
- * inner arcs are older and longer.
- */
-function OrbitRing({ stepSeconds = 0.25, slotCount = 24 }: OrbitRingProps) {
+function OrbitRing({
+  speed = 2,
+  slotCount = 100,
+  startAngle = 180,
+  stepsPerLap = 40,
+}: OrbitRingProps) {
   const { width, height } = useViewportSize();
 
   const cx = width / 2;
@@ -56,8 +51,8 @@ function OrbitRing({ stepSeconds = 0.25, slotCount = 24 }: OrbitRingProps) {
           strokeDasharray={360}
           style={{
             transformOrigin: `${cx}px ${cy}px`,
-            transform: `rotate(${START_ANGLE}deg)`,
-            animation: `orbit-draw ${stepSeconds * STEPS_PER_LAP}s linear ${i * stepSeconds}s both`,
+            transform: `rotate(${startAngle}deg)`,
+            animation: `orbit-draw ${stepsPerLap / speed}s linear ${i / speed}s both`,
           }}
         />
       ))}

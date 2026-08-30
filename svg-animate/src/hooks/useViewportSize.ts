@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 
-/** Tracks the current window inner width/height, updating on resize. */
 export function useViewportSize() {
   const [size, setSize] = useState(() => ({
     width: window.innerWidth,
