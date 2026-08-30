@@ -24,11 +24,13 @@ function About() {
         React, Next.js, and Node.js engineer.
         <br />
         <span className="text-sm">
-          -Scalable design
+          -Scalable system
           <br />
           -Web performance
           <br />
-          -Animation
+          -Web animation
+          <br />
+          -Web security
         </span>
       </p>
 
