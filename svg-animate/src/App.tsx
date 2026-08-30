@@ -1,4 +1,5 @@
 import { useState } from "react";
+import About from "./components/About";
 import Orbit from "./components/Orbit";
 
 const Widget = {
@@ -56,7 +57,9 @@ function App() {
         </div>
       </header>
 
-      <main className="min-h-dvh" />
+      <main className="min-h-dvh">
+        {activeWidget === Widget.about && <About />}
+      </main>
 
       <footer className="fixed inset-x-0 bottom-0 px-6 py-4 text-right sm:px-10">
         <p className="font-geo text-[10px] text-neutral-500 uppercase">
