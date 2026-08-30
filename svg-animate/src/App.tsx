@@ -1,9 +1,11 @@
 import { useState } from "react";
 import About from "./components/About";
 import Orbit from "./components/Orbit";
+import Wave from "./components/Wave";
 
 const Widget = {
   orbit: "orbit",
+  wave: "wave",
   about: "about",
 } as const;
 
@@ -25,6 +27,7 @@ function App() {
       />
 
       {activeWidget === Widget.orbit && <Orbit />}
+      {activeWidget === Widget.wave && <Wave />}
 
       <header className="fixed inset-x-0 top-0 px-6 py-4 text-right sm:px-10">
         <div className="inline-block">
@@ -37,6 +40,15 @@ function App() {
               }`}
             >
               Orbit
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveWidget(Widget.wave)}
+              className={`mr-1 cursor-pointer rounded px-3 pt-2.5 text-base leading-none text-neutral-800 transition-colors hover:text-black sm:mr-2 ${
+                activeWidget === Widget.wave ? "font-bold" : ""
+              }`}
+            >
+              Wave
             </button>
             <button
               type="button"
