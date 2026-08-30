@@ -8,7 +8,7 @@ const SLOT_GAP = 1;
 
 const CIRCLE_RADIUS = 40;
 
-function OrbitRing() {
+function Orbit() {
   const { width, height } = useViewportSize();
   const [speed, setSpeed] = useState(5);
   const [slotCount, setSlotCount] = useState(200);
@@ -127,4 +127,4 @@ function OrbitRing() {
   );
 }
 
-export default OrbitRing;
+export default Orbit;

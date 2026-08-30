@@ -1,19 +1,25 @@
 import { useState } from "react";
-import OrbitRing from "./components/OrbitRing";
+import Orbit from "./components/Orbit";
+
+const Widget = {
+  orbit: "orbit",
+} as const;
+
+type Widget = (typeof Widget)[keyof typeof Widget];
 
 function App() {
-  const [activeWidget, setActiveWidget] = useState<"orbit-rings" | null>(null);
+  const [activeWidget, setActiveWidget] = useState<Widget | null>(Widget.orbit);
 
   return (
     <div className="min-h-dvh">
-      {activeWidget === "orbit-rings" && <OrbitRing />}
+      {activeWidget === Widget.orbit && <Orbit />}
 
       <header className="fixed inset-x-0 top-0 px-6 py-4 text-right sm:px-10">
         <div className="inline-block">
           <nav className="font-syne-mono font-normal">
             <button
               type="button"
-              onClick={() => setActiveWidget("orbit-rings")}
+              onClick={() => setActiveWidget(Widget.orbit)}
               className="mr-1 cursor-pointer rounded px-3 pt-2.5 text-base leading-none text-neutral-800 transition-colors hover:text-black sm:mr-2"
             >
               Orbit
