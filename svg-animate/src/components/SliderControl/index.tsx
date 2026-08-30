@@ -19,7 +19,11 @@ function SliderControl({
   onChange,
   format,
 }: SliderControlProps) {
-  const percent = ((value - min) / (max - min)) * 100;
+  const snapped = Math.min(
+    max,
+    Math.max(min, min + Math.round((value - min) / step) * step),
+  );
+  const percent = ((snapped - min) / (max - min)) * 100;
 
   return (
     <label className="block">

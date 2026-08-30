@@ -75,7 +75,7 @@ function OrbitRing() {
         <SliderControl
           label="Speed"
           value={speed}
-          min={0.5}
+          min={1}
           max={20}
           step={1}
           onChange={setSpeed}
