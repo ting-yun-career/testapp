@@ -1,19 +1,23 @@
-import OrbitRing from './components/OrbitRing'
+import { useState } from "react";
+import OrbitRing from "./components/OrbitRing";
 
 function App() {
+  const [activeWidget, setActiveWidget] = useState<"orbit-rings" | null>(null);
+
   return (
     <div className="min-h-dvh">
-      <OrbitRing />
+      {activeWidget === "orbit-rings" && <OrbitRing />}
 
       <header className="fixed inset-x-0 top-0 px-6 py-4 text-right sm:px-10">
         <div className="inline-block">
           <nav>
-            <a
-              href="#demo"
-              className="mr-1 rounded px-3 pt-2.5 text-base leading-none font-medium text-neutral-800 no-underline transition-colors hover:text-black sm:mr-2"
+            <button
+              type="button"
+              onClick={() => setActiveWidget("orbit-rings")}
+              className="mr-1 cursor-pointer rounded px-3 pt-2.5 text-base leading-none font-medium text-neutral-800 transition-colors hover:text-black sm:mr-2"
             >
-              Demo
-            </a>
+              Orbit
+            </button>
             <a
               href="#about"
               className="rounded pl-2.5 pr-1 pt-2.5 text-base leading-none font-medium text-neutral-800 no-underline transition-colors hover:text-black"
