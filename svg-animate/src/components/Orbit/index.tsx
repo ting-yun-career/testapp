@@ -4,24 +4,44 @@ import ConfigPanel from "../ConfigPanel";
 import SliderControl from "../SliderControl";
 import PauseButton from "../PauseButton";
 import { prefersReducedMotion } from "../../lib/motion";
+import { useSessionConfig } from "../../lib/sessionConfig";
 import "./style.css";
 
 const SLOT_GAP = 1;
 
 const CIRCLE_RADIUS = 40;
 
+const CONFIG_KEY = "orbit-config";
+
+type OrbitConfig = {
+  speed: number;
+  slotCount: number;
+  startAngle: number;
+  stepsPerLap: number;
+  strokeWidth: number;
+};
+
+const DEFAULT_CONFIG: OrbitConfig = {
+  speed: 5,
+  slotCount: 90,
+  startAngle: 180,
+  stepsPerLap: 40,
+  strokeWidth: 2,
+};
+
 function Orbit() {
   const { width, height } = useViewportSize();
-  const [speed, setSpeed] = useState(5);
-  const [slotCount, setSlotCount] = useState(90);
-  const [startAngle, setStartAngle] = useState(180);
-  const [stepsPerLap, setStepsPerLap] = useState(40);
-  const [strokeWidth, setStrokeWidth] = useState(2);
+  const [config, setConfig] = useSessionConfig<OrbitConfig>(
+    CONFIG_KEY,
+    DEFAULT_CONFIG,
+  );
   const [restartToken, setRestartToken] = useState(0);
   const [paused, setPaused] = useState(prefersReducedMotion);
 
   const restart = () => setRestartToken((t) => t + 1);
   const togglePause = () => setPaused((p) => !p);
+
+  const { speed, slotCount, startAngle, stepsPerLap, strokeWidth } = config;
 
   const cx = width / 2;
   const cy = height / 2;
@@ -68,7 +88,7 @@ function Orbit() {
           min={1}
           max={20}
           step={1}
-          onChange={setSpeed}
+          onChange={(v) => setConfig((c) => ({ ...c, speed: v }))}
         />
         <SliderControl
           label="Ring count"
@@ -76,7 +96,7 @@ function Orbit() {
           min={10}
           max={400}
           step={10}
-          onChange={setSlotCount}
+          onChange={(v) => setConfig((c) => ({ ...c, slotCount: v }))}
         />
         <SliderControl
           label="Start angle"
@@ -85,7 +105,7 @@ function Orbit() {
           max={360}
           step={1}
           format={(v) => `${v}°`}
-          onChange={setStartAngle}
+          onChange={(v) => setConfig((c) => ({ ...c, startAngle: v }))}
         />
         <SliderControl
           label="Steps per lap"
@@ -93,7 +113,7 @@ function Orbit() {
           min={0}
           max={120}
           step={1}
-          onChange={setStepsPerLap}
+          onChange={(v) => setConfig((c) => ({ ...c, stepsPerLap: v }))}
         />
         <SliderControl
           label="Stroke width"
@@ -102,7 +122,7 @@ function Orbit() {
           max={10}
           step={1}
           format={(v) => `${v}px`}
-          onChange={setStrokeWidth}
+          onChange={(v) => setConfig((c) => ({ ...c, strokeWidth: v }))}
         />
       </ConfigPanel>
     </>

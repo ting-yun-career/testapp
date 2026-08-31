@@ -4,6 +4,7 @@ import SliderControl from "../SliderControl";
 import PauseButton from "../PauseButton";
 import { mulberry32 } from "../../lib/random";
 import { prefersReducedMotion } from "../../lib/motion";
+import { useSessionConfig } from "../../lib/sessionConfig";
 
 const MAX_WAVES = 24;
 const MAX_OCTAVES = 4;
@@ -45,6 +46,8 @@ type WaveConfig = {
   roughness: number;
 };
 
+const CONFIG_KEY = "wave-config";
+
 const DEFAULT_CONFIG: WaveConfig = {
   waveCount: 9,
   maxAmplitude: 230,
@@ -55,7 +58,10 @@ const DEFAULT_CONFIG: WaveConfig = {
 
 function Wave() {
   const [waveSpecs] = useState(generateWaveSpecs);
-  const [config, setConfig] = useState<WaveConfig>(DEFAULT_CONFIG);
+  const [config, setConfig] = useSessionConfig<WaveConfig>(
+    CONFIG_KEY,
+    DEFAULT_CONFIG,
+  );
   const [paused, setPaused] = useState(prefersReducedMotion);
 
   const configRef = useRef(config);

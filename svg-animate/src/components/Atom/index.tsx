@@ -4,6 +4,7 @@ import ConfigPanel from "../ConfigPanel";
 import SliderControl from "../SliderControl";
 import { mulberry32 } from "../../lib/random";
 import { prefersReducedMotion } from "../../lib/motion";
+import { useSessionConfig } from "../../lib/sessionConfig";
 
 const NUCLEON_PIXEL_SIZE = 3.34;
 const ELECTRON_PIXEL_SIZE = 1.5;
@@ -49,6 +50,8 @@ type AtomConfig = {
   speed: number;
   tailLength: number;
 };
+
+const CONFIG_KEY = "atom-config";
 
 const DEFAULT_CONFIG: AtomConfig = {
   protons: 6,
@@ -378,7 +381,10 @@ function buildNucleusAndElectrons(
 }
 
 function Atom() {
-  const [config, setConfig] = useState<AtomConfig>(DEFAULT_CONFIG);
+  const [config, setConfig] = useSessionConfig<AtomConfig>(
+    CONFIG_KEY,
+    DEFAULT_CONFIG,
+  );
   const [ready, setReady] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
