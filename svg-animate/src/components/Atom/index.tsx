@@ -3,6 +3,7 @@ import type * as THREE from "three";
 import ConfigPanel from "../ConfigPanel";
 import SliderControl from "../SliderControl";
 import { mulberry32 } from "../../lib/random";
+import { prefersReducedMotion } from "../../lib/motion";
 
 const NUCLEON_PIXEL_SIZE = 3.34;
 const ELECTRON_PIXEL_SIZE = 1.5;
@@ -66,10 +67,6 @@ type Electron = {
   precessionRate: number;
   direction: number;
 };
-
-function prefersReducedMotion() {
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
 
 function createDiscTexture(three: typeof THREE) {
   const size = 64;

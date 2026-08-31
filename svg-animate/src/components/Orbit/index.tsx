@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useViewportSize } from "../../hooks/useViewportSize";
 import ConfigPanel from "../ConfigPanel";
 import SliderControl from "../SliderControl";
+import { prefersReducedMotion } from "../../lib/motion";
 import "./style.css";
 
 const SLOT_GAP = 1;
@@ -16,8 +17,10 @@ function Orbit() {
   const [stepsPerLap, setStepsPerLap] = useState(40);
   const [strokeWidth, setStrokeWidth] = useState(2);
   const [restartToken, setRestartToken] = useState(0);
+  const [paused, setPaused] = useState(prefersReducedMotion);
 
   const restart = () => setRestartToken((t) => t + 1);
+  const togglePause = () => setPaused((p) => !p);
 
   const cx = width / 2;
   const cy = height / 2;
@@ -37,8 +40,8 @@ function Orbit() {
           cy={cy}
           r={CIRCLE_RADIUS}
           role="button"
-          aria-label="Restart animation"
-          onClick={restart}
+          aria-label={paused ? "Resume animation" : "Pause animation"}
+          onClick={togglePause}
           className="pointer-events-auto cursor-pointer fill-neutral-800/10 outline-none transition-colors hover:fill-neutral-800/20 active:fill-neutral-800/30"
         />
         <text
@@ -49,7 +52,7 @@ function Orbit() {
           aria-hidden="true"
           className="pointer-events-none font-geo text-[10px] fill-neutral-800/70 select-none"
         >
-          RESET
+          {paused ? "RESUME" : "PAUSE"}
         </text>
         <g aria-hidden="true">
           {Array.from({ length: slotCount }, (_, i) => (
@@ -68,6 +71,7 @@ function Orbit() {
                 transformOrigin: `${cx}px ${cy}px`,
                 transform: `rotate(${startAngle}deg)`,
                 animation: `orbit-draw ${stepsPerLap / speed}s linear ${i / speed}s both`,
+                animationPlayState: paused ? "paused" : "running",
               }}
             />
           ))}

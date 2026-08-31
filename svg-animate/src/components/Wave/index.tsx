@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import ConfigPanel from "../ConfigPanel";
 import SliderControl from "../SliderControl";
 import { mulberry32 } from "../../lib/random";
+import { prefersReducedMotion } from "../../lib/motion";
 
 const MAX_WAVES = 24;
 const MAX_OCTAVES = 4;
@@ -29,10 +30,6 @@ function generateWaveSpecs(): OctaveSpec[][] {
       drift: random(),
     })),
   );
-}
-
-function prefersReducedMotion() {
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
 type WaveConfig = {
