@@ -120,51 +120,15 @@ function fccLattice(count: number, spacing: number) {
   return points.slice(0, count);
 }
 
-function buildStructure(
-  three: typeof THREE,
-  protons: number,
-  pixelRatio: number,
-) {
-  const group = new three.Group();
-  const random = mulberry32(1);
-  const neutrons = protons;
-  const total = protons + neutrons;
-
-  const lattice = fccLattice(total, NUCLEON_SPACING / Math.SQRT2);
-
-  const order = lattice.map((_, i) => i);
-  for (let i = order.length - 1; i > 0; i--) {
-    const j = Math.floor(random() * (i + 1));
-    [order[i], order[j]] = [order[j], order[i]];
-  }
-  const isProton = new Array<boolean>(total).fill(false);
-  for (let i = 0; i < protons; i++) isProton[order[i]] = true;
-
-  const protonPositions = new Float32Array(protons * 3);
-  const neutronPositions = new Float32Array(neutrons * 3);
-  let protonIndex = 0;
-  let neutronIndex = 0;
-
-  for (let i = 0; i < total; i++) {
-    const point = lattice[i];
-    const x = point.x + (random() * 2 - 1) * NUCLEON_JITTER;
-    const y = point.y + (random() * 2 - 1) * NUCLEON_JITTER;
-    const z = point.z + (random() * 2 - 1) * NUCLEON_JITTER;
-
-    if (isProton[i]) {
-      protonPositions[protonIndex * 3] = x;
-      protonPositions[protonIndex * 3 + 1] = y;
-      protonPositions[protonIndex * 3 + 2] = z;
-      protonIndex++;
-    } else {
-      neutronPositions[neutronIndex * 3] = x;
-      neutronPositions[neutronIndex * 3 + 1] = y;
-      neutronPositions[neutronIndex * 3 + 2] = z;
-      neutronIndex++;
-    }
-  }
-
+/**
+ * Everything that doesn't depend on the proton/neutron count: the disc
+ * sprite texture, all particle materials, and the (fixed-length) axis
+ * geometry. Built once per mount and reused across every proton-count
+ * rebuild, instead of being recreated on each slider tick.
+ */
+function createStatics(three: typeof THREE, pixelRatio: number) {
   const disc = createDiscTexture(three);
+
   const protonMaterial = createParticleMaterial(
     three,
     PROTON_COLOR,
@@ -186,6 +150,136 @@ function buildStructure(
     ELECTRON_PIXEL_SIZE,
     pixelRatio,
   );
+  const tailMaterial = new three.LineBasicMaterial({
+    vertexColors: true,
+    transparent: true,
+    depthWrite: false,
+  });
+
+  const axisLinePoints: number[] = [];
+  const axisDotPoints: number[] = [];
+  const dotCount = Math.floor(AXIS_DOT_EXTENT / AXIS_DOT_SPACING);
+  for (const dir of AXIS_DIRS) {
+    axisLinePoints.push(
+      0,
+      0,
+      0,
+      dir[0] * AXIS_LINE_LENGTH,
+      dir[1] * AXIS_LINE_LENGTH,
+      dir[2] * AXIS_LINE_LENGTH,
+    );
+    for (let t = 1; t <= dotCount; t++) {
+      const d = t * AXIS_DOT_SPACING;
+      axisDotPoints.push(dir[0] * d, dir[1] * d, dir[2] * d);
+    }
+  }
+
+  const axisGeometry = new three.BufferGeometry();
+  axisGeometry.setAttribute(
+    "position",
+    new three.Float32BufferAttribute(axisLinePoints, 3),
+  );
+  const axisMaterial = new three.LineBasicMaterial({
+    color: HAIRLINE_COLOR,
+    transparent: true,
+    opacity: HAIRLINE_OPACITY,
+  });
+  const axisLines = new three.LineSegments(axisGeometry, axisMaterial);
+  axisLines.frustumCulled = false;
+
+  const axisDotGeometry = new three.BufferGeometry();
+  axisDotGeometry.setAttribute(
+    "position",
+    new three.Float32BufferAttribute(axisDotPoints, 3),
+  );
+  const axisDotMaterial = new three.PointsMaterial({
+    color: HAIRLINE_COLOR,
+    size: AXIS_DOT_PIXEL_SIZE * pixelRatio,
+    sizeAttenuation: false,
+    transparent: true,
+    opacity: AXIS_DOT_OPACITY,
+    depthWrite: false,
+  });
+  const axisDots = new three.Points(axisDotGeometry, axisDotMaterial);
+  axisDots.frustumCulled = false;
+
+  const group = new three.Group();
+  group.add(axisLines, axisDots);
+
+  // Re-sized on DPI change (see the resize handler) since gl_PointSize is
+  // in device pixels and doesn't track devicePixelRatio on its own.
+  const pointMaterials = [
+    { material: protonMaterial, baseSize: NUCLEON_PIXEL_SIZE },
+    { material: neutronMaterial, baseSize: NUCLEON_PIXEL_SIZE },
+    { material: electronMaterial, baseSize: ELECTRON_PIXEL_SIZE },
+    { material: axisDotMaterial, baseSize: AXIS_DOT_PIXEL_SIZE },
+  ];
+
+  const dispose = () => {
+    disc.dispose();
+    protonMaterial.dispose();
+    neutronMaterial.dispose();
+    electronMaterial.dispose();
+    tailMaterial.dispose();
+    axisGeometry.dispose();
+    axisMaterial.dispose();
+    axisDotGeometry.dispose();
+    axisDotMaterial.dispose();
+  };
+
+  return {
+    group,
+    protonMaterial,
+    neutronMaterial,
+    electronMaterial,
+    tailMaterial,
+    pointMaterials,
+    dispose,
+  };
+}
+
+type Statics = ReturnType<typeof createStatics>;
+
+/** The part that does depend on proton/neutron count: rebuilt whenever the
+ * Protons slider changes. Reuses the shared materials from `createStatics`
+ * rather than allocating its own. */
+function buildNucleusAndElectrons(
+  three: typeof THREE,
+  protons: number,
+  neutrons: number,
+  statics: Statics,
+) {
+  const group = new three.Group();
+  const random = mulberry32(1);
+  const total = protons + neutrons;
+
+  const lattice = fccLattice(total, NUCLEON_SPACING / Math.SQRT2);
+
+  const order = lattice.map((_, i) => i);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  const isProton = new Array<boolean>(total).fill(false);
+  for (let i = 0; i < protons; i++) isProton[order[i]] = true;
+
+  const protonPositions = new Float32Array(protons * 3);
+  const neutronPositions = new Float32Array(neutrons * 3);
+  let protonCount = 0;
+  let neutronCount = 0;
+
+  for (let i = 0; i < total; i++) {
+    const point = lattice[i];
+    const x = point.x + (random() * 2 - 1) * NUCLEON_JITTER;
+    const y = point.y + (random() * 2 - 1) * NUCLEON_JITTER;
+    const z = point.z + (random() * 2 - 1) * NUCLEON_JITTER;
+
+    const target = isProton[i] ? protonPositions : neutronPositions;
+    const index = isProton[i] ? protonCount++ : neutronCount++;
+    target[index * 3] = x;
+    target[index * 3 + 1] = y;
+    target[index * 3 + 2] = z;
+  }
 
   const nucleus = new three.Group();
 
@@ -194,21 +288,15 @@ function buildStructure(
     "position",
     new three.BufferAttribute(protonPositions, 3),
   );
-  nucleus.add(new three.Points(protonGeometry, protonMaterial));
+  nucleus.add(new three.Points(protonGeometry, statics.protonMaterial));
 
   const neutronGeometry = new three.BufferGeometry();
   neutronGeometry.setAttribute(
     "position",
     new three.BufferAttribute(neutronPositions, 3),
   );
-  nucleus.add(new three.Points(neutronGeometry, neutronMaterial));
+  nucleus.add(new three.Points(neutronGeometry, statics.neutronMaterial));
   group.add(nucleus);
-
-  const tailMaterial = new three.LineBasicMaterial({
-    vertexColors: true,
-    transparent: true,
-    depthWrite: false,
-  });
 
   const electrons: Electron[] = [];
   const electronPositions = new Float32Array(protons * 3);
@@ -248,7 +336,7 @@ function buildStructure(
       new three.BufferAttribute(tailPositions, 3),
     );
     tailGeometry.setAttribute("color", new three.BufferAttribute(tailColors, 4));
-    const tail = new three.Line(tailGeometry, tailMaterial);
+    const tail = new three.Line(tailGeometry, statics.tailMaterial);
     tail.frustumCulled = false;
     group.add(tail);
 
@@ -268,72 +356,14 @@ function buildStructure(
   const electronGeometry = new three.BufferGeometry();
   const electronAttribute = new three.BufferAttribute(electronPositions, 3);
   electronGeometry.setAttribute("position", electronAttribute);
-  const electronPoints = new three.Points(electronGeometry, electronMaterial);
+  const electronPoints = new three.Points(electronGeometry, statics.electronMaterial);
   electronPoints.frustumCulled = false;
   group.add(electronPoints);
 
-  const axisLinePoints: number[] = [];
-  const axisDotPoints: number[] = [];
-  const dotCount = Math.floor(AXIS_DOT_EXTENT / AXIS_DOT_SPACING);
-  for (const dir of AXIS_DIRS) {
-    axisLinePoints.push(
-      0,
-      0,
-      0,
-      dir[0] * AXIS_LINE_LENGTH,
-      dir[1] * AXIS_LINE_LENGTH,
-      dir[2] * AXIS_LINE_LENGTH,
-    );
-    for (let t = 1; t <= dotCount; t++) {
-      const d = t * AXIS_DOT_SPACING;
-      axisDotPoints.push(dir[0] * d, dir[1] * d, dir[2] * d);
-    }
-  }
-
-  const axisGeometry = new three.BufferGeometry();
-  axisGeometry.setAttribute(
-    "position",
-    new three.Float32BufferAttribute(axisLinePoints, 3),
-  );
-  const axisMaterial = new three.LineBasicMaterial({
-    color: HAIRLINE_COLOR,
-    transparent: true,
-    opacity: HAIRLINE_OPACITY,
-  });
-  const axisLines = new three.LineSegments(axisGeometry, axisMaterial);
-  axisLines.frustumCulled = false;
-  group.add(axisLines);
-
-  const axisDotGeometry = new three.BufferGeometry();
-  axisDotGeometry.setAttribute(
-    "position",
-    new three.Float32BufferAttribute(axisDotPoints, 3),
-  );
-  const axisDotMaterial = new three.PointsMaterial({
-    color: HAIRLINE_COLOR,
-    size: AXIS_DOT_PIXEL_SIZE * pixelRatio,
-    sizeAttenuation: false,
-    transparent: true,
-    opacity: AXIS_DOT_OPACITY,
-    depthWrite: false,
-  });
-  const axisDots = new three.Points(axisDotGeometry, axisDotMaterial);
-  axisDots.frustumCulled = false;
-  group.add(axisDots);
-
   const dispose = () => {
-    disc.dispose();
     protonGeometry.dispose();
     neutronGeometry.dispose();
     electronGeometry.dispose();
-    axisGeometry.dispose();
-    axisDotGeometry.dispose();
-    protonMaterial.dispose();
-    neutronMaterial.dispose();
-    electronMaterial.dispose();
-    tailMaterial.dispose();
-    axisMaterial.dispose();
-    axisDotMaterial.dispose();
     for (const electron of electrons) electron.tail.geometry.dispose();
   };
 
@@ -354,12 +384,14 @@ function Atom() {
   const containerRef = useRef<HTMLDivElement>(null);
   const threeRef = useRef<typeof THREE | null>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
+  const staticsRef = useRef<Statics | null>(null);
   const pixelRatioRef = useRef(1);
 
   const nucleusRef = useRef<THREE.Group | null>(null);
   const electronsRef = useRef<Electron[]>([]);
   const electronPositionsRef = useRef<Float32Array | null>(null);
   const electronAttributeRef = useRef<THREE.BufferAttribute | null>(null);
+  const disposeStructureRef = useRef<(() => void) | null>(null);
 
   const configRef = useRef(config);
   const reducedMotionRef = useRef(false);
@@ -384,7 +416,8 @@ function Atom() {
       if (cancelled) return;
 
       const renderer = new three.WebGLRenderer({ alpha: true, antialias: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      const initialPixelRatio = Math.min(window.devicePixelRatio, 2);
+      renderer.setPixelRatio(initialPixelRatio);
       renderer.setClearAlpha(0);
       renderer.domElement.style.display = "block";
       renderer.domElement.style.width = "100%";
@@ -406,6 +439,10 @@ function Atom() {
       controls.minDistance = MIN_DISTANCE;
       controls.maxDistance = MAX_DISTANCE;
 
+      const statics = createStatics(three, initialPixelRatio);
+      scene.add(statics.group);
+      pixelRatioRef.current = initialPixelRatio;
+
       const resize = () => {
         const width = container.clientWidth;
         const height = container.clientHeight;
@@ -413,13 +450,22 @@ function Atom() {
         renderer.setSize(width, height, false);
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
+
+        const nextRatio = Math.min(window.devicePixelRatio, 2);
+        if (nextRatio !== pixelRatioRef.current) {
+          pixelRatioRef.current = nextRatio;
+          renderer.setPixelRatio(nextRatio);
+          for (const { material, baseSize } of statics.pointMaterials) {
+            material.size = baseSize * nextRatio;
+          }
+        }
       };
       resize();
       window.addEventListener("resize", resize);
 
       threeRef.current = three;
       sceneRef.current = scene;
-      pixelRatioRef.current = renderer.getPixelRatio();
+      staticsRef.current = statics;
 
       const scratch = new three.Vector3();
       const precession = new three.Quaternion();
@@ -450,19 +496,9 @@ function Atom() {
             electron.phase +
             (elapsed * ORBIT_BASE_SPEED * electron.direction) / electron.radius;
 
-          scratch
-            .set(
-              Math.cos(angle) * electron.radius,
-              0,
-              Math.sin(angle) * electron.radius,
-            )
-            .applyQuaternion(orientation);
-          if (electronPositions) {
-            electronPositions[electron.index * 3] = scratch.x;
-            electronPositions[electron.index * 3 + 1] = scratch.y;
-            electronPositions[electron.index * 3 + 2] = scratch.z;
-          }
-
+          // t = 0 is the electron's own position (tailAngle === angle), so
+          // the tail loop also produces the head position — no need to
+          // compute it separately beforehand.
           for (let t = 0; t <= TAIL_SEGMENTS; t++) {
             const tailAngle =
               angle - electron.direction * (t / TAIL_SEGMENTS) * tailArc;
@@ -478,6 +514,12 @@ function Atom() {
             electron.tailPositions[t * 3 + 2] = scratch.z;
           }
           electron.tail.geometry.attributes.position.needsUpdate = true;
+
+          if (electronPositions) {
+            electronPositions[electron.index * 3] = electron.tailPositions[0];
+            electronPositions[electron.index * 3 + 1] = electron.tailPositions[1];
+            electronPositions[electron.index * 3 + 2] = electron.tailPositions[2];
+          }
         }
 
         if (electronAttributeRef.current) {
@@ -510,6 +552,15 @@ function Atom() {
       teardown = () => {
         cancelAnimationFrame(frameId);
         window.removeEventListener("resize", resize);
+        // Dispose the structure and statics here, explicitly, before the
+        // renderer/context go away — rather than relying on React running
+        // the structure effect's own cleanup before this one, which isn't
+        // guaranteed by effect declaration order.
+        disposeStructureRef.current?.();
+        disposeStructureRef.current = null;
+        scene.remove(statics.group);
+        statics.dispose();
+        staticsRef.current = null;
         controls.dispose();
         renderer.dispose();
         renderer.forceContextLoss();
@@ -528,22 +579,36 @@ function Atom() {
   useEffect(() => {
     const three = threeRef.current;
     const scene = sceneRef.current;
-    if (!ready || !three || !scene) return;
+    const statics = staticsRef.current;
+    if (!ready || !three || !scene || !statics) return;
 
-    const built = buildStructure(three, config.protons, pixelRatioRef.current);
+    // Approximation, not an isotope simulation: neutrons just mirror the
+    // proton count so the nucleus reads as a plausible light-element atom.
+    const neutrons = config.protons;
+    const built = buildNucleusAndElectrons(three, config.protons, neutrons, statics);
     scene.add(built.group);
     nucleusRef.current = built.nucleus;
     electronsRef.current = built.electrons;
     electronPositionsRef.current = built.electronPositions;
     electronAttributeRef.current = built.electronAttribute;
 
-    return () => {
+    const disposeStructure = () => {
       scene.remove(built.group);
       nucleusRef.current = null;
       electronsRef.current = [];
       electronPositionsRef.current = null;
       electronAttributeRef.current = null;
       built.dispose();
+    };
+    disposeStructureRef.current = disposeStructure;
+
+    return () => {
+      // Guard against double-disposal: the mount effect's teardown may
+      // have already called this (and nulled the ref) on full unmount.
+      if (disposeStructureRef.current === disposeStructure) {
+        disposeStructure();
+        disposeStructureRef.current = null;
+      }
     };
   }, [ready, config.protons]);
 
