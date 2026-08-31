@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useViewportSize } from "../../hooks/useViewportSize";
 import ConfigPanel from "../ConfigPanel";
 import SliderControl from "../SliderControl";
+import PauseButton from "../PauseButton";
 import { prefersReducedMotion } from "../../lib/motion";
 import "./style.css";
 
@@ -35,25 +36,7 @@ function Orbit() {
         height={height}
         viewBox={`0 0 ${width} ${height}`}
       >
-        <circle
-          cx={cx}
-          cy={cy}
-          r={CIRCLE_RADIUS}
-          role="button"
-          aria-label={paused ? "Resume animation" : "Pause animation"}
-          onClick={togglePause}
-          className="pointer-events-auto cursor-pointer fill-neutral-800/10 outline-none transition-colors hover:fill-neutral-800/20 active:fill-neutral-800/30"
-        />
-        <text
-          x={cx}
-          y={cy}
-          textAnchor="middle"
-          dominantBaseline="middle"
-          aria-hidden="true"
-          className="pointer-events-none font-geo text-[10px] fill-neutral-800/70 select-none"
-        >
-          {paused ? "RESUME" : "PAUSE"}
-        </text>
+        <PauseButton paused={paused} onClick={togglePause} radius={CIRCLE_RADIUS} />
         <g aria-hidden="true">
           {Array.from({ length: slotCount }, (_, i) => (
             <circle

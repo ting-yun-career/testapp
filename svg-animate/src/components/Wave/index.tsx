@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import ConfigPanel from "../ConfigPanel";
 import SliderControl from "../SliderControl";
+import PauseButton from "../PauseButton";
 import { mulberry32 } from "../../lib/random";
 import { prefersReducedMotion } from "../../lib/motion";
 
@@ -9,7 +10,11 @@ const MAX_OCTAVES = 4;
 const SAMPLE_STEP = 5;
 const AXIS_TICK_COUNT = 20;
 const AXIS_TICK_LENGTH = 3;
-const EDGE_MARGIN_RATIO = 1 / 20;
+// The fade envelope is a single Hann (raised-cosine) bump spanning the full
+// active width — zero at both margins, rising continuously to 1 at the
+// centre — not a flat middle with tapered shoulders. Shrinking this ratio
+// narrows the whole bump; it doesn't widen a flat region.
+const WINDOW_MARGIN_RATIO = 1 / 20;
 const PHASE_OFFSET_DEG = 40;
 const STROKE_WIDTH = 1;
 
@@ -63,91 +68,101 @@ function Wave() {
   const axisRef = useRef<SVGLineElement>(null);
   const tickRefs = useRef<(SVGLineElement | null)[]>([]);
   const timeRef = useRef(0);
+  const lastSizeRef = useRef({ width: 0, height: 0 });
+
+  const drawAxis = useCallback((width: number, height: number) => {
+    const centerY = height / 2;
+
+    const axis = axisRef.current;
+    if (axis) {
+      axis.setAttribute("x1", "0");
+      axis.setAttribute("x2", String(width));
+      axis.setAttribute("y1", String(centerY));
+      axis.setAttribute("y2", String(centerY));
+    }
+
+    for (let i = 0; i < AXIS_TICK_COUNT; i++) {
+      const tick = tickRefs.current[i];
+      if (!tick) continue;
+      const x = (i / (AXIS_TICK_COUNT - 1)) * width;
+      tick.setAttribute("x1", x.toFixed(1));
+      tick.setAttribute("x2", x.toFixed(1));
+      tick.setAttribute("y1", (centerY - AXIS_TICK_LENGTH / 2).toFixed(1));
+      tick.setAttribute("y2", (centerY + AXIS_TICK_LENGTH / 2).toFixed(1));
+    }
+  }, []);
 
   const drawFrame = useCallback(() => {
     const svg = svgRef.current;
-    if (svg) {
-      const width = svg.clientWidth;
-      const height = svg.clientHeight;
-      const c = configRef.current;
-      const t = timeRef.current;
-      const centerY = height / 2;
+    const path = pathRef.current;
+    if (!svg || !path) return;
 
-      const axis = axisRef.current;
-      if (axis) {
-        axis.setAttribute("x1", "0");
-        axis.setAttribute("x2", String(width));
-        axis.setAttribute("y1", String(centerY));
-        axis.setAttribute("y2", String(centerY));
-      }
+    const width = svg.clientWidth;
+    const height = svg.clientHeight;
+    const c = configRef.current;
+    const t = timeRef.current;
+    const centerY = height / 2;
 
-      for (let i = 0; i < AXIS_TICK_COUNT; i++) {
-        const tick = tickRefs.current[i];
-        if (!tick) continue;
-        const x = (i / (AXIS_TICK_COUNT - 1)) * width;
-        tick.setAttribute("x1", x.toFixed(1));
-        tick.setAttribute("x2", x.toFixed(1));
-        tick.setAttribute("y1", (centerY - AXIS_TICK_LENGTH / 2).toFixed(1));
-        tick.setAttribute("y2", (centerY + AXIS_TICK_LENGTH / 2).toFixed(1));
-      }
+    const lastSize = lastSizeRef.current;
+    if (lastSize.width !== width || lastSize.height !== height) {
+      drawAxis(width, height);
+      lastSizeRef.current = { width, height };
+    }
 
-      const path = pathRef.current;
-      if (path) {
-        const octaveCounts: number[] = [];
-        let totalWeightSum = 0;
-        for (let i = 0; i < c.waveCount; i++) {
-          const spec = waveSpecs[i];
-          const octaveCount = Math.min(c.roughness, spec.length);
-          octaveCounts.push(octaveCount);
-          for (let o = 0; o < octaveCount; o++) {
-            totalWeightSum += (1 / 2 ** o) * (0.7 + spec[o].amp * 0.6);
-          }
-        }
-
-        const margin = width * EDGE_MARGIN_RATIO;
-        const activeWidth = width - margin * 2;
-
-        let d = "";
-        for (let x = 0; x <= width; x += SAMPLE_STEP) {
-          const xNorm = x / width;
-          const edgeEnvelope =
-            x <= margin || x >= width - margin
-              ? 0
-              : 0.5 *
-                (1 - Math.cos((2 * Math.PI * (x - margin)) / activeWidth));
-          let oscillation = 0;
-
-          for (let i = 0; i < c.waveCount; i++) {
-            const spec = waveSpecs[i];
-            const octaveCount = octaveCounts[i];
-            const waveOffset = i * (PHASE_OFFSET_DEG * (Math.PI / 180));
-
-            for (let o = 0; o < octaveCount; o++) {
-              const rawWeight = (1 / 2 ** o) * (0.7 + spec[o].amp * 0.6);
-              const amp = (rawWeight / totalWeightSum) * c.maxAmplitude;
-              const freqMult = 2 ** o * (0.7 + spec[o].freq * 0.6);
-              const phase = spec[o].phase * Math.PI * 2;
-              const drift =
-                (spec[o].drift * 2 - 1) * (0.4 + o * 0.25) * c.speed;
-              oscillation +=
-                amp *
-                Math.sin(
-                  2 * Math.PI * c.maxFrequency * freqMult * xNorm +
-                    phase +
-                    waveOffset +
-                    t * drift,
-                );
-            }
-          }
-
-          const y = centerY + oscillation * edgeEnvelope;
-          d += `${d ? " L " : "M "}${x.toFixed(1)} ${y.toFixed(1)}`;
-        }
-
-        path.setAttribute("d", d);
+    // Per-(wave, octave) terms depend only on config and time, not on the
+    // sample position — computed once per frame instead of once per sample.
+    const terms: { amp: number; freqTerm: number; phaseTerm: number }[] = [];
+    let totalWeightSum = 0;
+    const octaveCounts: number[] = [];
+    for (let i = 0; i < c.waveCount; i++) {
+      const spec = waveSpecs[i];
+      const octaveCount = Math.min(c.roughness, spec.length);
+      octaveCounts.push(octaveCount);
+      for (let o = 0; o < octaveCount; o++) {
+        totalWeightSum += (1 / 2 ** o) * (0.7 + spec[o].amp * 0.6);
       }
     }
-  }, [waveSpecs]);
+    for (let i = 0; i < c.waveCount; i++) {
+      const spec = waveSpecs[i];
+      const octaveCount = octaveCounts[i];
+      const waveOffset = i * (PHASE_OFFSET_DEG * (Math.PI / 180));
+
+      for (let o = 0; o < octaveCount; o++) {
+        const rawWeight = (1 / 2 ** o) * (0.7 + spec[o].amp * 0.6);
+        const amp = (rawWeight / totalWeightSum) * c.maxAmplitude;
+        const freqMult = 2 ** o * (0.7 + spec[o].freq * 0.6);
+        const phase = spec[o].phase * Math.PI * 2;
+        const drift = (spec[o].drift * 2 - 1) * (0.4 + o * 0.25) * c.speed;
+        terms.push({
+          amp,
+          freqTerm: 2 * Math.PI * c.maxFrequency * freqMult,
+          phaseTerm: phase + waveOffset + t * drift,
+        });
+      }
+    }
+
+    const margin = width * WINDOW_MARGIN_RATIO;
+    const activeWidth = width - margin * 2;
+
+    const segments: string[] = [];
+    for (let x = 0; x <= width; x += SAMPLE_STEP) {
+      const xNorm = x / width;
+      const edgeEnvelope =
+        x <= margin || x >= width - margin
+          ? 0
+          : 0.5 * (1 - Math.cos((2 * Math.PI * (x - margin)) / activeWidth));
+
+      let oscillation = 0;
+      for (const term of terms) {
+        oscillation += term.amp * Math.sin(term.freqTerm * xNorm + term.phaseTerm);
+      }
+
+      const y = centerY + oscillation * edgeEnvelope;
+      segments.push(`${segments.length ? "L" : "M"} ${x.toFixed(1)} ${y.toFixed(1)}`);
+    }
+
+    path.setAttribute("d", segments.join(" "));
+  }, [waveSpecs, drawAxis]);
 
   useEffect(() => {
     drawFrame();
@@ -171,6 +186,13 @@ function Wave() {
   useEffect(() => {
     if (paused) drawFrame();
   }, [config, paused, drawFrame]);
+
+  useEffect(() => {
+    // The rAF loop already picks up size changes each frame while running;
+    // this covers the case where the viewport resizes while paused.
+    window.addEventListener("resize", drawFrame);
+    return () => window.removeEventListener("resize", drawFrame);
+  }, [drawFrame]);
 
   const togglePause = () => setPaused((p) => !p);
 
@@ -200,26 +222,7 @@ function Wave() {
           strokeWidth={STROKE_WIDTH}
         />
 
-        <circle cx="50%" cy="50%" r={40} className="fill-[#f5f0e6]" />
-        <circle
-          cx="50%"
-          cy="50%"
-          r={40}
-          role="button"
-          aria-label={paused ? "Resume animation" : "Pause animation"}
-          onClick={togglePause}
-          className="pointer-events-auto cursor-pointer fill-neutral-800/10 outline-none transition-colors hover:fill-neutral-800/20 active:fill-neutral-800/30"
-        />
-        <text
-          x="50%"
-          y="50%"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          aria-hidden="true"
-          className="pointer-events-none font-geo text-[10px] fill-neutral-800/70 select-none"
-        >
-          {paused ? "RESUME" : "PAUSE"}
-        </text>
+        <PauseButton paused={paused} onClick={togglePause} />
       </svg>
 
       <ConfigPanel>
@@ -227,7 +230,7 @@ function Wave() {
           label="Waves"
           value={config.waveCount}
           min={1}
-          max={24}
+          max={MAX_WAVES}
           step={1}
           onChange={(v) => setConfig((c) => ({ ...c, waveCount: v }))}
         />
@@ -260,7 +263,7 @@ function Wave() {
           label="Roughness"
           value={config.roughness}
           min={1}
-          max={4}
+          max={MAX_OCTAVES}
           step={1}
           onChange={(v) => setConfig((c) => ({ ...c, roughness: v }))}
         />
