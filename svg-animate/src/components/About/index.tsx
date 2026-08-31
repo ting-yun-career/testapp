@@ -21,16 +21,18 @@ function About() {
         data-in-view={bioInView || undefined}
         className="reveal font-geo text-base leading-relaxed text-neutral-700"
       >
-        React, Next.js, and Node.js engineer.
+        Ting Yun is a Frontend Engineer. Specializes in
         <br />
         <span className="text-sm">
-          -Scalable system
+          -React/Next.js development
           <br />
-          -Web performance
+          -Scalable frontend architecture
           <br />
-          -Web animation
+          -performance/optimization
           <br />
-          -Web security
+          -Webapp security
+          <br />
+          -SVG, animations
         </span>
       </p>
 
