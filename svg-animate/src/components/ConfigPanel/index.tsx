@@ -29,7 +29,7 @@ function ConfigPanel({ children }: ConfigPanelProps) {
       )}
 
       <aside
-        className="config-panel fixed top-1/2 right-0 z-20 w-64 border-l border-black/20 bg-[#f5f0e6] px-6 py-5 font-geo select-none"
+        className="config-panel fixed top-1/2 right-0 z-20 max-h-[80dvh] w-64 overflow-y-auto border-l border-black/20 bg-[#f5f0e6] px-6 py-5 font-geo select-none"
         data-open={open || undefined}
         onClick={() => {
           if (!open) setOpen(true);
