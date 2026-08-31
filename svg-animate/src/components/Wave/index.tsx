@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import ConfigPanel from "../ConfigPanel";
 import SliderControl from "../SliderControl";
+import { mulberry32 } from "../../lib/random";
 
 const MAX_WAVES = 24;
 const MAX_OCTAVES = 4;
@@ -17,16 +18,6 @@ type OctaveSpec = {
   phase: number;
   drift: number;
 };
-
-function mulberry32(seed: number) {
-  return function random() {
-    seed |= 0;
-    seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 
 function generateWaveSpecs(): OctaveSpec[][] {
   const random = mulberry32(1);
