@@ -21,21 +21,14 @@ function About() {
         data-in-view={bioInView || undefined}
         className="reveal font-geo text-base leading-relaxed text-neutral-700"
       >
-        Ting Yun is a Frontend Engineer. Specializes in
-        <br />
-        <span className="text-sm">
-          -React/Next.js development
-          <br />
-          -GraphQL, useQuery, Tailwind
-          <br />
-          -Node.js, Auth0, Node.js, Cloudflare
-        </span>
+        Ting Yun is a Frontend Engineer with expertises in React, Next.js,
+        GraphQL, Cloudflare, and Node.js.
       </p>
 
       <div
         ref={timelineRef}
         data-in-view={timelineInView || undefined}
-        className="reveal relative mt-5 border-l border-black/20 pl-8"
+        className="reveal relative mt-7 border-l border-black/20 pl-8"
       >
         <ul className="space-y-3">
           {TIMELINE.map(({ position, company, year }) => (
