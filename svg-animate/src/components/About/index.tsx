@@ -28,7 +28,7 @@ function About() {
           <br />
           -GraphQL, useQuery, Tailwind
           <br />
-          -Node.js, Auth0, Node.js, MongoDB, PostgreSQL, Redis
+          -Node.js, Auth0, Node.js, Cloudflare
         </span>
       </p>
 
