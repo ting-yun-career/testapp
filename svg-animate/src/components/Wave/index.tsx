@@ -54,10 +54,10 @@ type WaveConfig = {
 
 const DEFAULT_CONFIG: WaveConfig = {
   waveCount: 9,
-  maxAmplitude: 70,
-  maxFrequency: 2,
-  speed: 1,
-  roughness: 3,
+  maxAmplitude: 230,
+  maxFrequency: 6,
+  speed: 10,
+  roughness: 1,
 };
 
 function Wave() {
