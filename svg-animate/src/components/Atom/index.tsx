@@ -19,7 +19,6 @@ const ORBIT_BASE_SPEED = 3;
 const PRECESSION_RATE = 0.25;
 
 const TAIL_SEGMENTS = 40;
-const TAIL_ARC = Math.PI * 0.75;
 const TAIL_ALPHA = 0.55;
 
 const AXIS_LINE_LENGTH = 1000;
@@ -47,11 +46,13 @@ const AXIS_DIRS: [number, number, number][] = [
 type AtomConfig = {
   protons: number;
   speed: number;
+  tailLength: number;
 };
 
 const DEFAULT_CONFIG: AtomConfig = {
   protons: 6,
   speed: 1,
+  tailLength: 135,
 };
 
 type Electron = {
@@ -439,6 +440,7 @@ function Atom() {
 
         const electrons = electronsRef.current;
         const electronPositions = electronPositionsRef.current;
+        const tailArc = (configRef.current.tailLength * Math.PI) / 180;
 
         for (const electron of electrons) {
           precession.setFromAxisAngle(
@@ -466,7 +468,7 @@ function Atom() {
 
           for (let t = 0; t <= TAIL_SEGMENTS; t++) {
             const tailAngle =
-              angle - electron.direction * (t / TAIL_SEGMENTS) * TAIL_ARC;
+              angle - electron.direction * (t / TAIL_SEGMENTS) * tailArc;
             scratch
               .set(
                 Math.cos(tailAngle) * electron.radius,
@@ -568,6 +570,15 @@ function Atom() {
           max={20}
           step={1}
           onChange={(v) => setConfig((c) => ({ ...c, speed: v }))}
+        />
+        <SliderControl
+          label="Tail length"
+          value={config.tailLength}
+          min={0}
+          max={360}
+          step={5}
+          format={(v) => `${v}°`}
+          onChange={(v) => setConfig((c) => ({ ...c, tailLength: v }))}
         />
       </ConfigPanel>
     </>
