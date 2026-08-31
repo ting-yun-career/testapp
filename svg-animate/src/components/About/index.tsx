@@ -26,13 +26,9 @@ function About() {
         <span className="text-sm">
           -React/Next.js development
           <br />
-          -Scalable frontend architecture
+          -GraphQL, useQuery, Tailwind
           <br />
-          -performance/optimization
-          <br />
-          -Webapp security
-          <br />
-          -SVG, animations
+          -Node.js, Auth0, Node.js, MongoDB, PostgreSQL, Redis
         </span>
       </p>
 
