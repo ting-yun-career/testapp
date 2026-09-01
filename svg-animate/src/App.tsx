@@ -3,15 +3,25 @@ import About from "./components/About";
 import Orbit from "./components/Orbit";
 import Wave from "./components/Wave";
 import Atom from "./components/Atom";
+import Text from "./components/Text";
 
 const Widget = {
   orbit: "orbit",
   wave: "wave",
   atom: "atom",
+  text: "text",
   about: "about",
 } as const;
 
 type Widget = (typeof Widget)[keyof typeof Widget];
+
+const NAV_ITEMS: { id: Widget; label: string }[] = [
+  { id: Widget.orbit, label: "Orbit" },
+  { id: Widget.wave, label: "Wave" },
+  { id: Widget.atom, label: "Atom" },
+  { id: Widget.text, label: "Text" },
+  { id: Widget.about, label: "About" },
+];
 
 function App() {
   const [activeWidget, setActiveWidget] = useState<Widget | null>(Widget.orbit);
@@ -31,46 +41,23 @@ function App() {
       {activeWidget === Widget.orbit && <Orbit />}
       {activeWidget === Widget.wave && <Wave />}
       {activeWidget === Widget.atom && <Atom />}
+      {activeWidget === Widget.text && <Text />}
 
       <header className="fixed inset-x-0 top-0 px-6 py-4 text-right sm:px-10">
         <div className="inline-block">
           <nav className="font-syne-mono font-normal">
-            <button
-              type="button"
-              onClick={() => setActiveWidget(Widget.orbit)}
-              className={`mr-1 cursor-pointer rounded px-3 pt-2.5 text-base leading-none text-neutral-800 transition-colors hover:text-black sm:mr-2 ${
-                activeWidget === Widget.orbit ? "font-bold" : ""
-              }`}
-            >
-              Orbit
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveWidget(Widget.wave)}
-              className={`mr-1 cursor-pointer rounded px-3 pt-2.5 text-base leading-none text-neutral-800 transition-colors hover:text-black sm:mr-2 ${
-                activeWidget === Widget.wave ? "font-bold" : ""
-              }`}
-            >
-              Wave
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveWidget(Widget.atom)}
-              className={`mr-1 cursor-pointer rounded px-3 pt-2.5 text-base leading-none text-neutral-800 transition-colors hover:text-black sm:mr-2 ${
-                activeWidget === Widget.atom ? "font-bold" : ""
-              }`}
-            >
-              Atom
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveWidget(Widget.about)}
-              className={`cursor-pointer rounded pl-2.5 pr-1 pt-2.5 text-base leading-none text-neutral-800 transition-colors hover:text-black ${
-                activeWidget === Widget.about ? "font-bold" : ""
-              }`}
-            >
-              About
-            </button>
+            {NAV_ITEMS.map((item, i) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setActiveWidget(item.id)}
+                className={`cursor-pointer rounded pt-2.5 text-base leading-none text-neutral-800 transition-colors hover:text-black ${
+                  i === NAV_ITEMS.length - 1 ? "pl-2.5 pr-1" : "mr-1 px-3 sm:mr-2"
+                } ${activeWidget === item.id ? "font-bold" : ""}`}
+              >
+                {item.label}
+              </button>
+            ))}
           </nav>
           <svg
             className="mt-[-7px] h-px w-full text-black/20"
