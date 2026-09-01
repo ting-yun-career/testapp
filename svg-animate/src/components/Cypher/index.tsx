@@ -60,7 +60,7 @@ type TextConfig = {
   swapRate: number;
 };
 
-const CONFIG_KEY = "text-config";
+const CONFIG_KEY = "cypher-config";
 
 const DEFAULT_CONFIG: TextConfig = {
   duration: 200,
@@ -139,7 +139,7 @@ function computeGrid(width: number, height: number, glyphRatio: number) {
   return { cells };
 }
 
-function Text() {
+function Cypher() {
   const { width, height } = useViewportSize();
   const [config, setConfig] = useSessionConfig<TextConfig>(
     CONFIG_KEY,
@@ -285,4 +285,4 @@ function Text() {
   );
 }
 
-export default Text;
+export default Cypher;

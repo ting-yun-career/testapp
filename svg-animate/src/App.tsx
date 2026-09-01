@@ -3,13 +3,13 @@ import About from "./components/About";
 import Orbit from "./components/Orbit";
 import Wave from "./components/Wave";
 import Atom from "./components/Atom";
-import Text from "./components/Text";
+import Cypher from "./components/Cypher";
 
 const Widget = {
   orbit: "orbit",
   wave: "wave",
   atom: "atom",
-  text: "text",
+  cypher: "cypher",
   about: "about",
 } as const;
 
@@ -19,7 +19,7 @@ const NAV_ITEMS: { id: Widget; label: string }[] = [
   { id: Widget.orbit, label: "Orbit" },
   { id: Widget.wave, label: "Wave" },
   { id: Widget.atom, label: "Atom" },
-  { id: Widget.text, label: "Text" },
+  { id: Widget.cypher, label: "Cypher" },
   { id: Widget.about, label: "About" },
 ];
 
@@ -41,7 +41,7 @@ function App() {
       {activeWidget === Widget.orbit && <Orbit />}
       {activeWidget === Widget.wave && <Wave />}
       {activeWidget === Widget.atom && <Atom />}
-      {activeWidget === Widget.text && <Text />}
+      {activeWidget === Widget.cypher && <Cypher />}
 
       <header className="fixed inset-x-0 top-0 px-6 py-4 text-right sm:px-10">
         <div className="inline-block bg-[#f5f0e6]/80">
