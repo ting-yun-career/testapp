@@ -11,9 +11,9 @@ const SLOT_GAP = 1;
 
 const CIRCLE_RADIUS = 40;
 
-const CONFIG_KEY = "orbit-config";
+const CONFIG_KEY = "ring-config";
 
-type OrbitConfig = {
+type RingConfig = {
   speed: number;
   slotCount: number;
   startAngle: number;
@@ -21,7 +21,7 @@ type OrbitConfig = {
   strokeWidth: number;
 };
 
-const DEFAULT_CONFIG: OrbitConfig = {
+const DEFAULT_CONFIG: RingConfig = {
   speed: 14,
   slotCount: 200,
   startAngle: 147,
@@ -29,9 +29,9 @@ const DEFAULT_CONFIG: OrbitConfig = {
   strokeWidth: 3,
 };
 
-function Orbit() {
+function Ring() {
   const { width, height } = useViewportSize();
-  const [config, setConfig] = useSessionConfig<OrbitConfig>(
+  const [config, setConfig] = useSessionConfig<RingConfig>(
     CONFIG_KEY,
     DEFAULT_CONFIG,
   );
@@ -73,7 +73,7 @@ function Orbit() {
               style={{
                 transformOrigin: `${cx}px ${cy}px`,
                 transform: `rotate(${startAngle}deg)`,
-                animation: `orbit-draw ${stepsPerLap / speed}s linear ${i / speed}s both`,
+                animation: `ring-draw ${stepsPerLap / speed}s linear ${i / speed}s both`,
                 animationPlayState: paused ? "paused" : "running",
               }}
             />
@@ -129,4 +129,4 @@ function Orbit() {
   );
 }
 
-export default Orbit;
+export default Ring;

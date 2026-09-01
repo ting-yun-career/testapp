@@ -1,12 +1,12 @@
 import { useState } from "react";
 import About from "./components/About";
-import Orbit from "./components/Orbit";
+import Ring from "./components/Ring";
 import Wave from "./components/Wave";
 import Atom from "./components/Atom";
 import Cypher from "./components/Cypher";
 
 const Widget = {
-  orbit: "orbit",
+  ring: "ring",
   wave: "wave",
   atom: "atom",
   cypher: "cypher",
@@ -16,7 +16,7 @@ const Widget = {
 type Widget = (typeof Widget)[keyof typeof Widget];
 
 const NAV_ITEMS: { id: Widget; label: string }[] = [
-  { id: Widget.orbit, label: "Orbit" },
+  { id: Widget.ring, label: "Ring" },
   { id: Widget.wave, label: "Wave" },
   { id: Widget.atom, label: "Atom" },
   { id: Widget.cypher, label: "Cypher" },
@@ -24,7 +24,7 @@ const NAV_ITEMS: { id: Widget; label: string }[] = [
 ];
 
 function App() {
-  const [activeWidget, setActiveWidget] = useState<Widget | null>(Widget.orbit);
+  const [activeWidget, setActiveWidget] = useState<Widget | null>(Widget.ring);
 
   return (
     <div className="min-h-dvh">
@@ -38,7 +38,7 @@ function App() {
         }}
       />
 
-      {activeWidget === Widget.orbit && <Orbit />}
+      {activeWidget === Widget.ring && <Ring />}
       {activeWidget === Widget.wave && <Wave />}
       {activeWidget === Widget.atom && <Atom />}
       {activeWidget === Widget.cypher && <Cypher />}
