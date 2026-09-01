@@ -46,7 +46,7 @@ const CONFIG_KEY = "text-config";
 const DEFAULT_CONFIG: TextConfig = {
   value: "Password",
   duration: 5,
-  swapRate: 17,
+  swapRate: 24,
   font: "single",
 };
 

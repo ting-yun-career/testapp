@@ -627,7 +627,7 @@ function Atom() {
           label="Protons"
           value={config.protons}
           min={1}
-          max={30}
+          max={100}
           step={1}
           onChange={(v) => setConfig((c) => ({ ...c, protons: v }))}
         />
