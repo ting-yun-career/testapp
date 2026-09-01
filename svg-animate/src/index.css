@@ -3,8 +3,6 @@
 @theme {
   --font-sans: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
   --font-bytesized: 'Bytesized', ui-sans-serif, system-ui, sans-serif;
-  --font-bitcount-single: 'Bitcount Prop Single Ink', ui-sans-serif, system-ui, sans-serif;
-  --font-sixtyfour: 'Sixtyfour', ui-monospace, monospace;
   --font-geo: 'Geo', ui-sans-serif, system-ui, sans-serif;
   --font-syne-mono: 'Syne Mono', ui-monospace, monospace;
 }

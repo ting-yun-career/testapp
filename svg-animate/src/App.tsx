@@ -44,7 +44,7 @@ function App() {
       {activeWidget === Widget.text && <Text />}
 
       <header className="fixed inset-x-0 top-0 px-6 py-4 text-right sm:px-10">
-        <div className="inline-block">
+        <div className="inline-block bg-[#f5f0e6]/80">
           <nav className="font-syne-mono font-normal">
             {NAV_ITEMS.map((item, i) => (
               <button

@@ -22,11 +22,11 @@ type OrbitConfig = {
 };
 
 const DEFAULT_CONFIG: OrbitConfig = {
-  speed: 5,
-  slotCount: 90,
-  startAngle: 180,
-  stepsPerLap: 40,
-  strokeWidth: 2,
+  speed: 14,
+  slotCount: 200,
+  startAngle: 147,
+  stepsPerLap: 120,
+  strokeWidth: 3,
 };
 
 function Orbit() {

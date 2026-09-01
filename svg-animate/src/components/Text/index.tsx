@@ -1,64 +1,74 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ConfigPanel from "../ConfigPanel";
-import SelectControl from "../SelectControl";
 import SliderControl from "../SliderControl";
-import TextControl from "../TextControl";
+import { useViewportSize } from "../../hooks/useViewportSize";
+import { mulberry32 } from "../../lib/random";
 import { prefersReducedMotion } from "../../lib/motion";
 import { useSessionConfig } from "../../lib/sessionConfig";
 
-const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&@*+=/<>[]{}$";
+// Greek was dropped — the font has no coverage for it, so those glyphs fell
+// back to the browser's placeholder rendering instead of the chosen font.
+// Punctuation was dropped too — its width variance (narrow "." "'" "|" next
+// to wide "@" "%" "&") skewed the average cell size the whole grid is
+// packed against, throwing off spacing for everything else.
+const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const DIGITS = "0123456789";
+const WALL_CHARSET = LETTERS + DIGITS;
+
+const FONT_FAMILY = "Bitcount Prop Single Ink";
+
 const FALLBACK_GLYPH_RATIO = 0.7;
-const SLOT_TRACKING = 1.08;
-const SPACE_SLOT_RATIO = 0.4;
-const WIDTH_BUDGET_RATIO = 0.9;
-const SETTLE_MIN_RATIO = 0.15;
-// Characters always settle left-to-right rather than in a random order, and
-// hold at the settled state for a fixed beat before the next scramble.
+// Horizontal cell width is the glyph's own width plus this fixed gap — an
+// exact pixel gap rather than a proportional tracking multiplier.
+const HORIZONTAL_GAP_PX = -1;
+const LINE_HEIGHT_RATIO = 0.92;
+// Fixed (not proportional to settle time) so the first cell always cracks
+// about a second after load, however long the full sweep is set to.
+const SETTLE_START_DELAY = 1;
+// Each settle sweep holds at the fully-cracked state for a beat before the
+// wall re-scrambles and cracks again.
 const HOLD_SECONDS = 1;
-const FONT_SIZE_PX = 40;
+const FONT_SIZE_PX = 18;
+const MAX_DEVICE_PIXEL_RATIO = 2;
+// Tailwind neutral-800, and the same color at 45% opacity — matches the
+// settled/unsettled look the widget had as SVG text.
+const SETTLED_FILL = "#262626";
+const UNSETTLED_FILL = "rgba(38, 38, 38, 0.45)";
 
-// Single source of truth for the available fonts — everything else (the
-// config-panel options, the glyph-ratio cache, the font-loading effect)
-// is derived from these keys instead of re-listing them by hand.
-const FONT_FAMILIES = {
-  single: { label: "Single", className: "font-bitcount-single", family: "Bitcount Prop Single Ink" },
-  sixtyfour: { label: "Sixtyfour", className: "font-sixtyfour", family: "Sixtyfour" },
-} as const;
+// A long, fixed, deterministically-generated pool of "cracked" characters —
+// what the wall settles towards. Algorithmic rather than stored so it never
+// runs out regardless of viewport/grid size; wraps around via modulo. Not
+// derived from any user input, matching the brute-force-cracking effect
+// (the target is fixed, only the scramble is random).
+const TARGET_SEED = 1337;
+const TARGET_POOL_LENGTH = 4096;
+const TARGET_POOL = (() => {
+  const random = mulberry32(TARGET_SEED);
+  let pool = "";
+  for (let i = 0; i < TARGET_POOL_LENGTH; i++) {
+    pool += WALL_CHARSET[Math.floor(random() * WALL_CHARSET.length)];
+  }
+  return pool;
+})();
 
-type FontKey = keyof typeof FONT_FAMILIES;
-
-const FONT_KEYS = Object.keys(FONT_FAMILIES) as FontKey[];
-
-const FONT_OPTIONS: { value: FontKey; label: string }[] = FONT_KEYS.map((key) => ({
-  value: key,
-  label: FONT_FAMILIES[key].label,
-}));
+function targetCharAt(index: number): string {
+  return TARGET_POOL[index % TARGET_POOL_LENGTH];
+}
 
 type TextConfig = {
-  value: string;
   duration: number;
   swapRate: number;
-  font: FontKey;
 };
 
 const CONFIG_KEY = "text-config";
 
 const DEFAULT_CONFIG: TextConfig = {
-  value: "Password",
-  duration: 5,
+  duration: 200,
   swapRate: 24,
-  font: "single",
 };
 
-// Config persists in sessionStorage across code changes, so a `font` value
-// saved before a rename (or removed option) may no longer be a valid key —
-// fall back to the default rather than crashing on an undefined lookup.
-function normalizeFont(font: FontKey): FontKey {
-  return font in FONT_FAMILIES ? font : DEFAULT_CONFIG.font;
-}
-
-// Cheap deterministic hash used to pick a scrambled glyph for (slot, tick) —
-// avoids allocating a new mulberry32 generator every frame for every slot.
+// Cheap deterministic hash used to pick a scrambled glyph for (cell, tick) —
+// avoids allocating a new mulberry32 generator every frame for every cell.
 function hashUnit(a: number, b: number): number {
   let h = Math.imul(a + 1, 374761393) ^ Math.imul(b + 1, 668265263);
   h = Math.imul(h ^ (h >>> 13), 1274126177);
@@ -66,178 +76,159 @@ function hashUnit(a: number, b: number): number {
   return (h >>> 0) / 4294967296;
 }
 
-function computeSettleTimes(chars: string[], duration: number): number[] {
-  const n = chars.length;
-  return chars.map((ch, i) => {
-    if (ch === " ") return 0;
+// Cells settle in reading order (row-major, top-left to bottom-right) over
+// the settle-time window — a cracking wavefront sweeping the wall rather
+// than every cell settling independently.
+function computeSettleTimes(n: number, duration: number): number[] {
+  // Clamp so a very short settle time (slider's low end) can't push the
+  // start delay past the end of the sweep itself.
+  const startDelay = Math.min(SETTLE_START_DELAY, duration * 0.5);
+  return Array.from({ length: n }, (_, i) => {
     const positional = n > 1 ? i / (n - 1) : 0;
-    return duration * (SETTLE_MIN_RATIO + (1 - SETTLE_MIN_RATIO) * positional);
+    return startDelay + (duration - startDelay) * positional;
   });
 }
 
-type Geometry = { fontSizePx: number; slotXs: number[]; centerY: number };
-
-function computeGeometry(
-  width: number,
-  height: number,
-  maxFontSize: number,
-  chars: string[],
-  glyphRatio: number,
-): Geometry {
-  const n = chars.length;
-  if (n === 0) return { fontSizePx: maxFontSize, slotXs: [], centerY: height / 2 };
-
-  const advanceRatio = glyphRatio * SLOT_TRACKING;
-  // Space slots use a fraction of a full glyph's width — a word gap the
-  // width of a letter reads as far too loose next to the settled text.
-  const units = chars.map((ch) => (ch === " " ? SPACE_SLOT_RATIO : 1));
-  const totalUnits = units.reduce((sum, u) => sum + u, 0);
-  const widthBudget = width * WIDTH_BUDGET_RATIO;
-  const fontSizePx = Math.min(maxFontSize, widthBudget / (totalUnits * advanceRatio));
-
-  const widths = units.map((u) => u * fontSizePx * advanceRatio);
-  const totalWidth = widths.reduce((sum, w) => sum + w, 0);
-  let cursor = width / 2 - totalWidth / 2;
-  const slotXs = widths.map((w) => {
-    const center = cursor + w / 2;
-    cursor += w;
-    return center;
-  });
-
-  return { fontSizePx, slotXs, centerY: height / 2 };
-}
-
-// Measures the widest glyph in `sample` against the loaded font family, as a
-// ratio of font size — used to size fixed-width slots so glyph swaps don't
-// jitter neighbouring characters horizontally. Each font has different glyph
-// proportions, so every font is measured separately.
-function measureGlyphRatio(sample: string, family: string): number {
+// Measures the average glyph width in the wall charset against the loaded
+// font, as a ratio of font size — used to size grid cells. Sizing to the
+// widest glyph left narrow characters (digits, punctuation) sitting in an
+// oversized, centred cell with visible padding on both sides; average width
+// packs cells tightly instead, at the cost of the occasional wide glyph
+// slightly overlapping its neighbour.
+function measureGlyphRatio(sample: string): number {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
   if (!ctx) return FALLBACK_GLYPH_RATIO;
 
   const probeSize = 200;
-  ctx.font = `${probeSize}px "${family}"`;
-  let max = 0;
+  ctx.font = `${probeSize}px "${FONT_FAMILY}"`;
+  let total = 0;
   for (const ch of sample) {
-    if (ch === " ") continue;
-    max = Math.max(max, ctx.measureText(ch).width);
+    total += ctx.measureText(ch).width;
   }
-  return max > 0 ? max / probeSize : FALLBACK_GLYPH_RATIO;
+  return sample.length > 0
+    ? total / sample.length / probeSize
+    : FALLBACK_GLYPH_RATIO;
+}
+
+type Cell = { x: number; y: number };
+
+function computeGrid(width: number, height: number, glyphRatio: number) {
+  // A negative gap can bring this to zero or below for a narrow enough
+  // glyph — floor it so cols/rows can't blow up to Infinity.
+  const cellWidth = Math.max(1, FONT_SIZE_PX * glyphRatio + HORIZONTAL_GAP_PX);
+  const cellHeight = FONT_SIZE_PX * LINE_HEIGHT_RATIO;
+  const cols = Math.max(1, Math.floor(width / cellWidth));
+  const rows = Math.max(1, Math.floor(height / cellHeight));
+
+  const gridWidth = cols * cellWidth;
+  const gridHeight = rows * cellHeight;
+  const offsetX = (width - gridWidth) / 2 + cellWidth / 2;
+  const offsetY = (height - gridHeight) / 2 + cellHeight / 2;
+
+  const cells: Cell[] = [];
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      cells.push({
+        x: offsetX + col * cellWidth,
+        y: offsetY + row * cellHeight,
+      });
+    }
+  }
+
+  return { cells };
 }
 
 function Text() {
-  const [config, setConfig] = useSessionConfig<TextConfig>(CONFIG_KEY, DEFAULT_CONFIG);
+  const { width, height } = useViewportSize();
+  const [config, setConfig] = useSessionConfig<TextConfig>(
+    CONFIG_KEY,
+    DEFAULT_CONFIG,
+  );
   const [paused] = useState(prefersReducedMotion);
+
+  const [glyphRatio, setGlyphRatio] = useState(FALLBACK_GLYPH_RATIO);
+
+  // Glyph widths measured against the fallback font are wrong until the
+  // real font actually loads — re-measure once ready. This is React state
+  // (not a ref) because the grid's cell/column count is derived from it.
+  useEffect(() => {
+    let cancelled = false;
+    document.fonts.load(`16px "${FONT_FAMILY}"`).catch(() => {});
+    document.fonts.ready.then(() => {
+      if (cancelled) return;
+      setGlyphRatio(measureGlyphRatio(WALL_CHARSET));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const grid = useMemo(
+    () => computeGrid(width, height, glyphRatio),
+    [width, height, glyphRatio],
+  );
+  const n = grid.cells.length;
 
   const configRef = useRef(config);
   useEffect(() => {
     configRef.current = config;
   }, [config]);
 
-  const characters = useMemo(() => Array.from(config.value.toUpperCase()), [config.value]);
-  const fontKey = normalizeFont(config.font);
-
-  const svgRef = useRef<SVGSVGElement>(null);
-  const textRefs = useRef<(SVGTextElement | null)[]>([]);
+  // A wall this dense (thousands of cells) is one bulk raster surface, not
+  // one DOM node per glyph — with SVG <text> per cell, the browser has to
+  // lay out and paint thousands of nodes on every tick, which is what made
+  // the scramble look choppy. Canvas redraws the whole frame in one pass.
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const timeRef = useRef(paused ? config.duration : 0);
-  const glyphRatiosRef = useRef<Record<FontKey, number>>(
-    Object.fromEntries(FONT_KEYS.map((key) => [key, FALLBACK_GLYPH_RATIO])) as Record<
-      FontKey,
-      number
-    >,
-  );
-  const cacheRef = useRef<{ key: string; chars: string[]; settleTimes: number[] }>({
-    key: "",
-    chars: [],
-    settleTimes: [],
-  });
-  const lastGlyphsRef = useRef<(string | null)[]>([]);
-  const lastClassKeysRef = useRef<(string | null)[]>([]);
-  const geometryRef = useRef<Geometry>({ fontSizePx: 0, slotXs: [], centerY: 0 });
-  const lastSizeKeyRef = useRef("");
+  const settleTimesRef = useRef<number[]>([]);
+  const settleCacheKeyRef = useRef("");
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !ctx) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, MAX_DEVICE_PIXEL_RATIO);
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }, [width, height]);
 
   const drawFrame = useCallback(() => {
-    const svg = svgRef.current;
-    if (!svg) return;
-    const width = svg.clientWidth;
-    const height = svg.clientHeight;
-    if (width === 0 || height === 0) return;
+    const ctx = canvasRef.current?.getContext("2d");
+    if (!ctx) return;
     const c = configRef.current;
 
-    const cacheKey = `${c.value}|${c.duration}`;
-    if (cacheKey !== cacheRef.current.key) {
-      const chars = Array.from(c.value.toUpperCase());
-      cacheRef.current = {
-        key: cacheKey,
-        chars,
-        settleTimes: computeSettleTimes(chars, c.duration),
-      };
-      lastGlyphsRef.current = chars.map(() => null);
-      lastClassKeysRef.current = chars.map(() => null);
+    const settleCacheKey = `${n}|${c.duration}`;
+    if (settleCacheKey !== settleCacheKeyRef.current) {
+      settleCacheKeyRef.current = settleCacheKey;
+      settleTimesRef.current = computeSettleTimes(n, c.duration);
     }
-    const { chars, settleTimes } = cacheRef.current;
-    const n = chars.length;
-
-    const fontKey = normalizeFont(c.font);
-    const glyphRatio = glyphRatiosRef.current[fontKey];
-    const sizeKey = `${width}x${height}x${c.value}x${fontKey}x${glyphRatio}`;
-    if (sizeKey !== lastSizeKeyRef.current) {
-      lastSizeKeyRef.current = sizeKey;
-      geometryRef.current = computeGeometry(width, height, FONT_SIZE_PX, chars, glyphRatio);
-      const { fontSizePx, slotXs, centerY } = geometryRef.current;
-      for (let i = 0; i < n; i++) {
-        const el = textRefs.current[i];
-        if (!el) continue;
-        el.setAttribute("x", slotXs[i].toFixed(1));
-        el.setAttribute("y", centerY.toFixed(1));
-        el.setAttribute("font-size", fontSizePx.toFixed(1));
-      }
-    }
+    const settleTimes = settleTimesRef.current;
 
     const cycle = c.duration + HOLD_SECONDS;
     const phase = cycle > 0 ? timeRef.current % cycle : 0;
+    const tick = Math.floor(phase * c.swapRate);
 
-    for (let i = 0; i < n; i++) {
-      const el = textRefs.current[i];
-      if (!el) continue;
-      const ch = chars[i];
+    ctx.clearRect(0, 0, width, height);
+    ctx.font = `${FONT_SIZE_PX}px "${FONT_FAMILY}"`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
 
-      let glyph: string;
-      let settled: boolean;
-      if (ch === " ") {
-        glyph = " ";
-        settled = true;
-      } else if (phase >= settleTimes[i]) {
-        glyph = ch;
-        settled = true;
-      } else {
-        const tick = Math.floor(phase * c.swapRate);
-        glyph = CHARSET[Math.floor(hashUnit(i, tick) * CHARSET.length)];
-        settled = false;
-      }
-
-      if (lastGlyphsRef.current[i] !== glyph) {
-        lastGlyphsRef.current[i] = glyph;
-        el.textContent = glyph;
-      }
-
-      // Settled/unsettled + font is the only thing that ever changes the
-      // class — most frames touch neither, so skip the DOM write when the
-      // combined key hasn't moved since last frame.
-      const classKey = `${fontKey}:${settled}`;
-      if (lastClassKeysRef.current[i] !== classKey) {
-        lastClassKeysRef.current[i] = classKey;
-        const fontClass = FONT_FAMILIES[fontKey].className;
-        el.setAttribute(
-          "class",
-          settled
-            ? `${fontClass} fill-neutral-800 select-none`
-            : `${fontClass} fill-neutral-800/45 select-none`,
-        );
+    // Two passes so fillStyle only changes twice a frame instead of once
+    // per glyph — cheap since canvas state changes aren't free either.
+    for (const settled of [false, true]) {
+      ctx.fillStyle = settled ? SETTLED_FILL : UNSETTLED_FILL;
+      for (let i = 0; i < n; i++) {
+        if (phase >= settleTimes[i] !== settled) continue;
+        const glyph = settled
+          ? targetCharAt(i)
+          : WALL_CHARSET[Math.floor(hashUnit(i, tick) * WALL_CHARSET.length)];
+        const cell = grid.cells[i];
+        ctx.fillText(glyph, cell.x, cell.y);
       }
     }
-  }, []);
+  }, [n, grid, width, height]);
 
   useEffect(() => {
     drawFrame();
@@ -262,73 +253,20 @@ function Text() {
     if (paused) drawFrame();
   }, [config, paused, drawFrame]);
 
-  useEffect(() => {
-    window.addEventListener("resize", drawFrame);
-    return () => window.removeEventListener("resize", drawFrame);
-  }, [drawFrame]);
-
-  // Glyph widths measured against the fallback font are wrong until every
-  // font actually loads — re-measure each once ready and force a geometry
-  // recompute so slots don't stay sized off the fallback.
-  useEffect(() => {
-    let cancelled = false;
-    for (const key of FONT_KEYS) {
-      document.fonts.load(`16px "${FONT_FAMILIES[key].family}"`).catch(() => {});
-    }
-    document.fonts.ready.then(() => {
-      if (cancelled) return;
-      const sample = CHARSET + configRef.current.value.toUpperCase();
-      glyphRatiosRef.current = Object.fromEntries(
-        FONT_KEYS.map((key) => [key, measureGlyphRatio(sample, FONT_FAMILIES[key].family)]),
-      ) as Record<FontKey, number>;
-      lastSizeKeyRef.current = "";
-      drawFrame();
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [drawFrame]);
-
   return (
     <>
-      <svg
-        ref={svgRef}
+      <canvas
+        ref={canvasRef}
         className="pointer-events-none fixed inset-0 h-full w-full"
         aria-hidden="true"
-      >
-        {characters.map((ch, i) => (
-          <text
-            key={i}
-            ref={(el) => {
-              textRefs.current[i] = el;
-            }}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            className={`${FONT_FAMILIES[fontKey].className} fill-neutral-800/45 select-none`}
-          >
-            {ch === " " ? "" : ch}
-          </text>
-        ))}
-      </svg>
+      />
 
       <ConfigPanel>
-        <TextControl
-          label="Text"
-          value={config.value}
-          maxLength={24}
-          onChange={(v) => setConfig((c) => ({ ...c, value: v }))}
-        />
-        <SelectControl
-          label="Font"
-          value={fontKey}
-          options={FONT_OPTIONS}
-          onChange={(v) => setConfig((c) => ({ ...c, font: v }))}
-        />
         <SliderControl
           label="Settle time"
           value={config.duration}
-          min={0.5}
-          max={20}
+          min={100}
+          max={300}
           step={0.1}
           format={(v) => `${v.toFixed(1)}s`}
           onChange={(v) => setConfig((c) => ({ ...c, duration: v }))}
