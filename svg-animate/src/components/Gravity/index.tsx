@@ -72,6 +72,7 @@ const MAX_SUBSTEPS = 5;
 const POLE_STROKE = "rgba(38, 38, 38, 0.5)";
 const POLE_STROKE_WIDTH = 1.5;
 const BALL_BASE_ALPHA = 0.85;
+const BALL_FILL = `rgba(38, 38, 38, ${BALL_BASE_ALPHA})`;
 
 type PolePoint = { x: number; y: number };
 
@@ -210,15 +211,35 @@ function Gravity() {
         if (!ctx) return;
         ctx.clearRect(0, 0, width, height);
 
+        // One path covering every pole, one stroke call, rather than a
+        // beginPath/stroke pair per pole. Note this is tidiness, not a
+        // meaningful optimization: measured, the whole of draw() costs well
+        // under 1ms even at ~1400 shapes. Engine.update dominates the frame.
         ctx.strokeStyle = POLE_STROKE;
         ctx.lineWidth = POLE_STROKE_WIDTH;
+        ctx.beginPath();
         for (const p of poles) {
-          ctx.beginPath();
+          ctx.moveTo(p.x + POLE_RADIUS, p.y);
           ctx.arc(p.x, p.y, POLE_RADIUS, 0, Math.PI * 2);
-          ctx.stroke();
         }
+        ctx.stroke();
+
+        // Same for balls, split on alpha: the overwhelming majority are
+        // fully settled and share one exact fillStyle, so they batch into a
+        // single path + fill. Only the (typically few dozen at most)
+        // currently-fading balls have a continuously varying alpha and need
+        // their own fillStyle/fill call each.
+        ctx.fillStyle = BALL_FILL;
+        ctx.beginPath();
+        for (const b of ballsRef.current) {
+          if (b.alpha < 1) continue;
+          ctx.moveTo(b.body.position.x + b.radius, b.body.position.y);
+          ctx.arc(b.body.position.x, b.body.position.y, b.radius, 0, Math.PI * 2);
+        }
+        ctx.fill();
 
         for (const b of ballsRef.current) {
+          if (b.alpha >= 1) continue;
           ctx.fillStyle = `rgba(38, 38, 38, ${(BALL_BASE_ALPHA * b.alpha).toFixed(3)})`;
           ctx.beginPath();
           ctx.arc(b.body.position.x, b.body.position.y, b.radius, 0, Math.PI * 2);
