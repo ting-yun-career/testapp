@@ -1,9 +1,21 @@
 import { useState } from "react";
 
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
 function readSessionValue<T>(key: string, fallback: T): T {
   try {
     const raw = sessionStorage.getItem(key);
-    return raw === null ? fallback : (JSON.parse(raw) as T);
+    if (raw === null) return fallback;
+    const stored = JSON.parse(raw) as T;
+    // Shallow-merge over the default rather than trusting the stored value
+    // as-is: a widget's config shape can gain fields across versions (e.g.
+    // adding a new slider), and a session with an older stored value would
+    // otherwise come back missing that field entirely.
+    return isPlainObject(fallback) && isPlainObject(stored)
+      ? ({ ...fallback, ...stored } as T)
+      : stored;
   } catch {
     return fallback;
   }
