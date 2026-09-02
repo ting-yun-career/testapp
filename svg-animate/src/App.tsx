@@ -44,14 +44,14 @@ function App() {
       {activeWidget === Widget.cypher && <Cypher />}
 
       <header className="fixed inset-x-0 top-0 px-6 py-4 text-right sm:px-10">
-        <div className="inline-block bg-[#f5f0e6]/90">
+        <div className="relative inline-block bg-[#f5f0e6]/90">
           <nav className="font-syne-mono font-normal">
             {NAV_ITEMS.map((item, i) => (
               <button
                 key={item.id}
                 type="button"
                 onClick={() => setActiveWidget(item.id)}
-                className={`cursor-pointer rounded pt-2.5 text-base leading-none text-neutral-800 transition-colors hover:text-black ${
+                className={`cursor-pointer rounded pt-2.5 pb-2.5 text-base leading-none text-neutral-800 transition-colors hover:text-black ${
                   i === NAV_ITEMS.length - 1 ? "pl-2.5 pr-1" : "mr-1 px-3 sm:mr-2"
                 } ${activeWidget === item.id ? "font-bold" : ""}`}
               >
@@ -60,7 +60,7 @@ function App() {
             ))}
           </nav>
           <svg
-            className="mt-[-7px] h-px w-full text-black/20"
+            className="absolute inset-x-0 bottom-2.75 h-px text-black/20"
             viewBox="0 0 150 1"
             preserveAspectRatio="none"
             aria-hidden="true"
