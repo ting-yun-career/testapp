@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import ConfigPanel from "../ConfigPanel";
 import SliderControl from "../SliderControl";
-import PauseButton from "../PauseButton";
 import { mulberry32 } from "../../lib/random";
 import { prefersReducedMotion } from "../../lib/motion";
 import { useSessionConfig } from "../../lib/sessionConfig";
@@ -62,7 +61,7 @@ function Wave() {
     CONFIG_KEY,
     DEFAULT_CONFIG,
   );
-  const [paused, setPaused] = useState(prefersReducedMotion);
+  const [paused] = useState(prefersReducedMotion);
 
   const configRef = useRef(config);
   useEffect(() => {
@@ -200,8 +199,6 @@ function Wave() {
     return () => window.removeEventListener("resize", drawFrame);
   }, [drawFrame]);
 
-  const togglePause = () => setPaused((p) => !p);
-
   return (
     <>
       <svg
@@ -227,8 +224,6 @@ function Wave() {
           className="stroke-neutral-800/40"
           strokeWidth={STROKE_WIDTH}
         />
-
-        <PauseButton paused={paused} onClick={togglePause} />
       </svg>
 
       <ConfigPanel>
