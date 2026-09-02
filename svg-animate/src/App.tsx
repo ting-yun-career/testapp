@@ -60,7 +60,7 @@ function App() {
             ))}
           </nav>
           <svg
-            className="absolute inset-x-0 bottom-2.75 h-px text-black/20"
+            className="absolute inset-x-0 bottom-2.75 h-px w-full text-black/20"
             viewBox="0 0 150 1"
             preserveAspectRatio="none"
             aria-hidden="true"
