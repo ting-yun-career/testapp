@@ -46,6 +46,11 @@ const SPAWN_JITTER_PX = 40;
 const BALL_RESTITUTION = 0.55;
 const POLE_RESTITUTION = 0.6;
 
+// Slack added to a "was this ball resting against the removed one" check —
+// generous enough to catch real contact despite floating-point/solver
+// slop, without being so wide it wakes balls that were never touching.
+const WAKE_CONTACT_SLACK_PX = 3;
+
 // Resting balls fade out and get removed so the pile never grows without
 // bound: once a ball has been asleep this long (config.drainDelay), it
 // starts fading; once fully transparent, it's removed from the simulation.
@@ -162,7 +167,7 @@ function Gravity() {
 
       const Matter = ((mod as { default?: typeof MatterNS }).default ??
         (mod as unknown as typeof MatterNS));
-      const { Engine, Bodies, Composite } = Matter;
+      const { Engine, Bodies, Composite, Sleeping } = Matter;
 
       const engine = Engine.create({ enableSleeping: true });
       engine.gravity.y = configRef.current.gravity;
@@ -258,6 +263,25 @@ function Gravity() {
         return;
       }
 
+      // Composite.remove fires no collision/wake event, so a sleeping ball
+      // resting directly on the body being removed would otherwise hang in
+      // mid-air forever once its support disappears — wake anything that
+      // was actually touching it so it falls and re-settles naturally.
+      // Waking a ball that turns out to still be supported by something
+      // else is harmless: it re-settles and sleeps again within a frame or
+      // two, so this only needs to be a generous "were these touching"
+      // check, not a precise support graph.
+      const wakeTouchingSleepers = (removed: MatterNS.Body) => {
+        const removedRadius = removed.circleRadius ?? 0;
+        for (const other of ballsRef.current) {
+          if (other.body === removed || !other.body.isSleeping) continue;
+          const dx = other.body.position.x - removed.position.x;
+          const dy = other.body.position.y - removed.position.y;
+          const reach = other.radius + removedRadius + WAKE_CONTACT_SLACK_PX;
+          if (dx * dx + dy * dy <= reach * reach) Sleeping.set(other.body, false);
+        }
+      };
+
       const spawnBall = () => {
         const radius = configRef.current.ballRadius;
         const x = width / 2 + (Math.random() * 2 - 1) * SPAWN_JITTER_PX;
@@ -271,7 +295,10 @@ function Gravity() {
 
         if (ballsRef.current.length > MAX_BALLS) {
           const oldest = ballsRef.current.shift();
-          if (oldest) Composite.remove(engine.world, oldest.body);
+          if (oldest) {
+            wakeTouchingSleepers(oldest.body);
+            Composite.remove(engine.world, oldest.body);
+          }
         }
       };
 
@@ -319,6 +346,7 @@ function Gravity() {
           if (b.sleptFor <= drainDelay) continue;
           b.alpha = Math.max(0, 1 - (b.sleptFor - drainDelay) / FADE_DURATION_S);
           if (b.alpha <= 0) {
+            wakeTouchingSleepers(b.body);
             Composite.remove(engine.world, b.body);
             balls.splice(i, 1);
           }
