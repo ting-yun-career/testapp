@@ -48,7 +48,11 @@ function App() {
       {activeWidget === Widget.cypher && <Cypher />}
       {activeWidget === Widget.gravity && <Gravity />}
 
-      <header className="fixed inset-x-0 top-0 px-6 py-4 text-right sm:px-10">
+      {/* z-30: header had no z-index (auto), so a descendant's z-index
+          (however high) could never out-rank ConfigPanel's fixed z-20
+          wrapper — a positive z-index sibling always beats an auto one,
+          regardless of what's nested inside it. Needs to be set here. */}
+      <header className="fixed inset-x-0 top-0 z-30 px-6 py-4 text-right sm:px-10">
         <div className="relative inline-block bg-[#f5f0e6]/90">
           {/* Full row — five items were too cramped on phone widths, so
               this only shows from the `nav` breakpoint up. */}
