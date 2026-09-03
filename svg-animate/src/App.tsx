@@ -28,6 +28,7 @@ const NAV_ITEMS: { id: Widget; label: string }[] = [
 
 function App() {
   const [activeWidget, setActiveWidget] = useState<Widget | null>(Widget.ring);
+  const [navOpen, setNavOpen] = useState(false);
 
   return (
     <div className="min-h-dvh">
@@ -49,7 +50,9 @@ function App() {
 
       <header className="fixed inset-x-0 top-0 px-6 py-4 text-right sm:px-10">
         <div className="relative inline-block bg-[#f5f0e6]/90">
-          <nav className="font-syne-mono font-normal">
+          {/* Full row — five items were too cramped on phone widths, so
+              this only shows from the `nav` breakpoint up. */}
+          <nav className="hidden font-syne-mono font-normal nav:block">
             {NAV_ITEMS.map((item, i) => (
               <button
                 key={item.id}
@@ -64,7 +67,7 @@ function App() {
             ))}
           </nav>
           <svg
-            className="absolute inset-x-0 bottom-2.75 h-px w-full text-black/20"
+            className="absolute inset-x-0 bottom-2.75 hidden h-px w-full text-black/20 nav:block"
             viewBox="0 0 150 1"
             preserveAspectRatio="none"
             aria-hidden="true"
@@ -79,6 +82,43 @@ function App() {
               vectorEffect="non-scaling-stroke"
             />
           </svg>
+
+          {/* Collapsed trigger — below the `nav` breakpoint only. */}
+          <button
+            type="button"
+            onClick={() => setNavOpen((o) => !o)}
+            className="cursor-pointer rounded px-3 pt-2.5 pb-2.5 font-syne-mono text-base leading-none text-neutral-800 nav:hidden"
+          >
+            {navOpen ? "Close" : "Menu"}
+          </button>
+
+          {navOpen && (
+            <>
+              <button
+                type="button"
+                aria-label="Close menu"
+                onClick={() => setNavOpen(false)}
+                className="fixed inset-0 z-10 nav:hidden"
+              />
+              <nav className="relative z-20 flex flex-col items-end border-t border-black/10 font-syne-mono font-normal nav:hidden">
+                {NAV_ITEMS.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => {
+                      setActiveWidget(item.id);
+                      setNavOpen(false);
+                    }}
+                    className={`w-full cursor-pointer px-4 py-2.5 text-right text-base leading-none text-neutral-800 ${
+                      activeWidget === item.id ? "font-bold" : ""
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </nav>
+            </>
+          )}
         </div>
       </header>
 

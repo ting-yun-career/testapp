@@ -5,6 +5,10 @@
   --font-bytesized: 'Bytesized', ui-sans-serif, system-ui, sans-serif;
   --font-geo: 'Geo', ui-sans-serif, system-ui, sans-serif;
   --font-syne-mono: 'Syne Mono', ui-monospace, monospace;
+  /* Full nav row shows from here up; below it, collapses behind a Menu
+     trigger. iPhone Pro Max is 430px CSS-wide — set past that so it (and
+     similar large phones) still gets the collapsed layout. */
+  --breakpoint-nav: 480px;
 }
 
 :root {

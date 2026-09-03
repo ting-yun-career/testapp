@@ -35,14 +35,17 @@ function ConfigPanel({ children }: ConfigPanelProps) {
           if (!open) setOpen(true);
         }}
       >
-        {!open && (
-          <button
-            type="button"
-            aria-label="Open configuration panel"
-            onClick={() => setOpen(true)}
-            className="absolute top-0 right-full bottom-0 w-[50px]"
-          />
-        )}
+        {/* Visible pull tab — the panel's own edge is only a thin sliver
+            when closed (easy to miss on a touchscreen), so this sticks out
+            further and is always shown, in both states. */}
+        <button
+          type="button"
+          aria-label={open ? "Close configuration panel" : "Open configuration panel"}
+          onClick={() => setOpen((o) => !o)}
+          className="absolute top-1/2 right-full flex h-20 w-8 -translate-y-1/2 cursor-pointer items-center justify-center border border-r-0 border-black/20 bg-[#f5f0e6] font-geo text-[10px] tracking-widest text-neutral-600 uppercase transition-colors hover:text-neutral-800 [writing-mode:vertical-rl]"
+        >
+          Config
+        </button>
 
         <div className="space-y-5">{children}</div>
       </aside>
