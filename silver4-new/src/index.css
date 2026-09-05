@@ -1,113 +1,203 @@
 @import 'tailwindcss';
 
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+/* ==========================================================================
+   Design tokens — ported 1:1 from the cloud-design hand-off's 00-tokens.css.
+   Everything here becomes a Tailwind utility (bg-ink, text-accent, font-
+   display, text-md, leading-loose, tracking-wider, ease-brand, …).
+   ========================================================================== */
+@theme {
+  /* ---- Colour ------------------------------------------------------------ */
+  --color-ink: #14110f;
+  --color-ink-deep: #0a0908;
+  --color-ink-soft: #4b4642;
+  --color-muted: #8b847e;
+  --color-paper: #ffffff;
+  --color-paper-alt: #f5f2ee;
+  --color-line: #e3ded8;
+  --color-line-dark: #322d29;
+  --color-accent: #9a8262;
+  --color-accent-soft: #cbb99f;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  /* ---- Typography --------------------------------------------------------
+     Fluid scale: min at 360px viewport, max at 1280px. */
+  --font-display: 'Playfair Display SC', 'Cormorant Garamond', 'Times New Roman', serif;
+  --font-body: 'Jost', 'Helvetica Neue', Arial, sans-serif;
+  --font-nav: 'Cormorant Garamond', 'Times New Roman', serif;
+  /* The hero and page-header titles (and every h2 on the home page) use this
+     in place of --font-display. */
+  --font-marker: 'Permanent Marker', 'Playfair Display SC', 'Cormorant Garamond', 'Times New Roman', serif;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: inherit;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: inherit;
+  --text-base: 1rem;
+  --text-base--line-height: inherit;
+  --text-md: clamp(1.0625rem, 0.99rem + 0.31vw, 1.1875rem);
+  --text-lg: clamp(1.25rem, 1.14rem + 0.47vw, 1.5rem);
+  --text-lg--line-height: inherit;
+  --text-xl: clamp(1.75rem, 1.5rem + 1.05vw, 2.375rem);
+  --text-xl--line-height: inherit;
+  --text-2xl: clamp(2.25rem, 1.8rem + 1.9vw, 3.25rem);
+  --text-2xl--line-height: inherit;
+  --text-3xl: clamp(2.75rem, 1.9rem + 3.6vw, 4.75rem);
+  --text-3xl--line-height: inherit;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
+  --leading-tight: 1.08;
+  --leading-snug: 1.25;
+  --leading-normal: 1.6;
+  --leading-loose: 1.75;
+
+  --tracking-wide: 0.08em;
+  --tracking-wider: 0.18em;
+
+  /* ---- Layout -------------------------------------------------------------
+     Space tokens deliberately omitted: the 4px/0.25rem step values (3xs…3xl)
+     line up exactly with Tailwind's default numeric spacing scale
+     (1, 2, 3, 4, 6, 8, 12, 16, 24), so plain padding, gap and margin
+     utilities already match. */
+  --container-max: 75rem;
+  --container-narrow: 46rem;
+  --container-pad: clamp(1.25rem, 0.75rem + 2.5vw, 3rem);
+  --header-h: 4.25rem;
+  --action-bar-h: 4rem;
+  --section-y: clamp(3.5rem, 2rem + 6vw, 7.5rem);
+
+  /* ---- Borders & shape ----------------------------------------------------- */
+  --radius-sm: 2px;
+  --radius-pill: 999px;
+
+  /* ---- Elevation ------------------------------------------------------------ */
+  --shadow-sm: 0 1px 2px rgb(20 17 15 / 6%), 0 2px 8px rgb(20 17 15 / 4%);
+  --shadow-md: 0 4px 12px rgb(20 17 15 / 8%), 0 12px 32px rgb(20 17 15 / 6%);
+  --shadow-lg: 0 12px 40px rgb(20 17 15 / 14%);
+
+  /* ---- Motion ------------------------------------------------------------- */
+  --ease-brand: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-brand-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Hero background drift + the scroll-cue bounce (05-sections.css). */
+  --animate-hero-drift: hero-drift 24s cubic-bezier(0.22, 0.61, 0.36, 1) infinite alternate;
+  --animate-hero-cue: hero-cue 2.4s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+}
+
+@keyframes hero-drift {
+  from {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.08) translate3d(0, -1.5%, 0);
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+@keyframes hero-cue {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+    opacity: 0.5;
   }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+  50% {
+    transform: translate(-50%, 6px);
+    opacity: 1;
   }
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+/* ==========================================================================
+   Base layer — the page's default voice (bare elements only). Component-
+   level styling lives on the React components themselves as Tailwind
+   classes; this mirrors what 02-base.css did for un-classed tags.
+   ========================================================================== */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-h) + var(--spacing) * 6);
   }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
+
+  body {
+    @apply bg-paper text-ink font-body text-base font-light;
+    line-height: var(--leading-normal);
+    padding-bottom: var(--action-bar-h);
   }
-}
-p {
-  margin: 0;
-}
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
+  @media (min-width: 48rem) {
+    body {
+      padding-bottom: 0;
+    }
+  }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display font-normal leading-tight;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  h1 em,
+  h2 em,
+  h3 em {
+    @apply not-italic text-accent;
+  }
+
+  p {
+    max-width: 68ch;
+    text-wrap: pretty;
+  }
+
+  p + p {
+    margin-block-start: calc(var(--spacing) * 4);
+  }
+
+  strong {
+    @apply font-medium;
+  }
+
+  small {
+    @apply text-sm text-muted;
+  }
+
+  a {
+    @apply no-underline;
+    transition: color 150ms var(--ease-brand);
+  }
+
+  p a,
+  li a:not([class]),
+  dd a {
+    @apply text-accent underline decoration-1 underline-offset-[0.2em];
+  }
+
+  p a:hover,
+  li a:not([class]):hover,
+  dd a:hover {
+    @apply text-ink;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-paper);
+  }
+
+  /* Home page only: every h2 uses the marker font, per index.html's original
+     `.page-home h2` rule. */
+  .page-home h2 {
+    font-family: var(--font-marker);
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings:
+      'FILL' 0,
+      'wght' 250,
+      'GRAD' 0,
+      'opsz' 24;
+    line-height: 1;
+    user-select: none;
+  }
 }

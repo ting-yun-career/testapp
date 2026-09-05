@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Services &amp; Prices — Silver4 Hair &amp; Beauty Salon</title>
+<meta name="description" content="Silver4 Salon price list: haircuts, shampoo and styling, colour and balayage, perms and Japanese straightening, head spa and Kérastase treatments.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Jost:wght@300;400;500&family=Playfair+Display+SC:ital,wght@0,400;0,700;1,400&family=Permanent+Marker&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,250,0,0&display=block">
+
+<link rel="stylesheet" href="css/main.css">
+<script type="module" src="js/main.js"></script>
+</head>
+<body>
+
+<a class="btn btn--primary skip-link" href="#main">Skip to content</a>
+
+<!-- SITE HEADER — partial #1, see index.html -->
+<header class="site-header" data-header>
+  <div class="site-header__bar container">
+    <a class="site-header__brand" href="index.html">
+      <img class="site-header__logo" src="assets/img/logo.png" alt="Silver4 Hair &amp; Beauty Salon">
+    </a>
+    <nav class="site-nav" id="site-nav" data-nav aria-label="Main navigation">
+      <ul class="site-nav__list">
+        <li><a class="site-nav__link" href="index.html">Home</a></li>
+        <li><a class="site-nav__link" href="services.html" aria-current="page">Services</a></li>
+        <li><a class="site-nav__link" href="team.html">Our Stylists</a></li>
+        <li><a class="site-nav__link" href="gallery.html">Gallery</a></li>
+        <li><a class="site-nav__link" href="about.html">About</a></li>
+      </ul>
+      <div class="site-nav__foot">
+        <div class="site-footer__contact">
+          <span>(604) 423-4223</span>
+          <button class="site-footer__copy" type="button" data-copy="+16044234223" aria-label="Copy phone number">
+            <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+          </button>
+        </div>
+        <div class="site-footer__contact">
+          <span>info@silver4salon.com</span>
+          <button class="site-footer__copy" type="button" data-copy="info@silver4salon.com" aria-label="Copy email address">
+            <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+          </button>
+        </div>
+        <div class="site-footer__contact">
+          <span>1263 Kingsway, Vancouver, BC</span>
+          <button class="site-footer__copy" type="button" data-copy="1263 Kingsway, Vancouver, BC" aria-label="Copy address">
+            <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+          </button>
+        </div>
+        <p style="margin-block-start: var(--space-xs);">Open daily 11:00AM–7:00PM</p>
+      </div>
+    </nav>
+    <div class="site-header__actions">
+      <a class="btn btn--primary btn--sm show-md-up"
+         href="https://www.fresha.com/book-now/silver-4-hair-and-beauty-salon-p5x0yfdh/all-offer?share=true&amp;pId=2865797"
+         target="_blank" rel="noopener">Book Now</a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">
+        <span class="visually-hidden">Menu</span>
+        <span class="material-symbols-outlined nav-toggle__open" aria-hidden="true">menu</span>
+        <span class="material-symbols-outlined nav-toggle__close" aria-hidden="true">close</span>
+      </button>
+    </div>
+  </div>
+  <div class="nav-backdrop" data-nav-backdrop aria-hidden="true"></div>
+</header>
+
+<main id="main">
+
+  <section class="page-header">
+    <div class="container page-header__inner">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Services</span>
+      </nav>
+      <h1 class="page-header__title">Services &amp; <em>prices</em></h1>
+      <p class="page-header__lede">Prices are a starting range and vary with the level of your
+        stylist and the length and density of your hair. Colour consultations are always free.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+
+      <!-- Sticky category nav — plain anchors, so it works with JS off.
+           js/jumpnav.js only adds the active highlight. -->
+      <nav class="jump-nav" data-jump-nav aria-label="Jump to a service category">
+        <a class="jump-nav__link" href="#haircut">Haircut</a>
+        <a class="jump-nav__link" href="#styling">Shampoo &amp; Styling</a>
+        <a class="jump-nav__link" href="#colour">Colour</a>
+        <a class="jump-nav__link" href="#perm">Perm &amp; Texture</a>
+        <a class="jump-nav__link" href="#headspa">Head Spa &amp; Treatment</a>
+      </nav>
+
+      <div class="stack stack--xl">
+
+        <!-- ---- HAIRCUT ------------------------------------------------- -->
+        <section id="haircut" class="stack stack--md">
+          <div class="stack">
+            <span class="rule" aria-hidden="true"></span>
+            <h2>Haircut</h2>
+          </div>
+          <div class="price-notes">
+            <p>Includes wash, scalp massage, conditioning, blow-dry and style.</p>
+            <p>Undo styling does not include shampoo; to add shampoo, $35.</p>
+          </div>
+          <div class="price-list">
+            <div class="price-row">
+              <p class="price-row__name">Men</p>
+              <p class="price-row__price">$55+ – $75+</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Women</p>
+              <p class="price-row__price">$75+ – $95+</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Kids</p>
+              <p class="price-row__price">$45+ – $65+</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---- SHAMPOO & STYLING --------------------------------------- -->
+        <section id="styling" class="stack stack--md">
+          <div class="stack">
+            <span class="rule" aria-hidden="true"></span>
+            <h2>Shampoo &amp; Styling</h2>
+          </div>
+          <div class="price-list">
+            <div class="price-row">
+              <p class="price-row__name">Shampoo + Styling</p>
+              <p class="price-row__price">$50+ – $75+</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Undo Styling</p>
+              <p class="price-row__price">$75+ – $95+</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---- COLOUR -------------------------------------------------- -->
+        <section id="colour" class="stack stack--md">
+          <div class="stack">
+            <span class="rule" aria-hidden="true"></span>
+            <h2>Colour <em>·</em> consultation free</h2>
+          </div>
+          <div class="price-notes">
+            <p>Price varies according to the level of stylist.</p>
+            <p>Includes shampoo and styling.</p>
+            <p>Prices do not include a toner.</p>
+          </div>
+          <div class="price-list">
+            <div class="price-row">
+              <p class="price-row__name">New Growth</p>
+              <p class="price-row__note">Under 1 inch</p>
+              <p class="price-row__price">$135+</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">All Over Hair Colour</p>
+              <p class="price-row__price">$165+ – $250+</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Partial Highlights</p>
+              <p class="price-row__price">$185+ – $255+</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Full Highlights</p>
+              <p class="price-row__price">$255+ – $325+</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Partial Balayage</p>
+              <p class="price-row__price">$280+ – $360+</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Full Balayage</p>
+              <p class="price-row__price">$320+ – $400+</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Toner</p>
+              <p class="price-row__note">Add-on for colour services</p>
+              <p class="price-row__price">$75+ – $120+</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Blonding — New Growth</p>
+              <p class="price-row__price price-row__price--text">By consultation</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Blonding — Full Length</p>
+              <p class="price-row__price price-row__price--text">By consultation</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Colour Correction</p>
+              <p class="price-row__price price-row__price--text">By consultation</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---- PERM & TEXTURE ------------------------------------------ -->
+        <section id="perm" class="stack stack--md">
+          <div class="stack">
+            <span class="rule" aria-hidden="true"></span>
+            <h2>Perm &amp; Texture</h2>
+          </div>
+          <div class="price-notes">
+            <p>Includes shampoo and styling.</p>
+          </div>
+          <div class="price-list">
+            <div class="price-row">
+              <p class="price-row__name">Permanent Wave</p>
+              <p class="price-row__price">$160+ – $260</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Digital Perm</p>
+              <p class="price-row__price">$270+ – $380</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Japanese Straightening</p>
+              <p class="price-row__price">$270+ – $380</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Down Perm</p>
+              <p class="price-row__note">Add-on service</p>
+              <p class="price-row__price">$40+</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Bang Perm</p>
+              <p class="price-row__note">Add-on service</p>
+              <p class="price-row__price">$50+</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---- HEAD SPA & TREATMENT ------------------------------------ -->
+        <section id="headspa" class="stack stack--md">
+          <div class="stack">
+            <span class="rule" aria-hidden="true"></span>
+            <h2>Head Spa &amp; Hair <em>Treatment</em></h2>
+          </div>
+          <div class="price-notes">
+            <p>Includes shampoo and styling.</p>
+          </div>
+          <div class="price-list">
+            <div class="price-row">
+              <p class="price-row__name">Silver4 Head Spa</p>
+              <p class="price-row__price">$160+ – $260</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Silver4 Scalp Treatment</p>
+              <p class="price-row__price">$120+ – $200</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Kérastase Hair Masque Treatment</p>
+              <p class="price-row__price">$120+ – $200</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Kérastase Fusio-Dose</p>
+              <p class="price-row__note">Add-on</p>
+              <p class="price-row__price">$58 per bottle</p>
+            </div>
+            <div class="price-row">
+              <p class="price-row__name">Kérastase Chronologiste Caviar Treatment</p>
+              <p class="price-row__price">$260+ – $400</p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       VVIP PACKAGE
+       ⬜ TO REPLACE: the old site published this as a single flat image
+       (asset/vvip/content.png) with no readable text alternative. It is
+       embedded below as-is so nothing is lost, but the tiers and prices
+       should be re-typed as real text — an image of a price list is
+       unreadable on a phone, unsearchable and inaccessible.
+       ======================================================================== -->
+  <section class="section bg-paper-alt" id="vvip">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Members</p>
+        <h2>The VVIP <em>package</em></h2>
+        <p class="lede">Prepaid packages for guests who visit us regularly. Ask at reception
+          for the current terms.</p>
+      </div>
+      <div class="figure figure--wide figure--contain">
+        <img src="https://silver4salon.com/asset/vvip/content.png"
+             alt="Silver4 VVIP package details" loading="lazy" decoding="async">
+      </div>
+      <p class="u-mt-md text-muted"><small>⬜ Placeholder: this content needs re-typing as
+        text. See the comment in the source.</small></p>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="container cta-band__inner">
+      <p class="eyebrow">Not sure which service?</p>
+      <h2 class="cta-band__title">Book a free <em>consultation</em></h2>
+      <p>We'll look at your hair, talk through what's realistic and quote you before we start.</p>
+      <div class="cluster">
+        <a class="btn btn--light"
+           href="https://www.fresha.com/book-now/silver-4-hair-and-beauty-salon-p5x0yfdh/all-offer?share=true&amp;pId=2865797"
+           target="_blank" rel="noopener">Book on Fresha</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- SITE FOOTER — partial #2, see index.html -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div>
+        <div class="site-footer__contact">
+          <span>(604) 423-4223</span>
+          <button class="site-footer__copy" type="button" data-copy="+16044234223" aria-label="Copy phone number">
+            <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+          </button>
+        </div>
+        <div class="site-footer__contact">
+          <span>info@silver4salon.com</span>
+          <button class="site-footer__copy" type="button" data-copy="info@silver4salon.com" aria-label="Copy email address">
+            <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+          </button>
+        </div>
+        <div class="site-footer__contact" style="margin-block-start: var(--space-xs);">
+          <span>1263 Kingsway, Vancouver, BC</span>
+          <button class="site-footer__copy" type="button" data-copy="1263 Kingsway, Vancouver, BC" aria-label="Copy address">
+            <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+          </button>
+        </div>
+        <div class="site-footer__socials u-mt-md">
+          <a class="site-footer__social" href="#" aria-label="Silver4 on Instagram">
+            <span class="material-symbols-outlined" aria-hidden="true">photo_camera</span>
+          </a>
+          <a class="site-footer__social" href="#" aria-label="Silver4 on Facebook">
+            <span class="material-symbols-outlined" aria-hidden="true">thumb_up</span>
+          </a>
+          <a class="site-footer__social" href="https://www.google.com/search?q=silver4+salon#lrd=reviews" target="_blank" rel="noopener" aria-label="Leave a Google review">
+            <span class="material-symbols-outlined" aria-hidden="true">star</span>
+          </a>
+        </div>
+      </div>
+      <nav aria-label="Footer navigation">
+        <p class="site-footer__title">Explore</p>
+        <ul class="site-footer__list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="services.html">Services &amp; prices</a></li>
+          <li><a href="team.html">Our stylists</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="about.html">About Silver4</a></li>
+          <li><a href="index.html#visit">Hours &amp; location</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Guest information">
+        <p class="site-footer__title">Guest information</p>
+        <ul class="site-footer__list">
+          <li><a href="about.html#satisfaction">Satisfaction guarantee</a></li>
+          <li><a href="about.html#cancellation">Cancellation policy</a></li>
+          <li><a href="about.html#deposit">Deposit policy</a></li>
+          <li><a href="services.html#vvip">VVIP package</a></li>
+          <li><a href="about.html#health">Health &amp; safety</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="site-footer__bottom">
+      <p>© <span>2026</span> Silver4 Salon™.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- MOBILE ACTION BAR — partial #3, see index.html -->
+<nav class="action-bar" aria-label="Quick actions">
+  <a class="action-bar__item" href="tel:+16044234223">
+    <span class="material-symbols-outlined" aria-hidden="true">call</span>
+    <span>Call</span>
+  </a>
+  <a class="action-bar__item" href="sms:+16044234223">
+    <span class="material-symbols-outlined" aria-hidden="true">sms</span>
+    <span>Text</span>
+  </a>
+  <a class="action-bar__item action-bar__item--primary"
+     href="https://www.fresha.com/book-now/silver-4-hair-and-beauty-salon-p5x0yfdh/all-offer?share=true&amp;pId=2865797"
+     target="_blank" rel="noopener">
+    <span class="material-symbols-outlined" aria-hidden="true">event_available</span>
+    <span>Book</span>
+  </a>
+</nav>
+
+</body>
+</html>

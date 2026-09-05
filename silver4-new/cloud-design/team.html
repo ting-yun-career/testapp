@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Our Stylists — Silver4 Hair &amp; Beauty Salon</title>
+<meta name="description" content="Meet the Silver4 Salon team: stylists and colourists in Vancouver working in English, Mandarin, Cantonese, Korean and Spanish.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Jost:wght@300;400;500&family=Playfair+Display+SC:ital,wght@0,400;0,700;1,400&family=Permanent+Marker&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,250,0,0&display=block">
+
+<link rel="stylesheet" href="css/main.css">
+<script type="module" src="js/main.js"></script>
+</head>
+<body>
+
+<a class="btn btn--primary skip-link" href="#main">Skip to content</a>
+
+<!-- SITE HEADER — partial #1, see index.html -->
+<header class="site-header" data-header>
+  <div class="site-header__bar container">
+    <a class="site-header__brand" href="index.html">
+      <img class="site-header__logo" src="assets/img/logo.png" alt="Silver4 Hair &amp; Beauty Salon">
+    </a>
+    <nav class="site-nav" id="site-nav" data-nav aria-label="Main navigation">
+      <ul class="site-nav__list">
+        <li><a class="site-nav__link" href="index.html">Home</a></li>
+        <li><a class="site-nav__link" href="services.html">Services</a></li>
+        <li><a class="site-nav__link" href="team.html" aria-current="page">Our Stylists</a></li>
+        <li><a class="site-nav__link" href="gallery.html">Gallery</a></li>
+        <li><a class="site-nav__link" href="about.html">About</a></li>
+      </ul>
+      <div class="site-nav__foot">
+        <div class="site-footer__contact">
+          <span>(604) 423-4223</span>
+          <button class="site-footer__copy" type="button" data-copy="+16044234223" aria-label="Copy phone number">
+            <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+          </button>
+        </div>
+        <div class="site-footer__contact">
+          <span>info@silver4salon.com</span>
+          <button class="site-footer__copy" type="button" data-copy="info@silver4salon.com" aria-label="Copy email address">
+            <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+          </button>
+        </div>
+        <div class="site-footer__contact">
+          <span>1263 Kingsway, Vancouver, BC</span>
+          <button class="site-footer__copy" type="button" data-copy="1263 Kingsway, Vancouver, BC" aria-label="Copy address">
+            <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+          </button>
+        </div>
+        <p style="margin-block-start: var(--space-xs);">Open daily 11:00AM–7:00PM</p>
+      </div>
+    </nav>
+    <div class="site-header__actions">
+      <a class="btn btn--primary btn--sm show-md-up"
+         href="https://www.fresha.com/book-now/silver-4-hair-and-beauty-salon-p5x0yfdh/all-offer?share=true&amp;pId=2865797"
+         target="_blank" rel="noopener">Book Now</a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">
+        <span class="visually-hidden">Menu</span>
+        <span class="material-symbols-outlined nav-toggle__open" aria-hidden="true">menu</span>
+        <span class="material-symbols-outlined nav-toggle__close" aria-hidden="true">close</span>
+      </button>
+    </div>
+  </div>
+  <div class="nav-backdrop" data-nav-backdrop aria-hidden="true"></div>
+</header>
+
+<main id="main">
+
+  <section class="page-header">
+    <div class="container page-header__inner">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Our Stylists</span>
+      </nav>
+      <h1 class="page-header__title">The team behind the <em>chair</em></h1>
+      <p class="page-header__lede">Between us we speak English, Mandarin, Cantonese, Korean and
+        Spanish. Ask for whoever you like when you book.</p>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       TEAM GRID
+       ⬜ TO REPLACE: every portrait is a placehold.co stand-in. Real files go
+       at assets/img/team/<name>.jpg, 3:4 crop, ≥800px wide. The .figure
+       wrapper holds the aspect ratio, so swapping the src causes no reflow.
+       Bios are carried over verbatim from silver4salon.com. Alberto's and
+       Sam's bios were empty on the old site — ⬜ TO CONFIRM with the client.
+       ======================================================================== -->
+  <section class="section">
+    <div class="container">
+      <div class="grid grid--3">
+
+        <article class="card team-card" data-reveal>
+          <div class="figure figure--portrait figure--zoom card__media">
+            <img src="https://placehold.co/600x800/f5f2ee/8b847e?text=Yi" alt="Portrait of Yi" loading="lazy" decoding="async">
+          </div>
+          <p class="team-card__role">Stylist</p>
+          <h2 class="team-card__name">Yi</h2>
+          <p class="card__body">Graduated from Blanche Macdonald and Vidal Sassoon, with over
+            six years of experience in hair beauty. She specialises in styling, colour and hair
+            treatment. Passionate about art and beauty, she is always looking for creative ways
+            to bring the two into her work.</p>
+          <p class="team-card__langs">English · Mandarin · Cantonese</p>
+        </article>
+
+        <article class="card team-card" data-reveal data-reveal-delay="80">
+          <div class="figure figure--portrait figure--zoom card__media">
+            <img src="https://placehold.co/600x800/f5f2ee/8b847e?text=Kawal" alt="Portrait of Kawal" loading="lazy" decoding="async">
+          </div>
+          <p class="team-card__role">Colour &amp; Cutting</p>
+          <h2 class="team-card__name">Kawal</h2>
+          <p class="card__body">With over ten years of experience as a hair artist, Kawal has
+            perfected her craft when it comes to colouring and cutting hair. She specialises in
+            all things hair colour and cuts, and offers smoothing treatments for unmanageable
+            hair textures. If you are looking for a hairdresser who cares about your hair goals,
+            Kawal is your stylist.</p>
+          <p class="team-card__langs">English</p>
+        </article>
+
+        <article class="card team-card" data-reveal data-reveal-delay="160">
+          <div class="figure figure--portrait figure--zoom card__media">
+            <img src="https://placehold.co/600x800/f5f2ee/8b847e?text=Becca" alt="Portrait of Becca" loading="lazy" decoding="async">
+          </div>
+          <p class="team-card__role">Transformations</p>
+          <h2 class="team-card__name">Becca</h2>
+          <p class="card__body">Ten years in the hair industry, running under “Becca Milani Hair
+            Inc.” since 2020. Becca is great with transformations. Contact her online to book.</p>
+          <p class="team-card__langs">English</p>
+        </article>
+
+        <article class="card team-card" data-reveal>
+          <div class="figure figure--portrait figure--zoom card__media">
+            <img src="https://placehold.co/600x800/f5f2ee/8b847e?text=Alberto" alt="Portrait of Alberto" loading="lazy" decoding="async">
+          </div>
+          <p class="team-card__role">Stylist</p>
+          <h2 class="team-card__name">Alberto</h2>
+          <!-- ⬜ TO WRITE: no bio existed on the old site. -->
+          <p class="card__body text-muted">Bio to come.</p>
+          <p class="team-card__langs">English · Spanish</p>
+        </article>
+
+        <article class="card team-card" data-reveal data-reveal-delay="80">
+          <div class="figure figure--portrait figure--zoom card__media">
+            <img src="https://placehold.co/600x800/f5f2ee/8b847e?text=Sam" alt="Portrait of Sam" loading="lazy" decoding="async">
+          </div>
+          <p class="team-card__role">Stylist</p>
+          <h2 class="team-card__name">Sam</h2>
+          <!-- ⬜ TO WRITE: no bio existed on the old site. -->
+          <p class="card__body text-muted">Bio to come.</p>
+          <p class="team-card__langs">English · Korean</p>
+        </article>
+
+        <article class="card team-card" data-reveal data-reveal-delay="160">
+          <div class="figure figure--portrait figure--zoom card__media">
+            <img src="https://placehold.co/600x800/f5f2ee/8b847e?text=Viola" alt="Portrait of Viola" loading="lazy" decoding="async">
+          </div>
+          <p class="team-card__role">Reception</p>
+          <h2 class="team-card__name">Viola</h2>
+          <p class="card__body">Viola is an awesome receptionist. She practises excellent verbal
+            communication, active listening and great customer service. She is friendly,
+            approachable and likeable — and, most importantly, has a helpful attitude and a
+            natural interest in talking with people.</p>
+          <p class="team-card__langs">English · Mandarin · Cantonese</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="container cta-band__inner">
+      <p class="eyebrow">Have someone in mind?</p>
+      <h2 class="cta-band__title">Book with your <em>stylist</em></h2>
+      <p>Choose your stylist and service when you book online, or call and we'll match you.</p>
+      <div class="cluster">
+        <a class="btn btn--light"
+           href="https://www.fresha.com/book-now/silver-4-hair-and-beauty-salon-p5x0yfdh/all-offer?share=true&amp;pId=2865797"
+           target="_blank" rel="noopener">Book on Fresha</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- SITE FOOTER — partial #2, see index.html -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div>
+        <div class="site-footer__contact">
+          <span>(604) 423-4223</span>
+          <button class="site-footer__copy" type="button" data-copy="+16044234223" aria-label="Copy phone number">
+            <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+          </button>
+        </div>
+        <div class="site-footer__contact">
+          <span>info@silver4salon.com</span>
+          <button class="site-footer__copy" type="button" data-copy="info@silver4salon.com" aria-label="Copy email address">
+            <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+          </button>
+        </div>
+        <div class="site-footer__contact" style="margin-block-start: var(--space-xs);">
+          <span>1263 Kingsway, Vancouver, BC</span>
+          <button class="site-footer__copy" type="button" data-copy="1263 Kingsway, Vancouver, BC" aria-label="Copy address">
+            <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+          </button>
+        </div>
+        <div class="site-footer__socials u-mt-md">
+          <a class="site-footer__social" href="#" aria-label="Silver4 on Instagram">
+            <span class="material-symbols-outlined" aria-hidden="true">photo_camera</span>
+          </a>
+          <a class="site-footer__social" href="#" aria-label="Silver4 on Facebook">
+            <span class="material-symbols-outlined" aria-hidden="true">thumb_up</span>
+          </a>
+          <a class="site-footer__social" href="https://www.google.com/search?q=silver4+salon#lrd=reviews" target="_blank" rel="noopener" aria-label="Leave a Google review">
+            <span class="material-symbols-outlined" aria-hidden="true">star</span>
+          </a>
+        </div>
+      </div>
+      <nav aria-label="Footer navigation">
+        <p class="site-footer__title">Explore</p>
+        <ul class="site-footer__list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="services.html">Services &amp; prices</a></li>
+          <li><a href="team.html">Our stylists</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="about.html">About Silver4</a></li>
+          <li><a href="index.html#visit">Hours &amp; location</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Guest information">
+        <p class="site-footer__title">Guest information</p>
+        <ul class="site-footer__list">
+          <li><a href="about.html#satisfaction">Satisfaction guarantee</a></li>
+          <li><a href="about.html#cancellation">Cancellation policy</a></li>
+          <li><a href="about.html#deposit">Deposit policy</a></li>
+          <li><a href="services.html#vvip">VVIP package</a></li>
+          <li><a href="about.html#health">Health &amp; safety</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="site-footer__bottom">
+      <p>© <span>2026</span> Silver4 Salon™.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- MOBILE ACTION BAR — partial #3, see index.html -->
+<nav class="action-bar" aria-label="Quick actions">
+  <a class="action-bar__item" href="tel:+16044234223">
+    <span class="material-symbols-outlined" aria-hidden="true">call</span>
+    <span>Call</span>
+  </a>
+  <a class="action-bar__item" href="sms:+16044234223">
+    <span class="material-symbols-outlined" aria-hidden="true">sms</span>
+    <span>Text</span>
+  </a>
+  <a class="action-bar__item action-bar__item--primary"
+     href="https://www.fresha.com/book-now/silver-4-hair-and-beauty-salon-p5x0yfdh/all-offer?share=true&amp;pId=2865797"
+     target="_blank" rel="noopener">
+    <span class="material-symbols-outlined" aria-hidden="true">event_available</span>
+    <span>Book</span>
+  </a>
+</nav>
+
+</body>
+</html>

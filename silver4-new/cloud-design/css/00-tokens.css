@@ -1,0 +1,107 @@
+/* ==========================================================================
+   00-TOKENS — design variables ONLY
+   --------------------------------------------------------------------------
+   Nothing in this file selects an element. Every colour, size, font and
+   duration used anywhere in the site is declared here. If you need a value
+   that isn't here, add a token rather than hard-coding it downstream.
+   ========================================================================== */
+
+:root {
+  /* ---- Colour -----------------------------------------------------------
+     Near-monochrome editorial palette. "ink" = dark text/surfaces,
+     "paper" = light surfaces, one restrained metallic accent.            */
+  --color-ink:          #14110f;   /* primary text, dark section bg        */
+  --color-ink-deep:     #0a0908;   /* deepest surface (footer)             */
+  --color-ink-soft:     #4b4642;   /* secondary text                       */
+  --color-muted:        #8b847e;   /* meta text, captions                  */
+  --color-paper:        #ffffff;   /* default page bg                      */
+  --color-paper-alt:    #f5f2ee;   /* alternating section bg               */
+  --color-line:         #e3ded8;   /* hairline borders on paper            */
+  --color-line-dark:    #322d29;   /* hairline borders on ink              */
+  --color-accent:       #9a8262;   /* brass — rules, small marks, hovers   */
+  --color-accent-soft:  #cbb99f;   /* accent on dark surfaces              */
+
+  --color-scrim:        rgb(10 9 8 / 45%);   /* over hero video           */
+  --color-scrim-strong: rgb(10 9 8 / 70%);   /* mobile drawer backdrop    */
+
+  /* ---- Typography ------------------------------------------------------- */
+  --font-display: "Playfair Display SC", "Cormorant Garamond", "Times New Roman", serif;
+  --font-body:    "Jost", "Helvetica Neue", Arial, sans-serif;
+  --font-nav:     "Cormorant Garamond", "Times New Roman", serif;
+
+  /* Fluid scale: min at 360px viewport, max at 1280px. */
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-md:   clamp(1.0625rem, 0.99rem + 0.31vw, 1.1875rem);
+  --text-lg:   clamp(1.25rem,  1.14rem + 0.47vw, 1.5rem);
+  --text-xl:   clamp(1.75rem,  1.5rem  + 1.05vw, 2.375rem);
+  --text-2xl:  clamp(2.25rem,  1.8rem  + 1.9vw,  3.25rem);
+  --text-3xl:  clamp(2.75rem,  1.9rem  + 3.6vw,  4.75rem);
+
+  --leading-tight:  1.08;
+  --leading-snug:   1.25;
+  --leading-normal: 1.6;
+  --leading-loose:  1.75;
+
+  --tracking-wide:  0.08em;   /* uppercase labels        */
+  --tracking-wider: 0.18em;   /* eyebrows, nav, buttons  */
+
+  --weight-light:   300;
+  --weight-regular: 400;
+  --weight-medium:  500;
+  --weight-semi:    600;
+
+  /* ---- Spacing (rem, 4px base) ------------------------------------------ */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs:  0.75rem;
+  --space-sm:  1rem;
+  --space-md:  1.5rem;
+  --space-lg:  2rem;
+  --space-xl:  3rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+
+  /* Vertical rhythm between sections — fluid so phones aren't wasteful. */
+  --section-y: clamp(3.5rem, 2rem + 6vw, 7.5rem);
+
+  /* ---- Layout ----------------------------------------------------------- */
+  --container-max:  75rem;   /* 1200px */
+  --container-narrow: 46rem; /* prose  */
+  --container-pad:  clamp(1.25rem, 0.75rem + 2.5vw, 3rem);
+  --header-h:       4.25rem;
+  --action-bar-h:   4rem;    /* mobile-only fixed bottom bar */
+
+  /* ---- Borders & shape --------------------------------------------------- */
+  --radius-none: 0;
+  --radius-sm:   2px;
+  --radius-pill: 999px;
+  --border-hair: 1px;
+
+  /* ---- Elevation --------------------------------------------------------- */
+  --shadow-sm: 0 1px 2px rgb(20 17 15 / 6%), 0 2px 8px rgb(20 17 15 / 4%);
+  --shadow-md: 0 4px 12px rgb(20 17 15 / 8%), 0 12px 32px rgb(20 17 15 / 6%);
+  --shadow-lg: 0 12px 40px rgb(20 17 15 / 14%);
+
+  /* ---- Motion ------------------------------------------------------------ */
+  --ease:        cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast:    150ms;
+  --dur-base:    280ms;
+  --dur-slow:    600ms;
+
+  /* ---- Z-index scale — never write a raw z-index downstream -------------- */
+  --z-base:      0;
+  --z-raised:    10;
+  --z-header:    100;
+  --z-actionbar: 110;
+  --z-drawer:    200;
+  --z-overlay:   300;  /* gallery lightbox */
+}
+
+/* Breakpoints, for reference — CSS custom properties can't be used in media
+   queries, so these values are repeated literally in the files below:
+     --bp-md: 48rem   (768px)  tablet and up
+     --bp-lg: 64rem  (1024px)  desktop and up
+   Only these two. Resist adding more.                                       */

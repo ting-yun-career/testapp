@@ -1,0 +1,104 @@
+/* ==========================================================================
+   02-BASE — bare element styling: the page's default voice.
+   Style elements here; style classes in 04/05.
+   ========================================================================== */
+
+html {
+  scroll-behavior: smooth;
+  /* Anchor targets clear the sticky header. */
+  scroll-padding-top: calc(var(--header-h) + var(--space-md));
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-light);
+  line-height: var(--leading-normal);
+  /* Room for the mobile fixed action bar. */
+  padding-bottom: var(--action-bar-h);
+}
+
+@media (min-width: 48rem) {
+  body { padding-bottom: 0; }
+}
+
+/* ---- Headings ------------------------------------------------------------ */
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--text-3xl); }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-xl); }
+h4 { font-size: var(--text-lg); }
+
+/* The accent word inside a headline — the is. Salon device. */
+h1 em, h2 em, h3 em {
+  font-style: normal;
+  color: var(--color-accent);
+}
+
+/* ---- Body copy ----------------------------------------------------------- */
+
+p {
+  max-width: 68ch;
+  text-wrap: pretty;
+}
+
+p + p { margin-top: var(--space-sm); }
+
+strong { font-weight: var(--weight-medium); }
+
+small {
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+/* ---- Links --------------------------------------------------------------- */
+
+a {
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+/* Inline links inside prose get an underline; UI links don't. */
+p a,
+li a:not([class]),
+dd a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+p a:hover,
+li a:not([class]):hover,
+dd a:hover { color: var(--color-ink); }
+
+/* ---- Focus --------------------------------------------------------------- */
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-paper);
+}
+
+/* ---- Icon font ----------------------------------------------------------- */
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 250, "GRAD" 0, "opsz" 24;
+  line-height: 1;
+  user-select: none;
+}

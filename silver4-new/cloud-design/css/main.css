@@ -1,0 +1,15 @@
+/* ==========================================================================
+   Silver4 Salon — stylesheet manifest
+   --------------------------------------------------------------------------
+   Files load in numbered cascade order. A later file may override an earlier
+   one; never the reverse. Add new component styles to 04, new page-specific
+   section styles to 05.
+   ========================================================================== */
+
+@import url("00-tokens.css");
+@import url("01-reset.css");
+@import url("02-base.css");
+@import url("03-layout.css");
+@import url("04-components.css");
+@import url("05-sections.css");
+@import url("06-utilities.css");
