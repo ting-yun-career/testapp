@@ -1,7 +1,7 @@
 export const PHONE_DISPLAY = '(604) 423-4223'
 export const PHONE_TEL = '+16044234223'
 export const EMAIL = 'info@silver4salon.com'
-export const ADDRESS = '1263 Kingsway, Vancouver, BC'
+export const ADDRESS = '177 W 2nd Ave, Vancouver, BC V5Y 0L8'
 
 export const BOOKING_URL =
   'https://www.fresha.com/book-now/silver-4-hair-and-beauty-salon-p5x0yfdh/all-offer?share=true&pId=2865797'
