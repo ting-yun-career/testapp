@@ -216,4 +216,34 @@
     line-height: 1;
     user-select: none;
   }
+
+  /* Slim, mostly-invisible scrollbar — the thumb only tints in while the
+     page is being hovered, and fades back out otherwise. */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+  }
+
+  html:hover {
+    scrollbar-color: var(--color-line-dark) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: var(--radius-pill);
+    transition: background-color 200ms var(--ease-brand);
+  }
+
+  html:hover::-webkit-scrollbar-thumb {
+    background-color: var(--color-line-dark);
+  }
 }
