@@ -1,21 +1,28 @@
 import { Container } from '../layout'
 import { Button } from '../Button'
 import { Icon } from '../Icon'
-import { useHeroVideo } from '../../hooks/useHeroVideo'
+import { useHeroVideo, type HeroVideoSource } from '../../hooks/useHeroVideo'
 import { BOOKING_URL } from '../../lib/constants'
 
 const STILL_URL = 'https://silver4salon.com/asset/salon/DSC00993_comp.jpg'
 
+// Plays in order, then loops back to the start — hero1 -> hero2 -> hero1 -> ...
+const HERO_VIDEOS: HeroVideoSource[] = [
+  { mobile: '/video/hero-mobile.mp4', desktop: '/video/hero.mp4' },
+  { mobile: '/video/hero2-mobile.mp4', desktop: '/video/hero2.mp4' },
+]
+
 /* ==========================================================================
    Hero — full-bleed video with overlaid copy. Ported from .hero in
    05-sections.css + js/hero.js.
-   public/video/hero-mobile.mp4 (960x540) and public/video/hero.mp4
-   (1920x1080) are the compressed, no-audio loops; the still image below
-   stays the fallback — useHeroVideo only reveals the video once it truly
-   plays, so there is never a black box.
+   public/video/hero*.mp4 (1920x1080) and hero*-mobile.mp4 (960x540) are the
+   compressed, no-audio clips; the still image below stays the fallback —
+   useHeroVideo only reveals the video once it truly plays, so there is
+   never a black box.
    ========================================================================== */
 export function Hero() {
-  const { heroRef, videoRef, videoReady, muted, muteHidden, toggleMute } = useHeroVideo()
+  const { heroRef, videoRef, videoReady, muted, muteHidden, toggleMute, currentSrc } =
+    useHeroVideo(HERO_VIDEOS)
 
   return (
     <section
@@ -35,14 +42,11 @@ export function Hero() {
           }`}
           autoPlay
           muted
-          loop
           playsInline
           preload="metadata"
           poster={STILL_URL}
-        >
-          <source media="(max-width: 767px)" src="/video/hero-mobile.mp4" type="video/mp4" />
-          <source src="/video/hero.mp4" type="video/mp4" />
-        </video>
+          src={currentSrc}
+        />
       </div>
 
       <div
