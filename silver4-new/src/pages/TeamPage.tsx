@@ -3,15 +3,26 @@ import { CtaBand } from '../components/CtaBand'
 import { Container, Section, Grid } from '../components/layout'
 import { TeamCard } from '../components/sections/TeamCard'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
+import yiPhoto from '../assets/team/yi.webp'
+import kawalPhoto from '../assets/team/kawal.webp'
+import beccaPhoto from '../assets/team/becca.webp'
+import albertoPhoto from '../assets/team/alberto.webp'
+import samPhoto from '../assets/team/sam.webp'
+import violaPhoto from '../assets/team/viola.webp'
+import mikePhoto from '../assets/team/mike.webp'
+import montsePhoto from '../assets/team/montse.webp'
+import arrinPhoto from '../assets/team/arrin.webp'
 
-// ⬜ TO REPLACE (HANDOFF.md item 5): every portrait is a placehold.co
-// stand-in. Bios are carried over verbatim from silver4salon.com; Alberto's
-// and Sam's were empty on the old site (⬜ TO CONFIRM with the client).
+// Bios are carried over verbatim from silver4salon.com; Alberto's and
+// Sam's were empty on the old site (⬜ TO CONFIRM with the client).
+// Mike, Montse and Arrin are new hires with no bio/role/language details
+// yet — role defaulted to "Stylist" and language to "English" as a
+// placeholder; confirm with the client.
 const TEAM = [
   {
     name: 'Yi',
     role: 'Stylist',
-    img: 'https://placehold.co/600x800/f5f2ee/8b847e?text=Yi',
+    img: yiPhoto,
     langs: 'English · Mandarin · Cantonese',
     delay: 0,
     bio: "Graduated from Blanche Macdonald and Vidal Sassoon, with over six years of experience in hair beauty. She specialises in styling, colour and hair treatment. Passionate about art and beauty, she is always looking for creative ways to bring the two into her work.",
@@ -19,7 +30,7 @@ const TEAM = [
   {
     name: 'Kawal',
     role: 'Colour & Cutting',
-    img: 'https://placehold.co/600x800/f5f2ee/8b847e?text=Kawal',
+    img: kawalPhoto,
     langs: 'English',
     delay: 80,
     bio: 'With over ten years of experience as a hair artist, Kawal has perfected her craft when it comes to colouring and cutting hair. She specialises in all things hair colour and cuts, and offers smoothing treatments for unmanageable hair textures. If you are looking for a hairdresser who cares about your hair goals, Kawal is your stylist.',
@@ -27,7 +38,7 @@ const TEAM = [
   {
     name: 'Becca',
     role: 'Transformations',
-    img: 'https://placehold.co/600x800/f5f2ee/8b847e?text=Becca',
+    img: beccaPhoto,
     langs: 'English',
     delay: 160,
     bio: 'Ten years in the hair industry, running under “Becca Milani Hair Inc.” since 2020. Becca is great with transformations. Contact her online to book.',
@@ -35,7 +46,7 @@ const TEAM = [
   {
     name: 'Alberto',
     role: 'Stylist',
-    img: 'https://placehold.co/600x800/f5f2ee/8b847e?text=Alberto',
+    img: albertoPhoto,
     langs: 'English · Spanish',
     delay: 0,
     bio: 'Bio to come.',
@@ -44,7 +55,7 @@ const TEAM = [
   {
     name: 'Sam',
     role: 'Stylist',
-    img: 'https://placehold.co/600x800/f5f2ee/8b847e?text=Sam',
+    img: samPhoto,
     langs: 'English · Korean',
     delay: 80,
     bio: 'Bio to come.',
@@ -53,10 +64,37 @@ const TEAM = [
   {
     name: 'Viola',
     role: 'Reception',
-    img: 'https://placehold.co/600x800/f5f2ee/8b847e?text=Viola',
+    img: violaPhoto,
     langs: 'English · Mandarin · Cantonese',
     delay: 160,
     bio: 'Viola is an awesome receptionist. She practises excellent verbal communication, active listening and great customer service. She is friendly, approachable and likeable — and, most importantly, has a helpful attitude and a natural interest in talking with people.',
+  },
+  {
+    name: 'Mike',
+    role: 'Stylist',
+    img: mikePhoto,
+    langs: 'English',
+    delay: 0,
+    bio: 'Bio to come.',
+    bioMuted: true,
+  },
+  {
+    name: 'Montse',
+    role: 'Stylist',
+    img: montsePhoto,
+    langs: 'English',
+    delay: 80,
+    bio: 'Bio to come.',
+    bioMuted: true,
+  },
+  {
+    name: 'Arrin',
+    role: 'Stylist',
+    img: arrinPhoto,
+    langs: 'English',
+    delay: 160,
+    bio: 'Bio to come.',
+    bioMuted: true,
   },
 ]
 

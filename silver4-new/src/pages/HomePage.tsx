@@ -33,6 +33,10 @@ import { useReveal } from "../hooks/useReveal";
 import { useDocumentMeta } from "../hooks/useDocumentMeta";
 import { HOURS, HOURS_DISPLAY_ORDER } from "../lib/constants";
 import { HOME_GALLERY_TEASER } from "../lib/galleryImages";
+import yiPhoto from "../assets/team/yi.webp";
+import kawalPhoto from "../assets/team/kawal.webp";
+import beccaPhoto from "../assets/team/becca.webp";
+import mikePhoto from "../assets/team/mike.webp";
 
 const SERVICE_CARDS = [
   {
@@ -72,34 +76,33 @@ const SERVICE_CARDS = [
   },
 ];
 
-// ⬜ TO REPLACE (HANDOFF.md item 5): placehold.co stand-ins.
 const TEAM_TEASER = [
   {
     name: "Yi",
     role: "Stylist",
-    img: "https://placehold.co/600x800/f5f2ee/8b847e?text=Yi",
+    img: yiPhoto,
     langs: "English · Mandarin · Cantonese",
     delay: 0,
   },
   {
     name: "Kawal",
     role: "Colour & Cutting",
-    img: "https://placehold.co/600x800/f5f2ee/8b847e?text=Kawal",
+    img: kawalPhoto,
     langs: "English",
     delay: 80,
   },
   {
     name: "Becca",
     role: "Transformations",
-    img: "https://placehold.co/600x800/f5f2ee/8b847e?text=Becca",
+    img: beccaPhoto,
     langs: "English",
     delay: 160,
   },
   {
-    name: "Sam",
+    name: "Mike",
     role: "Stylist",
-    img: "https://placehold.co/600x800/f5f2ee/8b847e?text=Sam",
-    langs: "English · Korean",
+    img: mikePhoto,
+    langs: "English",
     delay: 240,
   },
 ];
