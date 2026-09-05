@@ -20,22 +20,13 @@ interface PriceRowProps {
   name: ReactNode
   price: ReactNode
   note?: ReactNode
-  priceIsText?: boolean
 }
 
-export function PriceRow({ name, price, note, priceIsText }: PriceRowProps) {
+export function PriceRow({ name, price, note }: PriceRowProps) {
   return (
     <div className="grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-2 py-3 border-b border-line last:border-b-0">
       <p className="text-base font-normal">{name}</p>
-      <p
-        className={
-          priceIsText
-            ? 'font-body text-xs tracking-wide uppercase text-ink-soft whitespace-nowrap'
-            : 'font-display text-md text-accent whitespace-nowrap'
-        }
-      >
-        {price}
-      </p>
+      <p className="text-base font-normal whitespace-nowrap">{price}</p>
       {note && <p className="col-span-2 text-sm text-muted">{note}</p>}
     </div>
   )

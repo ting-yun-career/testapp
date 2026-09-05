@@ -70,13 +70,6 @@ const SERVICE_CARDS = [
     body: "Our signature scalp and hair treatments, including Kérastase Fusio-Dose and Chronologiste.",
     delay: 80,
   },
-  {
-    href: "/services#vvip",
-    meta: "Members",
-    title: "VVIP Package",
-    body: "Prepaid packages for guests who visit regularly. Ask at reception for current terms.",
-    delay: 160,
-  },
 ];
 
 // ⬜ TO REPLACE (HANDOFF.md item 5): placehold.co stand-ins.
