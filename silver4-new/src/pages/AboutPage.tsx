@@ -91,9 +91,7 @@ function StoryCopy() {
   return (
     <div ref={ref} className={`flex flex-col gap-6 ${className}`}>
       <Eyebrow>Our story</Eyebrow>
-      <h2>
-        If you hated going to the hair salon <em>because</em>&hellip;
-      </h2>
+      <h2>Tired of the usual salon visit?</h2>
       <DetailList as="ul" className="mt-6">
         <DetailRow as="li">
           <DetailVal as="span">It takes too long to finish.</DetailVal>
@@ -105,24 +103,12 @@ function StoryCopy() {
           <DetailVal as="span">The stylist doesn&rsquo;t wash your hair properly.</DetailVal>
         </DetailRow>
       </DetailList>
-      <Lede className="mt-6">This will not happen at Silver4 Salon.</Lede>
+      <Lede className="mt-6">Not at Silver4.</Lede>
       <p>
-        At Silver4 we have introduced the world&rsquo;s most comfortable Japanese hair washing
-        unit, which combines hair washing, body massage and chromatherapy in one service.
-        Chromatherapy is known to have the effect of calming the emotions and blood pressure,
-        brightening the skin, and more.
+        Our Japanese hair-washing unit combines washing, massage and chromatherapy in one
+        service — chromatherapy is known to calm blood pressure and brighten skin.
       </p>
-      <p>
-        Our feature hair care product, Kérastase, is the icon of the highest quality hair care
-        brands. It sets the most reputable standard in the industry — only selected hair salons
-        may use or promote their products, and the customers of those salons are the ones who
-        judge the result.
-      </p>
-      <p>
-        The service we provide is a complete experience and much more than a typical hair salon.
-        Here you are getting more than just a haircut: you are getting an unforgettable
-        experience having your hair washed by our stylists.
-      </p>
+      <p>We&rsquo;re also a certified Kérastase salon, one of the highest standards in hair care.</p>
     </div>
   )
 }
@@ -157,7 +143,7 @@ export default function AboutPage() {
             About <em>Silver4</em>
           </>
         }
-        lede="A complete experience, and much more than a typical hair salon."
+        lede="More than a haircut."
       />
 
       <Section>
