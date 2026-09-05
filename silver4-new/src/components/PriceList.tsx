@@ -5,7 +5,11 @@ import type { ReactNode } from 'react'
    ========================================================================== */
 
 export function PriceNotes({ children }: { children: ReactNode }) {
-  return <div className="flex flex-col gap-1 mb-6 text-sm text-muted">{children}</div>
+  return (
+    <div className="flex flex-col gap-1 mb-6 text-sm text-muted [&_p]:max-w-none [&_p]:leading-snug">
+      {children}
+    </div>
+  )
 }
 
 export function PriceList({ children }: { children: ReactNode }) {
@@ -27,7 +31,7 @@ export function PriceRow({ name, price, note, priceIsText }: PriceRowProps) {
         className={
           priceIsText
             ? 'font-body text-xs tracking-wide uppercase text-ink-soft whitespace-nowrap'
-            : 'font-display text-md italic text-accent whitespace-nowrap'
+            : 'font-display text-md text-accent whitespace-nowrap'
         }
       >
         {price}

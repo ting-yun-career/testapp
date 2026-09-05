@@ -2,7 +2,7 @@ import { PageHeader } from '../components/PageHeader'
 import { JumpNav } from '../components/JumpNav'
 import { CtaBand } from '../components/CtaBand'
 import { Container, Section, SectionHead, Stack } from '../components/layout'
-import { Eyebrow, Lede, Rule, Figure } from '../components/primitives'
+import { Eyebrow, Lede, Figure } from '../components/primitives'
 import { PriceList, PriceNotes, PriceRow } from '../components/PriceList'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 
@@ -38,10 +38,7 @@ export default function ServicesPage() {
 
           <Stack gap="xl">
             <section id="haircut" className="flex flex-col gap-6">
-              <Stack>
-                <Rule />
-                <h2>Haircut</h2>
-              </Stack>
+              <h2 className="text-[30px]">Haircut</h2>
               <PriceNotes>
                 <p>Includes wash, scalp massage, conditioning, blow-dry and style.</p>
                 <p>Undo styling does not include shampoo; to add shampoo, $35.</p>
@@ -54,10 +51,7 @@ export default function ServicesPage() {
             </section>
 
             <section id="styling" className="flex flex-col gap-6">
-              <Stack>
-                <Rule />
-                <h2>Shampoo &amp; Styling</h2>
-              </Stack>
+              <h2 className="text-[30px]">Shampoo &amp; Styling</h2>
               <PriceList>
                 <PriceRow name="Shampoo + Styling" price="$50+ – $75+" />
                 <PriceRow name="Undo Styling" price="$75+ – $95+" />
@@ -65,12 +59,9 @@ export default function ServicesPage() {
             </section>
 
             <section id="colour" className="flex flex-col gap-6">
-              <Stack>
-                <Rule />
-                <h2>
-                  Colour <em>·</em> consultation free
-                </h2>
-              </Stack>
+              <h2 className="text-[30px]">
+                Colour <em>·</em> consultation free
+              </h2>
               <PriceNotes>
                 <p>Price varies according to the level of stylist.</p>
                 <p>Includes shampoo and styling.</p>
@@ -91,10 +82,7 @@ export default function ServicesPage() {
             </section>
 
             <section id="perm" className="flex flex-col gap-6">
-              <Stack>
-                <Rule />
-                <h2>Perm &amp; Texture</h2>
-              </Stack>
+              <h2 className="text-[30px]">Perm &amp; Texture</h2>
               <PriceNotes>
                 <p>Includes shampoo and styling.</p>
               </PriceNotes>
@@ -108,12 +96,9 @@ export default function ServicesPage() {
             </section>
 
             <section id="headspa" className="flex flex-col gap-6">
-              <Stack>
-                <Rule />
-                <h2>
-                  Head Spa &amp; Hair <em>Treatment</em>
-                </h2>
-              </Stack>
+              <h2 className="text-[30px]">
+                Head Spa &amp; Hair <em>Treatment</em>
+              </h2>
               <PriceNotes>
                 <p>Includes shampoo and styling.</p>
               </PriceNotes>
