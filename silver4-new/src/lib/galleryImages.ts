@@ -5,7 +5,7 @@ import back3 from '../assets/gallery/back3.webp'
 import img5186 from '../assets/gallery/img_5186.webp'
 import back4 from '../assets/gallery/back4.webp'
 import back5 from '../assets/gallery/back5.webp'
-import yukiWashing from '../assets/gallery/yuki-washing.webp'
+import about from '../assets/gallery/about.webp'
 import back6 from '../assets/gallery/back6.webp'
 import back7 from '../assets/gallery/back7.webp'
 import img5187 from '../assets/gallery/img_5187.webp'
@@ -41,7 +41,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
   { src: img5186, alt: 'Blow-dry and style' },
   { src: back4, alt: 'Soft waves with warm highlights' },
   { src: back5, alt: 'Full highlights, blow-dried' },
-  { src: yukiWashing, alt: 'A client in the Japanese hair washing unit' },
+  { src: about, alt: 'Illustration of a client reclined for a hair wash' },
   { src: back6, alt: 'Layered cut, natural finish' },
   { src: back7, alt: 'Blunt cut, glossy finish' },
   { src: img5187, alt: 'Colour and style' },

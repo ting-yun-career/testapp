@@ -6,6 +6,7 @@ import { DetailList, DetailRow, DetailVal } from '../components/DetailList'
 import { Accordion, type AccordionItemData } from '../components/Accordion'
 import { useReveal } from '../hooks/useReveal'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
+import storyPhoto from '../assets/gallery/about.webp'
 
 const POLICY_ITEMS: AccordionItemData[] = [
   {
@@ -132,8 +133,8 @@ function StoryPhoto() {
     <div ref={ref} className={className}>
       <Figure
         ratio="2/3"
-        src="https://silver4salon.com/asset/salon/Yuki-washing.jpg"
-        alt="A client in the Japanese hair washing unit"
+        src={storyPhoto}
+        alt="Illustration of a client reclined for a hair wash"
         loading="lazy"
         decoding="async"
       />
