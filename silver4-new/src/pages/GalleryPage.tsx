@@ -1,8 +1,7 @@
 import { PageHeader } from '../components/PageHeader'
 import { CtaBand } from '../components/CtaBand'
-import { Section } from '../components/layout'
-import { GalleryGrid } from '../components/sections/GalleryGrid'
-import { Lightbox } from '../components/sections/Lightbox'
+import { Container, Section } from '../components/layout'
+import { Gallery, GalleryGrid, GalleryImage } from '../components/ui/shared-element-gallery'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { GALLERY_IMAGES } from '../lib/galleryImages'
 
@@ -25,10 +24,16 @@ export default function GalleryPage() {
       />
 
       <Section>
-        <GalleryGrid images={GALLERY_IMAGES} captions />
+        <Container wide>
+          <Gallery>
+            <GalleryGrid>
+              {GALLERY_IMAGES.map((image, index) => (
+                <GalleryImage key={image.src} id={String(index)} src={image.src} alt={image.alt} />
+              ))}
+            </GalleryGrid>
+          </Gallery>
+        </Container>
       </Section>
-
-      <Lightbox />
 
       <CtaBand
         eyebrow="Seen something you like?"
