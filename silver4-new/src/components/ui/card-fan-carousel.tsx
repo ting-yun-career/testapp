@@ -238,23 +238,32 @@ export default function SocialCards({ cards, onCenterChange }: SocialCardsProps)
       });
     };
 
-    const enterHandlers = visibleEntries.map(({ el, slot }) => {
-      const handler = () => {
-        if (isAnimating.current) return;
-        if (leaveTimer) { clearTimeout(leaveTimer); leaveTimer = null; }
-        if (activeSlot !== slot) { activeSlot = slot; updateHoverLayout(slot); }
-      };
-      el.addEventListener("mouseenter", handler);
-      return { el, handler };
-    });
+    // Hover is pointer-only. On touch, tapping a card fires a synthetic
+    // mouseenter that leaves the fan stuck in its hover arrangement, because
+    // the matching mouseleave doesn't arrive until the next tap elsewhere.
+    const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+    const enterHandlers = canHover
+      ? visibleEntries.map(({ el, slot }) => {
+          const handler = () => {
+            if (isAnimating.current) return;
+            if (leaveTimer) { clearTimeout(leaveTimer); leaveTimer = null; }
+            if (activeSlot !== slot) { activeSlot = slot; updateHoverLayout(slot); }
+          };
+          el.addEventListener("mouseenter", handler);
+          return { el, handler };
+        })
+      : [];
 
     const onMouseLeave = () => {
       if (isAnimating.current) return;
       if (leaveTimer) clearTimeout(leaveTimer);
       leaveTimer = setTimeout(() => { activeSlot = null; updateHoverLayout(null); }, 50);
     };
-    container.addEventListener("mouseleave", onMouseLeave);
+    if (canHover) container.addEventListener("mouseleave", onMouseLeave);
 
+    // Kept on every device: re-runs the layout with a fresh responsive
+    // multiplier when the viewport changes.
     const onResize = () => { if (!isAnimating.current) updateHoverLayout(activeSlot); };
     window.addEventListener("resize", onResize);
 
