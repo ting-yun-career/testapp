@@ -40,8 +40,10 @@ export default function ServicesPage() {
             <section id="haircut" className="flex flex-col gap-6">
               <h2 className="text-[30px]">Haircut</h2>
               <PriceNotes>
-                <p>Includes wash, scalp massage, conditioning, blow-dry and style.</p>
-                <p>Undo styling does not include shampoo; to add shampoo, $35.</p>
+                <p>
+                  Includes wash, scalp massage, conditioning, blow-dry and style. Undo styling
+                  does not include shampoo; to add shampoo, $35.
+                </p>
               </PriceNotes>
               <PriceList>
                 <PriceRow name="Men" price="$55+ – $75+" />
@@ -63,9 +65,10 @@ export default function ServicesPage() {
                 Colour <em>·</em> consultation free
               </h2>
               <PriceNotes>
-                <p>Price varies according to the level of stylist.</p>
-                <p>Includes shampoo and styling.</p>
-                <p>Prices do not include a toner.</p>
+                <p>
+                  Price varies according to the level of stylist. Includes shampoo and styling.
+                  Prices do not include a toner.
+                </p>
               </PriceNotes>
               <PriceList>
                 <PriceRow name="New Growth" note="Under 1 inch" price="$135+" />

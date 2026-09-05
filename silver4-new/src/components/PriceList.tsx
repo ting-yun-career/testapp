@@ -6,7 +6,7 @@ import type { ReactNode } from 'react'
 
 export function PriceNotes({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-col gap-1 mb-6 text-sm text-muted [&_p]:max-w-none [&_p]:leading-snug">
+    <div className="flex flex-col gap-1 mb-6 text-sm text-muted [&_p]:leading-relaxed">
       {children}
     </div>
   )
