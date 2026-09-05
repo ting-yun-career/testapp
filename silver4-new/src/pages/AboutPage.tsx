@@ -6,7 +6,7 @@ import { DetailList, DetailRow, DetailVal } from '../components/DetailList'
 import { Accordion, type AccordionItemData } from '../components/Accordion'
 import { useReveal } from '../hooks/useReveal'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
-import storyPhoto from '../assets/gallery/about.webp'
+import storyPhoto from '../assets/gallery/about.png'
 
 const POLICY_ITEMS: AccordionItemData[] = [
   {
