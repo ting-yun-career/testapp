@@ -59,7 +59,7 @@ interface SectionHeadProps {
 export function SectionHead({ children, center, className = '' }: SectionHeadProps) {
   return (
     <div
-      className={`flex flex-col gap-4 mb-12 max-w-[44rem] ${center ? 'mx-auto text-center items-center' : ''} ${className}`}
+      className={`flex flex-col gap-4 mb-12 ${center ? 'mx-auto text-center items-center' : ''} ${className}`}
     >
       {children}
     </div>

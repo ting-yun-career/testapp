@@ -10,7 +10,6 @@ import back7 from '../assets/gallery/back7.webp'
 import img5187 from '../assets/gallery/img_5187.webp'
 import back8 from '../assets/gallery/back8.webp'
 import back9 from '../assets/gallery/back9.webp'
-import dsc02480 from '../assets/gallery/dsc02480_comp.webp'
 import back10 from '../assets/gallery/back10.webp'
 import back11 from '../assets/gallery/back11.webp'
 import img5188 from '../assets/gallery/img_5188.webp'
@@ -45,7 +44,6 @@ export const GALLERY_IMAGES: GalleryImage[] = [
   { src: img5187, alt: 'Colour and style' },
   { src: back8, alt: 'Balayage on long hair' },
   { src: back9, alt: 'Shoulder-length cut' },
-  { src: dsc02480, alt: 'Inside the salon' },
   { src: back10, alt: 'Partial highlights' },
   { src: back11, alt: 'Layered cut with movement' },
   { src: img5188, alt: 'Finished style' },

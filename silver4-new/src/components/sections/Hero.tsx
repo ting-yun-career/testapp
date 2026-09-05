@@ -9,12 +9,10 @@ const STILL_URL = 'https://silver4salon.com/asset/salon/DSC00993_comp.jpg'
 /* ==========================================================================
    Hero — full-bleed video with overlaid copy. Ported from .hero in
    05-sections.css + js/hero.js.
-   ⬜ TO REPLACE: drop the client's files at assets/video/hero.mp4 and
-   assets/video/hero.webm, and a first-frame still at
-   assets/video/hero-poster.jpg. Until those exist the still image below is
-   what shows — useHeroVideo only reveals the video once it truly plays, so
-   there is never a black box. The <source> tags are commented out below so
-   the page doesn't fire two failing requests on every load.
+   public/video/hero-mobile.mp4 (960x540) and public/video/hero.mp4
+   (1920x1080) are the compressed, no-audio loops; the still image below
+   stays the fallback — useHeroVideo only reveals the video once it truly
+   plays, so there is never a black box.
    ========================================================================== */
 export function Hero() {
   const { heroRef, videoRef, videoReady, muted, muteHidden, toggleMute } = useHeroVideo()
@@ -42,15 +40,14 @@ export function Hero() {
           preload="metadata"
           poster={STILL_URL}
         >
-          {/* ⬜ UNCOMMENT once the video files exist:
-          <source src="/video/hero.webm" type="video/webm" />
-          <source src="/video/hero.mp4" type="video/mp4" /> */}
+          <source media="(max-width: 767px)" src="/video/hero-mobile.mp4" type="video/mp4" />
+          <source src="/video/hero.mp4" type="video/mp4" />
         </video>
       </div>
 
       <div
         aria-hidden="true"
-        className="absolute inset-0 z-0 bg-[linear-gradient(to_right,rgb(10_9_8/55%)_0%,rgb(10_9_8/20%)_55%,rgb(10_9_8/0%)_100%),linear-gradient(to_top,rgb(10_9_8/88%)_0%,rgb(10_9_8/62%)_55%,rgb(10_9_8/32%)_100%)]"
+        className="absolute inset-0 z-0 bg-[linear-gradient(to_right,rgb(10_9_8/55%)_0%,rgb(10_9_8/20%)_55%,rgb(10_9_8/0%)_100%),linear-gradient(to_top,rgb(10_9_8/100%)_0%,rgb(10_9_8/88%)_40%,rgb(10_9_8/50%)_100%)]"
       />
 
       <Container narrow className="relative z-10 flex flex-col gap-6 items-center text-center py-16">
