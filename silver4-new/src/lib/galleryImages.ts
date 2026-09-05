@@ -1,51 +1,69 @@
+import back1 from '../assets/gallery/back1.webp'
+import img5185 from '../assets/gallery/img_5185.webp'
+import back2 from '../assets/gallery/back2.webp'
+import back3 from '../assets/gallery/back3.webp'
+import img5186 from '../assets/gallery/img_5186.webp'
+import back4 from '../assets/gallery/back4.webp'
+import back5 from '../assets/gallery/back5.webp'
+import yukiWashing from '../assets/gallery/yuki-washing.webp'
+import back6 from '../assets/gallery/back6.webp'
+import back7 from '../assets/gallery/back7.webp'
+import img5187 from '../assets/gallery/img_5187.webp'
+import back8 from '../assets/gallery/back8.webp'
+import back9 from '../assets/gallery/back9.webp'
+import dsc02480 from '../assets/gallery/dsc02480_comp.webp'
+import back10 from '../assets/gallery/back10.webp'
+import back11 from '../assets/gallery/back11.webp'
+import img5188 from '../assets/gallery/img_5188.webp'
+import back12 from '../assets/gallery/back12.webp'
+import back13 from '../assets/gallery/back13.webp'
+import back14 from '../assets/gallery/back14.webp'
+import img5189 from '../assets/gallery/img_5189.webp'
+import back15 from '../assets/gallery/back15.webp'
+import back16 from '../assets/gallery/back16.webp'
+import back17 from '../assets/gallery/back17.webp'
+import back18 from '../assets/gallery/back18.webp'
+import back19 from '../assets/gallery/back19.webp'
+import back21 from '../assets/gallery/back21.webp'
+import back22 from '../assets/gallery/back22.webp'
+import back23 from '../assets/gallery/back23.webp'
+
 export interface GalleryImage {
   src: string
   alt: string
 }
 
-const BASE = 'https://silver4salon.com/asset/salon'
-
-// ⬜ TO REPLACE (per HANDOFF.md item 4): these are hot-linked from the old
-// site. Download, re-export at ~1600px wide, and serve from local assets —
-// a small thumb for `src`, full size kept on the link `href`.
 export const GALLERY_IMAGES: GalleryImage[] = [
-  { src: `${BASE}/profile2/back1.jpg`, alt: 'Long balayage, styled' },
-  { src: `${BASE}/profile1/IMG_5185.JPG`, alt: 'Precision cut, glossy finish' },
-  { src: `${BASE}/profile2/back2.jpg`, alt: 'Warm brunette with soft layers' },
-  { src: `${BASE}/profile2/back3.jpg`, alt: 'Mid-length cut with movement' },
-  { src: `${BASE}/profile1/IMG_5186.JPG`, alt: 'Blow-dry and style' },
-  { src: `${BASE}/profile2/back4.jpg`, alt: 'Soft waves with warm highlights' },
-  { src: `${BASE}/profile2/back5.jpg`, alt: 'Full highlights, blow-dried' },
-  { src: `${BASE}/Yuki-washing.jpg`, alt: 'A client in the Japanese hair washing unit' },
-  { src: `${BASE}/profile2/back6.jpg`, alt: 'Layered cut, natural finish' },
-  { src: `${BASE}/profile2/back7.jpg`, alt: 'Blunt cut, glossy finish' },
-  { src: `${BASE}/profile1/IMG_5187.JPG`, alt: 'Colour and style' },
-  { src: `${BASE}/profile2/back8.jpg`, alt: 'Balayage on long hair' },
-  { src: `${BASE}/profile2/back9.jpg`, alt: 'Shoulder-length cut' },
-  { src: `${BASE}/DSC02480_comp.jpg`, alt: 'Inside the salon' },
-  { src: `${BASE}/profile2/back10.jpg`, alt: 'Partial highlights' },
-  { src: `${BASE}/profile2/back11.jpg`, alt: 'Layered cut with movement' },
-  { src: `${BASE}/profile1/IMG_5188.JPG`, alt: 'Finished style' },
-  { src: `${BASE}/profile2/back12.jpg`, alt: 'Cool-toned blonde' },
-  { src: `${BASE}/profile2/back13.jpg`, alt: 'Long waves' },
-  { src: `${BASE}/profile2/back14.jpg`, alt: 'Rich brunette colour' },
-  { src: `${BASE}/profile1/IMG_5189.JPG`, alt: 'Styled and finished' },
-  { src: `${BASE}/profile2/back15.jpg`, alt: 'Full highlights, blow-dried' },
-  { src: `${BASE}/profile2/back16.jpg`, alt: 'Textured bob' },
-  { src: `${BASE}/profile2/back17.jpg`, alt: 'Soft balayage' },
-  { src: `${BASE}/profile2/back18.jpg`, alt: 'Straightened long hair' },
-  { src: `${BASE}/profile2/back19.jpg`, alt: 'Warm brunette, mid-length' },
-  { src: `${BASE}/profile2/back21.jpg`, alt: 'Curled and styled' },
-  { src: `${BASE}/profile2/back22.jpg`, alt: 'Highlighted lengths' },
-  { src: `${BASE}/profile2/back23.jpg`, alt: 'Finished blow-dry' },
+  { src: back1, alt: 'Long balayage, styled' },
+  { src: img5185, alt: 'Precision cut, glossy finish' },
+  { src: back2, alt: 'Warm brunette with soft layers' },
+  { src: back3, alt: 'Mid-length cut with movement' },
+  { src: img5186, alt: 'Blow-dry and style' },
+  { src: back4, alt: 'Soft waves with warm highlights' },
+  { src: back5, alt: 'Full highlights, blow-dried' },
+  { src: yukiWashing, alt: 'A client in the Japanese hair washing unit' },
+  { src: back6, alt: 'Layered cut, natural finish' },
+  { src: back7, alt: 'Blunt cut, glossy finish' },
+  { src: img5187, alt: 'Colour and style' },
+  { src: back8, alt: 'Balayage on long hair' },
+  { src: back9, alt: 'Shoulder-length cut' },
+  { src: dsc02480, alt: 'Inside the salon' },
+  { src: back10, alt: 'Partial highlights' },
+  { src: back11, alt: 'Layered cut with movement' },
+  { src: img5188, alt: 'Finished style' },
+  { src: back12, alt: 'Cool-toned blonde' },
+  { src: back13, alt: 'Long waves' },
+  { src: back14, alt: 'Rich brunette colour' },
+  { src: img5189, alt: 'Styled and finished' },
+  { src: back15, alt: 'Full highlights, blow-dried' },
+  { src: back16, alt: 'Textured bob' },
+  { src: back17, alt: 'Soft balayage' },
+  { src: back18, alt: 'Straightened long hair' },
+  { src: back19, alt: 'Warm brunette, mid-length' },
+  { src: back21, alt: 'Curled and styled' },
+  { src: back22, alt: 'Highlighted lengths' },
+  { src: back23, alt: 'Finished blow-dry' },
 ]
 
 // The home page teaser shows this specific subset (matches index.html).
-export const HOME_GALLERY_TEASER_SRCS = [
-  `${BASE}/profile2/back1.jpg`,
-  `${BASE}/profile2/back4.jpg`,
-  `${BASE}/profile2/back7.jpg`,
-  `${BASE}/profile2/back11.jpg`,
-  `${BASE}/profile2/back15.jpg`,
-  `${BASE}/profile2/back19.jpg`,
-]
+export const HOME_GALLERY_TEASER_SRCS = [back1, back4, back7, back11, back15, back19]
