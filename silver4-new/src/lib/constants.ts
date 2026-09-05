@@ -37,7 +37,6 @@ export const FOOTER_GUEST_LINKS: NavItem[] = [
   { label: 'Satisfaction guarantee', to: '/about#satisfaction' },
   { label: 'Cancellation policy', to: '/about#cancellation' },
   { label: 'Deposit policy', to: '/about#deposit' },
-  { label: 'VVIP package', to: '/services#vvip' },
   { label: 'Health & safety', to: '/about#health' },
 ]
 
