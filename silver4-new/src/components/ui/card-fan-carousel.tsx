@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import gsap from "gsap";
+import { FAN_MAX_VISIBLE, FAN_HALF, getFanInitialCenterIndex } from "./card-fan-carousel-utils";
 
 export interface CardItem {
   imgUrl: string;
@@ -9,10 +10,11 @@ export interface CardItem {
 
 interface SocialCardsProps {
   cards: CardItem[];
+  onCenterChange?: (index: number) => void;
 }
 
-const MAX_VISIBLE = 7;
-const HALF = 3;
+const MAX_VISIBLE = FAN_MAX_VISIBLE;
+const HALF = FAN_HALF;
 
 const FAN_POSITIONS = [
   { rot: -21, scale: 0.7756, x: -30, y: 7.3, zIndex: 1 },
@@ -67,7 +69,7 @@ function getSlotConfig(totalCards: number, slot: number) {
 const ARROW_CLASSES =
   "relative flex items-center justify-center rounded-full border-[1.5px] border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 backdrop-blur-[16px] text-black/40 dark:text-white/55 cursor-pointer shrink-0 z-30 outline-none shadow-[0_4px_20px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:border-black/25 dark:hover:border-white/25 hover:text-black/70 dark:hover:text-white/80 active:opacity-70 transition-colors duration-300 before:content-[''] before:absolute before:inset-[3px] before:rounded-full before:border before:border-black/[0.04] dark:before:border-white/[0.04] before:pointer-events-none";
 
-export default function SocialCards({ cards }: SocialCardsProps) {
+export default function SocialCards({ cards, onCenterChange }: SocialCardsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const isAnimating = useRef(false);
   const hasEntered = useRef(false);
@@ -76,7 +78,11 @@ export default function SocialCards({ cards }: SocialCardsProps) {
 
   const totalCards = cards.length;
   const needsPagination = totalCards > MAX_VISIBLE;
-  const [centerIndex, setCenterIndex] = useState(needsPagination ? HALF : totalCards >> 1);
+  const [centerIndex, setCenterIndex] = useState(() => getFanInitialCenterIndex(totalCards));
+
+  useEffect(() => {
+    onCenterChange?.(centerIndex);
+  }, [centerIndex, onCenterChange]);
 
   const getVisibleMap = useCallback((center: number) => {
     const map = new Map<number, number>();
@@ -98,6 +104,15 @@ export default function SocialCards({ cards }: SocialCardsProps) {
       direction === "right" ? (prev + 1) % totalCards : (prev - 1 + totalCards) % totalCards
     );
   }, [totalCards, needsPagination]);
+
+  const jumpTo = useCallback((index: number) => {
+    if (isAnimating.current || index === centerIndex) return;
+    isAnimating.current = true;
+    const forwardDist = (index - centerIndex + totalCards) % totalCards;
+    const backwardDist = (centerIndex - index + totalCards) % totalCards;
+    directionRef.current = forwardDist <= backwardDist ? "right" : "left";
+    setCenterIndex(index);
+  }, [centerIndex, totalCards]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -260,7 +275,7 @@ export default function SocialCards({ cards }: SocialCardsProps) {
   );
 
   return (
-    <section className="flex flex-col items-center w-full py-4 lg:py-8 px-4 md:px-8 relative z-20">
+    <section className="flex flex-col items-center w-full px-4 md:px-8 relative z-20">
       <div className="flex items-center justify-center w-full max-w-[90rem]">
         <div
           ref={containerRef}
@@ -277,7 +292,21 @@ export default function SocialCards({ cards }: SocialCardsProps) {
             return card.linkUrl ? (
               <a key={index} href={card.linkUrl} target={card.linkUrl.startsWith("http") ? "_blank" : "_self"} rel="noopener noreferrer" className={`${cardClasses} block cursor-pointer`}>{image}</a>
             ) : (
-              <div key={index} className={cardClasses}>{image}</div>
+              <div
+                key={index}
+                role="button"
+                tabIndex={0}
+                onClick={() => jumpTo(index)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    jumpTo(index);
+                  }
+                }}
+                className={`${cardClasses} cursor-pointer outline-none`}
+              >
+                {image}
+              </div>
             );
           })}
         </div>

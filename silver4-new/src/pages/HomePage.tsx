@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { Hero } from '../components/sections/Hero'
 import { Testimonials } from '../components/sections/Testimonials'
 import { TeamCard } from '../components/sections/TeamCard'
 import { Map } from '../components/sections/Map'
 import CardFanCarousel from '../components/ui/card-fan-carousel'
+import { getFanInitialCenterIndex } from '../components/ui/card-fan-carousel-utils'
 import { CtaBand } from '../components/CtaBand'
 import { Container, Section, SectionHead, Grid, Cluster, Stack, Split } from '../components/layout'
 import { Eyebrow, Lede } from '../components/primitives'
@@ -13,7 +15,7 @@ import { useHours } from '../hooks/useHours'
 import { useReveal } from '../hooks/useReveal'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { HOURS, HOURS_DISPLAY_ORDER } from '../lib/constants'
-import { GALLERY_IMAGES, HOME_GALLERY_TEASER_SRCS } from '../lib/galleryImages'
+import { HOME_GALLERY_TEASER } from '../lib/galleryImages'
 
 const SERVICE_CARDS = [
   { href: '/services#haircut', meta: 'From $45', title: 'Haircut', body: 'Men, women and kids. Includes wash, scalp massage, conditioning, blow-dry and style.', delay: 0 },
@@ -50,8 +52,8 @@ export default function HomePage() {
   )
 
   const { today, status } = useHours()
-  const teaserImages = HOME_GALLERY_TEASER_SRCS.map(
-    (src) => GALLERY_IMAGES.find((img) => img.src === src)!,
+  const [activeTeaserIndex, setActiveTeaserIndex] = useState(() =>
+    getFanInitialCenterIndex(HOME_GALLERY_TEASER.length),
   )
 
   return (
@@ -130,21 +132,25 @@ export default function HomePage() {
 
       <Section className="bg-ink text-paper">
         <Container>
-          <SectionHead>
+          <SectionHead className="!mb-6">
             <Eyebrow invert>Gallery</Eyebrow>
             <h2>Recent work</h2>
           </SectionHead>
         </Container>
 
         <CardFanCarousel
-          cards={teaserImages.map((image) => ({
+          cards={HOME_GALLERY_TEASER.map((image) => ({
             imgUrl: image.src,
             alt: image.alt,
-            linkUrl: '/gallery',
           }))}
+          onCenterChange={setActiveTeaserIndex}
         />
 
-        <Container className="mt-12">
+        <p className="max-w-none text-center text-sm tracking-wide uppercase text-paper/60">
+          {HOME_GALLERY_TEASER[activeTeaserIndex]?.tag}
+        </p>
+
+        <Container className="mt-6">
           <Cluster>
             <Button variant="outline" to="/gallery">
               View the full gallery

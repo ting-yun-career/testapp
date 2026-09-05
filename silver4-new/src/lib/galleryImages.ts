@@ -63,5 +63,22 @@ export const GALLERY_IMAGES: GalleryImage[] = [
   { src: back23, alt: 'Finished blow-dry' },
 ]
 
-// The home page teaser shows this specific subset (matches index.html).
-export const HOME_GALLERY_TEASER_SRCS = [back1, back4, back7, back11, back15, back19]
+export interface HomeGalleryTeaserItem extends GalleryImage {
+  tag: string
+}
+
+// The home page teaser shows this curated subset, each tagged with a
+// short colour/texture label shown below the widget as the photo comes
+// into focus.
+export const HOME_GALLERY_TEASER: HomeGalleryTeaserItem[] = [
+  { src: back1, alt: 'Long balayage, styled', tag: 'Ash Grey / Straight' },
+  { src: back4, alt: 'Soft waves with warm highlights', tag: 'Chestnut Brown / Braided' },
+  { src: back7, alt: 'Blunt cut, glossy finish', tag: 'Golden Balayage / Wavy' },
+  { src: back11, alt: 'Layered cut with movement', tag: 'Silver / Wavy' },
+  { src: back15, alt: 'Full highlights, blow-dried', tag: 'Rose Ash / Straight' },
+  { src: back19, alt: 'Warm brunette, mid-length', tag: 'Copper Auburn / Wavy' },
+  { src: img5185, alt: 'Precision cut, glossy finish', tag: 'Blue Black / Wavy' },
+  { src: back9, alt: 'Shoulder-length cut', tag: 'Platinum Blonde / Wavy' },
+  { src: back14, alt: 'Rich brunette colour', tag: 'Golden Beige / Wavy' },
+  { src: back22, alt: 'Highlighted lengths', tag: 'Golden Copper / Straight' },
+]
