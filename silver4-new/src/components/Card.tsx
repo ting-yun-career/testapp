@@ -30,7 +30,7 @@ export const BorderedCardLink = forwardRef<HTMLAnchorElement, BorderedCardLinkPr
       <Link
         ref={ref}
         to={to}
-        className={`flex flex-col gap-3 bg-paper border border-line p-6 transition-[border-color,transform] duration-[280ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-accent hover:-translate-y-[3px] ${className}`}
+        className={`flex flex-col gap-3 bg-paper border border-line p-6 transition-transform duration-[280ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[3px] ${className}`}
       >
         {children}
       </Link>
