@@ -1,8 +1,8 @@
 import { Hero } from '../components/sections/Hero'
 import { Testimonials } from '../components/sections/Testimonials'
 import { TeamCard } from '../components/sections/TeamCard'
-import { GalleryGrid } from '../components/sections/GalleryGrid'
 import { Map } from '../components/sections/Map'
+import CardFanCarousel from '../components/ui/card-fan-carousel'
 import { CtaBand } from '../components/CtaBand'
 import { Container, Section, SectionHead, Grid, Cluster, Stack, Split } from '../components/layout'
 import { Eyebrow, Lede } from '../components/primitives'
@@ -136,7 +136,13 @@ export default function HomePage() {
           </SectionHead>
         </Container>
 
-        <GalleryGrid images={teaserImages} />
+        <CardFanCarousel
+          cards={teaserImages.map((image) => ({
+            imgUrl: image.src,
+            alt: image.alt,
+            linkUrl: '/gallery',
+          }))}
+        />
 
         <Container className="mt-12">
           <Cluster>
