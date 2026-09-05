@@ -29,7 +29,7 @@ const TEAM = [
   },
   {
     name: 'Kawal',
-    role: 'Colour & Cutting',
+    role: 'Stylist',
     img: kawalPhoto,
     langs: 'English',
     delay: 80,
@@ -37,7 +37,7 @@ const TEAM = [
   },
   {
     name: 'Becca',
-    role: 'Transformations',
+    role: 'Stylist',
     img: beccaPhoto,
     langs: 'English',
     delay: 160,
