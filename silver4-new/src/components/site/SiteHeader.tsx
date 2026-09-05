@@ -6,7 +6,7 @@ import { CopyButton } from '../CopyButton'
 import { useScrolledHeader } from '../../hooks/useScrolledHeader'
 import { useNavDrawer } from '../../hooks/useNavDrawer'
 import { ADDRESS, BOOKING_URL, EMAIL, NAV_ITEMS, PHONE_DISPLAY, PHONE_TEL } from '../../lib/constants'
-import logo from '../../assets/logo.png'
+import logo from '../../assets/logos/SL4_FLOURISH_Black.png'
 
 /** Site header — sticky, with a mobile off-canvas drawer at <64rem and an
     inline nav at >=64rem. Ported from .site-header/.site-nav/.nav-toggle. */
