@@ -73,3 +73,5 @@ export default defineConfig([
 ])
 
 ```
+
+<!-- deploy test: 2026-09-05T09:01:53Z -->
