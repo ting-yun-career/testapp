@@ -120,7 +120,7 @@ export default function ServicesPage() {
         eyebrow="Not sure which service?"
         title={
           <>
-            Book a free <em>consultation</em>
+            Free <em>consultation</em>
           </>
         }
         body="We'll look at your hair, talk through what's realistic and quote you before we start."
