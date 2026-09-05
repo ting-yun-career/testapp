@@ -134,6 +134,22 @@
     text-wrap: balance;
   }
 
+  h1 {
+    font-size: var(--text-3xl);
+  }
+
+  h2 {
+    font-size: var(--text-2xl);
+  }
+
+  h3 {
+    font-size: var(--text-xl);
+  }
+
+  h4 {
+    font-size: var(--text-lg);
+  }
+
   h1 em,
   h2 em,
   h3 em {
