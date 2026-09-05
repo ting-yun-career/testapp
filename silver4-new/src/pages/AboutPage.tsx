@@ -7,6 +7,7 @@ import { Accordion, type AccordionItemData } from '../components/Accordion'
 import { useReveal } from '../hooks/useReveal'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import storyPhoto from '../assets/gallery/about.webp'
+import groupPhoto from '../assets/team/group.webp'
 
 const POLICY_ITEMS: AccordionItemData[] = [
   {
@@ -128,6 +129,21 @@ function StoryPhoto() {
   )
 }
 
+function TeamPhoto() {
+  const { ref, className } = useReveal<HTMLDivElement>(0)
+  return (
+    <div ref={ref} className={className}>
+      <Figure
+        ratio="16/9"
+        src={groupPhoto}
+        alt="The Silver4 Salon team"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  )
+}
+
 export default function AboutPage() {
   useDocumentMeta(
     'About — Silver4 Hair & Beauty Salon',
@@ -152,6 +168,16 @@ export default function AboutPage() {
             <StoryCopy />
             <StoryPhoto />
           </Split>
+        </Container>
+      </Section>
+
+      <Section className="bg-ink text-paper">
+        <Container>
+          <SectionHead>
+            <Eyebrow invert>Our team</Eyebrow>
+            <h2>Team members</h2>
+          </SectionHead>
+          <TeamPhoto />
         </Container>
       </Section>
 
