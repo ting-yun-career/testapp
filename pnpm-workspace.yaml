@@ -1,4 +1,5 @@
 packages:
+  - "silver4-new"
   - "svg-animate"
   - "myapp"
   - "packages/*"
