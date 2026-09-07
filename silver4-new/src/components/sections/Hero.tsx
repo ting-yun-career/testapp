@@ -6,11 +6,12 @@ import { BOOKING_URL, SERVICES_URL } from '../../lib/constants'
 
 const STILL_URL = 'https://silver4salon.com/asset/salon/DSC00993_comp.jpg'
 
-// Plays in order, then loops back to the start — hero1 -> hero2 -> hero3 -> hero1 -> ...
+// Plays in order, then loops back to the start — hero1 -> hero2 -> hero3 -> hero4 -> hero1 -> ...
 const HERO_VIDEOS: HeroVideoSource[] = [
   { mobile: '/video/hero-mobile.mp4', desktop: '/video/hero.mp4' },
   { mobile: '/video/hero2-mobile.mp4', desktop: '/video/hero2.mp4' },
   { mobile: '/video/hero3-mobile.mp4', desktop: '/video/hero3.mp4' },
+  { mobile: '/video/hero4-mobile.mp4', desktop: '/video/hero4.mp4' },
 ]
 
 /* ==========================================================================
