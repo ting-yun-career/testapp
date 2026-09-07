@@ -66,6 +66,7 @@ export default function HomePage() {
   useDocumentMeta(
     "Silver4 Hair & Beauty Salon — Vancouver",
     "Silver4 Salon in Vancouver: precision cuts, colour, balayage, Japanese straightening and the head spa experience with Kérastase and the world's most comfortable Japanese hair washing unit.",
+    "/",
   );
 
   const { today, status } = useHours();

@@ -102,6 +102,7 @@ export default function TeamPage() {
   useDocumentMeta(
     'Our Stylists — Silver4 Hair & Beauty Salon',
     'Meet the Silver4 Salon team: stylists and colourists in Vancouver working in English, Mandarin, Cantonese, Korean and Spanish.',
+    '/team',
   )
 
   return (

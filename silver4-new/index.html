@@ -5,11 +5,76 @@
     <link rel="icon" type="image/png" href="/favicon-32.png" />
     <link rel="apple-touch-icon" href="/favicon-180.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
     <title>Silver4 Hair &amp; Beauty Salon — Vancouver</title>
     <meta
       name="description"
       content="Silver4 Salon in Vancouver: precision cuts, colour, balayage, Japanese straightening and the head spa experience with Kérastase and the world's most comfortable Japanese hair washing unit."
     />
+    <!-- This is the pre-JS fallback for the home route. useDocumentMeta
+         (src/hooks/useDocumentMeta.ts) overwrites title/description/canonical
+         and these og:*/twitter:* tags per page once React mounts, and
+         scripts/prerender.mjs bakes that per-route result into each
+         dist/<route>/index.html at build time — so keep this block in sync
+         with HomePage's useDocumentMeta() call, since it's what a crawler
+         sees if it fetches "/" without running JS. -->
+    <link rel="canonical" href="https://silver4salon.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Silver 4 Hair Salon • Barbershop • Spa" />
+    <meta property="og:title" content="Silver4 Hair &amp; Beauty Salon — Vancouver" />
+    <meta
+      property="og:description"
+      content="Silver4 Salon in Vancouver: precision cuts, colour, balayage, Japanese straightening and the head spa experience with Kérastase and the world's most comfortable Japanese hair washing unit."
+    />
+    <meta property="og:url" content="https://silver4salon.com/" />
+    <meta property="og:image" content="https://silver4salon.com/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Silver4 Hair &amp; Beauty Salon — Vancouver" />
+    <meta
+      name="twitter:description"
+      content="Silver4 Salon in Vancouver: precision cuts, colour, balayage, Japanese straightening and the head spa experience with Kérastase and the world's most comfortable Japanese hair washing unit."
+    />
+    <meta name="twitter:image" content="https://silver4salon.com/og-image.jpg" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HairSalon",
+        "name": "Silver 4 Hair Salon • Barbershop • Spa",
+        "image": "https://silver4salon.com/og-image.jpg",
+        "url": "https://silver4salon.com/",
+        "telephone": "+1-604-423-4223",
+        "email": "info@silver4salon.com",
+        "priceRange": "$$",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "177 W 2nd Ave",
+          "addressLocality": "Vancouver",
+          "addressRegion": "BC",
+          "postalCode": "V5Y 0L8",
+          "addressCountry": "CA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 49.269145945345905,
+          "longitude": -123.10597657590498
+        },
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday"
+          ],
+          "opens": "11:00",
+          "closes": "19:00"
+        }
+      }
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

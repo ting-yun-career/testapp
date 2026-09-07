@@ -9,6 +9,7 @@ export default function GalleryPage() {
   useDocumentMeta(
     'Gallery — Silver4 Hair & Beauty Salon',
     'Recent cuts, colour, balayage and styling from the Silver4 Salon team in Vancouver.',
+    '/gallery',
   )
 
   return (

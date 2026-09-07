@@ -147,7 +147,8 @@ function TeamPhoto() {
 export default function AboutPage() {
   useDocumentMeta(
     'About — Silver4 Hair & Beauty Salon',
-    'About Silver4 Salon in Vancouver: the Japanese hair washing unit, chromatherapy, Kérastase, our VVIP package and our guest policies.',
+    'About Silver4 Salon in Vancouver: the Japanese hair washing unit, chromatherapy, Kérastase and our guest policies.',
+    '/about',
   )
 
   return (
