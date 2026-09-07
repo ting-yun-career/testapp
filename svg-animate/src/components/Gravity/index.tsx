@@ -121,6 +121,29 @@ const BOARD_CONTACT_TOLERANCE = 0.5;
 // would leave the whole pile shivering.
 const BOARD_IMPACT_SPEED = 1.5;
 
+// Every few seconds a dense load of ordinary balls is dumped on whichever end
+// of the board is raised, to break up a long one-sided lean. One heavy ball
+// isn't enough — the board shrugs off a single impulse — where a slug of this
+// many keeps the weight on that arm for as long as it takes to come down.
+//
+// They are laid out in a grid stacked above the top edge rather than all at
+// one point: same-frame spawns at the same spot start out overlapping, and
+// the solver's answer to that is to fire them apart.
+const LOAD_INTERVAL_S = 5;
+const LOAD_INTERVAL_JITTER = 0.4;
+const LOAD_COUNT = 30;
+
+// Fractions of the raised arm the load covers — out where the leverage is,
+// but stopping short of the tip, where a near miss just falls past the end.
+const LOAD_BAND_INNER = 0.45;
+const LOAD_BAND_OUTER = 0.95;
+
+// Grid pitch, in ball radii. Above 2 so neighbours start out clear of each
+// other with room for a little jitter.
+const LOAD_CELL_RADII = 2.6;
+
+const LOAD_LEVEL_EPS = (1 * Math.PI) / 180;
+
 // Drawn-only marker on the pivot — a collision body there would block balls
 // from passing beneath the board.
 const PIVOT_DOT_RADIUS = 5;
@@ -474,10 +497,8 @@ function Gravity() {
       // there. Spread over the full length, both ends get loaded and it rocks.
       const spawnSpread = pivot ? pivot.length / 2 : SPAWN_JITTER_PX;
 
-      const spawnBall = () => {
-        const radius = configRef.current.ballRadius;
-        const x = width / 2 + (Math.random() * 2 - 1) * spawnSpread;
-        const body = Bodies.circle(x, -radius * 2, radius, {
+      const addBall = (x: number, y: number, radius: number) => {
+        const body = Bodies.circle(x, y, radius, {
           restitution: BALL_RESTITUTION,
           friction: 0.05,
           frictionAir: 0.01,
@@ -494,10 +515,66 @@ function Gravity() {
         }
       };
 
+      const spawnBall = () => {
+        const radius = configRef.current.ballRadius;
+        addBall(
+          width / 2 + (Math.random() * 2 - 1) * spawnSpread,
+          -radius * 2,
+          radius,
+        );
+      };
+
+      // A load of balls aimed at whichever end is currently up. The stream
+      // alone can leave the board leaning for a long stretch — one end low and
+      // catching everything that rolls — and this is the weight that puts it
+      // back the other way.
+      const spawnLoad = () => {
+        if (!boardBody || !pivot) return;
+        const radius = configRef.current.ballRadius;
+
+        // Canvas y grows downward, so the raised end is the one with the
+        // smaller y: the right end sits at pivot.y + (length/2)*sin(angle),
+        // which is above the pivot exactly when the angle is negative.
+        const angle = boardBody.angle;
+        const highSide =
+          Math.abs(angle) < LOAD_LEVEL_EPS
+            ? Math.random() < 0.5
+              ? -1
+              : 1
+            : angle < 0
+              ? 1
+              : -1;
+
+        const half = pivot.length / 2;
+        const inner = half * LOAD_BAND_INNER;
+        const band = half * (LOAD_BAND_OUTER - LOAD_BAND_INNER);
+        const cell = Math.max(radius * LOAD_CELL_RADII, 1);
+        const columns = Math.max(1, Math.floor(band / cell));
+        const columnWidth = band / columns;
+        const jitter = Math.max(0, (columnWidth - radius * 2) / 2);
+
+        for (let i = 0; i < LOAD_COUNT; i++) {
+          const localX =
+            inner +
+            ((i % columns) + 0.5) * columnWidth +
+            (Math.random() * 2 - 1) * jitter;
+          addBall(
+            pivot.x + highSide * localX * Math.cos(angle),
+            -radius * 2 - Math.floor(i / columns) * cell,
+            radius,
+          );
+        }
+      };
+
+      const nextLoadDelay = () =>
+        LOAD_INTERVAL_S * (1 + (Math.random() * 2 - 1) * LOAD_INTERVAL_JITTER);
+
       let frameId = 0;
       let last = performance.now();
       let physicsAcc = 0;
       let spawnAcc = 0;
+      let loadAcc = 0;
+      let loadDelay = nextLoadDelay();
 
       const loop = (now: number) => {
         const dt = Math.min(
@@ -532,6 +609,15 @@ function Gravity() {
         while (spawnAcc >= spawnInterval) {
           spawnBall();
           spawnAcc -= spawnInterval;
+        }
+
+        if (boardBody) {
+          loadAcc += dt;
+          if (loadAcc >= loadDelay) {
+            loadAcc = 0;
+            loadDelay = nextLoadDelay();
+            spawnLoad();
+          }
         }
 
         const drainDelay = c.drainDelay;
