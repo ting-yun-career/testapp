@@ -17,64 +17,19 @@ import {
 import { Eyebrow, Lede } from "../components/primitives";
 import { Button } from "../components/Button";
 import {
-  BorderedCardLink,
-  CardMeta,
-  CardTitle,
-  CardBody,
-} from "../components/Card";
-import {
   DetailList,
   DetailRow,
   DetailKey,
   DetailVal,
 } from "../components/DetailList";
 import { useHours } from "../hooks/useHours";
-import { useReveal } from "../hooks/useReveal";
 import { useDocumentMeta } from "../hooks/useDocumentMeta";
-import { HOURS, HOURS_DISPLAY_ORDER } from "../lib/constants";
+import { HOURS, HOURS_DISPLAY_ORDER, SERVICES_URL } from "../lib/constants";
 import { HOME_GALLERY_TEASER } from "../lib/galleryImages";
 import yiPhoto from "../assets/team/yi.webp";
 import kawalPhoto from "../assets/team/kawal.webp";
 import beccaPhoto from "../assets/team/becca.webp";
 import mikePhoto from "../assets/team/mike.webp";
-
-const SERVICE_CARDS = [
-  {
-    href: "/services#haircut",
-    meta: "From $45",
-    title: "Haircut",
-    body: "Men, women and kids. Includes wash, scalp massage, conditioning, blow-dry and style.",
-    delay: 0,
-  },
-  {
-    href: "/services#styling",
-    meta: "From $50",
-    title: "Shampoo & Styling",
-    body: "Everyday styling through to updos for weddings and events.",
-    delay: 80,
-  },
-  {
-    href: "/services#colour",
-    meta: "From $135 · Free consult",
-    title: "Colour",
-    body: "All-over colour, highlights, balayage, blonding and colour correction.",
-    delay: 160,
-  },
-  {
-    href: "/services#perm",
-    meta: "From $160",
-    title: "Perm & Texture",
-    body: "Permanent wave, digital perm and Japanese straightening.",
-    delay: 0,
-  },
-  {
-    href: "/services#headspa",
-    meta: "From $120",
-    title: "Head Spa & Treatment",
-    body: "Our signature scalp and hair treatments, including Kérastase Fusio-Dose and Chronologiste.",
-    delay: 80,
-  },
-];
 
 const TEAM_TEASER = [
   {
@@ -107,23 +62,6 @@ const TEAM_TEASER = [
   },
 ];
 
-function ServiceCard({
-  href,
-  meta,
-  title,
-  body,
-  delay,
-}: (typeof SERVICE_CARDS)[number]) {
-  const { ref, className } = useReveal<HTMLAnchorElement>(delay);
-  return (
-    <BorderedCardLink to={href} className={className} ref={ref}>
-      <CardMeta>{meta}</CardMeta>
-      <CardTitle>{title}</CardTitle>
-      <CardBody>{body}</CardBody>
-    </BorderedCardLink>
-  );
-}
-
 export default function HomePage() {
   useDocumentMeta(
     "Silver4 Hair & Beauty Salon — Vancouver",
@@ -152,15 +90,14 @@ export default function HomePage() {
             </Lede>
           </SectionHead>
 
-          <Grid cols={3}>
-            {SERVICE_CARDS.map((card) => (
-              <ServiceCard key={card.href} {...card} />
-            ))}
-          </Grid>
-
-          <Cluster className="mt-12">
-            <Button variant="primary" to="/services">
-              See the full price list
+          <Cluster className="mt-4">
+            <Button
+              variant="primary"
+              href={SERVICES_URL}
+              target="_blank"
+              rel="noopener"
+            >
+              View services &amp; pricing
             </Button>
           </Cluster>
         </Container>

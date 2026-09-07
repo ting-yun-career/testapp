@@ -2,7 +2,7 @@ import { Container } from '../layout'
 import { Button } from '../Button'
 import { Icon } from '../Icon'
 import { useHeroVideo, type HeroVideoSource } from '../../hooks/useHeroVideo'
-import { BOOKING_URL } from '../../lib/constants'
+import { BOOKING_URL, SERVICES_URL } from '../../lib/constants'
 
 const STILL_URL = 'https://silver4salon.com/asset/salon/DSC00993_comp.jpg'
 
@@ -65,7 +65,7 @@ export function Hero() {
           <Button variant="light" href={BOOKING_URL} target="_blank" rel="noopener">
             Book an appointment
           </Button>
-          <Button variant="ghost-light" to="/services">
+          <Button variant="ghost-light" href={SERVICES_URL} target="_blank" rel="noopener">
             Browse services
           </Button>
         </div>

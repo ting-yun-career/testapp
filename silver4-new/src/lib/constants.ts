@@ -6,6 +6,9 @@ export const ADDRESS = '177 W 2nd Ave, Vancouver, BC V5Y 0L8'
 export const BOOKING_URL =
   'https://www.fresha.com/book-now/silver-4-hair-and-beauty-salon-p5x0yfdh/all-offer?share=true&pId=2865797'
 
+export const SERVICES_URL =
+  'https://www.fresha.com/a/silver-4-hair-barbershop-spa-vancouver-177-west-2nd-avenue-cgfj9k0s?pId=2865797'
+
 export const GOOGLE_REVIEW_URL = 'https://www.google.com/search?q=silver4+salon#lrd=reviews'
 
 export const MAP_EMBED_SRC =
@@ -18,7 +21,6 @@ export interface NavItem {
 
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Home', to: '/' },
-  { label: 'Services', to: '/services' },
   { label: 'Our Stylists', to: '/team' },
   { label: 'Gallery', to: '/gallery' },
   { label: 'About', to: '/about' },
@@ -26,7 +28,6 @@ export const NAV_ITEMS: NavItem[] = [
 
 export const FOOTER_EXPLORE_LINKS: NavItem[] = [
   { label: 'Home', to: '/' },
-  { label: 'Services & prices', to: '/services' },
   { label: 'Our stylists', to: '/team' },
   { label: 'Gallery', to: '/gallery' },
   { label: 'About Silver4', to: '/about' },
