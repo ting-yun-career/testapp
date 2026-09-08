@@ -16,25 +16,57 @@ const PYRAMID_WIDTH_RATIO = 0.6;
 // the lever.
 export const BOARD_THICKNESS = 8;
 
-// Height of the pivot as a fraction of the viewport: far enough below the
+// Height of the top pivot as a fraction of the viewport: far enough below the
 // spawn point that balls arrive with real speed, high enough that they still
-// have a clear fall to the floor after sliding off either end.
+// have a clear fall to the levers below.
 const BOARD_PIVOT_Y_RATIO = 0.45;
+
+// The pair below it, sized and placed to catch what rolls off the top lever's
+// two ends: low enough that the top lever swinging to its tilt stop still
+// clears them, high enough to leave the floor free for the settling pile.
+const LOWER_LEVER_Y_RATIO = 0.72;
+const LOWER_LEVER_LENGTH_RATIO = 0.55;
+
+// How far out the lower pivots sit, as a fraction of the top lever's length
+// measured from center. Past the top lever's own tips (which are at half its
+// length), so the drop point lands on their inner arms rather than on the
+// pivots — that's the half that gets loaded and turns them.
+const LOWER_LEVER_PIVOT_RATIO = 0.7;
+
+// Kept off the viewport edge, which the shift above would otherwise run them
+// past at the top of the Board length slider's range.
+const LOWER_LEVER_EDGE_MARGIN = 16;
+
+// The top lever is drawn in from the width the Board length slider asks for.
+// Its tips set where the lower pair hangs, so a full-width top lever pushes
+// them out against the viewport edges — this pulls the whole cascade back
+// toward the middle without changing how the three relate to each other.
+const TOP_LEVER_CONTRACTION = 0.7;
 
 export type PolePoint = { x: number; y: number };
 
-export type PivotBoard = { x: number; y: number; length: number };
+export type Lever = { x: number; y: number; length: number };
 
-export function computePivotBoard(
+// Index 0 is the top lever; the rest hang below it. Every lever behaves the
+// same way, so callers just iterate.
+export function computeLevers(
   width: number,
   height: number,
   lengthRatio: number,
-): PivotBoard {
-  return {
-    x: width / 2,
-    y: height * BOARD_PIVOT_Y_RATIO,
-    length: Math.max(1, width * lengthRatio),
-  };
+): Lever[] {
+  const length = Math.max(1, width * lengthRatio * TOP_LEVER_CONTRACTION);
+  const lowerLength = Math.max(1, length * LOWER_LEVER_LENGTH_RATIO);
+  const catchOffset = Math.min(
+    length * LOWER_LEVER_PIVOT_RATIO,
+    Math.max(0, width / 2 - lowerLength / 2 - LOWER_LEVER_EDGE_MARGIN),
+  );
+  const lowerY = height * LOWER_LEVER_Y_RATIO;
+
+  return [
+    { x: width / 2, y: height * BOARD_PIVOT_Y_RATIO, length },
+    { x: width / 2 - catchOffset, y: lowerY, length: lowerLength },
+    { x: width / 2 + catchOffset, y: lowerY, length: lowerLength },
+  ];
 }
 
 // Lays out poles as a Galton-board / pachinko pyramid: row r has exactly

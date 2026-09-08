@@ -6,7 +6,7 @@ import ConfigPanel from "../ConfigPanel";
 import SliderControl from "../SliderControl";
 import { prefersReducedMotion } from "../../lib/motion";
 import { useSessionConfig } from "../../lib/sessionConfig";
-import { BOARD_THICKNESS, computePivotBoard, computePoles } from "./fields";
+import { BOARD_THICKNESS, computeLevers, computePoles } from "./fields";
 
 const CONFIG_KEY = "gravity-config";
 
@@ -48,6 +48,14 @@ const WALL_THICKNESS = 200;
 // grid, would retrace the same deterministic path forever — this jitter is
 // what makes the field diverge, not cosmetic noise.
 const SPAWN_JITTER_PX = 40;
+
+// How far above the viewport balls enter from, clear of the largest radius the
+// ball-size slider offers so none of them pop into view.
+const ABOVE_VIEWPORT_SPAWN_Y = 24;
+
+// Gap left between a mid-air spawn band and the levers either side of it, so
+// balls never appear already touching one.
+const MID_AIR_SPAWN_CLEARANCE = 16;
 
 const BALL_RESTITUTION = 0.55;
 const POLE_RESTITUTION = 0.6;
@@ -189,12 +197,13 @@ type Ball = {
   // Matter body is created, so it's drawn at that same radius even if the
   // config slider changes afterward (only newly spawned balls pick that up).
   radius: number;
-  // Which face of the board this ball was last seen clear of: -1 above, 1
-  // below, 0 not yet known (or off the ends, where there is no face to be on).
-  // Matter's own positionPrev cannot answer this — when the solver ejects a
-  // ball through the board it shifts positionPrev by the same correction, so
-  // the ball's history says it was always on the side it was wrongly pushed to.
-  boardFace: -1 | 0 | 1;
+  // Which face of each lever this ball was last seen clear of, one entry per
+  // lever: -1 above, 1 below, 0 not yet known (or off the ends, where there is
+  // no face to be on). Matter's own positionPrev cannot answer this — when the
+  // solver ejects a ball through a lever it shifts positionPrev by the same
+  // correction, so the ball's history says it was always on the side it was
+  // wrongly pushed to.
+  leverFaces: number[];
 };
 
 function Gravity() {
@@ -239,32 +248,38 @@ function Gravity() {
 
       const isBoards = variant === "boards";
       const poles = isBoards ? [] : computePoles(width, height, poleCount);
-      const pivot = isBoards
-        ? computePivotBoard(width, height, boardLength / 100)
-        : null;
+      const levers = isBoards
+        ? computeLevers(width, height, boardLength / 100)
+        : [];
+      const topLever = levers[0] ?? null;
 
-      // Never allowed to sleep: a sleeping board still gets woken by an
+      // Never allowed to sleep: a sleeping lever still gets woken by an
       // incoming ball, but it would also stop honouring the restoring torque
       // mid-teeter and freeze at whatever angle it happened to hold.
-      const boardBody = pivot
-        ? Bodies.rectangle(pivot.x, pivot.y, pivot.length, BOARD_THICKNESS, {
-            restitution: BOARD_RESTITUTION,
-            friction: BOARD_FRICTION,
-            frictionAir: BOARD_ANGULAR_DAMPING,
-            chamfer: { radius: BOARD_CHAMFER_RADIUS },
-            sleepThreshold: Infinity,
-          })
-        : null;
+      const leverBodies = levers.map((lever) =>
+        Bodies.rectangle(lever.x, lever.y, lever.length, BOARD_THICKNESS, {
+          restitution: BOARD_RESTITUTION,
+          friction: BOARD_FRICTION,
+          frictionAir: BOARD_ANGULAR_DAMPING,
+          chamfer: { radius: BOARD_CHAMFER_RADIUS },
+          sleepThreshold: Infinity,
+        }),
+      );
 
-      if (boardBody && pivot) {
-        Body.setInertia(
-          boardBody,
-          BOARD_INERTIA_COEFF * boardBody.mass * pivot.length * pivot.length,
-        );
+      // Every lever's inertia is scaled by the *top* lever's length, not its
+      // own. Inertia would otherwise go as length³ while the torque a ball
+      // applies goes as length, leaving the short lower levers several times
+      // twitchier than the long one above them — they would spend their time
+      // slammed against a stop instead of teetering.
+      if (topLever) {
+        const reference = topLever.length * topLever.length;
+        for (const body of leverBodies) {
+          Body.setInertia(body, BOARD_INERTIA_COEFF * body.mass * reference);
+        }
       }
 
-      const obstacleBodies = boardBody
-        ? [boardBody]
+      const obstacleBodies = isBoards
+        ? leverBodies
         : poles.map((p) =>
             Bodies.circle(p.x, p.y, POLE_RADIUS, {
               isStatic: true,
@@ -275,102 +290,109 @@ function Gravity() {
 
       const maxBoardAngle = (boardTilt * Math.PI) / 180;
 
-      // Pin the center, clamp the tip: the board keeps exactly one degree of
-      // freedom, rotation about the pivot, bounded by the tilt slider so it
+      // Pin the center, clamp the tip: a lever keeps exactly one degree of
+      // freedom, rotation about its pivot, bounded by the tilt slider so it
       // can never swing past a plausible seesaw angle and start spinning.
-      const settleBoard = () => {
-        if (!boardBody || !pivot) return;
-        Body.setPosition(boardBody, { x: pivot.x, y: pivot.y });
-        Body.setVelocity(boardBody, { x: 0, y: 0 });
-        if (boardBody.angle > maxBoardAngle) {
-          Body.setAngle(boardBody, maxBoardAngle);
-          Body.setAngularVelocity(boardBody, 0);
-        } else if (boardBody.angle < -maxBoardAngle) {
-          Body.setAngle(boardBody, -maxBoardAngle);
-          Body.setAngularVelocity(boardBody, 0);
-        } else if (Math.abs(boardBody.angularVelocity) > BOARD_MAX_ANGULAR_SPEED) {
-          Body.setAngularVelocity(
-            boardBody,
-            Math.sign(boardBody.angularVelocity) * BOARD_MAX_ANGULAR_SPEED,
-          );
+      const settleLevers = () => {
+        for (let i = 0; i < leverBodies.length; i++) {
+          const body = leverBodies[i];
+          const lever = levers[i];
+          Body.setPosition(body, { x: lever.x, y: lever.y });
+          Body.setVelocity(body, { x: 0, y: 0 });
+          if (body.angle > maxBoardAngle) {
+            Body.setAngle(body, maxBoardAngle);
+            Body.setAngularVelocity(body, 0);
+          } else if (body.angle < -maxBoardAngle) {
+            Body.setAngle(body, -maxBoardAngle);
+            Body.setAngularVelocity(body, 0);
+          } else if (Math.abs(body.angularVelocity) > BOARD_MAX_ANGULAR_SPEED) {
+            Body.setAngularVelocity(
+              body,
+              Math.sign(body.angularVelocity) * BOARD_MAX_ANGULAR_SPEED,
+            );
+          }
         }
       };
 
-      // Matter cannot keep balls out of a board this thin on its own, in two
+      // Matter cannot keep balls out of a lever this thin on its own, in two
       // separate ways. A ball arrives at 15px/step (24 at max gravity) against
       // a 8px slab, so it lands *inside* rather than against the face; and once
       // its center is past the mid-plane, SAT's minimum-translation axis points
       // out the far side, so the solver's own correction is what posts the ball
-      // through the board. Both were visible: balls fused into the plank for a
+      // through the lever. Both were visible: balls fused into the plank for a
       // few frames, then dropped out the bottom.
       //
-      // So the board's contact is resolved here instead, as a hard constraint:
+      // So lever contact is resolved here instead, as a hard constraint:
       // whichever face a ball was on last step is the face it stays on. That
       // holds at any speed, needs no thickening, and leaves Matter to handle
       // every other body in the world.
-      const holdBallsOffBoard = () => {
-        if (!boardBody || !pivot) return;
-        const cos = Math.cos(boardBody.angle);
-        const sin = Math.sin(boardBody.angle);
-        const half = pivot.length / 2;
+      const holdBallsOffLevers = () => {
+        for (let i = 0; i < leverBodies.length; i++) {
+          const leverBody = leverBodies[i];
+          const lever = levers[i];
+          const cos = Math.cos(leverBody.angle);
+          const sin = Math.sin(leverBody.angle);
+          const half = lever.length / 2;
 
-        for (const ball of ballsRef.current) {
-          const body = ball.body;
-          const surface = BOARD_THICKNESS / 2 + ball.radius;
+          for (const ball of ballsRef.current) {
+            const body = ball.body;
+            const surface = BOARD_THICKNESS / 2 + ball.radius;
 
-          const dx = body.position.x - pivot.x;
-          const dy = body.position.y - pivot.y;
-          const localX = dx * cos + dy * sin;
-          const localY = -dx * sin + dy * cos;
-          if (Math.abs(localX) > half) {
-            ball.boardFace = 0;
-            continue;
-          }
-
-          const side = localY < 0 ? -1 : 1;
-          const clear = Math.abs(localY) > surface + BOARD_CONTACT_TOLERANCE;
-          if (clear && (ball.boardFace === 0 || ball.boardFace === side)) {
-            ball.boardFace = side;
-            continue;
-          }
-
-          // Either overlapping the board or already on the wrong side of it.
-          // Both are put back against the face the ball was last clear of.
-          const face = ball.boardFace !== 0 ? ball.boardFace : side;
-          ball.boardFace = face;
-          const targetY = face * surface;
-          Body.setPosition(body, {
-            x: pivot.x + localX * cos - targetY * sin,
-            y: pivot.y + localX * sin + targetY * cos,
-          });
-
-          const vLocalX = body.velocity.x * cos + body.velocity.y * sin;
-          let vLocalY = -body.velocity.x * sin + body.velocity.y * cos;
-          if (vLocalY * face < 0) {
-            if (Math.abs(vLocalY) > BOARD_IMPACT_SPEED) {
-              // A real hit: bounce it off the face and turn the board, which
-              // is the impulse the missed contact would have applied.
-              if (boardBody.inertia > 0) {
-                Body.setAngularVelocity(
-                  boardBody,
-                  boardBody.angularVelocity +
-                    (localX * body.mass * vLocalY) / boardBody.inertia,
-                );
-              }
-              vLocalY *= -BOARD_SWEEP_RESTITUTION;
-            } else {
-              // A ball simply lying on the board, gaining a fraction of a
-              // pixel of fall each step. Bouncing that back would buzz, so it
-              // is just held against the face.
-              vLocalY = 0;
+            const dx = body.position.x - lever.x;
+            const dy = body.position.y - lever.y;
+            const localX = dx * cos + dy * sin;
+            const localY = -dx * sin + dy * cos;
+            if (Math.abs(localX) > half) {
+              ball.leverFaces[i] = 0;
+              continue;
             }
-          }
-          Body.setVelocity(body, {
-            x: vLocalX * cos - vLocalY * sin,
-            y: vLocalX * sin + vLocalY * cos,
-          });
 
-          if (body.isSleeping) Sleeping.set(body, false);
+            const side = localY < 0 ? -1 : 1;
+            const clear = Math.abs(localY) > surface + BOARD_CONTACT_TOLERANCE;
+            const known = ball.leverFaces[i];
+            if (clear && (known === 0 || known === side)) {
+              ball.leverFaces[i] = side;
+              continue;
+            }
+
+            // Either overlapping the lever or already on the wrong side of it.
+            // Both are put back against the face the ball was last clear of.
+            const face = known !== 0 ? known : side;
+            ball.leverFaces[i] = face;
+            const targetY = face * surface;
+            Body.setPosition(body, {
+              x: lever.x + localX * cos - targetY * sin,
+              y: lever.y + localX * sin + targetY * cos,
+            });
+
+            const vLocalX = body.velocity.x * cos + body.velocity.y * sin;
+            let vLocalY = -body.velocity.x * sin + body.velocity.y * cos;
+            if (vLocalY * face < 0) {
+              if (Math.abs(vLocalY) > BOARD_IMPACT_SPEED) {
+                // A real hit: bounce it off the face and turn the lever, which
+                // is the impulse the missed contact would have applied.
+                if (leverBody.inertia > 0) {
+                  Body.setAngularVelocity(
+                    leverBody,
+                    leverBody.angularVelocity +
+                      (localX * body.mass * vLocalY) / leverBody.inertia,
+                  );
+                }
+                vLocalY *= -BOARD_SWEEP_RESTITUTION;
+              } else {
+                // A ball simply lying on the lever, gaining a fraction of a
+                // pixel of fall each step. Bouncing that back would buzz, so it
+                // is just held against the face.
+                vLocalY = 0;
+              }
+            }
+            Body.setVelocity(body, {
+              x: vLocalX * cos - vLocalY * sin,
+              y: vLocalX * sin + vLocalY * cos,
+            });
+
+            if (body.isSleeping) Sleeping.set(body, false);
+          }
         }
       };
 
@@ -420,20 +442,23 @@ function Gravity() {
           ctx.moveTo(p.x + POLE_RADIUS, p.y);
           ctx.arc(p.x, p.y, POLE_RADIUS, 0, Math.PI * 2);
         }
-        if (boardBody) {
+        for (const leverBody of leverBodies) {
           // The body's own vertices are already in world space and already
-          // rotated, so the board needs no corner math of its own.
-          const [first, ...rest] = boardBody.vertices;
+          // rotated, so a lever needs no corner math of its own.
+          const [first, ...rest] = leverBody.vertices;
           ctx.moveTo(first.x, first.y);
           for (const vertex of rest) ctx.lineTo(vertex.x, vertex.y);
           ctx.closePath();
         }
         ctx.stroke();
 
-        if (pivot) {
+        if (levers.length > 0) {
           ctx.fillStyle = BALL_FILL;
           ctx.beginPath();
-          ctx.arc(pivot.x, pivot.y, PIVOT_DOT_RADIUS, 0, Math.PI * 2);
+          for (const lever of levers) {
+            ctx.moveTo(lever.x + PIVOT_DOT_RADIUS, lever.y);
+            ctx.arc(lever.x, lever.y, PIVOT_DOT_RADIUS, 0, Math.PI * 2);
+          }
           ctx.fill();
         }
 
@@ -491,11 +516,65 @@ function Gravity() {
       };
 
       // Poles keep the narrow central column the pyramid is built around. The
-      // board wants the opposite: rain across its whole span, tip to tip. A
-      // column at the middle only ever loads whichever side is already down —
-      // every ball rolls to the low end — so the board tips once and stays
-      // there. Spread over the full length, both ends get loaded and it rocks.
-      const spawnSpread = pivot ? pivot.length / 2 : SPAWN_JITTER_PX;
+      // levers want the opposite: rain across every one of them, tip to tip.
+      //
+      // A lever fed only at one point loads whichever side is already down —
+      // everything that lands rolls to the low end — and stays leaning. That is
+      // true of the lower pair as much as the top one, and no arrangement of
+      // them fixes it, because whatever the top lever sheds necessarily arrives
+      // at one spot. Only rain covering both of a lever's arms lets it come
+      // back up.
+      //
+      // Which is why the lower levers get their own rain, starting in the gap
+      // between them and the lever above rather than off the top of the
+      // viewport: their spans sit partly under the top lever's, so anything
+      // dropped from up there over an inner arm is caught before it arrives.
+      // Each band is placed just clear of the top lever at its steepest, for
+      // the longest fall the gap allows, and is weighted by lever length so
+      // the rain stays evenly spread across all three.
+      type SpawnBand = { x: number; halfWidth: number; y: number; weight: number };
+
+      const spawnBands: SpawnBand[] = [];
+      if (levers.length === 0) {
+        spawnBands.push({
+          x: width / 2,
+          halfWidth: SPAWN_JITTER_PX,
+          y: -ABOVE_VIEWPORT_SPAWN_Y,
+          weight: 1,
+        });
+      } else {
+        levers.forEach((lever, i) => {
+          let y = -ABOVE_VIEWPORT_SPAWN_Y;
+          if (i > 0 && topLever) {
+            const gapTop =
+              topLever.y +
+              (topLever.length / 2) * Math.sin(maxBoardAngle) +
+              MID_AIR_SPAWN_CLEARANCE;
+            const gapBottom =
+              lever.y -
+              (lever.length / 2) * Math.sin(maxBoardAngle) -
+              MID_AIR_SPAWN_CLEARANCE;
+            y = gapTop < gapBottom ? gapTop : (gapTop + gapBottom) / 2;
+          }
+          spawnBands.push({
+            x: lever.x,
+            halfWidth: lever.length / 2,
+            y,
+            weight: lever.length,
+          });
+        });
+      }
+
+      const totalSpawnWeight = spawnBands.reduce((sum, b) => sum + b.weight, 0);
+
+      const pickSpawnBand = () => {
+        let remaining = Math.random() * totalSpawnWeight;
+        for (const band of spawnBands) {
+          remaining -= band.weight;
+          if (remaining <= 0) return band;
+        }
+        return spawnBands[spawnBands.length - 1];
+      };
 
       const addBall = (x: number, y: number, radius: number) => {
         const body = Bodies.circle(x, y, radius, {
@@ -504,7 +583,13 @@ function Gravity() {
           frictionAir: 0.01,
         });
         Composite.add(engine.world, body);
-        ballsRef.current.push({ body, sleptFor: 0, alpha: 1, radius, boardFace: 0 });
+        ballsRef.current.push({
+          body,
+          sleptFor: 0,
+          alpha: 1,
+          radius,
+          leverFaces: new Array(levers.length).fill(0),
+        });
 
         if (ballsRef.current.length > MAX_BALLS) {
           const oldest = ballsRef.current.shift();
@@ -517,25 +602,39 @@ function Gravity() {
 
       const spawnBall = () => {
         const radius = configRef.current.ballRadius;
+        const band = pickSpawnBand();
         addBall(
-          width / 2 + (Math.random() * 2 - 1) * spawnSpread,
-          -radius * 2,
+          band.x + (Math.random() * 2 - 1) * band.halfWidth,
+          band.y,
           radius,
         );
       };
 
-      // A load of balls aimed at whichever end is currently up. The stream
-      // alone can leave the board leaning for a long stretch — one end low and
-      // catching everything that rolls — and this is the weight that puts it
-      // back the other way.
+      // A load of balls aimed at the raised end of whichever lever is leaning
+      // hardest — the stream can still leave one of them stuck at a stop for a
+      // long stretch, and this is the weight that puts it back the other way.
+      //
+      // A load aimed at a lower lever's inner arm is partly caught by the top
+      // lever on the way down, since the two spans overlap. That is not worth
+      // correcting for: the intercepted part lands on the top lever and
+      // cascades from there, which is the same errand.
       const spawnLoad = () => {
-        if (!boardBody || !pivot) return;
+        if (leverBodies.length === 0) return;
+        let target = 0;
+        for (let i = 1; i < leverBodies.length; i++) {
+          if (
+            Math.abs(leverBodies[i].angle) > Math.abs(leverBodies[target].angle)
+          ) {
+            target = i;
+          }
+        }
+        const lever = levers[target];
         const radius = configRef.current.ballRadius;
 
         // Canvas y grows downward, so the raised end is the one with the
-        // smaller y: the right end sits at pivot.y + (length/2)*sin(angle),
+        // smaller y: the right end sits at lever.y + (length/2)*sin(angle),
         // which is above the pivot exactly when the angle is negative.
-        const angle = boardBody.angle;
+        const angle = leverBodies[target].angle;
         const highSide =
           Math.abs(angle) < LOAD_LEVEL_EPS
             ? Math.random() < 0.5
@@ -545,7 +644,7 @@ function Gravity() {
               ? 1
               : -1;
 
-        const half = pivot.length / 2;
+        const half = lever.length / 2;
         const inner = half * LOAD_BAND_INNER;
         const band = half * (LOAD_BAND_OUTER - LOAD_BAND_INNER);
         const cell = Math.max(radius * LOAD_CELL_RADII, 1);
@@ -559,7 +658,7 @@ function Gravity() {
             ((i % columns) + 0.5) * columnWidth +
             (Math.random() * 2 - 1) * jitter;
           addBall(
-            pivot.x + highSide * localX * Math.cos(angle),
+            lever.x + highSide * localX * Math.cos(angle),
             -radius * 2 - Math.floor(i / columns) * cell,
             radius,
           );
@@ -589,16 +688,16 @@ function Gravity() {
         physicsAcc += dt;
         let steps = 0;
         while (physicsAcc >= PHYSICS_STEP_S && steps < MAX_SUBSTEPS) {
-          if (boardBody) {
-            boardBody.torque =
-              -boardBody.inertia *
+          for (const leverBody of leverBodies) {
+            leverBody.torque =
+              -leverBody.inertia *
               BOARD_RESTORE_ACCEL *
               RAD_PER_S2_TO_MATTER_TORQUE *
-              boardBody.angle;
+              leverBody.angle;
           }
           Engine.update(engine, PHYSICS_STEP_MS);
-          settleBoard();
-          holdBallsOffBoard();
+          settleLevers();
+          holdBallsOffLevers();
           physicsAcc -= PHYSICS_STEP_S;
           steps++;
         }
@@ -611,7 +710,7 @@ function Gravity() {
           spawnAcc -= spawnInterval;
         }
 
-        if (boardBody) {
+        if (topLever) {
           loadAcc += dt;
           if (loadAcc >= loadDelay) {
             loadAcc = 0;
