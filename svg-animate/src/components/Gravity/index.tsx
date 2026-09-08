@@ -20,7 +20,6 @@ type GravityConfig = {
   boardLength: number;
   boardTilt: number;
   ballRadius: number;
-  drainDelay: number;
 };
 
 const DEFAULT_CONFIG: GravityConfig = {
@@ -31,7 +30,6 @@ const DEFAULT_CONFIG: GravityConfig = {
   boardLength: 45,
   boardTilt: 14,
   ballRadius: 3,
-  drainDelay: 2,
 };
 
 const VARIANT_OPTIONS: { value: GravityVariant; label: string }[] = [
@@ -152,6 +150,14 @@ const LOAD_CELL_RADII = 2.6;
 
 const LOAD_LEVEL_EPS = (1 * Math.PI) / 180;
 
+// Bounds of the Max tilt slider. Shared with the JSX below so the two stay in
+// sync, and with the mid-air spawn bands' clearance math, which needs the
+// worst case a lever could ever swing to — using the *slider's* max here
+// rather than the live config value is what lets that value be read from
+// configRef instead of being an effect dependency (see settleLevers).
+const MIN_BOARD_TILT_DEG = 4;
+const MAX_BOARD_TILT_DEG = 18;
+
 // Drawn-only marker on the pivot — a collision body there would block balls
 // from passing beneath the board.
 const PIVOT_DOT_RADIUS = 5;
@@ -162,8 +168,10 @@ const PIVOT_DOT_RADIUS = 5;
 const WAKE_CONTACT_SLACK_PX = 3;
 
 // Resting balls fade out and get removed so the pile never grows without
-// bound: once a ball has been asleep this long (config.drainDelay), it
-// starts fading; once fully transparent, it's removed from the simulation.
+// bound: once a ball has been asleep this long, it starts fading; once fully
+// transparent, it's removed from the simulation. No longer user-configurable
+// (was a "Drain delay" slider), just a fixed pace.
+const DRAIN_DELAY_S = 2;
 const FADE_DURATION_S = 0.6;
 
 // Hard backstop in case a ball somehow never settles (e.g. balanced on a
@@ -222,7 +230,7 @@ function Gravity() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const ballsRef = useRef<Ball[]>([]);
 
-  const { variant, poleCount, boardLength, boardTilt } = config;
+  const { variant, poleCount, boardLength } = config;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -288,12 +296,18 @@ function Gravity() {
             }),
           );
 
-      const maxBoardAngle = (boardTilt * Math.PI) / 180;
-
       // Pin the center, clamp the tip: a lever keeps exactly one degree of
       // freedom, rotation about its pivot, bounded by the tilt slider so it
       // can never swing past a plausible seesaw angle and start spinning.
+      //
+      // Reads the tilt live from configRef rather than closing over it, like
+      // gravity/spawnRate/ballRadius below already do — the slider fires
+      // onChange continuously while dragged, and boardTilt used to be an
+      // effect dependency, so every tick of the drag tore down and rebuilt the
+      // whole engine (every body, every ball) just to update this clamp.
       const settleLevers = () => {
+        const maxBoardAngle =
+          (configRef.current.boardTilt * Math.PI) / 180;
         for (let i = 0; i < leverBodies.length; i++) {
           const body = leverBodies[i];
           const lever = levers[i];
@@ -534,6 +548,11 @@ function Gravity() {
       // the rain stays evenly spread across all three.
       type SpawnBand = { x: number; halfWidth: number; y: number; weight: number };
 
+      // Sized off the slider's static max, not the live tilt: these bands are
+      // laid out once here rather than recomputed every frame, so the margin
+      // has to stay valid no matter how Max tilt is adjusted afterward.
+      const worstCaseTiltAngle = (MAX_BOARD_TILT_DEG * Math.PI) / 180;
+
       const spawnBands: SpawnBand[] = [];
       if (levers.length === 0) {
         spawnBands.push({
@@ -548,11 +567,11 @@ function Gravity() {
           if (i > 0 && topLever) {
             const gapTop =
               topLever.y +
-              (topLever.length / 2) * Math.sin(maxBoardAngle) +
+              (topLever.length / 2) * Math.sin(worstCaseTiltAngle) +
               MID_AIR_SPAWN_CLEARANCE;
             const gapBottom =
               lever.y -
-              (lever.length / 2) * Math.sin(maxBoardAngle) -
+              (lever.length / 2) * Math.sin(worstCaseTiltAngle) -
               MID_AIR_SPAWN_CLEARANCE;
             y = gapTop < gapBottom ? gapTop : (gapTop + gapBottom) / 2;
           }
@@ -719,7 +738,6 @@ function Gravity() {
           }
         }
 
-        const drainDelay = c.drainDelay;
         const balls = ballsRef.current;
         for (let i = balls.length - 1; i >= 0; i--) {
           const b = balls[i];
@@ -729,8 +747,8 @@ function Gravity() {
             continue;
           }
           b.sleptFor += dt;
-          if (b.sleptFor <= drainDelay) continue;
-          b.alpha = Math.max(0, 1 - (b.sleptFor - drainDelay) / FADE_DURATION_S);
+          if (b.sleptFor <= DRAIN_DELAY_S) continue;
+          b.alpha = Math.max(0, 1 - (b.sleptFor - DRAIN_DELAY_S) / FADE_DURATION_S);
           if (b.alpha <= 0) {
             wakeTouchingSleepers(b.body);
             Composite.remove(engine.world, b.body);
@@ -755,15 +773,7 @@ function Gravity() {
       cancelled = true;
       teardown?.();
     };
-  }, [
-    width,
-    height,
-    variant,
-    poleCount,
-    boardLength,
-    boardTilt,
-    paused,
-  ]);
+  }, [width, height, variant, poleCount, boardLength, paused]);
 
   return (
     <>
@@ -811,8 +821,8 @@ function Gravity() {
             <SliderControl
               label="Max tilt"
               value={config.boardTilt}
-              min={4}
-              max={18}
+              min={MIN_BOARD_TILT_DEG}
+              max={MAX_BOARD_TILT_DEG}
               step={1}
               format={(v) => `${v}°`}
               onChange={(v) => setConfig((c) => ({ ...c, boardTilt: v }))}
@@ -836,15 +846,6 @@ function Gravity() {
           step={0.5}
           format={(v) => `${v}px`}
           onChange={(v) => setConfig((c) => ({ ...c, ballRadius: v }))}
-        />
-        <SliderControl
-          label="Drain delay"
-          value={config.drainDelay}
-          min={0.5}
-          max={10}
-          step={0.5}
-          format={(v) => `${v}s`}
-          onChange={(v) => setConfig((c) => ({ ...c, drainDelay: v }))}
         />
       </ConfigPanel>
     </>
