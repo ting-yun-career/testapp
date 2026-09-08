@@ -15,7 +15,13 @@ const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const DIGITS = "0123456789";
 const WALL_CHARSET = LETTERS + DIGITS;
 
-const FONT_FAMILY = "Bitcount Prop Single Ink";
+// The "Ink" cut of this family is a COLRv1 color font with decorative
+// ink-splash accents baked into the glyphs — a color font's own palette
+// layers override canvas fillStyle, not the other way around, which is what
+// was putting red into characters this widget draws as plain black/gray
+// text. This plain cut has no embedded color layers, so fillStyle applies
+// normally.
+const FONT_FAMILY = "Bitcount Prop Single";
 
 const FALLBACK_GLYPH_RATIO = 0.7;
 // Horizontal cell width is the glyph's own width plus this fixed gap — an
