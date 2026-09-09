@@ -8,7 +8,9 @@ const TOP_MARGIN_RATIO = 0.12;
 const BOTTOM_MARGIN_RATIO = 0.12;
 
 // Fraction of the viewport width the widest (bottom) pyramid row spans.
-const PYRAMID_WIDTH_RATIO = 0.6;
+// Exported so the spawn spread can be sized off the same triangle it's
+// raining onto, rather than an unrelated fixed pixel jitter.
+export const PYRAMID_WIDTH_RATIO = 0.6;
 
 // Thin enough to read as a board rather than a beam, thick enough that a small
 // ball at high gravity doesn't tunnel through between physics steps (Matter

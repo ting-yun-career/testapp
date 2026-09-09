@@ -6,7 +6,12 @@ import ConfigPanel from "../ConfigPanel";
 import SliderControl from "../SliderControl";
 import { prefersReducedMotion } from "../../lib/motion";
 import { useSessionConfig } from "../../lib/sessionConfig";
-import { BOARD_THICKNESS, computeLevers, computePoles } from "./fields";
+import {
+  BOARD_THICKNESS,
+  computeLevers,
+  computePoles,
+  PYRAMID_WIDTH_RATIO,
+} from "./fields";
 
 const CONFIG_KEY = "gravity-config";
 
@@ -45,7 +50,14 @@ const WALL_THICKNESS = 200;
 // A ball spawning dead-center every time, into a perfectly symmetric pole
 // grid, would retrace the same deterministic path forever — this jitter is
 // what makes the field diverge, not cosmetic noise.
-const SPAWN_JITTER_PX = 40;
+//
+// Sized off the pyramid's own width rather than a fixed pixel value, so it
+// scales with viewport/pole-count instead of leaving every spawn clustered in
+// a narrow column regardless of how wide the triangle actually is. Half the
+// triangle's width, not its half-width — this is a spread the ball jitters
+// across (± this much from center), so halving the ratio again is what
+// actually makes the total spawn span half the triangle.
+const POLE_SPAWN_SPREAD_RATIO = PYRAMID_WIDTH_RATIO / 4;
 
 // How far above the viewport balls enter from, clear of the largest radius the
 // ball-size slider offers so none of them pop into view.
@@ -59,7 +71,7 @@ const BALL_RESTITUTION = 0.55;
 const POLE_RESTITUTION = 0.6;
 
 // The board is deliberately slippery. A ball needs friction above tan(tilt) —
-// ~0.32 at the 18° maximum — to hold still on a slope, so anything near that
+// ~0.58 at the 30° maximum — to hold still on a slope, so anything near that
 // would park sleeping balls on the board itself. Well below it, balls always
 // slide off the low end and settle in the floor pile, where the existing
 // sleep/fade/drain path already handles them.
@@ -150,13 +162,29 @@ const LOAD_CELL_RADII = 2.6;
 
 const LOAD_LEVEL_EPS = (1 * Math.PI) / 180;
 
+// A click drops a burst of balls right where the pointer landed, in either
+// variant. Scattered inside a small disc rather than stacked exactly on the
+// point, for the same reason the periodic load uses a grid: same-frame
+// spawns at one exact spot start out fully overlapping, and the solver's
+// answer to that is to fire them apart, which reads as a small explosion
+// instead of a handful of balls landing where clicked.
+const CLICK_SPAWN_COUNT = 60;
+const CLICK_SPAWN_RADIUS_PX = 30;
+
+// The hover ring that previews where a click would land — a lighter, dashed
+// echo of the obstacle stroke, so it reads as a preview rather than another
+// solid shape in the scene.
+const CLICK_HINT_STROKE = "rgba(38, 38, 38, 0.35)";
+const CLICK_HINT_STROKE_WIDTH = 1.5;
+const CLICK_HINT_DASH: number[] = [4, 4];
+
 // Bounds of the Max tilt slider. Shared with the JSX below so the two stay in
 // sync, and with the mid-air spawn bands' clearance math, which needs the
 // worst case a lever could ever swing to — using the *slider's* max here
 // rather than the live config value is what lets that value be read from
 // configRef instead of being an effect dependency (see settleLevers).
 const MIN_BOARD_TILT_DEG = 4;
-const MAX_BOARD_TILT_DEG = 18;
+const MAX_BOARD_TILT_DEG = 30;
 
 // Drawn-only marker on the pivot — a collision body there would block balls
 // from passing beneath the board.
@@ -440,6 +468,15 @@ function Gravity() {
       Composite.add(engine.world, [...obstacleBodies, ...walls]);
       ballsRef.current = [];
 
+      // Where the pointer last was, in canvas coordinates — null when it
+      // isn't over the canvas at all. Read by draw() below to sketch a hint
+      // ring, written by the pointermove/pointerleave listeners set up
+      // further down. Declared up here, ahead of draw's own definition,
+      // because draw() is called once immediately below and a `let`
+      // referenced before its declaration throws, even from inside a closure
+      // that isn't invoked until later.
+      let hoverPoint: { x: number; y: number } | null = null;
+
       const draw = () => {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
@@ -496,6 +533,20 @@ function Gravity() {
           ctx.beginPath();
           ctx.arc(b.body.position.x, b.body.position.y, b.radius, 0, Math.PI * 2);
           ctx.fill();
+        }
+
+        // Hint ring: traces the exact disc a click would fill, right under
+        // the pointer, so hovering reads as "click here" without relying on
+        // the pointer cursor alone to say so. Dashed, to read as a preview
+        // rather than another solid obstacle in the scene.
+        if (hoverPoint) {
+          ctx.setLineDash(CLICK_HINT_DASH);
+          ctx.strokeStyle = CLICK_HINT_STROKE;
+          ctx.lineWidth = CLICK_HINT_STROKE_WIDTH;
+          ctx.beginPath();
+          ctx.arc(hoverPoint.x, hoverPoint.y, CLICK_SPAWN_RADIUS_PX, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.setLineDash([]);
         }
       };
 
@@ -557,7 +608,7 @@ function Gravity() {
       if (levers.length === 0) {
         spawnBands.push({
           x: width / 2,
-          halfWidth: SPAWN_JITTER_PX,
+          halfWidth: width * POLE_SPAWN_SPREAD_RATIO,
           y: -ABOVE_VIEWPORT_SPAWN_Y,
           weight: 1,
         });
@@ -628,6 +679,44 @@ function Gravity() {
           radius,
         );
       };
+
+      const spawnBurstAt = (x: number, y: number) => {
+        const radius = configRef.current.ballRadius;
+        for (let i = 0; i < CLICK_SPAWN_COUNT; i++) {
+          // Uniform over the disc's area, not over (angle, radius) — sampling
+          // radius uniformly would bunch balls near the center instead.
+          const angle = Math.random() * Math.PI * 2;
+          const r = CLICK_SPAWN_RADIUS_PX * Math.sqrt(Math.random());
+          addBall(x + Math.cos(angle) * r, y + Math.sin(angle) * r, radius);
+        }
+      };
+
+      // Both variants listen — Poles gets the same click-to-spawn as Boards.
+      // Attached to the canvas itself, not window — the config panel and
+      // header sit above it in stacking order (higher z-index), so a click on
+      // either of those never reaches this handler and this needs no
+      // target-filtering of its own.
+      const onClick = (event: MouseEvent) => {
+        const rect = canvas.getBoundingClientRect();
+        spawnBurstAt(event.clientX - rect.left, event.clientY - rect.top);
+      };
+      canvas.addEventListener("click", onClick);
+
+      // The hover ring drawn in draw() — this only updates where it is,
+      // draw() (already running every frame via the loop below) is what
+      // actually paints it.
+      const onPointerMove = (event: PointerEvent) => {
+        const rect = canvas.getBoundingClientRect();
+        hoverPoint = {
+          x: event.clientX - rect.left,
+          y: event.clientY - rect.top,
+        };
+      };
+      const onPointerLeave = () => {
+        hoverPoint = null;
+      };
+      canvas.addEventListener("pointermove", onPointerMove);
+      canvas.addEventListener("pointerleave", onPointerLeave);
 
       // A load of balls aimed at the raised end of whichever lever is leaning
       // hardest — the stream can still leave one of them stuck at a stop for a
@@ -763,6 +852,9 @@ function Gravity() {
 
       teardown = () => {
         cancelAnimationFrame(frameId);
+        canvas.removeEventListener("click", onClick);
+        canvas.removeEventListener("pointermove", onPointerMove);
+        canvas.removeEventListener("pointerleave", onPointerLeave);
         Composite.clear(engine.world, false);
         Engine.clear(engine);
         ballsRef.current = [];
@@ -779,7 +871,11 @@ function Gravity() {
     <>
       <canvas
         ref={canvasRef}
-        className="pointer-events-none fixed inset-0 h-full w-full"
+        // Unlike every other widget's canvas, this one takes clicks itself —
+        // both variants spawn a burst of balls under the pointer. The header
+        // and config panel still sit above this in stacking order, so
+        // enabling clicks here never steals one meant for them.
+        className="pointer-events-auto fixed inset-0 h-full w-full cursor-pointer"
         aria-hidden="true"
       />
 
