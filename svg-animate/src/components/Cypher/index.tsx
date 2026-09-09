@@ -41,6 +41,29 @@ const MAX_DEVICE_PIXEL_RATIO = 2;
 const SETTLED_FILL = "#262626";
 const UNSETTLED_FILL = "rgba(38, 38, 38, 0.45)";
 
+// A giant letter, sized to roughly the viewport's height, hides in the wall:
+// any cell that falls inside its filled shape draws in this bright pink once
+// settled, instead of the usual near-black, so the letter reads as a hidden
+// watermark made of cracking characters. Only once settled — a masked cell
+// looks like any other cell while still scrambling, and only turns pink at
+// the moment it reaches its target glyph, in its own place in the sweep
+// rather than the whole letter appearing at once.
+const HIDDEN_LETTER_TEXT = "B";
+const HIGHLIGHT_SETTLED_FILL = "#ff2d95";
+
+// Fraction of the viewport height the letter's glyph should span. Short of
+// the full height so its top/bottom don't land flush against the screen
+// edges. Width is whatever that height happens to produce — no separate
+// horizontal fit, so a tall narrow viewport can end up with a letter wider
+// than the screen (simply clipped by it), which reads fine since the point is
+// the shape, not the letter's edges.
+const HIDDEN_LETTER_HEIGHT_RATIO = 0.85;
+
+// Alpha above which a sampled pixel counts as "inside" the letter — text
+// edges anti-alias down to near-zero, not straight to it, so this needs to
+// sit clear of both ends rather than right at the boundary.
+const HIDDEN_LETTER_ALPHA_THRESHOLD = 128;
+
 // A long, fixed, deterministically-generated pool of "cracked" characters —
 // what the wall settles towards. Algorithmic rather than stored so it never
 // runs out regardless of viewport/grid size; wraps around via modulo. Not
@@ -145,6 +168,67 @@ function computeGrid(width: number, height: number, glyphRatio: number) {
   return { cells };
 }
 
+// Renders HIDDEN_LETTER_TEXT onto an offscreen canvas at roughly viewport
+// size, then samples that canvas once per grid cell to decide which cells sit
+// inside the letter's filled shape. A single getImageData call over the whole
+// canvas, rather than one per cell — thousands of individual reads back from
+// the GPU/canvas backing store would be far slower than one bulk read
+// followed by cheap array indexing.
+function computeHighlightMask(
+  cells: Cell[],
+  width: number,
+  height: number,
+): Uint8Array {
+  const mask = new Uint8Array(cells.length);
+  if (width <= 0 || height <= 0) return mask;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.ceil(width);
+  canvas.height = Math.ceil(height);
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  if (!ctx) return mask;
+
+  // Same measure-at-a-probe-size-then-scale approach as measureGlyphRatio:
+  // canvas has no other way to ask "how tall does this render at size N",
+  // and font size doesn't map to rendered glyph height in any fixed ratio
+  // across fonts/letters.
+  const probeSize = 200;
+  ctx.font = `${probeSize}px sans-serif`;
+  const metrics = ctx.measureText(HIDDEN_LETTER_TEXT);
+  const measuredHeight =
+    (metrics.actualBoundingBoxAscent || probeSize * 0.7) +
+    (metrics.actualBoundingBoxDescent || 0);
+  const targetHeight = height * HIDDEN_LETTER_HEIGHT_RATIO;
+  const fontSize =
+    measuredHeight > 0 ? (targetHeight / measuredHeight) * probeSize : targetHeight;
+
+  // textBaseline "middle" centers on the font's em-box middle, not the
+  // glyph's actual ink — for a letter like "B" (no descender, all its weight
+  // above the baseline) that sits visibly low. Measuring the final-size
+  // glyph's own bounding box and placing the baseline by hand centers the
+  // ink itself instead.
+  ctx.font = `${fontSize}px sans-serif`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "alphabetic";
+  const finalMetrics = ctx.measureText(HIDDEN_LETTER_TEXT);
+  const ascent = finalMetrics.actualBoundingBoxAscent || fontSize * 0.7;
+  const descent = finalMetrics.actualBoundingBoxDescent || 0;
+  const baselineY = height / 2 + (ascent - descent) / 2;
+  ctx.fillStyle = "#000";
+  ctx.fillText(HIDDEN_LETTER_TEXT, width / 2, baselineY);
+
+  const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  for (let i = 0; i < cells.length; i++) {
+    const cell = cells[i];
+    const px = Math.min(canvas.width - 1, Math.max(0, Math.round(cell.x)));
+    const py = Math.min(canvas.height - 1, Math.max(0, Math.round(cell.y)));
+    const alpha = data[(py * canvas.width + px) * 4 + 3];
+    mask[i] = alpha > HIDDEN_LETTER_ALPHA_THRESHOLD ? 1 : 0;
+  }
+
+  return mask;
+}
+
 function Cypher() {
   const { width, height } = useViewportSize();
   const [config, setConfig] = useSessionConfig<TextConfig>(
@@ -189,6 +273,7 @@ function Cypher() {
   const timeRef = useRef(paused ? config.duration : 0);
   const settleTimesRef = useRef<number[]>([]);
   const settleCacheKeyRef = useRef("");
+  const highlightMaskRef = useRef<Uint8Array>(new Uint8Array(0));
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -221,20 +306,42 @@ function Cypher() {
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
-    // Two passes so fillStyle only changes twice a frame instead of once
-    // per glyph — cheap since canvas state changes aren't free either.
-    for (const settled of [false, true]) {
-      ctx.fillStyle = settled ? SETTLED_FILL : UNSETTLED_FILL;
+    const mask = highlightMaskRef.current;
+
+    // Unsettled cells never show the highlight, mask or not — a hidden-letter
+    // cell looks exactly like any other cell right up until it settles onto
+    // its target glyph, which is the moment the mask actually reveals itself,
+    // in each cell's own place in the cracking sweep rather than all at once.
+    ctx.fillStyle = UNSETTLED_FILL;
+    for (let i = 0; i < n; i++) {
+      if (phase >= settleTimes[i]) continue;
+      const glyph = WALL_CHARSET[Math.floor(hashUnit(i, tick) * WALL_CHARSET.length)];
+      const cell = grid.cells[i];
+      ctx.fillText(glyph, cell.x, cell.y);
+    }
+
+    // Settled cells split by mask — two passes so fillStyle only changes
+    // once each, not once per glyph.
+    for (const highlighted of [false, true]) {
+      ctx.fillStyle = highlighted ? HIGHLIGHT_SETTLED_FILL : SETTLED_FILL;
       for (let i = 0; i < n; i++) {
-        if (phase >= settleTimes[i] !== settled) continue;
-        const glyph = settled
-          ? targetCharAt(i)
-          : WALL_CHARSET[Math.floor(hashUnit(i, tick) * WALL_CHARSET.length)];
+        if (phase < settleTimes[i]) continue;
+        if (Boolean(mask[i]) !== highlighted) continue;
         const cell = grid.cells[i];
-        ctx.fillText(glyph, cell.x, cell.y);
+        ctx.fillText(targetCharAt(i), cell.x, cell.y);
       }
     }
   }, [n, grid, width, height]);
+
+  // Recomputed whenever the grid's geometry does (resize, or the font-load
+  // re-measure updating glyphRatio) — not on every frame, since the letter
+  // and cell positions it depends on are unchanged in between. Draws once
+  // immediately after so a still (paused) wall doesn't wait for an animation
+  // tick that may never come to pick up a freshly (re)computed mask.
+  useEffect(() => {
+    highlightMaskRef.current = computeHighlightMask(grid.cells, width, height);
+    drawFrame();
+  }, [grid, width, height, drawFrame]);
 
   useEffect(() => {
     drawFrame();
