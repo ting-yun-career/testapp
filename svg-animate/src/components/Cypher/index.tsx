@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ConfigPanel from "../ConfigPanel";
 import SliderControl from "../SliderControl";
+import TextControl from "../TextControl";
 import { useViewportSize } from "../../hooks/useViewportSize";
 import { mulberry32 } from "../../lib/random";
 import { prefersReducedMotion } from "../../lib/motion";
@@ -48,7 +49,14 @@ const UNSETTLED_FILL = "rgba(38, 38, 38, 0.45)";
 // looks like any other cell while still scrambling, and only turns pink at
 // the moment it reaches its target glyph, in its own place in the sweep
 // rather than the whole letter appearing at once.
-const HIDDEN_LETTER_TEXT = "B";
+//
+// The letter itself is config.hiddenLetter (a "Hidden letter" field in the
+// panel), not a constant — DEFAULT_HIDDEN_LETTER is just its starting value.
+// Only single printable-ASCII characters are accepted; an empty field is a
+// valid, deliberate "off" state (an empty string measures and draws as
+// nothing, so the mask comes out all-clear with no special-casing needed).
+const DEFAULT_HIDDEN_LETTER = "?";
+const PRINTABLE_ASCII = /^[\x20-\x7e]$/;
 const HIGHLIGHT_SETTLED_FILL = "#ff2d95";
 
 // Fraction of the viewport height the letter's glyph should span. Short of
@@ -87,6 +95,7 @@ function targetCharAt(index: number): string {
 type TextConfig = {
   duration: number;
   swapRate: number;
+  hiddenLetter: string;
 };
 
 const CONFIG_KEY = "cypher-config";
@@ -94,6 +103,7 @@ const CONFIG_KEY = "cypher-config";
 const DEFAULT_CONFIG: TextConfig = {
   duration: 200,
   swapRate: 24,
+  hiddenLetter: DEFAULT_HIDDEN_LETTER,
 };
 
 // Cheap deterministic hash used to pick a scrambled glyph for (cell, tick) —
@@ -168,19 +178,22 @@ function computeGrid(width: number, height: number, glyphRatio: number) {
   return { cells };
 }
 
-// Renders HIDDEN_LETTER_TEXT onto an offscreen canvas at roughly viewport
-// size, then samples that canvas once per grid cell to decide which cells sit
-// inside the letter's filled shape. A single getImageData call over the whole
-// canvas, rather than one per cell — thousands of individual reads back from
-// the GPU/canvas backing store would be far slower than one bulk read
-// followed by cheap array indexing.
+// Renders `letter` onto an offscreen canvas at roughly viewport size, then
+// samples that canvas once per grid cell to decide which cells sit inside the
+// letter's filled shape. A single getImageData call over the whole canvas,
+// rather than one per cell — thousands of individual reads back from the
+// GPU/canvas backing store would be far slower than one bulk read followed by
+// cheap array indexing.
 function computeHighlightMask(
   cells: Cell[],
   width: number,
   height: number,
+  letter: string,
 ): Uint8Array {
   const mask = new Uint8Array(cells.length);
-  if (width <= 0 || height <= 0) return mask;
+  // Empty is the deliberate "off" state (see hiddenLetter's doc comment) —
+  // skip the canvas work rather than measure and draw nothing.
+  if (width <= 0 || height <= 0 || letter.length === 0) return mask;
 
   const canvas = document.createElement("canvas");
   canvas.width = Math.ceil(width);
@@ -194,7 +207,7 @@ function computeHighlightMask(
   // across fonts/letters.
   const probeSize = 200;
   ctx.font = `${probeSize}px sans-serif`;
-  const metrics = ctx.measureText(HIDDEN_LETTER_TEXT);
+  const metrics = ctx.measureText(letter);
   const measuredHeight =
     (metrics.actualBoundingBoxAscent || probeSize * 0.7) +
     (metrics.actualBoundingBoxDescent || 0);
@@ -210,12 +223,12 @@ function computeHighlightMask(
   ctx.font = `${fontSize}px sans-serif`;
   ctx.textAlign = "center";
   ctx.textBaseline = "alphabetic";
-  const finalMetrics = ctx.measureText(HIDDEN_LETTER_TEXT);
+  const finalMetrics = ctx.measureText(letter);
   const ascent = finalMetrics.actualBoundingBoxAscent || fontSize * 0.7;
   const descent = finalMetrics.actualBoundingBoxDescent || 0;
   const baselineY = height / 2 + (ascent - descent) / 2;
   ctx.fillStyle = "#000";
-  ctx.fillText(HIDDEN_LETTER_TEXT, width / 2, baselineY);
+  ctx.fillText(letter, width / 2, baselineY);
 
   const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
   for (let i = 0; i < cells.length; i++) {
@@ -334,14 +347,20 @@ function Cypher() {
   }, [n, grid, width, height]);
 
   // Recomputed whenever the grid's geometry does (resize, or the font-load
-  // re-measure updating glyphRatio) — not on every frame, since the letter
-  // and cell positions it depends on are unchanged in between. Draws once
-  // immediately after so a still (paused) wall doesn't wait for an animation
-  // tick that may never come to pick up a freshly (re)computed mask.
+  // re-measure updating glyphRatio) or the hidden letter itself changes — not
+  // on every frame, since none of what this depends on changes in between.
+  // Draws once immediately after so a still (paused) wall doesn't wait for an
+  // animation tick that may never come to pick up a freshly (re)computed
+  // mask.
   useEffect(() => {
-    highlightMaskRef.current = computeHighlightMask(grid.cells, width, height);
+    highlightMaskRef.current = computeHighlightMask(
+      grid.cells,
+      width,
+      height,
+      config.hiddenLetter,
+    );
     drawFrame();
-  }, [grid, width, height, drawFrame]);
+  }, [grid, width, height, config.hiddenLetter, drawFrame]);
 
   useEffect(() => {
     drawFrame();
@@ -392,6 +411,20 @@ function Cypher() {
           step={1}
           format={(v) => `${v}/s`}
           onChange={(v) => setConfig((c) => ({ ...c, swapRate: v }))}
+        />
+        <TextControl
+          label="Hidden letter"
+          value={config.hiddenLetter}
+          maxLength={1}
+          onChange={(v) => {
+            // Rejects anything but a single printable-ASCII character —
+            // empty is allowed too, as the deliberate "off" state. An
+            // invalid keystroke is silently dropped rather than stored: the
+            // input is controlled by config.hiddenLetter, so on rejection
+            // React just re-renders it back to the last valid value.
+            if (v.length > 0 && !PRINTABLE_ASCII.test(v)) return;
+            setConfig((c) => ({ ...c, hiddenLetter: v }));
+          }}
         />
       </ConfigPanel>
     </>
