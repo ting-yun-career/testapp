@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./scripts/new-project.sh --name silver4-new --type page)",
+      "Bash(unzip -o cloud-design.zip -d .)",
+      "Bash(sed 's/stiffness: 0.2,/stiffness: 0.02,/; s/speed: 0.15,/speed: 0.5,/; s/cableLength: 70,/cableLength: 200,/' gondola-check.cjs)",
+      "Bash(node gondola-check-extreme.cjs)",
+      "Bash(*)"
+    ]
+  }
+}
