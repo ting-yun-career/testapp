@@ -5,6 +5,7 @@ import Wave from "./components/Wave";
 import Atom from "./components/Atom";
 import Cypher from "./components/Cypher";
 import Gravity from "./components/Gravity";
+import Gondola from "./components/Gondola";
 
 const Widget = {
   ring: "ring",
@@ -12,6 +13,7 @@ const Widget = {
   atom: "atom",
   cypher: "cypher",
   gravity: "gravity",
+  gondola: "gondola",
   about: "about",
 } as const;
 
@@ -23,6 +25,7 @@ const NAV_ITEMS: { id: Widget; label: string }[] = [
   { id: Widget.atom, label: "Atom" },
   { id: Widget.cypher, label: "Cypher" },
   { id: Widget.gravity, label: "Gravity" },
+  { id: Widget.gondola, label: "Gondola" },
   { id: Widget.about, label: "About" },
 ];
 
@@ -47,6 +50,7 @@ function App() {
       {activeWidget === Widget.atom && <Atom />}
       {activeWidget === Widget.cypher && <Cypher />}
       {activeWidget === Widget.gravity && <Gravity />}
+      {activeWidget === Widget.gondola && <Gondola />}
 
       {/* z-30: header had no z-index (auto), so a descendant's z-index
           (however high) could never out-rank ConfigPanel's fixed z-20
