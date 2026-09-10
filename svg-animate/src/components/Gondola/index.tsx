@@ -29,11 +29,11 @@ const CABLE_STIFFNESS = 0.2;
 
 const MAX_DEVICE_PIXEL_RATIO = 2;
 
-// Track center as a fraction of the viewport — high enough that the box has
-// clear room to hang and swing below it without the loop or the box
-// threatening to clip the bottom edge at the sliders' upper range.
+// Track center as a fraction of the viewport. Dead center on both axes — the
+// loop is nudged up from there by SPRITE_VERTICAL_BIAS below so that what
+// actually gets centered is the drawn composition, not the bare circle.
 const TRACK_CENTER_X_RATIO = 0.5;
-const TRACK_CENTER_Y_RATIO = 0.38;
+const TRACK_CENTER_Y_RATIO = 0.5;
 
 // Track radius is a % of the shorter viewport dimension (min, not width),
 // like Gravity sizes its board off the axis a shape actually has to fit in —
@@ -89,6 +89,17 @@ const JOINT_FRACTION_Y = 241 / 1024;
 // separately to preserve its own aspect ratio instead of reusing one constant
 // for both.
 const BOX_IMAGE_DISPLAY_SIZE = 200;
+
+// The hub — the point that rides the track — sits near the TOP of the sprite,
+// so the gondola hangs mostly below the circle: at the loop's apex the art
+// reaches only a little above the track, while at its nadir it hangs a lot
+// below. Centering the circle itself would therefore leave the composition
+// visibly bottom-heavy. This is half that imbalance, and the track center is
+// shifted up by it so the drawn extent (highest pixel at the apex, lowest at
+// the nadir) is what ends up centered in the viewport instead.
+const SPRITE_ABOVE_HUB = JOINT_FRACTION_Y * BOX_IMAGE_DISPLAY_SIZE;
+const SPRITE_BELOW_HUB = BOX_IMAGE_DISPLAY_SIZE - SPRITE_ABOVE_HUB;
+const SPRITE_VERTICAL_BIAS = (SPRITE_BELOW_HUB - SPRITE_ABOVE_HUB) / 2;
 
 // --- Cabin lean, and why it's NOT modeled as a torque on the physics body ---
 //
@@ -195,7 +206,7 @@ function Gondola() {
 
     const trackCenter = {
       x: width * TRACK_CENTER_X_RATIO,
-      y: height * TRACK_CENTER_Y_RATIO,
+      y: height * TRACK_CENTER_Y_RATIO - SPRITE_VERTICAL_BIAS,
     };
 
     import("matter-js").then((mod) => {
