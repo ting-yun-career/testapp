@@ -13,18 +13,19 @@ const CONFIG_KEY = "gondola-config";
 type GondolaConfig = {
   speed: number;
   gravity: number;
-  cableLength: number;
-  stiffness: number;
   trackRadius: number;
 };
 
 const DEFAULT_CONFIG: GondolaConfig = {
   speed: 0.15,
   gravity: 1,
-  cableLength: 70,
-  stiffness: 0.2,
   trackRadius: 25,
 };
+
+// Fixed, no longer sliders — the cabin hangs at one distance below the hub, on
+// a cable of one springiness.
+const CABLE_LENGTH = 70;
+const CABLE_STIFFNESS = 0.2;
 
 const MAX_DEVICE_PIXEL_RATIO = 2;
 
@@ -132,8 +133,9 @@ const BOX_IMAGE_DISPLAY_SIZE = 200;
 //
 // It does need clamping, though: with a short cable and weak gravity, the
 // drive overpowers gravity and the bob genuinely swings above the anchor
-// (measured headlessly: 12 of the 32 slider corners, every one of them at
-// the shortest cable and weakest gravity, reaching a full 180deg). Drawing
+// (measured headlessly back when cable length was a slider too: 12 of the 32
+// slider corners, every one of them at the shortest cable and weakest
+// gravity, reaching a full 180deg). Drawing
 // that raw would put the cabin back to doing backflips, so the angle is
 // clamped and then run through a damped spring — which also keeps the clamp
 // from snapping as the angle saturates. Bounded input to a linear damped
@@ -207,9 +209,9 @@ function Gondola() {
       engine.gravity.y = configRef.current.gravity;
 
       // theta and leanAngle/leanAngularVelocity are the only path/lean state
-      // — everything else (anchor position, cable length/stiffness) is read
-      // live off configRef every tick, so none of those sliders need to tear
-      // this effect down and restart.
+      // — the anchor position is recomputed from configRef every tick, so
+      // neither of the remaining sliders that feed it needs to tear this
+      // effect down and restart.
       let theta = START_THETA;
       let leanAngle = 0;
       let leanAngularVelocity = 0;
@@ -227,7 +229,7 @@ function Gondola() {
       // offset point (no separate mass-center position to track anymore).
       const box = Bodies.rectangle(
         startAnchor.x,
-        startAnchor.y + configRef.current.cableLength,
+        startAnchor.y + CABLE_LENGTH,
         BOX_WIDTH,
         BOX_HEIGHT,
       );
@@ -238,8 +240,8 @@ function Gondola() {
         bodyB: box,
         // pointB defaults to the body's centroid ({x: 0, y: 0}) — deliberate,
         // see the lean-model comment above.
-        length: configRef.current.cableLength,
-        stiffness: configRef.current.stiffness,
+        length: CABLE_LENGTH,
+        stiffness: CABLE_STIFFNESS,
       });
       Composite.add(engine.world, cable);
 
@@ -255,11 +257,6 @@ function Gondola() {
         const anchor = pointOnCircle(trackCenter.x, trackCenter.y, radius, theta);
         cable.pointA.x = anchor.x;
         cable.pointA.y = anchor.y;
-        // Matter reads these off the constraint object every step rather
-        // than fixing them at creation, so they can follow live slider
-        // changes exactly like gravity does below.
-        cable.length = c.cableLength;
-        cable.stiffness = c.stiffness;
       };
       Events.on(engine, "beforeUpdate", onBeforeUpdate);
 
@@ -422,23 +419,6 @@ function Gondola() {
           max={2.5}
           step={0.1}
           onChange={(v) => setConfig((c) => ({ ...c, gravity: v }))}
-        />
-        <SliderControl
-          label="Cable length"
-          value={config.cableLength}
-          min={20}
-          max={200}
-          step={5}
-          format={(v) => `${v}px`}
-          onChange={(v) => setConfig((c) => ({ ...c, cableLength: v }))}
-        />
-        <SliderControl
-          label="Stiffness"
-          value={config.stiffness}
-          min={0.02}
-          max={1}
-          step={0.02}
-          onChange={(v) => setConfig((c) => ({ ...c, stiffness: v }))}
         />
         <SliderControl
           label="Track radius"
