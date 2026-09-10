@@ -6,6 +6,7 @@ import SliderControl from "../SliderControl";
 import { prefersReducedMotion } from "../../lib/motion";
 import { useSessionConfig } from "../../lib/sessionConfig";
 import { pointOnCircle } from "./fields";
+import gondolaSrc from "./gondola.png";
 
 const CONFIG_KEY = "gondola-config";
 
@@ -46,6 +47,105 @@ function trackRadiusPx(percent: number, width: number, height: number): number {
 const BOX_WIDTH = 60;
 const BOX_HEIGHT = 30;
 
+// Swap gondola.png for any other image or SVG in this folder to change what
+// draws at the box's position — the physics body's own size/shape (BOX_WIDTH
+// x BOX_HEIGHT, set on the Matter body below) is unrelated to what's drawn
+// over it; drawImage doesn't have to match the collision box's dimensions at
+// all. A Vite asset import (rather than a public/ URL) since this lives
+// alongside the component it belongs to, like the rest of the widget's files.
+//
+// Loaded once at module scope, not per mount: Image() objects are cheap and
+// the browser caches the fetch regardless, but there's no reason to create a
+// new one every time this widget mounts.
+const boxImage = new Image();
+boxImage.src = gondolaSrc;
+
+// Where the wheel's hub sits in gondola.png (1024x1024), as a fraction of the
+// image — measured directly off the source with a scratch coordinate-picker
+// tool (util/coord-picker.html), not estimated. This is the point that
+// actually lands on the anchor (see the drawImage calls below) — not the
+// image's own bounding-box center, and not WHEEL_CROP_HEIGHT either, which
+// is a different row chosen only to split the wheel and cabin into layers.
+const JOINT_FRACTION_X = 437 / 1024;
+const JOINT_FRACTION_Y = 241 / 1024;
+
+// gondola.png is drawn and rotated as one rigid sprite, but a real gondola's
+// wheel/grip stays clamped level to the cable — it doesn't tilt with the
+// cabin's swing, only the cabin (hinged below it) does. Treating the whole
+// picture as one rotating body was making the wheel (and the length of cable
+// drawn through it in the art) visibly swing with the cabin, which reads as
+// backwards once you notice it, because it is.
+//
+// The fix is drawing it as two layers sharing one pivot: everything above
+// this source-image row (the wheel, and the local cable segment drawn
+// through it) stays level; everything below it (the neck and cabin) rotates
+// with the physics swing. Measured with the same coordinate-picker tool as
+// the joint — the wheel's rim spans roughly y=200-282, and the neck below it
+// runs straight and narrow (barely moving from x=427-455) all the way to
+// y=400 before it starts curving into the cabin around y=430, so this sits
+// well clear of the wheel with plenty of margin either side to land in.
+//
+// This crop boundary is NOT the same point as the hub (JOINT_FRACTION_Y
+// above) — it's 109 source-px (≈21 display px at BOX_IMAGE_DISPLAY_SIZE)
+// below it. An earlier version pinned this boundary directly to the anchor
+// instead of the hub, on the assumption the gap would be visually
+// negligible; it wasn't (a constant, visible offset between the wheel
+// graphic and the actual track path, at every point along the loop). Both
+// drawImage calls below now anchor to the true hub and then offset the
+// crop boundary from it by this same 109px, rather than the other way
+// around.
+const WHEEL_CROP_HEIGHT = 350;
+
+// Size the image draws at on screen — independent of both gondola.png's own
+// resolution and the physics body's collision rectangle below; drawImage
+// doesn't care what either of those are. Assumes a square source, matching
+// gondola.png; a non-square replacement would need width and height sized
+// separately to preserve its own aspect ratio instead of reusing one constant
+// for both.
+const BOX_IMAGE_DISPLAY_SIZE = 200;
+
+// --- Cabin lean, and why it's NOT modeled as a torque on the physics body ---
+//
+// An earlier version attached the cable constraint at an offset point on the
+// body (the visual joint, some way above the body's own centroid) instead of
+// the centroid itself, specifically to let gravity torque the body as it
+// swung — real pendulum wobble instead of a point mass translating on a
+// string. That produced a genuine, previously-undiagnosed instability: the
+// anchor is a *kinematic* target (teleported to a new position every step by
+// onBeforeUpdate below), not something driven by real forces, and pulling a
+// rigid body toward a teleporting point through an off-center attachment
+// feeds the constraint solver's per-step correction back into the body's own
+// angular velocity. Headless matter-js reproduction (varying only the anchor
+// speed, holding every other slider at its default) showed this is a real
+// resonance, not a numerical edge case: net rotation stayed under a tenth of
+// a turn per 20s up to a speed a third of the slider's max, then exploded to
+// thousands of full turns per 10s beyond it — and a much larger, physically
+// heavier body (taller than the visual cabin) hit the same blowup, which
+// rules out "just needs more rotational inertia" as a fix. The instability
+// is structural to torquing a rigid body against a teleported point, not a
+// tunable threshold, so no slider-range tweak or inertia/stiffness value
+// makes it safe at every setting.
+//
+// The fix: attach the constraint at the body's centroid (pointB defaults to
+// {x: 0, y: 0}) so the cable can only ever pull, never twist it — a real
+// cable does the same, tension acts along its own line, so this is the more
+// physically honest model, not a compromise. body.angle is then
+// mathematically guaranteed to stay exactly 0 forever (confirmed headlessly
+// across the full cross product of every slider's min/max), regardless of
+// how hard the anchor is driven. The visible lean comes from a wholly
+// separate, self-contained damped spring (leanAngle below), driven only by
+// the body's own horizontal velocity — itself now provably bounded, since
+// centroid-only motion can't resonate the way the off-center torque did.
+// Being a linear damped spring toward a clamped target, it cannot diverge
+// for any input, however fast-changing: worst case it lags a hard, fast
+// swing rather than tracking every step (a low-pass filter, not a physical
+// torque simulation) — traded deliberately for a guarantee against spin
+// where the swing before it had no such guarantee.
+const LEAN_VELOCITY_GAIN = 0.05; // rad of target lean per px/step of horizontal joint velocity
+const MAX_LEAN = (30 * Math.PI) / 180; // clamp — no setting should ever tip the cabin past this
+const LEAN_STIFFNESS = 90; // spring constant toward the (clamped) target lean
+const LEAN_DAMPING = 14; // a little under critical (2*sqrt(stiffness) ~= 19) for a light settle-wobble
+
 // Fixed physics timestep, same reasoning as Gravity: Matter.js destabilizes
 // with a variable step, and capping substeps per frame avoids a spiral of
 // death after the tab is backgrounded and dt spikes.
@@ -61,9 +161,9 @@ const START_THETA = -Math.PI / 2;
 const TRACK_STROKE = "rgba(38, 38, 38, 0.35)";
 const TRACK_STROKE_WIDTH = 1.5;
 const TRACK_DASH: number[] = [6, 6];
-const CABLE_STROKE = "rgba(38, 38, 38, 0.5)";
-const CABLE_STROKE_WIDTH = 1.5;
-const ANCHOR_DOT_RADIUS = 4;
+// Fallback fill only now — the wheel/cable and anchor dot were dropped once
+// the wheel graphic itself started sitting exactly on the anchor (see the
+// two-layer drawing below), which made both redundant.
 const BOX_FILL = "rgba(38, 38, 38, 0.85)";
 
 function Gondola() {
@@ -108,10 +208,13 @@ function Gondola() {
       const engine = Engine.create();
       engine.gravity.y = configRef.current.gravity;
 
-      // theta is the only path state — everything else (anchor position,
-      // cable length/stiffness) is read live off configRef every tick, so
-      // none of those sliders need to tear this effect down and restart.
+      // theta and leanAngle/leanAngularVelocity are the only path/lean state
+      // — everything else (anchor position, cable length/stiffness) is read
+      // live off configRef every tick, so none of those sliders need to tear
+      // this effect down and restart.
       let theta = START_THETA;
+      let leanAngle = 0;
+      let leanAngularVelocity = 0;
 
       const startRadius = trackRadiusPx(configRef.current.trackRadius, width, height);
       const startAnchor = pointOnCircle(
@@ -121,11 +224,9 @@ function Gondola() {
         theta,
       );
 
-      // No pointB / offset — the constraint attaches at the box's own
-      // center, so gravity plus the constraint's pull toward the (moving)
-      // anchor is what makes it lag and sway, not body rotation. A gondola
-      // cabin hangs level in real life; this keeps it level here too, rather
-      // than swinging like a pendulum bob that tips over.
+      // The body's position IS the joint — see the lean-model comment above
+      // for why the constraint attaches at the centroid rather than an
+      // offset point (no separate mass-center position to track anymore).
       const box = Bodies.rectangle(
         startAnchor.x,
         startAnchor.y + configRef.current.cableLength,
@@ -137,6 +238,8 @@ function Gondola() {
       const cable = Constraint.create({
         pointA: { x: startAnchor.x, y: startAnchor.y },
         bodyB: box,
+        // pointB defaults to the body's centroid ({x: 0, y: 0}) — deliberate,
+        // see the lean-model comment above.
         length: configRef.current.cableLength,
         stiffness: configRef.current.stiffness,
       });
@@ -162,6 +265,23 @@ function Gondola() {
       };
       Events.on(engine, "beforeUpdate", onBeforeUpdate);
 
+      // Advances the lean spring once per physics step, same fixed-dt
+      // reasoning as theta above — and deliberately AFTER the step (not in
+      // onBeforeUpdate) so it reads the body's velocity as this step just
+      // left it, not last step's stale value.
+      const onAfterUpdate = () => {
+        const targetLean = Math.max(
+          -MAX_LEAN,
+          Math.min(MAX_LEAN, -box.velocity.x * LEAN_VELOCITY_GAIN),
+        );
+        const leanAcceleration =
+          LEAN_STIFFNESS * (targetLean - leanAngle) -
+          LEAN_DAMPING * leanAngularVelocity;
+        leanAngularVelocity += leanAcceleration * PHYSICS_STEP_S;
+        leanAngle += leanAngularVelocity * PHYSICS_STEP_S;
+      };
+      Events.on(engine, "afterUpdate", onAfterUpdate);
+
       const draw = () => {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
@@ -179,36 +299,93 @@ function Gondola() {
         ctx.stroke();
         ctx.setLineDash([]);
 
-        // Cable, from the anchor down to wherever the box has swung to.
-        ctx.strokeStyle = CABLE_STROKE;
-        ctx.lineWidth = CABLE_STROKE_WIDTH;
-        ctx.beginPath();
-        ctx.moveTo(cable.pointA.x, cable.pointA.y);
-        ctx.lineTo(box.position.x, box.position.y);
-        ctx.stroke();
+        // The gondola, as two layers sharing one pivot (see WHEEL_CROP_HEIGHT
+        // above for why): the wheel sits exactly on the anchor (specifically
+        // the hub, JOINT_FRACTION_Y — not the crop boundary; see that
+        // comment) and never rotates — no rope-stretch visualization needed
+        // either, since the wheel is drawn AT the anchor directly rather
+        // than at whatever the physics computes the joint's position to be,
+        // and per-frame that gap is sub-pixel anyway at any sane slider
+        // settings. The cabin swings from that same point, rotated by
+        // leanAngle — the separate damped spring described above, not the
+        // physics body's own angle (which stays at ~0; see that comment for
+        // why).
+        if (boxImage.complete && boxImage.naturalWidth > 0) {
+          const scale = BOX_IMAGE_DISPLAY_SIZE / boxImage.naturalWidth;
+          const drawWidth = boxImage.naturalWidth * scale;
+          const jointOffsetX = JOINT_FRACTION_X * drawWidth;
+          const jointOffsetY = JOINT_FRACTION_Y * boxImage.naturalHeight * scale;
+          const wheelDrawHeight = WHEEL_CROP_HEIGHT * scale;
+          const cabinCropHeight = boxImage.naturalHeight - WHEEL_CROP_HEIGHT;
+          const cabinDrawHeight = cabinCropHeight * scale;
+          // How far the crop boundary sits below the hub, at display scale —
+          // the same 109 source-px gap described above, just applied at the
+          // seam now instead of at the anchor.
+          const cropBoundaryBelowHub = wheelDrawHeight - jointOffsetY;
 
-        ctx.fillStyle = BOX_FILL;
+          // Wheel: top slice of the source, undistorted, no rotation. Its
+          // hub — not its bottom edge — lands on the anchor, so the visible
+          // pulley graphic tracks the track path exactly rather than sitting
+          // a constant ~21px off from it.
+          ctx.drawImage(
+            boxImage,
+            0,
+            0,
+            boxImage.naturalWidth,
+            WHEEL_CROP_HEIGHT,
+            cable.pointA.x - jointOffsetX,
+            cable.pointA.y - jointOffsetY,
+            drawWidth,
+            wheelDrawHeight,
+          );
 
-        // Anchor dot.
-        ctx.beginPath();
-        ctx.arc(cable.pointA.x, cable.pointA.y, ANCHOR_DOT_RADIUS, 0, Math.PI * 2);
-        ctx.fill();
-
-        // The box — vertices are already in world space and already
-        // rotated, so no corner math of its own is needed here.
-        const [first, ...rest] = box.vertices;
-        ctx.beginPath();
-        ctx.moveTo(first.x, first.y);
-        for (const vertex of rest) ctx.lineTo(vertex.x, vertex.y);
-        ctx.closePath();
-        ctx.fill();
+          // Cabin + neck: everything below that slice, pivoted at the same
+          // hub point the wheel anchors to. Its own top edge (the crop
+          // boundary) isn't the hub, so it's drawn cropBoundaryBelowHub
+          // lower than the pivot — matching exactly where the wheel layer's
+          // bottom edge sits at zero lean, so the two crops still meet at
+          // the seam instead of gapping or overlapping.
+          ctx.save();
+          ctx.translate(cable.pointA.x, cable.pointA.y);
+          ctx.rotate(leanAngle);
+          ctx.drawImage(
+            boxImage,
+            0,
+            WHEEL_CROP_HEIGHT,
+            boxImage.naturalWidth,
+            cabinCropHeight,
+            -jointOffsetX,
+            cropBoundaryBelowHub,
+            drawWidth,
+            cabinDrawHeight,
+          );
+          ctx.restore();
+        } else {
+          // Fallback while the image is still loading (or failed to load) —
+          // vertices are already in world space and already rotated, so no
+          // corner math of its own is needed here.
+          ctx.fillStyle = BOX_FILL;
+          const [first, ...rest] = box.vertices;
+          ctx.beginPath();
+          ctx.moveTo(first.x, first.y);
+          for (const vertex of rest) ctx.lineTo(vertex.x, vertex.y);
+          ctx.closePath();
+          ctx.fill();
+        }
       };
 
       draw();
+      // The image very likely hasn't finished loading by the time this first
+      // draw() call above runs — redraw once it has, so the fallback shape
+      // doesn't linger a beat (or forever, if paused, since nothing else
+      // would trigger a redraw at all in that case).
+      boxImage.addEventListener("load", draw, { once: true });
 
       if (paused) {
         teardown = () => {
+          boxImage.removeEventListener("load", draw);
           Events.off(engine, "beforeUpdate", onBeforeUpdate);
+          Events.off(engine, "afterUpdate", onAfterUpdate);
           Composite.clear(engine.world, false);
           Engine.clear(engine);
         };
@@ -241,7 +418,9 @@ function Gondola() {
 
       teardown = () => {
         cancelAnimationFrame(frameId);
+        boxImage.removeEventListener("load", draw);
         Events.off(engine, "beforeUpdate", onBeforeUpdate);
+        Events.off(engine, "afterUpdate", onAfterUpdate);
         Composite.clear(engine.world, false);
         Engine.clear(engine);
       };

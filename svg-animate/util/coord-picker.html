@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Coordinate picker</title>
+<style>
+  body { margin: 0; font-family: monospace; background: #ddd; }
+  #readout {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #111; color: #0f0; padding: 8px 12px;
+    font-size: 16px; z-index: 10; white-space: pre;
+  }
+  #wrap { position: relative; display: inline-block; margin-top: 50px; }
+  img { display: block; image-rendering: pixelated; }
+  #crosshair-v, #crosshair-h {
+    position: absolute; background: red; pointer-events: none;
+  }
+  #crosshair-v { width: 1px; top: 0; bottom: 0; }
+  #crosshair-h { height: 1px; left: 0; right: 0; }
+  #pins { position: absolute; top: 0; left: 0; }
+  .pin {
+    position: absolute; width: 8px; height: 8px; margin: -4px 0 0 -4px;
+    border-radius: 50%; background: red; border: 1px solid white;
+  }
+</style>
+</head>
+<body>
+<div id="readout">Hover the image. Click to drop a pin and log its coordinates below.</div>
+<div id="wrap">
+  <img id="img" src="gondola.png">
+  <div id="crosshair-v"></div>
+  <div id="crosshair-h"></div>
+  <div id="pins"></div>
+</div>
+<script>
+  const img = document.getElementById("img");
+  const readout = document.getElementById("readout");
+  const cv = document.getElementById("crosshair-v");
+  const ch = document.getElementById("crosshair-h");
+  const pins = document.getElementById("pins");
+  const log = [];
+
+  img.addEventListener("mousemove", (e) => {
+    const x = e.offsetX, y = e.offsetY;
+    const w = img.naturalWidth, h = img.naturalHeight;
+    cv.style.left = x + "px";
+    ch.style.top = y + "px";
+    readout.textContent =
+      `x=${x}  y=${y}   (fraction: ${(x/w).toFixed(3)}, ${(y/h).toFixed(3)})   image: ${w}x${h}\n` +
+      log.join("\n");
+  });
+
+  img.addEventListener("click", (e) => {
+    const x = e.offsetX, y = e.offsetY;
+    const w = img.naturalWidth, h = img.naturalHeight;
+    const pin = document.createElement("div");
+    pin.className = "pin";
+    pin.style.left = x + "px";
+    pin.style.top = y + "px";
+    pins.appendChild(pin);
+    log.unshift(`pinned: x=${x} y=${y}  (fraction: ${(x/w).toFixed(3)}, ${(y/h).toFixed(3)})`);
+  });
+</script>
+</body>
+</html>
