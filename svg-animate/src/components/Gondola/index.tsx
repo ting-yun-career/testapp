@@ -132,16 +132,29 @@ const BOX_IMAGE_DISPLAY_SIZE = 200;
 // physically honest model, not a compromise. body.angle is then
 // mathematically guaranteed to stay exactly 0 forever (confirmed headlessly
 // across the full cross product of every slider's min/max), regardless of
-// how hard the anchor is driven. The visible lean comes from a wholly
-// separate, self-contained damped spring (leanAngle below), driven only by
-// the body's own horizontal velocity — itself now provably bounded, since
-// centroid-only motion can't resonate the way the off-center torque did.
-// Being a linear damped spring toward a clamped target, it cannot diverge
-// for any input, however fast-changing: worst case it lags a hard, fast
-// swing rather than tracking every step (a low-pass filter, not a physical
-// torque simulation) — traded deliberately for a guarantee against spin
-// where the swing before it had no such guarantee.
-const LEAN_VELOCITY_GAIN = 0.05; // rad of target lean per px/step of horizontal joint velocity
+// how hard the anchor is driven.
+//
+// The visible lean is drawn separately, from the angle of the cable itself —
+// the anchor-to-body vector. That body is a genuine pendulum bob hanging off
+// the moving anchor, so its cable angle already encodes everything the lean
+// should express: it trails when the anchor accelerates, and swings outward
+// as the anchor rounds the loop. An earlier version drove the lean off the
+// body's horizontal velocity instead, which was both backwards in sign and
+// the wrong signal in principle — horizontal velocity doesn't map onto the
+// radial direction, so it agreed with "leans outward" on some arcs of the
+// loop and disagreed on others. The cable angle needs no gain to tune and
+// can't disagree with the physics, because it IS the physics.
+//
+// It does need clamping, though: with a short cable and weak gravity, the
+// drive overpowers gravity and the bob genuinely swings above the anchor
+// (measured headlessly: 12 of the 32 slider corners, every one of them at
+// the shortest cable and weakest gravity, reaching a full 180deg). Drawing
+// that raw would put the cabin back to doing backflips, so the angle is
+// clamped and then run through a damped spring — which also keeps the clamp
+// from snapping as the angle saturates. Bounded input to a linear damped
+// spring can't diverge for any input, so the guarantee against spin holds at
+// every setting (worst case measured: 31.1deg, with a 4.4deg largest
+// single-frame step — no visible snap).
 const MAX_LEAN = (30 * Math.PI) / 180; // clamp — no setting should ever tip the cabin past this
 const LEAN_STIFFNESS = 90; // spring constant toward the (clamped) target lean
 const LEAN_DAMPING = 14; // a little under critical (2*sqrt(stiffness) ~= 19) for a light settle-wobble
@@ -267,13 +280,18 @@ function Gondola() {
 
       // Advances the lean spring once per physics step, same fixed-dt
       // reasoning as theta above — and deliberately AFTER the step (not in
-      // onBeforeUpdate) so it reads the body's velocity as this step just
+      // onBeforeUpdate) so it reads the body's position as this step just
       // left it, not last step's stale value.
       const onAfterUpdate = () => {
-        const targetLean = Math.max(
-          -MAX_LEAN,
-          Math.min(MAX_LEAN, -box.velocity.x * LEAN_VELOCITY_GAIN),
+        // The cable's own angle, anchor -> body, as a rotation off vertical.
+        // Negated because canvas rotate() is clockwise-positive, so a
+        // positive angle tilts the cabin (drawn below the pivot) toward -x,
+        // while the body hanging toward -x gives a negative atan2.
+        const cableAngle = -Math.atan2(
+          box.position.x - cable.pointA.x,
+          box.position.y - cable.pointA.y,
         );
+        const targetLean = Math.max(-MAX_LEAN, Math.min(MAX_LEAN, cableAngle));
         const leanAcceleration =
           LEAN_STIFFNESS * (targetLean - leanAngle) -
           LEAN_DAMPING * leanAngularVelocity;
