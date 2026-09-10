@@ -63,38 +63,23 @@ boxImage.src = gondolaSrc;
 // Where the wheel's hub sits in gondola.png (1024x1024), as a fraction of the
 // image — measured directly off the source with a scratch coordinate-picker
 // tool (util/coord-picker.html), not estimated. This is the point that
-// actually lands on the anchor (see the drawImage calls below) — not the
-// image's own bounding-box center, and not WHEEL_CROP_HEIGHT either, which
-// is a different row chosen only to split the wheel and cabin into layers.
+// actually lands on the anchor (see the drawImage call below), not the
+// image's own bounding-box center.
 const JOINT_FRACTION_X = 437 / 1024;
 const JOINT_FRACTION_Y = 241 / 1024;
 
-// gondola.png is drawn and rotated as one rigid sprite, but a real gondola's
-// wheel/grip stays clamped level to the cable — it doesn't tilt with the
-// cabin's swing, only the cabin (hinged below it) does. Treating the whole
-// picture as one rotating body was making the wheel (and the length of cable
-// drawn through it in the art) visibly swing with the cabin, which reads as
-// backwards once you notice it, because it is.
-//
-// The fix is drawing it as two layers sharing one pivot: everything above
-// this source-image row (the wheel, and the local cable segment drawn
-// through it) stays level; everything below it (the neck and cabin) rotates
-// with the physics swing. Measured with the same coordinate-picker tool as
-// the joint — the wheel's rim spans roughly y=200-282, and the neck below it
-// runs straight and narrow (barely moving from x=427-455) all the way to
-// y=400 before it starts curving into the cabin around y=430, so this sits
-// well clear of the wheel with plenty of margin either side to land in.
-//
-// This crop boundary is NOT the same point as the hub (JOINT_FRACTION_Y
-// above) — it's 109 source-px (≈21 display px at BOX_IMAGE_DISPLAY_SIZE)
-// below it. An earlier version pinned this boundary directly to the anchor
-// instead of the hub, on the assumption the gap would be visually
-// negligible; it wasn't (a constant, visible offset between the wheel
-// graphic and the actual track path, at every point along the loop). Both
-// drawImage calls below now anchor to the true hub and then offset the
-// crop boundary from it by this same 109px, rather than the other way
-// around.
-const WHEEL_CROP_HEIGHT = 350;
+// gondola.png is drawn and rotated as one rigid sprite pivoting at the hub —
+// wheel and cabin swing together. An earlier version split the wheel and
+// cabin into two separately-drawn layers, keeping the wheel level while only
+// the cabin rotated, on the reasoning that a real gondola's grip stays
+// clamped to the cable and doesn't tip with the cabin. That model needed a
+// seam where the two crops met, and rotating the lower layer around the hub
+// (rather than around the seam itself) swung that seam sideways by a few
+// pixels at high lean angles — wider than the neck art it needed to align
+// with, which read as the wheel and cabin visibly disconnecting. Pivoting
+// the whole sprite as one piece at the hub has no seam to misalign in the
+// first place, and matches the intended read of the whole gondola wobbling
+// side to side as it's dragged around the loop, hub included.
 
 // Size the image draws at on screen — independent of both gondola.png's own
 // resolution and the physics body's collision rectangle below; drawImage
@@ -317,65 +302,27 @@ function Gondola() {
         ctx.stroke();
         ctx.setLineDash([]);
 
-        // The gondola, as two layers sharing one pivot (see WHEEL_CROP_HEIGHT
-        // above for why): the wheel sits exactly on the anchor (specifically
-        // the hub, JOINT_FRACTION_Y — not the crop boundary; see that
-        // comment) and never rotates — no rope-stretch visualization needed
-        // either, since the wheel is drawn AT the anchor directly rather
-        // than at whatever the physics computes the joint's position to be,
-        // and per-frame that gap is sub-pixel anyway at any sane slider
-        // settings. The cabin swings from that same point, rotated by
-        // leanAngle — the separate damped spring described above, not the
-        // physics body's own angle (which stays at ~0; see that comment for
-        // why).
+        // The gondola, as one rigid sprite pivoting at the hub (see the
+        // JOINT_FRACTION comment above for why the whole image, wheel
+        // included, rotates as a unit) — leanAngle is the separate damped
+        // spring described above, not the physics body's own angle, which
+        // stays at ~0.
         if (boxImage.complete && boxImage.naturalWidth > 0) {
           const scale = BOX_IMAGE_DISPLAY_SIZE / boxImage.naturalWidth;
           const drawWidth = boxImage.naturalWidth * scale;
+          const drawHeight = boxImage.naturalHeight * scale;
           const jointOffsetX = JOINT_FRACTION_X * drawWidth;
-          const jointOffsetY = JOINT_FRACTION_Y * boxImage.naturalHeight * scale;
-          const wheelDrawHeight = WHEEL_CROP_HEIGHT * scale;
-          const cabinCropHeight = boxImage.naturalHeight - WHEEL_CROP_HEIGHT;
-          const cabinDrawHeight = cabinCropHeight * scale;
-          // How far the crop boundary sits below the hub, at display scale —
-          // the same 109 source-px gap described above, just applied at the
-          // seam now instead of at the anchor.
-          const cropBoundaryBelowHub = wheelDrawHeight - jointOffsetY;
+          const jointOffsetY = JOINT_FRACTION_Y * drawHeight;
 
-          // Wheel: top slice of the source, undistorted, no rotation. Its
-          // hub — not its bottom edge — lands on the anchor, so the visible
-          // pulley graphic tracks the track path exactly rather than sitting
-          // a constant ~21px off from it.
-          ctx.drawImage(
-            boxImage,
-            0,
-            0,
-            boxImage.naturalWidth,
-            WHEEL_CROP_HEIGHT,
-            cable.pointA.x - jointOffsetX,
-            cable.pointA.y - jointOffsetY,
-            drawWidth,
-            wheelDrawHeight,
-          );
-
-          // Cabin + neck: everything below that slice, pivoted at the same
-          // hub point the wheel anchors to. Its own top edge (the crop
-          // boundary) isn't the hub, so it's drawn cropBoundaryBelowHub
-          // lower than the pivot — matching exactly where the wheel layer's
-          // bottom edge sits at zero lean, so the two crops still meet at
-          // the seam instead of gapping or overlapping.
           ctx.save();
           ctx.translate(cable.pointA.x, cable.pointA.y);
           ctx.rotate(leanAngle);
           ctx.drawImage(
             boxImage,
-            0,
-            WHEEL_CROP_HEIGHT,
-            boxImage.naturalWidth,
-            cabinCropHeight,
             -jointOffsetX,
-            cropBoundaryBelowHub,
+            -jointOffsetY,
             drawWidth,
-            cabinDrawHeight,
+            drawHeight,
           );
           ctx.restore();
         } else {
