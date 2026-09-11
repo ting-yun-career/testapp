@@ -14,13 +14,21 @@ type GondolaConfig = {
   speed: number;
   gravity: number;
   trackRadius: number;
+  carCount: number;
 };
 
 const DEFAULT_CONFIG: GondolaConfig = {
   speed: 0.15,
   gravity: 1,
   trackRadius: 25,
+  carCount: 1,
 };
+
+// Cars ride the loop evenly spaced, so the count is also the divisor for their
+// phase offsets. Capped at 4 — past that they crowd each other at the small
+// end of the track-radius slider.
+const MIN_CARS = 1;
+const MAX_CARS = 4;
 
 // Fixed, no longer sliders — the cabin hangs at one distance below the hub, on
 // a cable of one springiness.
@@ -185,6 +193,11 @@ function Gondola() {
   );
   const [paused] = useState(prefersReducedMotion);
 
+  // Structural, unlike the other config: changing it adds or removes physics
+  // bodies, so it's a dep of the effect below rather than a live configRef
+  // read — same split Gravity makes for its pole count.
+  const { carCount } = config;
+
   const configRef = useRef(config);
   useEffect(() => {
     configRef.current = config;
@@ -219,42 +232,59 @@ function Gondola() {
       const engine = Engine.create();
       engine.gravity.y = configRef.current.gravity;
 
-      // theta and leanAngle/leanAngularVelocity are the only path/lean state
-      // — the anchor position is recomputed from configRef every tick, so
-      // neither of the remaining sliders that feed it needs to tear this
-      // effect down and restart.
+      // theta is shared by every car — they're all the same point on the loop,
+      // just offset by a fixed phase — while the lean spring is per-car, since
+      // each one is a separate pendulum with its own swing. The anchor
+      // position is recomputed from configRef every tick, so neither of the
+      // sliders that feed it needs to tear this effect down and restart;
+      // carCount does, which is why it's in the dep array below.
       let theta = START_THETA;
-      let leanAngle = 0;
-      let leanAngularVelocity = 0;
 
       const startRadius = trackRadiusPx(configRef.current.trackRadius, width, height);
-      const startAnchor = pointOnCircle(
-        trackCenter.x,
-        trackCenter.y,
-        startRadius,
-        theta,
-      );
 
-      // The body's position IS the joint — see the lean-model comment above
-      // for why the constraint attaches at the centroid rather than an
-      // offset point (no separate mass-center position to track anymore).
-      const box = Bodies.rectangle(
-        startAnchor.x,
-        startAnchor.y + CABLE_LENGTH,
-        BOX_WIDTH,
-        BOX_HEIGHT,
-      );
-      Composite.add(engine.world, box);
+      const cars = Array.from({ length: carCount }, (_, index) => {
+        // Evenly spaced around the loop, so any count stays balanced.
+        const thetaOffset = (index / carCount) * Math.PI * 2;
+        const anchor = pointOnCircle(
+          trackCenter.x,
+          trackCenter.y,
+          startRadius,
+          theta + thetaOffset,
+        );
 
-      const cable = Constraint.create({
-        pointA: { x: startAnchor.x, y: startAnchor.y },
-        bodyB: box,
-        // pointB defaults to the body's centroid ({x: 0, y: 0}) — deliberate,
-        // see the lean-model comment above.
-        length: CABLE_LENGTH,
-        stiffness: CABLE_STIFFNESS,
+        // The body's position IS the joint — see the lean-model comment above
+        // for why the constraint attaches at the centroid rather than an
+        // offset point (no separate mass-center position to track anymore).
+        const box = Bodies.rectangle(
+          anchor.x,
+          anchor.y + CABLE_LENGTH,
+          BOX_WIDTH,
+          BOX_HEIGHT,
+          {
+            // Cars never collide with each other. A negative group in Matter
+            // means "same group never collides", and that's load-bearing here
+            // rather than cosmetic: a collision would impart angular velocity
+            // and break the body.angle === 0 invariant the lean model above
+            // depends on, putting the fallback shape back to spinning. Real
+            // cars on a loop stay evenly spaced and never touch either, so
+            // nothing is lost by turning this off.
+            collisionFilter: { group: -1 },
+          },
+        );
+        Composite.add(engine.world, box);
+
+        const cable = Constraint.create({
+          pointA: { x: anchor.x, y: anchor.y },
+          bodyB: box,
+          // pointB defaults to the body's centroid ({x: 0, y: 0}) —
+          // deliberate, see the lean-model comment above.
+          length: CABLE_LENGTH,
+          stiffness: CABLE_STIFFNESS,
+        });
+        Composite.add(engine.world, cable);
+
+        return { box, cable, thetaOffset, leanAngle: 0, leanAngularVelocity: 0 };
       });
-      Composite.add(engine.world, cable);
 
       // Moves the anchor along the track once per physics step (not once per
       // animation frame) — Engine.update fires this at the start of every
@@ -265,9 +295,16 @@ function Gondola() {
         const c = configRef.current;
         theta += c.speed * Math.PI * 2 * PHYSICS_STEP_S;
         const radius = trackRadiusPx(c.trackRadius, width, height);
-        const anchor = pointOnCircle(trackCenter.x, trackCenter.y, radius, theta);
-        cable.pointA.x = anchor.x;
-        cable.pointA.y = anchor.y;
+        for (const car of cars) {
+          const anchor = pointOnCircle(
+            trackCenter.x,
+            trackCenter.y,
+            radius,
+            theta + car.thetaOffset,
+          );
+          car.cable.pointA.x = anchor.x;
+          car.cable.pointA.y = anchor.y;
+        }
       };
       Events.on(engine, "beforeUpdate", onBeforeUpdate);
 
@@ -276,20 +313,23 @@ function Gondola() {
       // onBeforeUpdate) so it reads the body's position as this step just
       // left it, not last step's stale value.
       const onAfterUpdate = () => {
-        // The cable's own angle, anchor -> body, as a rotation off vertical.
-        // Negated because canvas rotate() is clockwise-positive, so a
-        // positive angle tilts the cabin (drawn below the pivot) toward -x,
-        // while the body hanging toward -x gives a negative atan2.
-        const cableAngle = -Math.atan2(
-          box.position.x - cable.pointA.x,
-          box.position.y - cable.pointA.y,
-        );
-        const targetLean = Math.max(-MAX_LEAN, Math.min(MAX_LEAN, cableAngle));
-        const leanAcceleration =
-          LEAN_STIFFNESS * (targetLean - leanAngle) -
-          LEAN_DAMPING * leanAngularVelocity;
-        leanAngularVelocity += leanAcceleration * PHYSICS_STEP_S;
-        leanAngle += leanAngularVelocity * PHYSICS_STEP_S;
+        for (const car of cars) {
+          // The cable's own angle, anchor -> body, as a rotation off
+          // vertical. Negated because canvas rotate() is clockwise-positive,
+          // so a positive angle tilts the cabin (drawn below the pivot)
+          // toward -x, while the body hanging toward -x gives a negative
+          // atan2.
+          const cableAngle = -Math.atan2(
+            car.box.position.x - car.cable.pointA.x,
+            car.box.position.y - car.cable.pointA.y,
+          );
+          const targetLean = Math.max(-MAX_LEAN, Math.min(MAX_LEAN, cableAngle));
+          const leanAcceleration =
+            LEAN_STIFFNESS * (targetLean - car.leanAngle) -
+            LEAN_DAMPING * car.leanAngularVelocity;
+          car.leanAngularVelocity += leanAcceleration * PHYSICS_STEP_S;
+          car.leanAngle += car.leanAngularVelocity * PHYSICS_STEP_S;
+        }
       };
       Events.on(engine, "afterUpdate", onAfterUpdate);
 
@@ -310,11 +350,12 @@ function Gondola() {
         ctx.stroke();
         ctx.setLineDash([]);
 
-        // The gondola, as one rigid sprite pivoting at the hub (see the
+        // Each car, as one rigid sprite pivoting at the hub (see the
         // JOINT_FRACTION comment above for why the whole image, wheel
         // included, rotates as a unit) — leanAngle is the separate damped
         // spring described above, not the physics body's own angle, which
-        // stays at ~0.
+        // stays at ~0. The image measurements don't depend on the car, so
+        // they're hoisted out of the loop.
         if (boxImage.complete && boxImage.naturalWidth > 0) {
           const scale = BOX_IMAGE_DISPLAY_SIZE / boxImage.naturalWidth;
           const drawWidth = boxImage.naturalWidth * scale;
@@ -322,28 +363,32 @@ function Gondola() {
           const jointOffsetX = JOINT_FRACTION_X * drawWidth;
           const jointOffsetY = JOINT_FRACTION_Y * drawHeight;
 
-          ctx.save();
-          ctx.translate(cable.pointA.x, cable.pointA.y);
-          ctx.rotate(leanAngle);
-          ctx.drawImage(
-            boxImage,
-            -jointOffsetX,
-            -jointOffsetY,
-            drawWidth,
-            drawHeight,
-          );
-          ctx.restore();
+          for (const car of cars) {
+            ctx.save();
+            ctx.translate(car.cable.pointA.x, car.cable.pointA.y);
+            ctx.rotate(car.leanAngle);
+            ctx.drawImage(
+              boxImage,
+              -jointOffsetX,
+              -jointOffsetY,
+              drawWidth,
+              drawHeight,
+            );
+            ctx.restore();
+          }
         } else {
           // Fallback while the image is still loading (or failed to load) —
           // vertices are already in world space and already rotated, so no
           // corner math of its own is needed here.
           ctx.fillStyle = BOX_FILL;
-          const [first, ...rest] = box.vertices;
-          ctx.beginPath();
-          ctx.moveTo(first.x, first.y);
-          for (const vertex of rest) ctx.lineTo(vertex.x, vertex.y);
-          ctx.closePath();
-          ctx.fill();
+          for (const car of cars) {
+            const [first, ...rest] = car.box.vertices;
+            ctx.beginPath();
+            ctx.moveTo(first.x, first.y);
+            for (const vertex of rest) ctx.lineTo(vertex.x, vertex.y);
+            ctx.closePath();
+            ctx.fill();
+          }
         }
       };
 
@@ -403,7 +448,7 @@ function Gondola() {
       cancelled = true;
       teardown?.();
     };
-  }, [width, height, paused]);
+  }, [width, height, paused, carCount]);
 
   return (
     <>
@@ -439,6 +484,14 @@ function Gondola() {
           step={1}
           format={(v) => `${v}%`}
           onChange={(v) => setConfig((c) => ({ ...c, trackRadius: v }))}
+        />
+        <SliderControl
+          label="Cars"
+          value={config.carCount}
+          min={MIN_CARS}
+          max={MAX_CARS}
+          step={1}
+          onChange={(v) => setConfig((c) => ({ ...c, carCount: v }))}
         />
       </ConfigPanel>
     </>
