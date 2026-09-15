@@ -16,7 +16,7 @@ function Hero() {
 
 function WhyUs() {
   return (
-    <section className="mx-auto flex max-w-6xl flex-col gap-[var(--gap_width)] px-[var(--gap_width)] py-[var(--gap_width)] desktop:flex-row">
+    <section className="flex flex-col gap-[var(--gap_width)] px-[var(--gap_width)] py-[var(--gap_width)] desktop:flex-row">
       <ExpandableImage
         src="/gallery/about.webp"
         alt="Inside the Silver4 studio"
@@ -50,8 +50,8 @@ function WhyUs() {
 
 function Products() {
   return (
-    <section className="mx-auto max-w-6xl px-[var(--gap_width)] py-[var(--gap_width)]">
-      <div className="grid grid-cols-2 gap-[var(--gap_width)] desktop:grid-cols-4">
+    <section className="px-[var(--gap_width)] py-[var(--gap_width)]">
+      <div className="grid grid-cols-2 gap-[var(--gap_width)] desktop:grid-cols-6">
         {PRODUCTS.map((product) => (
           <div key={product.name} className="flex flex-col gap-[var(--gap_width)]">
             <div className="aspect-square w-full bg-cream" />
@@ -67,7 +67,7 @@ function Products() {
 
 function ScheduleAndMap() {
   return (
-    <section className="mx-auto grid max-w-6xl gap-[var(--gap_width)] px-[var(--gap_width)] py-[var(--gap_width)] desktop:grid-cols-2">
+    <section className="grid gap-[var(--gap_width)] px-[var(--gap_width)] py-[var(--gap_width)] desktop:grid-cols-2">
       <div>
         <dl className="divide-y divide-hairline border-y border-hairline">
           {SCHEDULE.map((row) => (

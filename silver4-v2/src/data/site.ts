@@ -59,6 +59,8 @@ export const PRODUCTS = [
   { brand: 'K18', name: 'Molecular Repair Oil', price: '$92.00' },
   { brand: 'Olaplex', name: 'No.3 Hair Perfector', price: '$30.00' },
   { brand: 'Kevin.Murphy', name: 'Shimmer.Me Blonde', price: '$50.00' },
+  { brand: 'Kerastase', name: 'Nutritive Masque', price: '$68.00' },
+  { brand: 'Moroccanoil', name: 'Treatment Original', price: '$46.00' },
 ]
 
 export const HAIR_SERVICE_GALLERY = [
