@@ -16,12 +16,12 @@ function Hero() {
 
 function WhyUs() {
   return (
-    <section className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-5 desktop:flex-row desktop:items-center desktop:gap-14">
+    <section className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-5 desktop:flex-row desktop:gap-14">
       <ExpandableImage
         src="/gallery/about.webp"
         alt="Inside the Silver4 studio"
         wrapperClassName="desktop:w-1/2"
-        className="aspect-4/3 w-full object-cover"
+        className="aspect-square w-full object-cover desktop:aspect-auto desktop:h-full"
       />
       <div className="desktop:w-1/2">
         <p className="text-xs font-semibold uppercase tracking-wider text-accent">
