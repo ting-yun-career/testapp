@@ -123,7 +123,11 @@ export function Footer() {
 
         <div className="mt-8 desktop:mt-0">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-accent">Hours</h3>
-          <p className="mt-4 text-sm text-white/80">{FOOTER_HOURS}</p>
+          <p className="mt-4 text-sm text-white/80">
+            {FOOTER_HOURS.days}
+            <br />
+            {FOOTER_HOURS.time}
+          </p>
         </div>
       </div>
 

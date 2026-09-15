@@ -28,7 +28,10 @@ export const SCHEDULE = [
   { day: 'Sunday', hours: '11:00AM – 7:00PM' },
 ]
 
-export const FOOTER_HOURS = 'Mon – Sun: 11:00AM – 7:00PM'
+export const FOOTER_HOURS = { days: 'Mon – Sun:', time: '11:00AM – 7:00PM' }
+
+export const MAP_EMBED_SRC =
+  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5206.765320462814!2d-123.10597657590498!3d49.269145945345905!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54867383559906e3%3A0x14cfe4501a9605d7!2sSilver4+Hair%26Beauty+Salon!5e0!3m2!1sen!2sca!4v1550675095906'
 
 export const SOCIAL_LINKS = {
   instagram: 'https://instagram.com/silver4salon',

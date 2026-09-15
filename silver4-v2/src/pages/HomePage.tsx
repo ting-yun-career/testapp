@@ -2,8 +2,7 @@ import { ExpandableImage } from '../components/ExpandableImage'
 import { PhotoGrid } from '../components/PhotoGrid'
 import { BookAppointmentCta } from '../components/BookAppointmentCta'
 import { FollowUsButton } from '../components/FollowUsButton'
-import { PinIcon } from '../components/icons'
-import { HOMEPAGE_GALLERY, PRODUCTS, SCHEDULE } from '../data/site'
+import { HOMEPAGE_GALLERY, MAP_EMBED_SRC, PRODUCTS, SCHEDULE } from '../data/site'
 
 function Hero() {
   return (
@@ -88,9 +87,15 @@ function ScheduleAndMap() {
           Contact Us
         </a>
       </div>
-      <div className="flex min-h-64 flex-col items-center justify-center gap-2 bg-cream text-muted">
-        <PinIcon className="size-6" />
-        <span className="text-xs uppercase tracking-wider">Map coming soon</span>
+      <div className="relative min-h-64 overflow-hidden bg-cream">
+        <iframe
+          className="absolute inset-0 h-full w-full border-0"
+          src={MAP_EMBED_SRC}
+          title="Map showing Silver4 Hair & Beauty Salon"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          allowFullScreen
+        />
       </div>
     </section>
   )
