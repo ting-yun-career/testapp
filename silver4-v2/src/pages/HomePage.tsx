@@ -1,8 +1,9 @@
 import { ExpandableImage } from '../components/ExpandableImage'
 import { PhotoGrid } from '../components/PhotoGrid'
 import { BookAppointmentCta } from '../components/BookAppointmentCta'
+import { FollowUsButton } from '../components/FollowUsButton'
 import { PinIcon } from '../components/icons'
-import { HOMEPAGE_GALLERY, PRODUCTS, SCHEDULE, SOCIAL_LINKS } from '../data/site'
+import { HOMEPAGE_GALLERY, PRODUCTS, SCHEDULE } from '../data/site'
 
 function Hero() {
   return (
@@ -11,21 +12,6 @@ function Hero() {
         Crafting personal rituals of style &amp; luxury
       </h1>
     </section>
-  )
-}
-
-function FollowUs() {
-  return (
-    <div className="flex justify-center px-6 py-6">
-      <a
-        href={SOCIAL_LINKS.instagram}
-        target="_blank"
-        rel="noreferrer"
-        className="bg-ink px-8 py-3 text-xs font-semibold uppercase tracking-wider text-white transition-opacity hover:opacity-85"
-      >
-        Follow @silver4salon
-      </a>
-    </div>
   )
 }
 
@@ -117,7 +103,7 @@ export function HomePage() {
       <section className="px-4 py-6 desktop:px-6">
         <PhotoGrid photos={HOMEPAGE_GALLERY} />
       </section>
-      <FollowUs />
+      <FollowUsButton />
       <WhyUs />
       <Products />
       <ScheduleAndMap />

@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import { SiteLayout } from './layouts/SiteLayout'
 import { HomePage } from './pages/HomePage'
+import { HairServicesPage } from './pages/HairServicesPage'
 import { ComingSoonPage } from './pages/ComingSoonPage'
 
 function App() {
@@ -8,7 +9,7 @@ function App() {
     <Routes>
       <Route element={<SiteLayout />}>
         <Route index element={<HomePage />} />
-        <Route path="hair-services" element={<ComingSoonPage title="Hair Services" />} />
+        <Route path="hair-services" element={<HairServicesPage />} />
         <Route path="barber-services" element={<ComingSoonPage title="Barber Services" />} />
         <Route path="spa-services" element={<ComingSoonPage title="Spa Services" />} />
         <Route path="skin-therapy" element={<ComingSoonPage title="Skin Therapy" />} />
