@@ -49,7 +49,7 @@ export function Header() {
   return (
     <header className="border-b border-hairline bg-white">
       {/* Desktop */}
-      <div className="mx-auto hidden max-w-6xl flex-col gap-4 px-6 py-4 lg:flex">
+      <div className="mx-auto hidden max-w-6xl flex-col gap-4 px-6 py-4 desktop:flex">
         <div className="grid grid-cols-[1fr_auto_1fr] items-center">
           <div />
           <Link to="/" className="justify-self-center">
@@ -67,7 +67,7 @@ export function Header() {
       </div>
 
       {/* Mobile */}
-      <div className="lg:hidden">
+      <div className="desktop:hidden">
         <div className="flex items-center justify-between px-4 py-3">
           <Link to="/">
             <Wordmark />
@@ -92,19 +92,27 @@ export function Header() {
             </span>
           </button>
           {servicesOpen && (
-            <ul className="border-t border-hairline">
-              {SERVICE_MENU_ITEMS.map((item) => (
-                <li key={item.to} className="border-b border-hairline last:border-b-0">
-                  <NavLink
-                    to={item.to}
-                    onClick={() => setServicesOpen(false)}
-                    className="block px-4 py-3 text-sm text-ink hover:bg-cream"
-                  >
-                    {item.label}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
+            <>
+              <button
+                type="button"
+                aria-label="Close menu"
+                className="fixed inset-0 z-30 cursor-default"
+                onClick={() => setServicesOpen(false)}
+              />
+              <ul className="absolute inset-x-0 top-full z-40 border-t border-hairline bg-white shadow-lg">
+                {SERVICE_MENU_ITEMS.map((item) => (
+                  <li key={item.to} className="border-b border-hairline last:border-b-0">
+                    <NavLink
+                      to={item.to}
+                      onClick={() => setServicesOpen(false)}
+                      className="block px-4 py-3 text-sm text-ink hover:bg-cream"
+                    >
+                      {item.label}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
         </div>
       </div>

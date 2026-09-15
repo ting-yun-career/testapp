@@ -6,8 +6,8 @@ import { HOMEPAGE_GALLERY, PRODUCTS, SCHEDULE, SOCIAL_LINKS } from '../data/site
 
 function Hero() {
   return (
-    <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden bg-cream lg:min-h-[85vh]">
-      <h1 className="max-w-3xl px-6 text-center font-display text-4xl leading-tight sm:text-5xl lg:text-6xl">
+    <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden bg-cream desktop:min-h-[85vh]">
+      <h1 className="max-w-3xl px-6 text-center font-display text-4xl leading-tight desktop:text-6xl">
         Crafting personal rituals of style &amp; luxury
       </h1>
     </section>
@@ -31,14 +31,14 @@ function FollowUs() {
 
 function WhyUs() {
   return (
-    <section className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-6 lg:flex-row lg:items-center lg:gap-14">
+    <section className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-6 desktop:flex-row desktop:items-center desktop:gap-14">
       <ExpandableImage
         src="/gallery/about.webp"
         alt="Inside the Silver4 studio"
-        wrapperClassName="lg:w-1/2"
+        wrapperClassName="desktop:w-1/2"
         className="aspect-4/3 w-full object-cover"
       />
-      <div className="lg:w-1/2">
+      <div className="desktop:w-1/2">
         <p className="text-xs font-semibold uppercase tracking-wider text-accent">
           Premium Experience
         </p>
@@ -64,7 +64,7 @@ function WhyUs() {
 function Products() {
   return (
     <section className="mx-auto max-w-6xl px-6 py-6">
-      <div className="grid grid-cols-2 gap-5 lg:grid-cols-4 lg:gap-6">
+      <div className="grid grid-cols-2 gap-5 desktop:grid-cols-4 desktop:gap-6">
         {PRODUCTS.map((product) => (
           <div key={product.name} className="flex flex-col gap-2">
             <div className="aspect-square w-full bg-cream" />
@@ -80,7 +80,7 @@ function Products() {
 
 function ScheduleAndMap() {
   return (
-    <section className="mx-auto grid max-w-6xl gap-6 px-6 py-6 lg:grid-cols-2">
+    <section className="mx-auto grid max-w-6xl gap-6 px-6 py-6 desktop:grid-cols-2">
       <div>
         <dl className="divide-y divide-hairline border-y border-hairline">
           {SCHEDULE.map((row) => (
@@ -114,7 +114,7 @@ export function HomePage() {
   return (
     <>
       <Hero />
-      <section className="px-4 py-6 sm:px-6">
+      <section className="px-4 py-6 desktop:px-6">
         <PhotoGrid photos={HOMEPAGE_GALLERY} />
       </section>
       <FollowUs />

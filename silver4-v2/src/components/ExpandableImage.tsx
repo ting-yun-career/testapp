@@ -49,7 +49,7 @@ export function ExpandableImage({
       {open &&
         createPortal(
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 sm:p-10"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 desktop:p-10"
             onClick={() => setOpen(false)}
             role="dialog"
             aria-modal="true"
