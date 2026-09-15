@@ -7,7 +7,7 @@ import { HAIR_SERVICE_GALLERY, STYLISTS } from '../data/site'
 
 function ServiceHero() {
   return (
-    <section className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-8 desktop:flex-row desktop:gap-5">
+    <section className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-5 desktop:flex-row desktop:gap-5">
       <div className="aspect-4/3 w-full bg-cream desktop:aspect-auto desktop:w-1/2" />
       <div className="desktop:w-1/2">
         <h1 className="font-display text-4xl desktop:text-5xl">Curated Hair Services</h1>
@@ -44,7 +44,7 @@ export function HairServicesPage() {
       <ServiceHero />
 
       <SectionHeading eyebrow="Our Gallery" title="Recent Work" />
-      <section className="px-4 py-6 desktop:px-6">
+      <section className="px-5 py-5">
         <PhotoGrid photos={HAIR_SERVICE_GALLERY} />
       </section>
 
@@ -55,7 +55,7 @@ export function HairServicesPage() {
         title="Meet the Team"
         subtitle="The stylists and front-desk team who make every visit feel effortless."
       />
-      <section className="mx-auto max-w-6xl px-6 py-6">
+      <section className="mx-auto max-w-6xl px-5 py-5">
         <div className="grid grid-cols-2 gap-6 desktop:grid-cols-3">
           {STYLISTS.map((stylist) => (
             <StylistCard key={stylist.name} stylist={stylist} />

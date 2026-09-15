@@ -16,7 +16,7 @@ function Hero() {
 
 function WhyUs() {
   return (
-    <section className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-6 desktop:flex-row desktop:items-center desktop:gap-14">
+    <section className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-5 desktop:flex-row desktop:items-center desktop:gap-14">
       <ExpandableImage
         src="/gallery/about.webp"
         alt="Inside the Silver4 studio"
@@ -48,7 +48,7 @@ function WhyUs() {
 
 function Products() {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-6">
+    <section className="mx-auto max-w-6xl px-5 py-5">
       <div className="grid grid-cols-2 gap-5 desktop:grid-cols-4 desktop:gap-6">
         {PRODUCTS.map((product) => (
           <div key={product.name} className="flex flex-col gap-2">
@@ -65,7 +65,7 @@ function Products() {
 
 function ScheduleAndMap() {
   return (
-    <section className="mx-auto grid max-w-6xl gap-6 px-6 py-6 desktop:grid-cols-2">
+    <section className="mx-auto grid max-w-6xl gap-6 px-5 py-5 desktop:grid-cols-2">
       <div>
         <dl className="divide-y divide-hairline border-y border-hairline">
           {SCHEDULE.map((row) => (
@@ -105,7 +105,7 @@ export function HomePage() {
   return (
     <>
       <Hero />
-      <section className="px-4 py-6 desktop:px-6">
+      <section className="px-5 py-5">
         <PhotoGrid photos={HOMEPAGE_GALLERY} />
       </section>
       <FollowUsButton />

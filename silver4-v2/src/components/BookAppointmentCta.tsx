@@ -4,7 +4,7 @@ interface BookAppointmentCtaProps {
 
 export function BookAppointmentCta({ subtext }: BookAppointmentCtaProps) {
   return (
-    <section className="mx-auto max-w-3xl px-6 py-6 text-center">
+    <section className="mx-auto max-w-3xl px-5 py-5 text-center">
       <h2 className="font-display text-4xl leading-tight desktop:text-5xl">
         Book your
         <br />
