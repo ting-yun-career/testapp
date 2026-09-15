@@ -1,1 +1,20 @@
 @import 'tailwindcss';
+
+@theme {
+  --font-display: 'DM Serif Display', ui-serif, Georgia, serif;
+  --font-sans: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+
+  --color-ink: #16161a;
+  --color-muted: #6b6572;
+  --color-hairline: #e4e2dd;
+  --color-cream: #f4f2ec;
+  --color-accent: #b08551;
+  --color-panel: #111111;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
