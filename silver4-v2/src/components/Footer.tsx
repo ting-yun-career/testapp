@@ -52,8 +52,8 @@ const SERVICE_LINKS = [
 export function Footer() {
   return (
     <footer className="bg-panel text-white">
-      <div className="mx-auto max-w-6xl gap-10 px-6 py-12 desktop:grid desktop:grid-cols-4">
-        <div className="flex flex-col gap-4">
+      <div className="mx-auto max-w-6xl gap-[var(--gap_width)] px-[calc(var(--gap_width)*2)] py-[calc(var(--gap_width)*4)] desktop:grid desktop:grid-cols-4">
+        <div className="flex flex-col gap-[var(--gap_width)]">
           <Wordmark tone="light" />
           <p className="max-w-xs text-sm text-white/70">
             A sanctuary of bespoke hair styling, barber grooming, and refined spa experiences
@@ -95,9 +95,9 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 desktop:mt-0">
+        <div className="mt-[var(--gap_width)] desktop:mt-0">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-accent">Explore</h3>
-          <ul className="mt-4 flex flex-col gap-2">
+          <ul className="mt-[var(--gap_width)] flex flex-col gap-[var(--gap_width)]">
             {EXPLORE_LINKS.map((item) => (
               <li key={item.label}>
                 <Link to={item.to} className="text-sm text-white/80 hover:text-white">
@@ -108,9 +108,9 @@ export function Footer() {
           </ul>
         </div>
 
-        <div className="mt-8 desktop:mt-0">
+        <div className="mt-[var(--gap_width)] desktop:mt-0">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-accent">Services</h3>
-          <ul className="mt-4 flex flex-col gap-2">
+          <ul className="mt-[var(--gap_width)] flex flex-col gap-[var(--gap_width)]">
             {SERVICE_LINKS.map((item) => (
               <li key={item.label}>
                 <Link to={item.to} className="text-sm text-white/80 hover:text-white">
@@ -121,9 +121,9 @@ export function Footer() {
           </ul>
         </div>
 
-        <div className="mt-8 desktop:mt-0">
+        <div className="mt-[var(--gap_width)] desktop:mt-0">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-accent">Hours</h3>
-          <p className="mt-4 text-sm text-white/80">
+          <p className="mt-[var(--gap_width)] text-sm text-white/80">
             {FOOTER_HOURS.days}
             <br />
             {FOOTER_HOURS.time}
@@ -132,9 +132,9 @@ export function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-6xl flex-col-reverse items-center gap-3 px-6 py-5 text-xs text-white/60 desktop:flex-row desktop:justify-between">
+        <div className="mx-auto flex max-w-6xl flex-col-reverse items-center gap-[var(--gap_width)] px-[var(--gap_width)] py-[var(--gap_width)] text-xs text-white/60 desktop:flex-row desktop:justify-between">
           <p>&copy; {new Date().getFullYear()} Silver4 Salon &amp; Spa. All rights reserved.</p>
-          <div className="flex gap-4">
+          <div className="flex gap-[var(--gap_width)]">
             <Link to="/" className="hover:text-white">
               Privacy Policy
             </Link>

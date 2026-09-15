@@ -7,11 +7,11 @@ import { HAIR_SERVICE_GALLERY, STYLISTS } from '../data/site'
 
 function ServiceHero() {
   return (
-    <section className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-5 desktop:flex-row desktop:gap-5">
+    <section className="mx-auto flex max-w-6xl flex-col gap-[var(--gap_width)] px-[var(--gap_width)] py-[var(--gap_width)] desktop:flex-row">
       <div className="aspect-4/3 w-full bg-cream desktop:aspect-auto desktop:w-1/2" />
       <div className="desktop:w-1/2">
         <h1 className="font-display text-4xl desktop:text-5xl">Curated Hair Services</h1>
-        <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
+        <p className="mt-[var(--gap_width)] max-w-md text-sm leading-relaxed text-muted">
           At Silver4, styling is elevated into a therapeutic self-care practice. Every treatment
           begins with a complimentary aroma-infused sensory diagnostic, paving the way for
           customized cuts, premium plant-based coloring, and restorative scalp therapy. Our
@@ -25,7 +25,7 @@ function ServiceHero() {
 
 function StylistCard({ stylist }: { stylist: (typeof STYLISTS)[number] }) {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-[var(--gap_width)]">
       <ExpandableImage
         src={stylist.image}
         alt={stylist.name}
@@ -44,7 +44,7 @@ export function HairServicesPage() {
       <ServiceHero />
 
       <SectionHeading eyebrow="Our Gallery" title="Recent Work" />
-      <section className="px-5 py-5">
+      <section className="px-[var(--gap_width)] py-[var(--gap_width)]">
         <PhotoGrid photos={HAIR_SERVICE_GALLERY} />
       </section>
 
@@ -55,8 +55,8 @@ export function HairServicesPage() {
         title="Meet the Team"
         subtitle="The stylists and front-desk team who make every visit feel effortless."
       />
-      <section className="mx-auto max-w-6xl px-5 py-5">
-        <div className="grid grid-cols-2 gap-6 desktop:grid-cols-3">
+      <section className="mx-auto max-w-6xl px-[var(--gap_width)] py-[var(--gap_width)]">
+        <div className="grid grid-cols-2 gap-[var(--gap_width)] desktop:grid-cols-3">
           {STYLISTS.map((stylist) => (
             <StylistCard key={stylist.name} stylist={stylist} />
           ))}

@@ -7,7 +7,7 @@ import { HOMEPAGE_GALLERY, MAP_EMBED_SRC, PRODUCTS, SCHEDULE } from '../data/sit
 function Hero() {
   return (
     <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden bg-cream desktop:min-h-[85vh]">
-      <h1 className="max-w-3xl px-6 text-center font-display text-4xl leading-tight desktop:text-6xl">
+      <h1 className="max-w-3xl px-[var(--gap_width)] text-center font-display text-4xl leading-tight desktop:text-6xl">
         Crafting personal rituals of style &amp; luxury
       </h1>
     </section>
@@ -16,7 +16,7 @@ function Hero() {
 
 function WhyUs() {
   return (
-    <section className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-5 desktop:flex-row desktop:gap-14">
+    <section className="mx-auto flex max-w-6xl flex-col gap-[var(--gap_width)] px-[var(--gap_width)] py-[var(--gap_width)] desktop:flex-row">
       <ExpandableImage
         src="/gallery/about.webp"
         alt="Inside the Silver4 studio"
@@ -27,9 +27,11 @@ function WhyUs() {
         <p className="text-xs font-semibold uppercase tracking-wider text-accent">
           Premium Experience
         </p>
-        <h2 className="mt-2 font-display text-4xl">Why us</h2>
-        <p className="mt-3 text-sm font-semibold text-ink">Hair, Barber, SPA - A tribrid experience</p>
-        <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">
+        <h2 className="mt-[var(--gap_width)] font-display text-4xl">Why us</h2>
+        <p className="mt-[var(--gap_width)] text-sm font-semibold text-ink">
+          Hair, Barber, SPA - A tribrid experience
+        </p>
+        <p className="mt-[var(--gap_width)] max-w-md text-sm leading-relaxed text-muted">
           We believe styling is an art form. Our masters of cuts and wellness therapists elevate
           your grooming into a therapeutic, premium self-care ritual.
         </p>
@@ -37,7 +39,7 @@ function WhyUs() {
           href="https://www.fresha.com"
           target="_blank"
           rel="noreferrer"
-          className="mt-5 inline-block bg-ink px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white transition-opacity hover:opacity-85"
+          className="mt-[var(--gap_width)] inline-block bg-ink px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white transition-opacity hover:opacity-85"
         >
           Book Appointment
         </a>
@@ -48,10 +50,10 @@ function WhyUs() {
 
 function Products() {
   return (
-    <section className="mx-auto max-w-6xl px-5 py-5">
-      <div className="grid grid-cols-2 gap-5 desktop:grid-cols-4 desktop:gap-6">
+    <section className="mx-auto max-w-6xl px-[var(--gap_width)] py-[var(--gap_width)]">
+      <div className="grid grid-cols-2 gap-[var(--gap_width)] desktop:grid-cols-4">
         {PRODUCTS.map((product) => (
-          <div key={product.name} className="flex flex-col gap-2">
+          <div key={product.name} className="flex flex-col gap-[var(--gap_width)]">
             <div className="aspect-square w-full bg-cream" />
             <p className="text-xs uppercase tracking-wider text-muted">{product.brand}</p>
             <p className="text-sm text-ink">{product.name}</p>
@@ -65,13 +67,13 @@ function Products() {
 
 function ScheduleAndMap() {
   return (
-    <section className="mx-auto grid max-w-6xl gap-6 px-5 py-5 desktop:grid-cols-2">
+    <section className="mx-auto grid max-w-6xl gap-[var(--gap_width)] px-[var(--gap_width)] py-[var(--gap_width)] desktop:grid-cols-2">
       <div>
         <dl className="divide-y divide-hairline border-y border-hairline">
           {SCHEDULE.map((row) => (
             <div
               key={row.day}
-              className={`flex items-center justify-between py-3 text-sm ${
+              className={`flex items-center justify-between py-[var(--gap_width)] text-sm ${
                 row.day === 'Saturday' ? 'font-semibold text-ink' : 'text-muted'
               }`}
             >
@@ -82,7 +84,7 @@ function ScheduleAndMap() {
         </dl>
         <a
           href="mailto:info@silver4salon.com"
-          className="mt-5 inline-block bg-ink px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white transition-opacity hover:opacity-85"
+          className="mt-[var(--gap_width)] inline-block bg-ink px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white transition-opacity hover:opacity-85"
         >
           Contact Us
         </a>
@@ -105,7 +107,7 @@ export function HomePage() {
   return (
     <>
       <Hero />
-      <section className="px-5 py-5">
+      <section className="px-[var(--gap_width)] py-[var(--gap_width)]">
         <PhotoGrid photos={HOMEPAGE_GALLERY} />
       </section>
       <FollowUsButton />

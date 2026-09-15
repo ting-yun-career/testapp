@@ -1,5 +1,12 @@
 @import 'tailwindcss';
 
+:root {
+  /* Single source of truth for layout spacing — the gap between one
+     element and the next, and the padding between content and the
+     browser edge. Same value on every page, mobile and desktop alike. */
+  --gap_width: 15px;
+}
+
 @theme {
   --font-display: 'DM Serif Display', ui-serif, Georgia, serif;
   --font-sans: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;

@@ -7,7 +7,7 @@ interface Photo {
 
 export function PhotoGrid({ photos }: { photos: Photo[] }) {
   return (
-    <div className="grid grid-cols-2 gap-2 desktop:grid-cols-6 desktop:gap-3">
+    <div className="grid grid-cols-2 gap-[var(--gap_width)] desktop:grid-cols-6">
       {photos.map((photo, index) => (
         <ExpandableImage
           key={photo.src + index}

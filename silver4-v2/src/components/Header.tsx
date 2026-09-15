@@ -48,7 +48,7 @@ export function Header() {
   return (
     <header className="border-b border-hairline bg-white">
       {/* Desktop */}
-      <div className="mx-auto hidden max-w-6xl flex-col gap-4 px-6 py-4 desktop:flex">
+      <div className="mx-auto hidden max-w-6xl flex-col gap-[var(--gap_width)] px-[var(--gap_width)] py-[var(--gap_width)] desktop:flex">
         <div className="grid grid-cols-[1fr_auto_1fr] items-center">
           <div />
           <Link to="/" className="justify-self-center">
@@ -56,7 +56,7 @@ export function Header() {
           </Link>
           <SocialIcons className="justify-self-end" />
         </div>
-        <nav className="flex justify-center gap-8">
+        <nav className="flex justify-center gap-[var(--gap_width)]">
           {NAV_ITEMS.map((item) => (
             <NavLink key={item.to} to={item.to} end={item.to === '/'} className={desktopNavLinkClass}>
               {item.label}
@@ -67,7 +67,7 @@ export function Header() {
 
       {/* Mobile */}
       <div className="desktop:hidden">
-        <div className="flex items-center justify-between px-4 py-3">
+        <div className="flex items-center justify-between px-[var(--gap_width)] py-[var(--gap_width)]">
           <Link to="/">
             <img src="/logos/SL4_LOGO_Black.png" alt="Silver4" className="h-9 w-auto" />
           </Link>
@@ -77,7 +77,7 @@ export function Header() {
           <button
             type="button"
             onClick={() => setServicesOpen((value) => !value)}
-            className="flex w-full items-center justify-between px-4 py-3"
+            className="flex w-full items-center justify-between px-[var(--gap_width)] py-[var(--gap_width)]"
             aria-expanded={servicesOpen}
           >
             <span className="text-xs font-medium uppercase tracking-wider text-accent">
@@ -104,7 +104,7 @@ export function Header() {
                     <NavLink
                       to={item.to}
                       onClick={() => setServicesOpen(false)}
-                      className="block px-4 py-3 text-sm text-ink hover:bg-cream"
+                      className="block px-[var(--gap_width)] py-[var(--gap_width)] text-sm text-ink hover:bg-cream"
                     >
                       {item.label}
                     </NavLink>
