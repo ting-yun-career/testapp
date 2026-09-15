@@ -11,11 +11,11 @@
   --color-accent: #b08551;
   --color-panel: #111111;
 
-  /* Single mobile/desktop breakpoint, set just above the widest current
-     iPhone viewport (iPhone 15/16 Pro Max: 430px). No tablet-specific
-     design exists, so everything above phone width uses the desktop
-     layout. */
-  --breakpoint-desktop: 431px;
+  /* Single mobile/desktop breakpoint. Raised past the widest current
+     iPhone viewport (iPhone 15/16 Pro Max: 430px) to give the desktop
+     header's nav row room before it wraps. No tablet-specific design
+     exists, so everything above this uses the desktop layout. */
+  --breakpoint-desktop: 500px;
 }
 
 body {

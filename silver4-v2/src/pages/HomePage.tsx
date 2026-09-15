@@ -29,7 +29,7 @@ function WhyUs() {
           Premium Experience
         </p>
         <h2 className="mt-2 font-display text-4xl">Why us</h2>
-        <p className="mt-3 text-sm font-semibold text-ink">Bespoke Hair &amp; Body Rituals</p>
+        <p className="mt-3 text-sm font-semibold text-ink">Hair, Barber, SPA - A tribrid experience</p>
         <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">
           We believe styling is an art form. Our masters of cuts and wellness therapists elevate
           your grooming into a therapeutic, premium self-care ritual.

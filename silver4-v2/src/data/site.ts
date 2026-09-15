@@ -6,11 +6,10 @@ export const NAV_ITEMS = [
 ]
 
 export const SERVICE_MENU_ITEMS = [
+  { label: 'Home', to: '/' },
   { label: 'Hair Services', to: '/hair-services' },
   { label: 'Barber Services', to: '/barber-services' },
   { label: 'Spa Services', to: '/spa-services' },
-  { label: 'Skin Therapy', to: '/skin-therapy' },
-  { label: 'Special Rituals', to: '/special-rituals' },
 ]
 
 export const CONTACT = {
@@ -74,35 +73,11 @@ export const HAIR_SERVICE_GALLERY = [
   'img_5186',
 ].map((name) => ({ src: `/gallery/${name}.webp`, alt: 'Silver4 hair styling work' }))
 
-// Only "Mike" has a matching photo in public/team/ so far — the rest stay
-// as placeholders until real photos for Sophia, Nicholas, and Yuki are added.
 export const STYLISTS = [
-  {
-    name: 'Mike',
-    role: 'Stylist',
-    bio: 'Master of structural hair sculpting, precision scissor cuts, and modern barbering rituals. Dedicated to clean aesthetics and customized styling profiles.',
-    languages: 'English',
-    image: '/team/mike.webp',
-  },
-  {
-    name: 'Sophia',
-    role: 'Creative Colorist',
-    bio: 'Specialist in bespoke balayage, organic pigment blending, and corrective therapy. Sophia designs luminous tones that evolve beautifully over time.',
-    languages: 'English, French',
-    image: null,
-  },
-  {
-    name: 'Nicholas',
-    role: 'Artistic Director',
-    bio: "With over two decades in high-fashion editorial styling, Nicholas shapes unforgettable silhouettes tailored to each guest's natural bone structure.",
-    languages: 'English, Greek',
-    image: null,
-  },
-  {
-    name: 'Yuki',
-    role: 'Ritual Specialist',
-    bio: 'Expert in traditional scalp wellness therapies, head spa acupressure, and custom oil infusions. Reclaiming healthy hair starting at the root.',
-    languages: 'English, Japanese',
-    image: null,
-  },
+  { name: 'Viola', role: 'Receptionist', bio: 'Bio to come', image: '/team/viola.webp' },
+  { name: 'Yi', role: 'Stylist', bio: 'Bio to come', image: '/team/yi.webp' },
+  { name: 'Alberto', role: 'Stylist', bio: 'Bio to come', image: '/team/alberto.webp' },
+  { name: 'Sam', role: 'Stylist', bio: 'Bio to come', image: '/team/sam.webp' },
+  { name: 'Kawal', role: 'Stylist', bio: 'Bio to come', image: '/team/kawal.webp' },
+  { name: 'Becca', role: 'Stylist', bio: 'Bio to come', image: '/team/becca.webp' },
 ]

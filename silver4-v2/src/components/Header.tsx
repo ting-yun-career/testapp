@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { ChevronDownIcon, FacebookIcon, InstagramIcon, XIcon } from './icons'
 import { NAV_ITEMS, SERVICE_MENU_ITEMS, SOCIAL_LINKS } from '../data/site'
-import { Wordmark } from './Wordmark'
 
 function SocialIcons({ className = '' }: { className?: string }) {
   return (
@@ -70,7 +69,7 @@ export function Header() {
       <div className="desktop:hidden">
         <div className="flex items-center justify-between px-4 py-3">
           <Link to="/">
-            <Wordmark />
+            <img src="/logos/SL4_LOGO_Black.png" alt="Silver4" className="h-9 w-auto" />
           </Link>
           <SocialIcons />
         </div>
@@ -82,7 +81,7 @@ export function Header() {
             aria-expanded={servicesOpen}
           >
             <span className="text-xs font-medium uppercase tracking-wider text-accent">
-              Explore Rituals
+              Explore Services
             </span>
             <span className="flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-ink">
               Hair Services

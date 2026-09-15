@@ -13,7 +13,7 @@ export function PhotoGrid({ photos }: { photos: Photo[] }) {
           key={photo.src + index}
           src={photo.src}
           alt={photo.alt}
-          className="aspect-3/4 h-full w-full object-cover"
+          className="aspect-3/4 w-full object-cover"
         />
       ))}
     </div>
