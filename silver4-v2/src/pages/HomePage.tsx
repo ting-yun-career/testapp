@@ -1,8 +1,8 @@
 import { ExpandableImage } from '../components/ExpandableImage'
-import { PhotoGrid } from '../components/PhotoGrid'
+import { VideoGrid } from '../components/VideoGrid'
 import { BookAppointmentCta } from '../components/BookAppointmentCta'
 import { FollowUsButton } from '../components/FollowUsButton'
-import { HOMEPAGE_GALLERY, MAP_EMBED_SRC, PRODUCTS, SCHEDULE } from '../data/site'
+import { HOMEPAGE_VIDEOS, MAP_EMBED_SRC, PRODUCTS, SCHEDULE } from '../data/site'
 
 function Hero() {
   return (
@@ -108,7 +108,7 @@ export function HomePage() {
     <>
       <Hero />
       <section className="px-[var(--gap_width)] py-[var(--gap_width)]">
-        <PhotoGrid photos={HOMEPAGE_GALLERY} />
+        <VideoGrid videos={HOMEPAGE_VIDEOS} />
       </section>
       <FollowUsButton />
       <WhyUs />

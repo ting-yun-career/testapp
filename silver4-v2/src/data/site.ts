@@ -39,20 +39,20 @@ export const SOCIAL_LINKS = {
   x: 'https://x.com/silver4salon',
 }
 
-export const HOMEPAGE_GALLERY = [
-  'back1',
-  'back2',
-  'back3',
-  'back4',
-  'back5',
-  'back6',
-  'back7',
-  'back8',
-  'back9',
-  'back10',
-  'back11',
-  'back12',
-].map((name) => ({ src: `/gallery/${name}.webp`, alt: 'Silver4 styling work' }))
+export const HOMEPAGE_VIDEOS = [
+  { src: '/animated/female/ash-brown-waves.webm', label: 'Ash brown waves' },
+  { src: '/animated/female/balayage-brown-waves.webm', label: 'Balayage brown waves' },
+  { src: '/animated/female/balayage-ends-sectioning.webm', label: 'Balayage ends sectioning' },
+  { src: '/animated/female/copper-red-curls.webm', label: 'Copper red curls' },
+  { src: '/animated/female/dark-red-curls.webm', label: 'Dark red curls' },
+  { src: '/animated/female/golden-blonde-waves.webm', label: 'Golden blonde waves' },
+  { src: '/animated/female/long-brunette-blowout.webm', label: 'Long brunette blowout' },
+  { src: '/animated/female/magenta-pink-curls.webm', label: 'Magenta pink curls' },
+  { src: '/animated/female/silver-blonde-bob.webm', label: 'Silver blonde bob' },
+  { src: '/animated/female/straight-hair-flat-iron-finish.webm', label: 'Straight hair flat iron finish' },
+  { src: '/animated/males/buzz-cut-skin-fade.webm', label: 'Buzz cut skin fade' },
+  { src: '/animated/males/curly-crop-fade-blue-shirt.webm', label: 'Curly crop fade' },
+]
 
 export const PRODUCTS = [
   { brand: 'GHD', name: 'Classic 1" Flat Iron', price: '$279.00' },
