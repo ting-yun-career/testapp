@@ -55,12 +55,36 @@ export const HOMEPAGE_VIDEOS = [
 ]
 
 export const PRODUCTS = [
-  { brand: 'GHD', name: 'Classic 1" Flat Iron', price: '$279.00' },
-  { brand: 'K18', name: 'Molecular Repair Oil', price: '$92.00' },
-  { brand: 'Olaplex', name: 'No.3 Hair Perfector', price: '$30.00' },
-  { brand: 'Kevin.Murphy', name: 'Shimmer.Me Blonde', price: '$50.00' },
-  { brand: 'Kerastase', name: 'Nutritive Masque', price: '$68.00' },
-  { brand: 'Moroccanoil', name: 'Treatment Original', price: '$46.00' },
+  {
+    brand: 'AGIVA',
+    name: 'Hair Wax Pomade No. 07',
+    price: '$25.00',
+    image: '/products/agiva-hair-wax-pomade-no-07.avif',
+  },
+  {
+    brand: 'Kerastase',
+    name: 'Bain Hydratation Douceur',
+    price: '$63.00',
+    image: '/products/kerastase-bain-hydratation-douceur.avif',
+  },
+  {
+    brand: 'Kerastase',
+    name: 'Blond Absolu Cicaflash',
+    price: '$68.50',
+    image: '/products/kerastase-blond-absolu-cicaflash.webp',
+  },
+  {
+    brand: 'Kerastase',
+    name: 'Chroma Absolu Huile Chroma Éclat',
+    price: '$98.50',
+    image: '/products/kerastase-chroma-absolu-huile-chroma-eclat.avif',
+  },
+  {
+    brand: 'Kerastase',
+    name: 'Blond Absolu Masque Cicaextrême',
+    price: '$93.50',
+    image: '/products/kerastase-blond-absolu-masque-cicaextreme.avif',
+  },
 ]
 
 export const HAIR_SERVICE_GALLERY = [

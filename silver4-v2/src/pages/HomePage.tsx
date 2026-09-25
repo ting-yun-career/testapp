@@ -54,7 +54,11 @@ function Products() {
       <div className="grid grid-cols-2 gap-[var(--gap_width)] desktop:grid-cols-6">
         {PRODUCTS.map((product) => (
           <div key={product.name} className="flex flex-col gap-[var(--gap_width)]">
-            <div className="aspect-square w-full bg-cream" />
+            <img
+              src={product.image}
+              alt={`${product.brand} ${product.name}`}
+              className="aspect-square w-full bg-cream object-contain"
+            />
             <p className="text-xs uppercase tracking-wider text-muted">{product.brand}</p>
             <p className="text-sm text-ink">{product.name}</p>
             <p className="text-sm text-muted">{product.price}</p>
