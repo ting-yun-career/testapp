@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-Guidance for Claude Code when working in `silver4-new/`.
+Guidance for Codex when working in `silver4-new/`.
 
 ## Git workflow (mandatory)
 

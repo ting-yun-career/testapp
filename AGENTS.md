@@ -2,6 +2,10 @@
 
 This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
 
+## Session handoff
+
+Read `HANDOFF.md` (repo root) at the start of a session to see what was in progress most recently. Add a dated entry there (most recent on top) before ending a session that leaves uncommitted or partially-done work.
+
 ## Repository layout
 
 The active project lives in `myapp/`. The `silver4/` directory is a separate static landing page and is not related to `myapp/`.

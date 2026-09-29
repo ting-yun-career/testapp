@@ -1,21 +1,10 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Codex when working with code inside `myapp/`. It mirrors the myapp-relevant sections of the root `AGENTS.md`, scoped to this project (paths below are relative to `myapp/`, not the repo root).
 
-## Repository layout
+## Session handoff
 
-The active project lives in `myapp/`. The `silver4/` directory is a separate static landing page and is not related to `myapp/`.
-
-All commands below should be run from inside `myapp/`.
-
-## Adding a new project to this monorepo
-
-When a new project directory is added at the repo root, two steps are required — skipping either one will break CI:
-
-1. Add the directory name to the `packages` list in `pnpm-workspace.yaml` (repo root).
-2. Run `pnpm install` from the repo root to update `pnpm-lock.yaml` with the new project's dependencies.
-
-Commit both `pnpm-workspace.yaml` and the updated `pnpm-lock.yaml` together. If the new project has a `pnpm.onlyBuiltDependencies` field in its `package.json`, move it to the `onlyBuiltDependencies` key in the root `pnpm-workspace.yaml` instead — pnpm 10 ignores that field in individual package manifests.
+Read `HANDOFF.md` (in this directory) at the start of a session to see what was in progress most recently on this project. Add a dated entry there (most recent on top) before ending a session that leaves uncommitted or partially-done work.
 
 ## Commands
 
@@ -113,7 +102,7 @@ Authenticated pages (`/dashboard`, `/appointments`) are wrapped in `Authenticate
 
 ### `@repo/ui` package
 
-Shared UI components live in `packages/ui/src/`. Currently exports: `Button`, `TextControl`, `BottomNav` (+ `BottomNavItem` type). `BottomNav` is router-agnostic — it accepts `items: BottomNavItem[]`, `activeId: string`, and `onItemClick` callback; callers handle navigation.
+Shared UI components live in `packages/ui/src/` (repo root). Currently exports: `Button`, `TextControl`, `BottomNav` (+ `BottomNavItem` type). `BottomNav` is router-agnostic — it accepts `items: BottomNavItem[]`, `activeId: string`, and `onItemClick` callback; callers handle navigation.
 
 ### Testing
 

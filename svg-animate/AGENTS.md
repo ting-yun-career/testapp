@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-Guidance for Claude Code when working in `svg-animate/`.
+Guidance for Codex when working in `svg-animate/`.
 
 ## Known pitfalls
 
