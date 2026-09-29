@@ -19,7 +19,6 @@
 		"@repo/ui": "workspace:*",
 		"@stripe/react-stripe-js": "^6.4.0",
 		"@stripe/stripe-js": "^9.6.0",
-		"@upstash/redis": "^1.38.1",
 		"clsx": "^2.1.1",
 		"date-fns": "^4.1.0",
 		"jose": "^6.2.3",
