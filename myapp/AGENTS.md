@@ -1,38 +1,10 @@
 # AGENTS.md
 
-This file provides guidance to Codex when working with code inside `myapp/`. It mirrors the myapp-relevant sections of the root `AGENTS.md`, scoped to this project (paths below are relative to `myapp/`, not the repo root).
+This file provides guidance to AI coding agents when working with code inside `myapp/`. Repo-wide conventions (git safety, monorepo layout, adding new projects) live in the root `AGENTS.md` and aren't repeated here; this file covers everything specific to this project. Paths below are relative to `myapp/`, not the repo root.
 
 ## Session handoff
 
 Read `HANDOFF.md` (in this directory) at the start of a session to see what was in progress most recently on this project. Add a dated entry there (most recent on top) before ending a session that leaves uncommitted or partially-done work.
-
-## Commands
-
-```bash
-# Install dependencies
-pnpm install
-
-# Start local dev server (Vite + Cloudflare Worker via @cloudflare/vite-plugin)
-pnpm dev
-
-# Type-check and build for production
-pnpm build
-
-# Lint
-pnpm lint
-
-# Run all tests
-pnpm test
-
-# Run a single test file
-pnpm test worker/appointment.test.ts
-
-# Generate Cloudflare Worker types from wrangler.jsonc
-pnpm cf-typegen
-
-# Deploy to Cloudflare Workers
-pnpm deploy
-```
 
 ## Architecture
 
@@ -140,11 +112,4 @@ Optional: `additionalInfo`, `paymentIntentId` (required on the public route).
 appointments(id, status, start_at_utc, end_at_utc, timezone, name, email, meeting_contact, notes, created_at)
 ```
 
-Planned tables (not yet created): `availability_rules(id, weekday, start_minute, end_minute, timezone)`, `blackout_ranges(id, start_at_utc, end_at_utc, reason)`.
-
-### Rollout order for remaining work
-
-1. Implement `/api/availability` in the Worker and replace the hardcoded weekly availability in the frontend.
-2. Add Turnstile before exposing the public booking form broadly.
-3. Add email or calendar sync after persistence is stable.
-4. Add Durable Objects only if stricter concurrency control is needed.
+Business hours (Mon–Fri 9am–5pm) are intentionally hardcoded — in `worker/chat.ts`'s `getBusinessOpenWindowsInVisitorTime` and mirrored in the frontend booking calendar — not stored in D1. They're simple and static for the life of this app; don't propose an `availability_rules`/`blackout_ranges` table for this.
