@@ -9,6 +9,7 @@ import {
   useNavigate,
 } from 'react-router-dom'
 import AuthenticatedBookingCalendar from './components/web/BookingCalendar/AuthenticatedBookingCalendar'
+import ChatWidget from './components/web/Chatbot/ChatWidget'
 import Icon from './components/web/Icon'
 import MenuDropdown from './components/MenuDropdown'
 import Button from '@repo/ui/Button'
@@ -27,33 +28,36 @@ const NAV_ITEMS: BottomNavItem[] = [
 
 function App() {
   return (
-    <Routes>
-      <Route element={<LandingPage />} path="/" />
-      <Route
-        element={
-          <RequireAuth>
-            <AuthenticatedShell>
-              <DashboardPage />
-            </AuthenticatedShell>
-          </RequireAuth>
-        }
-        path="/dashboard"
-      />
-      <Route
-        element={
-          <RequireAuth>
-            <AuthenticatedShell>
-              <AppointmentsPage />
-            </AuthenticatedShell>
-          </RequireAuth>
-        }
-        path="/appointments"
-      />
-      <Route element={<BookingPage />} path="/book" />
-      <Route element={<CheckoutPage />} path="/checkout" />
-      <Route element={<PaymentSuccessPage />} path="/payment/success" />
-      <Route element={<Navigate replace to="/" />} path="*" />
-    </Routes>
+    <>
+      <Routes>
+        <Route element={<LandingPage />} path="/" />
+        <Route
+          element={
+            <RequireAuth>
+              <AuthenticatedShell>
+                <DashboardPage />
+              </AuthenticatedShell>
+            </RequireAuth>
+          }
+          path="/dashboard"
+        />
+        <Route
+          element={
+            <RequireAuth>
+              <AuthenticatedShell>
+                <AppointmentsPage />
+              </AuthenticatedShell>
+            </RequireAuth>
+          }
+          path="/appointments"
+        />
+        <Route element={<BookingPage />} path="/book" />
+        <Route element={<CheckoutPage />} path="/checkout" />
+        <Route element={<PaymentSuccessPage />} path="/payment/success" />
+        <Route element={<Navigate replace to="/" />} path="*" />
+      </Routes>
+      <ChatWidget />
+    </>
   )
 }
 

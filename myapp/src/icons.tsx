@@ -55,6 +55,34 @@ export function ChevronRightIcon() {
   )
 }
 
+export function ChatBubbleIcon() {
+  return (
+    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24">
+      <path
+        d="M4 5h16v11H8l-4 4V5Z"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.8"
+      />
+    </svg>
+  )
+}
+
+export function SendIcon() {
+  return (
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24">
+      <path
+        d="M4 12 20 4l-6 16-3-7-7-1Z"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.8"
+      />
+    </svg>
+  )
+}
+
 export function MenuIcon() {
   return (
     <svg
