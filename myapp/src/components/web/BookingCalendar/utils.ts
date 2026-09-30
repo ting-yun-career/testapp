@@ -44,9 +44,16 @@ export type BookingCalendarApi = {
   saveAppointment: (data: AppointmentRequest) => Promise<SavedAppointment>
 }
 
+export type ProposedSlot = {
+  date: string
+  endMinutes: number
+  startMinutes: number
+}
+
 export type BookingCalendarProps = {
   api: BookingCalendarApi
   availabilities?: Availability[]
+  initialProposedSlot?: ProposedSlot
 }
 
 export type SelectionRange = {
@@ -172,6 +179,10 @@ export function getSelectionDetails(selection: SelectionRange | null) {
 
 export function slotIndexToMinutes(slotIndex: number, startHour: number) {
   return startHour * 60 + slotIndex * 15
+}
+
+export function minutesToSlotIndex(minutes: number, startHour: number) {
+  return Math.round((minutes - startHour * 60) / 15)
 }
 
 export function buildUtcAppointmentRangeFromLocalSelection(
