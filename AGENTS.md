@@ -34,6 +34,11 @@ On merge/rebase conflicts:
 
 Scope each commit to one issue/feature, ≤10 files (ideally <5). Split larger changes into multiple commits.
 
+## Code quality
+
+- Handle common HTTP error codes explicitly (401, 429, 5xx, etc.) — never leak raw exception/response text to the client.
+- Add UI tests covering how the UI responds to each handled error case.
+
 ## Repository layout
 
 Active project: `myapp/` — see `myapp/AGENTS.md` for details, not duplicated here. `silver4/` is unrelated.
