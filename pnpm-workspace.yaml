@@ -2,8 +2,6 @@ packages:
   - "silver4-v2"
   - "silver4-new"
   - "svg-animate"
-  - "myapp"
-  - "packages/*"
   - "silver4"
 
 onlyBuiltDependencies:
