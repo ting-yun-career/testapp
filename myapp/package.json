@@ -9,12 +9,14 @@
 		"build": "tsc -b && vite build",
 		"lint": "eslint .",
 		"test": "vitest run",
+		"test:e2e": "playwright test",
 		"preview": "pnpm run build && vite preview",
 		"deploy": "pnpm run build && wrangler deploy",
 		"cf-typegen": "wrangler types",
 		"scan": "socket scan create ."
 	},
 	"dependencies": {
+		"@anthropic-ai/sdk": "^0.129.0",
 		"@auth0/auth0-react": "^2.16.1",
 		"@repo/ui": "workspace:*",
 		"@stripe/react-stripe-js": "^6.4.0",
@@ -29,6 +31,7 @@
 	"devDependencies": {
 		"@cloudflare/vite-plugin": "^1.54.2",
 		"@eslint/js": "^9.39.1",
+		"@playwright/test": "^1.63.0",
 		"@socketsecurity/cli": "^1.1.94",
 		"@tailwindcss/vite": "^4.2.2",
 		"@types/node": "^24.10.1",
