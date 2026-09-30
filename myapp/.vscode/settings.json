@@ -1,6 +1,9 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.wordWrapColumn": 200,
+  "editor.rulers": [200],
   "files.associations": {
     "wrangler.json": "jsonc"
   }
