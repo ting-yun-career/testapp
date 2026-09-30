@@ -11,6 +11,7 @@ This file provides guidance to AI coding agents when working with code in this r
 - To discard uncommitted changes, `git reset --hard HEAD` the whole project, not per-file. Confirm with the user first.
 - Prefer an isolated `git worktree` for tasks independent of current uncommitted state (see Worktree workflow below). Skip this if the task needs uncommitted files that only exist in the main tree.
 - `git add` a newly-created file immediately, before doing anything else with it.
+- Before every commit, check `git status` and confirm every staged file is one you intend to commit — not just that your target file is staged.
 
 ### Worktree workflow
 
