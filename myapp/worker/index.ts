@@ -5,8 +5,10 @@ import {
 } from './appointment'
 import { requireAuth0Jwt } from './auth'
 import { createPublicDepositIntent, verifyDepositPayment } from './stripe'
+import { handleChatMessage, handleGetChatHistory } from './chat'
 
 type WorkerEnv = Env & {
+  ANTHROPIC_API_KEY?: string
   AUTH0_AUDIENCE?: string
   AUTH0_DOMAIN?: string
   DB?: D1Database
@@ -106,6 +108,17 @@ export default {
       }
 
       return deleteAppointment(deleteMatch[1], runtimeEnv)
+    }
+
+    if (url.pathname === '/api/public/chat' && request.method === 'GET') {
+      return handleGetChatHistory(request, runtimeEnv)
+    }
+
+    if (url.pathname === '/api/public/chat' && request.method === 'POST') {
+      if (!runtimeEnv.ANTHROPIC_API_KEY) {
+        return Response.json({ error: 'Chat is not configured.' }, { status: 500 })
+      }
+      return handleChatMessage(request, runtimeEnv)
     }
 
     if (url.pathname.startsWith('/api/')) {
