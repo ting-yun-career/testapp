@@ -6,6 +6,8 @@ Guidance for AI coding agents working in `myapp/`. Repo-wide conventions are in 
 
 Read `agent/SESSION_LOG.md` at session start. Add a dated entry (most recent first) before ending a session with uncommitted/in-progress work.
 
+See `agent/TODO.md` for planned/optional additions.
+
 ## Architecture
 
 Full-stack appointment booking app: single Cloudflare Worker + static assets (SPA).
@@ -31,6 +33,7 @@ Full-stack appointment booking app: single Cloudflare Worker + static assets (SP
 ### Payment flow
 
 $1 CAD Stripe deposit required:
+
 1. `POST /api/public/payments/create-deposit-intent` → `clientSecret`.
 2. Stripe Elements payment on `/checkout`.
 3. `POST /api/public/appointments` with `paymentIntentId` — worker verifies payment before persisting.
@@ -55,14 +58,14 @@ $1 CAD Stripe deposit required:
 
 ### Routes
 
-| Path | Component | Auth |
-|------|-----------|------|
-| `/` | `LandingPage` | Public |
-| `/dashboard` | `DashboardPage` + `AuthenticatedBookingCalendar` | Requires Auth0 |
-| `/appointments` | `AppointmentsPage` — tabular list of all appointments | Requires Auth0 |
-| `/book` | `BookingPage` + `PublicBookingCalendar` | Public |
-| `/checkout` | `CheckoutPage` | Public |
-| `/payment/success` | `PaymentSuccessPage` | Public |
+| Path               | Component                                             | Auth           |
+| ------------------ | ----------------------------------------------------- | -------------- |
+| `/`                | `LandingPage`                                         | Public         |
+| `/dashboard`       | `DashboardPage` + `AuthenticatedBookingCalendar`      | Requires Auth0 |
+| `/appointments`    | `AppointmentsPage` — tabular list of all appointments | Requires Auth0 |
+| `/book`            | `BookingPage` + `PublicBookingCalendar`               | Public         |
+| `/checkout`        | `CheckoutPage`                                        | Public         |
+| `/payment/success` | `PaymentSuccessPage`                                  | Public         |
 
 ### Navigation
 
@@ -86,8 +89,6 @@ Vitest, Node environment. Worker tests mock D1's `prepare/bind/run` and `fetch` 
 
 - Cloudflare Workers — API layer.
 - Cloudflare D1 — appointments + chat history, bound as `DB`.
-
-See `agent/TODO.md` for planned/optional additions.
 
 ### API endpoints
 
